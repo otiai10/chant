@@ -13,7 +13,8 @@ type Application struct {
 func (c Application) Index() revel.Result {
 	if _, ok := c.Session["screenName"]; ok {
 		user, _ := factory.UserFronSession(c.Session)
-		return c.Render(user)
+		server := factory.ServerFromConf(revel.Config)
+		return c.Render(user, server)
 		//return c.Redirect(Room.Index)
 	}
 	return c.RenderTemplate("Top/Index.html")

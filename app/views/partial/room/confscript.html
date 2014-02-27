@@ -1,0 +1,14 @@
+<script>
+  var Conf = {
+    Me: (function(){
+      return function(){
+        return {{.user}};
+      };
+    })(),
+    Server: (function(){
+      return function(){
+        return {{.server}};
+      };
+    })()
+  };
+</script>

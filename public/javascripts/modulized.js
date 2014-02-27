@@ -3,9 +3,8 @@ Chant.Socket = (function(){
     var _socket = null;
     return function(force){
         if (force || _socket === null) {
-            _socket = new WebSocket('ws://'+window.location.host+'/websocket/room/socket');
+            _socket = new WebSocket('ws://'+Conf.Server().Host+':'+Conf.Server().Port+'/websocket/room/socket');
         }
-        console.log(_socket.readyState, WebSocket.OPEN);
         if (_socket.readyState > WebSocket.OPEN) return Chant.Socket(true);
         return _socket;
     };
@@ -79,7 +78,7 @@ Chant.Notifier = {
         }
     },
     detectMentioned: function(event){
-        if (event.Text && event.Text.match("@" + Me().ScreenName)) {
+        if (event.Text && event.Text.match("@" + Conf.Me().ScreenName)) {
             var params = {
                 icon: event.User.ProfileImageUrl,
                 title: event.User.ScreenName,

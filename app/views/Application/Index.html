@@ -4,13 +4,8 @@
 {{template "header.html" .}}
 
 <!-- contents -->
-<script>
-    var Me = (function(){
-        return function(){
-            return {{.user}};
-        };
-    })();
-</script>
+{{template "partial/room/confscript.html" .}}
+
 {{template "partial/room/header.html"}}
 {{template "partial/post.html"}}
 {{template "partial/room/stamps.html"}}
