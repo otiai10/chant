@@ -147,6 +147,13 @@ Chant.Anchorize = (function() {
     function _execAnchor(str){
         var url = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?/gi;
         var anc = url.exec(str);
+        if (anc != null && anc[3] == 'twitter.') {
+            var id = anc[4].replace(/^\/[^\/]+\/status\//,'');
+            setTimeout(function(){
+                Chant.Twitter.embed(id);
+            },0);
+            return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank">' + str + '</a></div>';
+        }
         if (anc != null && anc.length) {
             var lenToTruncate = 50;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
@@ -226,3 +233,18 @@ Chant.Protocol = (function() {
         };
     }
 })();
+Chant.Twitter = {
+    embed: function(id){
+        $.ajax({
+            url: 'https://api.twitter.com/1/statuses/oembed.json?id=' + String(id),
+            method: 'GET',
+            dataType: 'jsonp',
+            success: function(res){
+                $('#twitter' + id).html(res.html);
+            },
+            error: function(hoge){
+                console.log(hoge);
+            }
+        });
+    }
+};
