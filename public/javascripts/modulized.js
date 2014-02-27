@@ -148,7 +148,7 @@ Chant.Anchorize = (function() {
         var url = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?/gi;
         var anc = url.exec(str);
         if (anc != null && anc[3] == 'twitter.') {
-            var id = anc[4].replace(/^\/[^\/]+\/status\//,'');
+            var id = anc[4].replace(/^\/[^\/]+\/[^\/]+\//,'');
             setTimeout(function(){
                 Chant.Twitter.embed(id);
             },0);
