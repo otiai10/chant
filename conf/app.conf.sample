@@ -1,0 +1,31 @@
+app.name=chant
+http.addr=
+http.port=9090
+
+module.static=github.com/robfig/revel/modules/static
+
+[dev]
+mode.dev=true
+results.pretty=true
+watch=true
+
+http.host=localhost
+
+log.trace.output = off
+log.info.output  = stderr
+log.warn.output  = stderr
+log.error.output = stderr
+
+module.testrunner=github.com/robfig/revel/modules/testrunner
+
+[prod]
+mode.dev=false
+results.pretty=false
+watch=false
+
+http.host=my.sample.com
+
+log.trace.output = off
+log.info.output  = off
+log.warn.output  = %(app.name)s.log
+log.error.output = %(app.name)s.log

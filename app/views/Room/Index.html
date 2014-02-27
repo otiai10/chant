@@ -1,0 +1,26 @@
+{{set . "title" "Chant"}}
+
+<!-- heading -->
+{{template "header.html" .}}
+
+<!-- contents -->
+{{template "partial/room/header.html"}}
+{{template "partial/post.html"}}
+{{template "partial/room/stamps.html"}}
+{{template "partial/room/info.html"}}
+{{template "partial/room/timeline.html"}}
+
+<!-- templating -->
+{{template "tmpl/event/message.html"}}
+{{template "tmpl/event/leave.html"}}
+{{template "tmpl/event/join.html"}}
+{{template "tmpl/base/youtube.html"}}
+{{template "tmpl/base/soundcloud.html"}}
+{{template "tmpl/base/stamp.html"}}
+{{template "tmpl/roominfo/users.html"}}
+
+<!-- flash -->
+{{template "partial/flash.html"}}
+
+<!-- footing -->
+{{template "footer.html" .}}

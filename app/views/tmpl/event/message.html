@@ -1,0 +1,17 @@
+<script type="text/html" id="tmpl_event_message">
+<li class="message <%= event.User.ScreenName == '{{.user}}' ? 'you' : '' %> {{.user}}">
+  <div>
+    <div>
+      <%= event.User.ScreenName %> <span class="info-small clickable message-unique" data-time="<%= event.Timestamp %>"><%= event.Time %></span>
+      <form id="<%= event.Timestamp %>">
+        <input type="hidden" name="screenName" value="<%= event.User.ScreenName %>">
+        <input type="hidden" name="profileImageUrl" value="<%= event.User.ProfileImageUrl %>">
+        <input type="hidden" name="originalText" value="<%= event.isQuote ? 'quoted' : event.RawText %>">
+      </form>
+    </div>
+    <div>
+      <img src="<%= event.User.ProfileImageUrl %>" class="user-icon" user-name="<%= event.User.ScreenName %>"><%= event.Text %>
+    </div>
+  </div>
+</li>
+</script>

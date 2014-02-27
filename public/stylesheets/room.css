@@ -1,0 +1,28 @@
+.info-small {
+    font-size: x-small;
+    color: #aaa;
+}
+img.tl-img {
+    max-width: 70%;
+}
+img.user-icon {
+    cursor: pointer;
+}
+div#stamps-container {
+    float: right;
+    width: 150px;
+    border: normal solid black;
+}
+.clickable {
+    cursor: pointer;
+}
+
+blockquote {
+    border-left: 8px solid #ddd;
+    padding-left: 20px;
+    color: #333;
+    font-size: 0.8em;
+}
+blockquote img.user-icon {
+    width: 38px;
+}

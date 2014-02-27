@@ -1,0 +1,18 @@
+{{set . "title" "Chant"}}
+
+{{template "header.html" .}}
+
+<div id="home">
+  <h2>ちゃんとしたい</h2>
+  <div id="signin">
+    {{if .flash.error}}
+    <p class="error">
+      {{.flash.error}}
+    </p>
+    {{end}}
+    <p>
+      <a href="/auth">ﾄｩｲｯﾀー垢でログイン</a>
+    </p>
+  </div>
+</div>
+{{template "footer.html" .}}
