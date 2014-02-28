@@ -26,3 +26,6 @@ blockquote {
 blockquote img.user-icon {
     width: 38px;
 }
+.mentioning {
+    font-weight:          bold;
+}

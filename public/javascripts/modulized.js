@@ -13,7 +13,10 @@ Chant.Render = {
     Event: {
         message: function(event) {
 
-            Chant.Notifier.detectMentioned(event);
+            event.RawText = event.Text;
+
+            event.isMention = false;
+            event = Chant.Notifier.detectMentioned(event);
 
             event.Time = new Chant.Time(event.Timestamp).format();
             // うわーきもい
@@ -24,7 +27,6 @@ Chant.Render = {
                 if (prtcl.protocol == 'quote') event.isQuote = true;
                 return tmpl('tmpl_event_message',{event:event});
             }
-            event.RawText = event.Text;
             event.Text = Chant.Anchorize(event.Text);
             return tmpl('tmpl_event_message',{event:event});
         },
@@ -78,14 +80,18 @@ Chant.Notifier = {
         }
     },
     detectMentioned: function(event){
-        if (event.Text && event.Text.match("@" + Conf.Me().ScreenName)) {
+        var mentioning = "@" + Conf.Me().ScreenName;
+        if (event.Text && event.Text.match(mentioning)) {
             var params = {
                 icon: event.User.ProfileImageUrl,
                 title: event.User.ScreenName,
                 text: event.Text
             };
             Chant.Notifier._show(params);
+            var html = '<span class="mentioning">' + mentioning + '</span>';
+            event.Text = event.Text.replace(mentioning, html);
         }
+        return event;
     },
     _show: function(params){
         if (! $('#enable-notification').attr('checked')) return;
