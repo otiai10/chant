@@ -81,7 +81,8 @@ Chant.Notifier = {
     },
     detectMentioned: function(event){
         var mentioning = "@" + Conf.Me().ScreenName;
-        if (event.Text && event.Text.match(mentioning)) {
+        if (! event.Text) return event;
+        if (event.Text.match(mentioning) || event.Text.match('@all')) {
             var params = {
                 icon: event.User.ProfileImageUrl,
                 title: event.User.ScreenName,
