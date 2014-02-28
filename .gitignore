@@ -2,4 +2,5 @@ app/tmp/*
 app/routes/*
 conf/app.conf
 
+*.out
 *.log
