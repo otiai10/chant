@@ -127,7 +127,7 @@ Chant.Anchorize = (function() {
         var youTubeUrl = /https?:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g;
         var ytb = youTubeUrl.exec(str);
         if (ytb && ytb.length > 1) {
-            return _execAnchor(str) + '<br>' + tmpl('tmpl_base_youtube',{videoId:ytb[1]});
+            return /* _execAnchor(str) + */'<br>' + tmpl('tmpl_base_youtube',{videoId:ytb[1]});
         }
         return null;
     }
@@ -139,7 +139,7 @@ Chant.Anchorize = (function() {
                 videoId: sndcld[1],
                 url: sndcld[1]
             };
-            return _execAnchor(str) + '<br>' + tmpl('tmpl_base_soundcloud',sndcldParams);
+            return /* _execAnchor(str) + */'<br>' + tmpl('tmpl_base_soundcloud',sndcldParams);
         }
         return null;
     }
@@ -147,7 +147,7 @@ Chant.Anchorize = (function() {
         var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpg|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
-            return str.replace(img[0], _execAnchor(img[0]) + '<br><img src="' + img[0] + '" class="tl-img">');
+            return str.replace(img[0], /* _execAnchor(img[0]) + */'<br><a href="'+img[0]+'" target="_blank"><img src="' + img[0] + '" class="tl-img"></a>');
         }
         return;
     }
@@ -162,7 +162,7 @@ Chant.Anchorize = (function() {
             return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank">' + str + '</a></div>';
         }
         if (anc != null && anc.length) {
-            var lenToTruncate = 50;
+            var lenToTruncate = 100;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
             return str.replace(anc[0], '<a target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
         }
