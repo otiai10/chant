@@ -1,0 +1,10 @@
+<script type="text/javascript" src="/public/javascripts/swfobject.js"></script>    
+<script type="text/html" id="tmpl_base_globalplayer">
+  <% if (Sound.Source.Vendor.Name == 'youtube') { %>
+    <div id="ytapiplayer">
+      You need Flash player 8+ and JavaScript enabled to view this video.
+    </div>
+  <% } else if (Sound.Source.Vendor.Name == 'soundcloud') { %>
+    さうんどくらうど
+  <% } %>
+</script>

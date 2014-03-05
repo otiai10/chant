@@ -18,9 +18,36 @@ Chant._Playlist.prototype._play = function(index){
     if (! this.list[index]) return;
     this.nowplaying = index;
     var vendor = this.list[index].Source.Vendor.Name;
-    var html = tmpl('tmpl_base_' + vendor,{videoId: this.list[index].Source.Hash});
-    console.log(html);
+    var html = tmpl('tmpl_base_globalplayer', {Sound:this.list[index]});
+
+    // とりあえずベタ書きで
+    if (vendor == 'youtube') {
+        var params = { allowScriptAccess: "always" };
+        var atts = { id: "player-youtube" };
+        var videoId = this.list[index].Source.Hash;
+        setTimeout(function(){
+            swfobject.embedSWF(
+                "http://www.youtube.com/v/"+videoId+"?enablejsapi=1&playerapiid=ytplayer", 
+                "ytapiplayer", "391", "220", "8", null, null, params, atts
+            );
+        }, 0);
+    }
+
     $(this.player).html(html);
+};
+function onYouTubePlayerReady(id){
+    var player = document.getElementById('player-youtube');
+    player.playVideo();
+    player.addEventListener('onStateChange','YouTubeStateListener');
+};
+function YouTubeStateListener(newState){
+    var ENDED = 0;
+    switch(newState){
+        case ENDED:
+            Chant.Playlist().playNext();
+        default:
+            console.log('stateChanged♪', newState);
+    }
 };
 Chant._Playlist.prototype.add = function(sound){
     this.list.push(sound);
