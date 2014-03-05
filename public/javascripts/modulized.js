@@ -9,6 +9,42 @@ Chant.Socket = (function(){
         return _socket;
     };
 })();
+Chant._Playlist = function(soundList){
+    this.nowplaying   = 0;
+    this.list = soundList;
+    this.player = '#player';
+};
+Chant._Playlist.prototype._play = function(index){
+    if (! this.list[index]) return;
+    this.nowplaying = index;
+    var vendor = this.list[index].Source.Vendor.Name;
+    var html = tmpl('tmpl_base_' + vendor,{videoId: this.list[index].Source.Hash});
+    console.log(html);
+    $(this.player).html(html);
+};
+Chant._Playlist.prototype.add = function(sound){
+    this.list.push(sound);
+};
+Chant._Playlist.prototype.play = function(){
+    this._play(this.nowplaying);
+};
+Chant._Playlist.prototype.playNext = function(){
+    this.nowplaying++;
+    if (this.list.length <= this.nowplaying) {
+        this.nowplaying = 0;
+    }
+    this._play(this.nowplaying);
+};
+Chant.Playlist = (function(){
+    var _playlist = null;
+    return function(list){
+        if (list || _playlist === null) {
+            list = list || [];
+            _playlist = new Chant._Playlist(list);
+        }
+        return _playlist;
+    };
+})();
 Chant.Render = {
     Event: {
         message: function(event) {
@@ -39,13 +75,16 @@ Chant.Render = {
             //return tmpl('tmpl_event_leave',{event:event});
         },
         sound: function(sound) {
-            // とりあえず
+            Chant.Playlist().add(sound);
+            /*
             var event = {
                 User: sound.Sharer,
                 Time: new Chant.Time(sound.Timestamp).format(),
                 Text: Chant.Anchorize(sound.Source.Url)
             };
             return tmpl('tmpl_event_message', {event:event});
+            */
+            return '';
         },
         notification: function(event) {
             alert(event.Text);
@@ -135,11 +174,7 @@ Chant.Anchorize = (function() {
         var soundCloudUrl = /(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g;
         var sndcld = soundCloudUrl.exec(str);
         if (sndcld && sndcld.length > 3) {
-            var sndcldParams = {
-                videoId: sndcld[1],
-                url: sndcld[1]
-            };
-            return /* _execAnchor(str) + */'<br>' + tmpl('tmpl_base_soundcloud',sndcldParams);
+            return /* _execAnchor(str) + */'<br>' + tmpl('tmpl_base_soundcloud',{videoId:sndcld[1]});
         }
         return null;
     }
