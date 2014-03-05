@@ -20,20 +20,36 @@ Chant._Playlist.prototype._play = function(index){
     var vendor = this.list[index].Source.Vendor.Name;
     var html = tmpl('tmpl_base_globalplayer', {Sound:this.list[index]});
 
-    // とりあえずベタ書きで
+    $(this.player).html(html);
+
+    // とりあえずベタ書きで（；^ω^）
     if (vendor == 'youtube') {
+        // ロード
         var params = { allowScriptAccess: "always" };
         var atts = { id: "player-youtube" };
         var videoId = this.list[index].Source.Hash;
+        // 終了イベントのバインドはonYouTubePlayerReadyがする
         setTimeout(function(){
             swfobject.embedSWF(
                 "http://www.youtube.com/v/"+videoId+"?enablejsapi=1&playerapiid=ytplayer", 
                 "ytapiplayer", "391", "220", "8", null, null, params, atts
             );
         }, 0);
+    } else if (vendor == 'soundcloud') {
+        // ロード
+        var widgetIframe = document.getElementById('sc-widget');
+        var widget       = SC.Widget(widgetIframe);
+        var soudURL      = this.list[index].Source.Hash;
+        widget.load(soudURL);
+        // 終了イベントのバインド
+        widget.bind(SC.Widget.Events.READY, function(){
+            widget.play();    
+        });
+        widget.bind(SC.Widget.Events.FINISH, function(){
+            Chant.Playlist().playNext();
+        });
     }
 
-    $(this.player).html(html);
 };
 function onYouTubePlayerReady(id){
     var player = document.getElementById('player-youtube');
