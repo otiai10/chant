@@ -70,7 +70,7 @@ function YouTubeStateListener(newState){
     }
 };
 Chant._Playlist.prototype.add = function(sound){
-    this.list.push(sound);
+    this.list.unshift(sound);
 };
 Chant._Playlist.prototype.play = function(index){
     if (index) this.nowplaying = index;
