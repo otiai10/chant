@@ -90,4 +90,13 @@ $(function(){
     Chant.Socket().send(message);
     $('#message').focus();
   });
+
+  $('#playlist-start').live('click',function(){
+    Chant.Playlist().play(0);
+    $(this).remove();
+  });
+  $('.sound-title').live('click',function(){
+    var playlistIndex = $(this).attr('data-sound-index');
+    Chant.Playlist().play(playlistIndex);
+  });
 });

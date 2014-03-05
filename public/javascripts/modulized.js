@@ -22,6 +22,9 @@ Chant._Playlist.prototype._play = function(index){
 
     $(this.player).html(html);
 
+    // プレイリスト表示の更新
+    Chant.Render.Playlist.update();
+
     // とりあえずベタ書きで（；^ω^）
     if (vendor == 'youtube') {
         // ロード
@@ -40,6 +43,7 @@ Chant._Playlist.prototype._play = function(index){
         var widgetIframe = document.getElementById('sc-widget');
         var widget       = SC.Widget(widgetIframe);
         var soudURL      = this.list[index].Source.Hash;
+        //alert(soudURL);
         widget.load(soudURL);
         // 終了イベントのバインド
         widget.bind(SC.Widget.Events.READY, function(){
@@ -68,7 +72,8 @@ function YouTubeStateListener(newState){
 Chant._Playlist.prototype.add = function(sound){
     this.list.push(sound);
 };
-Chant._Playlist.prototype.play = function(){
+Chant._Playlist.prototype.play = function(index){
+    if (index) this.nowplaying = index;
     this._play(this.nowplaying);
 };
 Chant._Playlist.prototype.playNext = function(){
@@ -137,6 +142,25 @@ Chant.Render = {
     RoomInfo: {
         default: function(event){
             return tmpl('tmpl_roominfo_users', {users: event.RoomInfo.Users});
+        }
+    },
+    Playlist: {
+        update: function(list){
+            list = list || Chant.Playlist().list;
+            var nowplaying = Chant.Playlist().nowplaying;
+            var html = $.map(list, function(sound, index){
+                sound.index = index;
+                var isNowPlaying = false;
+                if (nowplaying == index) isNowPlaying = true;
+                sound.isNowPlaying = isNowPlaying;
+                if (sound.Source.Vendor.Name == 'youtube') {
+                    sound.title = sound.Source.Hash;
+                } else if (sound.Source.Vendor.Name = 'soundcloud') {
+                    sound.title = sound.Source.Hash.replace(/^https:\/\/soundcloud\.com/,'');
+                }
+                return tmpl('tmpl_base_playlist_sound', sound);
+            }).join('');
+            $('#playlist').html(html);
         }
     }
 };

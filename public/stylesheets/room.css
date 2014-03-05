@@ -29,3 +29,29 @@ blockquote img.user-icon {
 .mentioning {
     font-weight:          bold;
 }
+.boxy {
+    display: box;
+}
+#player-wrapper {
+    width: 80%;
+    background-color: #ddd;
+}
+#player {
+    width:391px;
+}
+#playlist {
+    float: right;
+}
+.sound-title {
+}
+.sound-sharer>img {
+    height: 20px;
+}
+li.playlist-li {
+    position: relative;
+}
+li.playlist-li.nowplaying-li:before {
+    content: '▸';
+    position: absolute;
+    left: -40px;
+}
