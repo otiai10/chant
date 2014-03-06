@@ -69,6 +69,11 @@ $(function(){
     Chant.Socket().send(message);
     $('#message').focus();
   });
+  $('#chunchun').click(function(){
+    var message = '{@img:chunchun}';
+    Chant.Socket().send(message);
+    $('#message').focus();
+  });
   // jquery1.5ぇ...
   $('.btn-stamp').live('click', function(){
     var message = $(this).find('img').attr('src');

@@ -286,6 +286,9 @@ Chant.Protocol = (function() {
                 },
                 'zawameku': function(){
                     return '<img src="./public/images/zawameku.jpg" class="tl-img">';
+                },
+                'chunchun': function(){
+                    return '<img src="./public/images/kotori.jpg" class="tl-img">';
                 }
             };
             if (typeof keys[key] != 'function') return;
