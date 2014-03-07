@@ -1,0 +1,12 @@
+{
+    "name": "chant-client",
+    "version": "0.0.1",
+    "devDependencies": {
+        "grunt-contrib-clean": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-regarde": "*",
+        "grunt": "*",
+        "grunt-typescript": "*"
+    }
+}
