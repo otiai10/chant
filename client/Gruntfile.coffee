@@ -19,13 +19,17 @@ module.exports = (grunt) ->
             default:
                 files: ['src/**/*.ts']
                 tasks: ['build']
+        exec:
+            release:
+                cmd: "cp build/chant.js ../public/javascripts/"
 
     grunt.loadNpmTasks 'grunt-typescript'
     grunt.loadNpmTasks 'grunt-contrib-concat'
     grunt.loadNpmTasks 'grunt-contrib-clean'
+    grunt.loadNpmTasks 'grunt-exec'
     grunt.loadNpmTasks 'grunt-regarde'
 
-    grunt.registerTask 'build',   ['typescript:compile']
+    grunt.registerTask 'build',   ['typescript:compile','exec:release']
     grunt.registerTask 'watch',   ['build', 'regarde:default']
 
     grunt.registerTask 'default', ['build']

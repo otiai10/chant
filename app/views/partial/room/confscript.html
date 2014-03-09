@@ -10,5 +10,21 @@
         return {{.server}};
       };
     })()
-  };
+  }
+
+  // indexにもっていこう
+  function onYouTubePlayerReady(id){
+      var player = document.getElementById('player-youtube');
+      player.playVideo();
+      player.addEventListener('onStateChange','YouTubeStateListener');
+  }
+  function YouTubeStateListener(newState){
+      var ENDED = 0;
+      switch(newState){
+          case ENDED:
+              Chant.Playlist().playNext();
+          default:
+              console.log('stateChanged♪', newState);
+      }
+  }
 </script>

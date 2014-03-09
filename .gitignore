@@ -7,3 +7,6 @@ client/build
 
 *.out
 *.log
+
+.idea
+*.iml
