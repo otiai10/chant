@@ -21,6 +21,12 @@ app.confを作成
 ```
 cp conf/app.conf.sample conf/app.conf
 ```
+クライアントサイドをビルド [詳細:client/README.md](client/README.md)
+```
+cd $GOPATH/src/chant/client
+npm install
+grunt build
+```
 起動
 ```
 revel run chant
