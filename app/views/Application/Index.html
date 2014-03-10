@@ -8,10 +8,14 @@
 
 {{template "partial/room/header.html"}}
 {{template "partial/post.html"}}
-{{template "partial/room/stamps.html"}}
 {{template "partial/room/info.html"}}
-{{template "partial/room/player.html"}}
-{{template "partial/room/timeline.html"}}
+<div id="dynamic-container">
+    <div id="fixed-container" class="boxy">
+        {{template "partial/room/stamps.html"}}
+        {{template "partial/room/player.html"}}
+    </div>
+    {{template "partial/room/timeline.html"}}
+</div>
 
 <!-- templating -->
 {{template "tmpl/event/message.html"}}
