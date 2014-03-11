@@ -47,6 +47,9 @@ module Chant {
                 widget.bind(SC.Widget.Events.FINISH, function(){
                     Chant.Playlist().playNext();
                 });
+                widget.bind(SC.Widget.Events.ERROR, function(){
+                    Chant.Playlist().playNext();
+                });
             }
         }
 

@@ -17,11 +17,20 @@
       var player = document.getElementById('player-youtube');
       player.playVideo();
       player.addEventListener('onStateChange','YouTubeStateListener');
+      player.addEventListener('onError',      'YouTubeStateListener');
   }
   function YouTubeStateListener(newState){
       var ENDED = 0;
+      var ERROR = {
+          NOTFOUND: 100,
+          EMBEDNOT: 101,
+          UNKNOWN:  150
+      };
       switch(newState){
           case ENDED:
+          case ERROR.NOTFOUND:
+          case ERROR.EMBEDNOT:
+          case ERROR.UNKNOWN:
               Chant.Playlist().playNext();
           default:
               console.log('stateChanged♪', newState);
