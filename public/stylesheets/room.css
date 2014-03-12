@@ -6,8 +6,8 @@ html, body {
 }
 
 body {
-    width: 90%;
-    min-width: 1100px;
+    width: 80%;
+    min-width: 800px;
     margin: 0 auto;
 }
 
@@ -21,7 +21,8 @@ h1>.highlight {
 div#footer {
     position: fixed;
     bottom: 0;
-    width: 90%;
+    width: 80%;
+    min-width: 800px;
     height: 20px;
     background: -webkit-gradient(linear, left top, left bottom,
                                 from(rgba(256,256,256, 0)),
@@ -99,7 +100,7 @@ div#player-wrapper {
     background-color: #ddd;
 }
 div#stamps-container {
-    width: 120px;
+    width: 60px;
     border: normal solid black;
 }
 ol#thread {
@@ -112,5 +113,6 @@ ol#thread>li:first-child {
 }
 */
 .entry-content-text {
+    width:         90%;
     padding-left: 10px;
 }
