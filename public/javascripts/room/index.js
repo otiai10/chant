@@ -61,7 +61,8 @@ $(function(){
     var message = '{@emo:+1}';
     Chant.Socket().send(message);
     $('#message').focus();
-    // めんどくせーからここでいいや
+  });
+  document.getElementById('enable-notification').addEventListener('change', function(){
     Chant.Notifier.init();
   });
   $('#zawameku').click(function(){
