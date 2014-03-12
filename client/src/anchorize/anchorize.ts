@@ -29,7 +29,7 @@ module Chant {
         return null;
     }
     var _execImage = (str) => {
-        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpg|png|gif)$/gi;
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
             return str.replace(img[0], /* _execAnchor(img[0]) + */'<br><a href="'+img[0]+'" target="_blank"><img src="' + img[0] + '" class="tl-img"></a>');
