@@ -44,6 +44,9 @@ func (c Auth) Index(oauth_verifier string) revel.Result {
 	// 一時的に使えるrequestTokenの取得を試みる
 	host, _ := revel.Config.String("http.host")
 	port, _ := revel.Config.String("http.port")
+  if ! revel.Config.BoolDefault("mode.dev", true) {
+    port = ""
+  }
 	requestToken, url, err := twitter.GetRequestTokenAndUrl(fmt.Sprintf("http://%s:%s/auth/callback", host, port))
 	if err == nil {
 		// 一時的に使えるrequestTokenが取得できたので、サーバ側で一次保存しておく
