@@ -30,7 +30,7 @@ module Chant {
                 setTimeout(function(){
                     swfobject.embedSWF(
                         "http://www.youtube.com/v/"+videoId+"?enablejsapi=1&playerapiid=ytplayer", 
-                        "ytapiplayer", "391", "220", "8", null, null, params, atts
+                        "ytapiplayer", "410", "220", "8", null, null, params, atts
                     );
                 }, 0);
             } else if (vendor == 'soundcloud') {
