@@ -14,7 +14,11 @@ declare module webkitNotifications {
 
 module Chant {
     export var Notifier = {
-        onmessage: () => {
+        isActive: true,
+        onmessage: (event: any) => {
+            console.log(Notifier.isActive);
+            if (event.Type == "leave" || event.Type == "join") return;
+            if (Notifier.isActive) return;
             $('title').text('!' + $('title').text());
         },
         onread: () => {

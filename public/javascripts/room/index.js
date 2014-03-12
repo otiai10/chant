@@ -11,7 +11,7 @@ $(function(){
   // Message received on the socket
   Chant.Socket().onmessage = function(event) {
     display(JSON.parse(event.data))
-    Chant.Notifier.onmessage();
+    Chant.Notifier.onmessage(JSON.parse(event.data));
   };
 
   Chant.Socket().onerror = function(event) {
@@ -25,7 +25,11 @@ $(function(){
   };
 
   window.onfocus = function(){
+    Chant.Notifier.isActive = true;
     Chant.Notifier.onread();
+  };
+  window.onblur = function(){
+    Chant.Notifier.isActive = false;
   };
 
   $('#send').click(function(e) {

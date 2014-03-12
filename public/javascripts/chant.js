@@ -2446,7 +2446,13 @@ var Chant;
 var Chant;
 (function (Chant) {
     Chant.Notifier = {
-        onmessage: function () {
+        isActive: true,
+        onmessage: function (event) {
+            console.log(Chant.Notifier.isActive);
+            if (event.Type == "leave" || event.Type == "join")
+                return;
+            if (Chant.Notifier.isActive)
+                return;
             $('title').text('!' + $('title').text());
         },
         onread: function () {
