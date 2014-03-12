@@ -97,7 +97,7 @@ div#fixed-container {
 }
 div#player-wrapper {
     width: 410px;
-    background-color: #ddd;
+    /* background-color: #ddd; */
 }
 div#stamps-container {
     width: 60px;
