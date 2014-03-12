@@ -9,8 +9,13 @@
         <input type="hidden" name="originalText" value="<%= event.isQuote ? 'quoted' : event.RawText %>">
       </form>
     </div>
-    <div>
-      <img src="<%= event.User.ProfileImageUrl %>" class="user-icon" user-name="<%= event.User.ScreenName %>"><%= event.Text %>
+    <div class="entry-content boxy">
+      <div>
+        <img src="<%= event.User.ProfileImageUrl %>" class="user-icon" user-name="<%= event.User.ScreenName %>">
+      </div>
+      <div class="entry-content-text">
+        <%= event.Text %>
+      </div>
     </div>
   </div>
 </li>

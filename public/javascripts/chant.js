@@ -2373,7 +2373,7 @@ var Chant;
         var youTubeUrl = /https?:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g;
         var ytb = youTubeUrl.exec(str);
         if (ytb && ytb.length > 1) {
-            return '<br>' + tmpl('tmpl_base_youtube', { videoId: ytb[1] });
+            return tmpl('tmpl_base_youtube', { videoId: ytb[1] });
         }
         return null;
     };
@@ -2381,7 +2381,7 @@ var Chant;
         var soundCloudUrl = /(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g;
         var sndcld = soundCloudUrl.exec(str);
         if (sndcld && sndcld.length > 3) {
-            return '<br>' + tmpl('tmpl_base_soundcloud', { videoId: sndcld[1] });
+            return tmpl('tmpl_base_soundcloud', { videoId: sndcld[1] });
         }
         return null;
     };
@@ -2389,7 +2389,7 @@ var Chant;
         var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
-            return str.replace(img[0], '<br><a href="' + img[0] + '" target="_blank"><img src="' + img[0] + '" class="tl-img"></a>');
+            return str.replace(img[0], '<a href="' + img[0] + '" target="_blank"><img src="' + img[0] + '" class="tl-img"></a>');
         }
         return;
     };
