@@ -13,8 +13,29 @@ body {
 
 h1 {
     font-family: Helvetica, Arial, Sans;
+    font-size: 1.5em;
 }
-
+h1>.highlight {
+    color: #cc0033;
+}
+div#footer {
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+    height: 20px;
+    background-color: rgba(256,256,256,0.7);
+    text-align: right;
+    padding: 10px 0;
+}
+div#footer>a {
+    text-decoration: none;
+    font-size: 0.8em;
+    color: #bbb;
+}
+div#footer>a:hover {
+    color: #999;
+    text-decoration: underline;
+}
 
 .info-small {
     font-size: x-small;
@@ -49,7 +70,6 @@ blockquote img.user-icon {
     width:391px;
 }
 #playlist {
-    float: right;
 }
 .sound-title {
 }
