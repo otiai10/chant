@@ -102,6 +102,12 @@ div#stamps-container {
     width: 120px;
     border: normal solid black;
 }
-div#thread {
-
+ol#thread {
+    list-style: none;
+    padding: 0;
 }
+/*
+ol#thread>li:first-child {
+    color: red;
+}
+*/
