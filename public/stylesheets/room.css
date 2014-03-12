@@ -49,6 +49,7 @@ img.tl-img {
 }
 img.user-icon {
     cursor: pointer;
+    border-radius: 30px;
 }
 .clickable {
     cursor: pointer;
