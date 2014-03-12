@@ -3,6 +3,7 @@ app/routes/*
 conf/app.conf
 
 client/node_modules
+client/bower_components
 client/build
 
 *.out

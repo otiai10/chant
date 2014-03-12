@@ -2,9 +2,9 @@
     "name": "chant-client",
     "version": "0.0.1",
     "devDependencies": {
+        "grunt-contrib-handlebars": "~0.5.9",
         "grunt-contrib-clean": "*",
         "grunt-contrib-concat": "*",
-        "grunt-contrib-uglify": "*",
         "grunt-regarde": "*",
         "grunt": "*",
         "grunt-exec": "*",
