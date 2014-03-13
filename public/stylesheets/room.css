@@ -61,6 +61,8 @@ blockquote {
     padding-left: 20px;
     color: #333;
     font-size: 0.8em;
+    margin-left: 0;
+    margin-top: 20px;
 }
 blockquote img.user-icon {
     width: 38px;
