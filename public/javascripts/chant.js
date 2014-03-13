@@ -2348,7 +2348,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"hoge\">\n\n</div>\n";
+  return "<div id=\"hoge\">\n    <h1>hoge</h1>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2691,6 +2691,8 @@ var Chant;
         };
 
         Render.default = function (event) {
+            var view = new Chant.IntroductionModalView();
+            $('body').append(view.render().$el);
             return tmpl('tmpl_roominfo_users', { users: event.RoomInfo.Users });
         };
 
@@ -2745,12 +2747,6 @@ var Chant;
     }
     Chant.Socket = Socket;
 })(Chant || (Chant = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var Chant;
 (function (Chant) {
     var HBSTemplate = (function () {
@@ -2766,25 +2762,50 @@ var Chant;
     })();
     Chant.HBSTemplate = HBSTemplate;
 })(Chant || (Chant = {}));
-
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var Chant;
 (function (Chant) {
     var ModalView = (function (_super) {
         __extends(ModalView, _super);
         function ModalView() {
-            _super.call(this);
+            _super.call(this, {
+                tagName: 'div',
+                className: 'modal-container'
+            });
         }
+        ModalView.prototype.events = function () {
+            return {
+                'click': 'fadeOut'
+            };
+        };
+        ModalView.prototype.fadeOut = function () {
+            var _this = this;
+            this.$el.fadeOut(function () {
+                _this.$el.remove();
+            });
+        };
         return ModalView;
     })(showv.View);
     Chant.ModalView = ModalView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
     var IntroductionModalView = (function (_super) {
         __extends(IntroductionModalView, _super);
         function IntroductionModalView() {
             _super.call(this);
             this.tpl = new Chant.HBSTemplate('hoge.hbs');
-            console.log(this.tpl.render());
         }
+        IntroductionModalView.prototype.render = function () {
+            this.$el.append(this.tpl.render());
+            return this;
+        };
         return IntroductionModalView;
-    })(ModalView);
+    })(Chant.ModalView);
     Chant.IntroductionModalView = IntroductionModalView;
 })(Chant || (Chant = {}));

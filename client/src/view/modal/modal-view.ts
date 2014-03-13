@@ -1,30 +1,24 @@
 /// <reference path="../../../definitions/showv.d.ts" />
 /// <reference path="../../../definitions/handlebars.d.ts" />
-
-// どっか持ってってw
-module Chant {
-    export class HBSTemplate {
-        private template: HandlebarsTemplate = null;
-        constructor(private name: string) {
-            this.template = HBS['asset/tpl/' + name];
-        }
-        render(param?: Object): string {
-            return this.template(param);
-        }
-    }
-}
+/// <reference path="../template.ts" />
 
 module Chant {
     export class ModalView extends showv.View {
         constructor(){
-            super();
+            super({
+                tagName: 'div',
+                className: 'modal-container'
+            });
         }
-    }
-    export class IntroductionModalView extends ModalView {
-        private tpl = new HBSTemplate('hoge.hbs');
-        constructor(){
-            super();
-            console.log(this.tpl.render());
+        events(): Object {
+            return {
+                'click': 'fadeOut'
+            }
+        }
+        fadeOut() {
+            this.$el.fadeOut(() => {
+                this.$el.remove();
+            });
         }
     }
 }

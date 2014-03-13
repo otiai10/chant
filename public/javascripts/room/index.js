@@ -32,7 +32,7 @@ $(function(){
     Chant.Notifier.isActive = false;
   };
 
-  $('#send').click(function(e) {
+  $('#send').on('click',function(e) {
     var message = $('#message').val()
     if (message === '') return;
     $('#message').val('').focus();
@@ -41,27 +41,27 @@ $(function(){
 
   $('#message').keypress(function(e) {
     if(e.charCode == 13 || e.keyCode == 13) {
-      $('#send').click()
+      $('#send').click();
       e.preventDefault()
     }
   })
 
-  $('#hey').click(function(){
+  $('#hey').on('click',function(){
     var message = 'ﾍｲｯ!ﾍｲｯ!ﾍｲｯ!';
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  $('#start-dash').click(function(){
+  $('#start-dash').on('click',function(){
     var message = 'ｽﾀｰﾀﾞｯｼｭ!!!';
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  $('#odayaka').click(function(){
+  $('#odayaka').on('click',function(){
     var message = '{@img:odayakajanai}';
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  $('#plus1').click(function(){
+  $('#plus1').on('click',function(){
     var message = '{@emo:+1}';
     Chant.Socket().send(message);
     $('#message').focus();
@@ -69,29 +69,29 @@ $(function(){
   document.getElementById('enable-notification').addEventListener('change', function(){
     Chant.Notifier.init();
   });
-  $('#zawameku').click(function(){
+  $('#zawameku').on('click',function(){
     var message = '{@img:zawameku}';
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  $('#chunchun').click(function(){
+  $('#chunchun').on('click',function(){
     var message = '{@img:chunchun}';
     Chant.Socket().send(message);
     $('#message').focus();
   });
   // jquery1.5ぇ...
-  $('.btn-stamp').live('click', function(){
+  $('.btn-stamp').on('click', function(){
     var message = $(this).find('img').attr('src');
     Chant.Socket().send(message);
     $('#message').focus();
   });
 
-  $('.user-icon').live('click',function(){
+  $('.user-icon').on('click',function(){
     var message = '@' + $(this).attr('user-name') + ' ';
     $('#message').val(message).focus();
   });
 
-  $('.message-unique').live('click',function(){
+  $('.message-unique').on('click',function(){
     var $form = $('form#' + $(this).attr('data-time'));
     var name = $form.find('[name=screenName]').val();
     var icon = $form.find('[name=profileImageUrl]').val();
@@ -101,11 +101,11 @@ $(function(){
     $('#message').focus();
   });
 
-  $('#playlist-start').live('click',function(){
+  $('#playlist-start').on('click',function(){
     Chant.Playlist().play(0);
     $(this).remove();
   });
-  $('.sound-title').live('click',function(){
+  $('.sound-title').on('click',function(){
     var playlistIndex = $(this).attr('data-sound-index');
     Chant.Playlist().play(playlistIndex);
   });
