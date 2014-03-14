@@ -2382,7 +2382,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"chips-header\">\n  <h2>Chips for `Chant Command`</h2>\n  <p>`Chant`では、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
+  return "<div id=\"chips-header\">\n  <h2>Chips for `CHA<span class=\"highlight\">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
   });
 var Chant;
 (function (Chant) {

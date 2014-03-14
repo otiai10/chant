@@ -18,6 +18,11 @@ h1 {
 h1>.highlight {
     color: #cc0033;
 }
+h2>.highlight {
+    color: #cc0033;
+    font-weight: bold;
+    text-shadow: 0 0 4px #cc0033;
+}
 div#footer {
     position: fixed;
     bottom: 0;
