@@ -83,19 +83,18 @@ $(function(){
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  // jquery1.5ぇ...
-  $('.btn-stamp').on('click', function(){
+  $(document).on('click','button.btn-stamp', function(){
     var message = $(this).find('img').attr('src');
     Chant.Socket().send(message);
     $('#message').focus();
   });
 
-  $('.user-icon').on('click',function(){
+  $(document).on('click','.user-icon',function(){
     var message = '@' + $(this).attr('user-name') + ' ';
     $('#message').val(message).focus();
   });
 
-  $('.message-unique').on('click',function(){
+  $(document).on('click','.message-unique',function(){
     var $form = $('form#' + $(this).attr('data-time'));
     var name = $form.find('[name=screenName]').val();
     var icon = $form.find('[name=profileImageUrl]').val();
@@ -109,7 +108,7 @@ $(function(){
     Chant.Playlist().play(0);
     $(this).remove();
   });
-  $('.sound-title').on('click',function(){
+  $(document).on('click','.sound-title',function(){
     var playlistIndex = $(this).attr('data-sound-index');
     Chant.Playlist().play(playlistIndex);
   });

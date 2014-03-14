@@ -103,7 +103,11 @@ div#player-wrapper {
 }
 div#stamps-container {
     width: 60px;
-    border: normal solid black;
+}
+button.btn-stamp {
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #fefefe;
 }
 ol#thread {
     list-style: none;
@@ -146,5 +150,16 @@ div.modal-contents {
     height: 100%;
     min-width: 800px;
     margin: 0 auto;
-    color: rgba(240,240,240,1);
+    color: #fefefe;
+}
+td.chips.desc-title {
+    width: 150px;
+}
+a.light {
+    color: #fefefe;
+    text-decoration: none;
+}
+a.light:hover {
+    color: #fff;
+    text-decoration: underline;
 }
