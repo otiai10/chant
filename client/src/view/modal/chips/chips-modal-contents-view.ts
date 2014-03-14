@@ -6,7 +6,9 @@ module Chant {
     export class ChipsModalContentsView extends ModalContentsView {
         private tpl = new HBSTemplate("modal/chips.hbs");
         constructor() {
-            super();
+            super({
+                id: 'chips'
+            });
         }
         render(): ChipsModalContentsView {
             this.$el.append(

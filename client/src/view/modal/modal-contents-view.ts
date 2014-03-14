@@ -1,10 +1,11 @@
 
 module Chant {
     export class ModalContentsView extends showv.View {
-        constructor(){
+        constructor(options: showv.IViewCreateOptions = {}){
             super({
                 tagName: 'div',
-                className: 'modal-contents'
+                id: options.id || '',
+                className: options.className || 'modal-contents'
             });
         }
     }

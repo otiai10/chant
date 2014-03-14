@@ -2348,7 +2348,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"chips\">\n    <h1>This is modal contents</h1>\n</div>\n";
+  return "<div id=\"chips-header\">\n  <h2>Chips for `Chant Command`</h2>\n  <p>`Chant`では、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n<div>\n  <h3>@stamp</h3>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2770,10 +2770,12 @@ var Chant;
 (function (Chant) {
     var ModalContentsView = (function (_super) {
         __extends(ModalContentsView, _super);
-        function ModalContentsView() {
+        function ModalContentsView(options) {
+            if (typeof options === "undefined") { options = {}; }
             _super.call(this, {
                 tagName: 'div',
-                className: 'modal-contents'
+                id: options.id || '',
+                className: options.className || 'modal-contents'
             });
         }
         return ModalContentsView;
@@ -2785,7 +2787,9 @@ var Chant;
     var ChipsModalContentsView = (function (_super) {
         __extends(ChipsModalContentsView, _super);
         function ChipsModalContentsView() {
-            _super.call(this);
+            _super.call(this, {
+                id: 'chips'
+            });
             this.tpl = new Chant.HBSTemplate("modal/chips.hbs");
         }
         ChipsModalContentsView.prototype.render = function () {
