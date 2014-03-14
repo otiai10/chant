@@ -1,4 +1,8 @@
 $(function(){
+
+  var view = new Chant.ChipsModalView();
+  $('body').append(view.render().$el);
+
   // Display a message
   var display = function(event) {
     //$(tmpl('message_tmpl', {event: event})).hide().prependTo('#thread').fadeIn(80);

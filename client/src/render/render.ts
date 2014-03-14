@@ -45,8 +45,6 @@ module Chant {
             default: Render.default
         }
         private static default(event: any): string {
-            var view = new IntroductionModalView();
-            $('body').append(view.render().$el);
             return tmpl('tmpl_roominfo_users', {users: event.RoomInfo.Users });
         }
 

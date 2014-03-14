@@ -2348,7 +2348,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"hoge\">\n    <h1>hoge</h1>\n</div>\n";
+  return "<div id=\"chips\" class=\"modal-contents\">\n    <h1>This is modal contents</h1>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2691,8 +2691,6 @@ var Chant;
         };
 
         Render.default = function (event) {
-            var view = new Chant.IntroductionModalView();
-            $('body').append(view.render().$el);
             return tmpl('tmpl_roominfo_users', { users: event.RoomInfo.Users });
         };
 
@@ -2770,42 +2768,79 @@ var __extends = this.__extends || function (d, b) {
 };
 var Chant;
 (function (Chant) {
-    var ModalView = (function (_super) {
-        __extends(ModalView, _super);
-        function ModalView() {
+    var ModalContentsView = (function (_super) {
+        __extends(ModalContentsView, _super);
+        function ModalContentsView() {
             _super.call(this, {
                 tagName: 'div',
-                className: 'modal-container'
+                className: 'modal-contents'
             });
         }
-        ModalView.prototype.events = function () {
+        return ModalContentsView;
+    })(showv.View);
+    Chant.ModalContentsView = ModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ChipsModalContentsView = (function (_super) {
+        __extends(ChipsModalContentsView, _super);
+        function ChipsModalContentsView() {
+            _super.call(this);
+            this.tpl = new Chant.HBSTemplate("hoge.hbs");
+        }
+        ChipsModalContentsView.prototype.render = function () {
+            this.$el.append(this.tpl.render());
+            return this;
+        };
+        return ChipsModalContentsView;
+    })(Chant.ModalContentsView);
+    Chant.ChipsModalContentsView = ChipsModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ModalWrapperView = (function (_super) {
+        __extends(ModalWrapperView, _super);
+        function ModalWrapperView() {
+            _super.call(this, {
+                tagName: 'div',
+                className: 'modal-wrapper'
+            });
+            this.background = '<div class="modal-background"></div>';
+        }
+        ModalWrapperView.prototype.events = function () {
             return {
                 'click': 'fadeOut'
             };
         };
-        ModalView.prototype.fadeOut = function () {
+        ModalWrapperView.prototype.fadeOut = function () {
             var _this = this;
-            this.$el.fadeOut(function () {
+            this.$el.fadeOut(100, function () {
                 _this.$el.remove();
             });
         };
-        return ModalView;
+        ModalWrapperView.prototype.render = function () {
+            this.$el.append(this.background, this.contents.render().$el);
+            return this;
+        };
+        return ModalWrapperView;
     })(showv.View);
-    Chant.ModalView = ModalView;
+    Chant.ModalWrapperView = ModalWrapperView;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
-    var IntroductionModalView = (function (_super) {
-        __extends(IntroductionModalView, _super);
-        function IntroductionModalView() {
+    var ChipsModalView = (function (_super) {
+        __extends(ChipsModalView, _super);
+        function ChipsModalView() {
             _super.call(this);
             this.tpl = new Chant.HBSTemplate('hoge.hbs');
+            this.contents = new Chant.ChipsModalContentsView();
         }
-        IntroductionModalView.prototype.render = function () {
+        ChipsModalView.prototype.render = function () {
             this.$el.append(this.tpl.render());
+            _super.prototype.render.call(this);
             return this;
         };
-        return IntroductionModalView;
-    })(Chant.ModalView);
-    Chant.IntroductionModalView = IntroductionModalView;
+        return ChipsModalView;
+    })(Chant.ModalWrapperView);
+    Chant.ChipsModalView = ChipsModalView;
 })(Chant || (Chant = {}));
