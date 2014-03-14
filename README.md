@@ -21,13 +21,16 @@ app.confを作成
 ```
 cp conf/app.conf.sample conf/app.conf
 ```
-クライアントサイドをビルド [詳細:client/README.md](client/README.md)
-```
-cd $GOPATH/src/chant/client
-npm install
-grunt build
-```
 起動
 ```
 revel run chant
 ```
+
+# 開発
+サーバサイド
+
+- `go fmt`する！(๑˃̵ᴗ˂̵)و http://otiai10.hatenablog.com/entry/2014/03/14/132315
+
+クライアントサイド
+
+- TypeScript！(๑˃̵ᴗ˂̵)و https://github.com/otiai10/chant/tree/master/client
