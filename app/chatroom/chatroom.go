@@ -60,7 +60,7 @@ func Leave(user *model.User) {
 }
 
 const archiveSize = 4
-const soundArchiveSize = 20
+const soundArchiveSize = 21
 
 var (
 	// Send a channel here to get room events back.  It will send the entire
@@ -127,7 +127,9 @@ func chatroom() {
 			if archive.Len() >= archiveSize {
 				archive.Remove(archive.Front())
 			}
-			archive.PushBack(event)
+			if event.Type != "leave" && event.Type != "join" {
+				archive.PushBack(event)
+			}
 
 		case unsub := <-unsubscribe:
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
