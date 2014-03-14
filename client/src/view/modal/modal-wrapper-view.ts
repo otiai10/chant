@@ -31,10 +31,9 @@ module Chant {
             );
             return this;
         }
+        // このshowを使いたいんだけど、Chromeの描画バグっぽい？backgroundが表示されない
         show(): ModalWrapperView {
-            setTimeout(() => {
-                this.$el.fadeIn(ModalWrapperView.fadeDuration);
-            },0);
+            this.$el.fadeIn(ModalWrapperView.fadeDuration);
             return this;
         }
     }

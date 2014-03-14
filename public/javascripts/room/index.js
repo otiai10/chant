@@ -1,8 +1,4 @@
 $(function(){
-
-  var view = new Chant.ChipsModalView();
-  $('body').append(view.render().show().$el);
-
   // Display a message
   var display = function(event) {
     //$(tmpl('message_tmpl', {event: event})).hide().prependTo('#thread').fadeIn(80);
@@ -112,4 +108,10 @@ $(function(){
     var playlistIndex = $(this).attr('data-sound-index');
     Chant.Playlist().play(playlistIndex);
   });
+
+  $(document).on('click','.show-chips',function(){
+    var view = new Chant.ChipsModalView();
+    $('body').append(view.render().$el.show());
+  });
+ 
 });

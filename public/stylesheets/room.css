@@ -32,6 +32,7 @@ div#footer {
     padding: 10px 0;
 }
 div#footer>a {
+    margin-left: 10px;
     text-decoration: none;
     font-size: 0.8em;
     color: #bbb;
@@ -161,5 +162,8 @@ a.light {
 }
 a.light:hover {
     color: #fff;
+    text-decoration: underline;
+}
+.chips-sample:hover {
     text-decoration: underline;
 }

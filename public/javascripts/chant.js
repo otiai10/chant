@@ -2364,7 +2364,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">使用例</td><td class=\"chips-sample\"><span>{</span>";
+  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">使用例</td><td class=\"chips-sample clickable\"><span>{</span>";
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -2919,11 +2919,9 @@ var Chant;
             this.$el.append(this.background, this.contents.render().$el);
             return this;
         };
+
         ModalWrapperView.prototype.show = function () {
-            var _this = this;
-            setTimeout(function () {
-                _this.$el.fadeIn(ModalWrapperView.fadeDuration);
-            }, 0);
+            this.$el.fadeIn(ModalWrapperView.fadeDuration);
             return this;
         };
         ModalWrapperView.fadeDuration = 100;
