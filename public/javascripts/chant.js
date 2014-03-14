@@ -2814,7 +2814,7 @@ var Chant;
         };
         ModalWrapperView.prototype.fadeOut = function () {
             var _this = this;
-            this.$el.fadeOut(100, function () {
+            this.$el.fadeOut(ModalWrapperView.fadeDuration, function () {
                 _this.$el.remove();
             });
         };
@@ -2822,6 +2822,14 @@ var Chant;
             this.$el.append(this.background, this.contents.render().$el);
             return this;
         };
+        ModalWrapperView.prototype.show = function () {
+            var _this = this;
+            setTimeout(function () {
+                _this.$el.fadeIn(ModalWrapperView.fadeDuration);
+            }, 0);
+            return this;
+        };
+        ModalWrapperView.fadeDuration = 100;
         return ModalWrapperView;
     })(showv.View);
     Chant.ModalWrapperView = ModalWrapperView;

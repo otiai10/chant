@@ -7,6 +7,7 @@ module Chant {
     export class ModalWrapperView extends showv.View {
         private background = '<div class="modal-background"></div>';
         public  contents: ModalContentsView;
+        private static fadeDuration: number = 100;
         constructor(){
             super({
                 tagName: 'div',
@@ -19,7 +20,7 @@ module Chant {
             }
         }
         fadeOut() {
-            this.$el.fadeOut(100, () => {
+            this.$el.fadeOut(ModalWrapperView.fadeDuration, () => {
                 this.$el.remove();
             });
         }
@@ -28,6 +29,12 @@ module Chant {
                 this.background,
                 this.contents.render().$el
             );
+            return this;
+        }
+        show(): ModalWrapperView {
+            setTimeout(() => {
+                this.$el.fadeIn(ModalWrapperView.fadeDuration);
+            },0);
             return this;
         }
     }

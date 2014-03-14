@@ -1,7 +1,7 @@
 $(function(){
 
   var view = new Chant.ChipsModalView();
-  $('body').append(view.render().$el);
+  $('body').append(view.render().show().$el);
 
   // Display a message
   var display = function(event) {
