@@ -2520,7 +2520,7 @@ var Chant;
             $('title').text('!' + $('title').text());
         },
         onread: function () {
-            $('title').text('Chant');
+            $('title').text('CHANT');
         },
         init: function () {
             if (webkitNotifications.checkPermission() == 0) {
@@ -2551,7 +2551,7 @@ var Chant;
             if (typeof params != 'object')
                 params = {};
             var icon = params.icon || '/public/images/favicon.jpg';
-            var title = params.title || 'Chant!';
+            var title = params.title || 'CHANT!';
             var text = params.text || 'えら〜';
             var notification = webkitNotifications.createNotification(icon, title, text);
             notification.onclick = function () {
