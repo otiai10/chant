@@ -6,7 +6,7 @@ import "chant/app/models"
 import "regexp"
 
 func SoundFromText(text string, user *model.User) (sound model.Sound, err error) {
-	exp, _ := regexp.Compile("(https?)://(soundcloud.com|www.youtube.com)/(.+)")
+	exp, _ := regexp.Compile("^(https?)://(soundcloud.com|www.youtube.com)/(.+)")
 	matched := exp.FindAllStringSubmatch(text, 1)
 	if len(matched) == 0 || len(matched[0]) < 4 {
 		err = NotSoundError{"ようつべとサンクラじゃない"}
