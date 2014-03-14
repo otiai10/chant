@@ -50,7 +50,7 @@ module Chant {
             if (! $('#enable-notification').attr('checked')) return;
             if (typeof params != 'object') params = {};
             var icon = params.icon || '/public/images/favicon.jpg';
-            var title = params.title || 'Chant!';
+            var title = params.title || 'CHANT!';
             var text = params.text || 'えら〜';
             var notification = webkitNotifications.createNotification(
                 icon,
