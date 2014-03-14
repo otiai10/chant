@@ -10,7 +10,7 @@ module Chant {
         constructor(){
             super({
                 tagName: 'div',
-                className: 'modal-wrapper'
+                className: 'modal-wrapper clickable'
             });
         }
         events(): Object {

@@ -2342,13 +2342,13 @@ Handlebars.template = Handlebars.VM.template;
 
 this["HBS"] = this["HBS"] || {};
 
-this["HBS"]["asset/tpl/hoge.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HBS"]["asset/tpl/modal/chips.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"chips\" class=\"modal-contents\">\n    <h1>This is modal contents</h1>\n</div>\n";
+  return "<div id=\"chips\">\n    <h1>This is modal contents</h1>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2786,7 +2786,7 @@ var Chant;
         __extends(ChipsModalContentsView, _super);
         function ChipsModalContentsView() {
             _super.call(this);
-            this.tpl = new Chant.HBSTemplate("hoge.hbs");
+            this.tpl = new Chant.HBSTemplate("modal/chips.hbs");
         }
         ChipsModalContentsView.prototype.render = function () {
             this.$el.append(this.tpl.render());
@@ -2803,7 +2803,7 @@ var Chant;
         function ModalWrapperView() {
             _super.call(this, {
                 tagName: 'div',
-                className: 'modal-wrapper'
+                className: 'modal-wrapper clickable'
             });
             this.background = '<div class="modal-background"></div>';
         }
@@ -2832,11 +2832,9 @@ var Chant;
         __extends(ChipsModalView, _super);
         function ChipsModalView() {
             _super.call(this);
-            this.tpl = new Chant.HBSTemplate('hoge.hbs');
             this.contents = new Chant.ChipsModalContentsView();
         }
         ChipsModalView.prototype.render = function () {
-            this.$el.append(this.tpl.render());
             _super.prototype.render.call(this);
             return this;
         };

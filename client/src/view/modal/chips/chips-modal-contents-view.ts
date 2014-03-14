@@ -4,7 +4,7 @@
 
 module Chant {
     export class ChipsModalContentsView extends ModalContentsView {
-        private tpl = new HBSTemplate("hoge.hbs");
+        private tpl = new HBSTemplate("modal/chips.hbs");
         constructor() {
             super();
         }

@@ -146,4 +146,5 @@ div.modal-contents {
     min-width: 800px;
     margin: 0 auto;
     background-color: rgba(0,0,0,0.4);
+    color: rgba(240,240,240,1);
 }

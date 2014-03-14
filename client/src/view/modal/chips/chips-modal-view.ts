@@ -4,15 +4,11 @@
 
 module Chant {
     export class ChipsModalView extends ModalWrapperView {
-        private tpl = new HBSTemplate('hoge.hbs');
         public contents = new ChipsModalContentsView();
         constructor(){
             super();
         }
         render(): ChipsModalView {
-            this.$el.append(
-                this.tpl.render()
-            );
             super.render();
             return this;
         }
