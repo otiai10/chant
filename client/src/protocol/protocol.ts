@@ -51,7 +51,7 @@ module Chant {
         },
         stamp: (url) => {
             var stampHTML = tmpl('tmpl_base_stamp', {url:url});
-            $('#stamps-container').prepend(stampHTML);
+            $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録ed' + stampHTML;
         },
         quote: (text) => {

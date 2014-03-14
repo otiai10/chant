@@ -2342,13 +2342,47 @@ Handlebars.template = Handlebars.VM.template;
 
 this["HBS"] = this["HBS"] || {};
 
-this["HBS"]["asset/tpl/hoge.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HBS"]["asset/tpl/modal/chip.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div>\n  <h2>";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h2>\n  <table>\n    <tbody>\n      <tr>\n        <td class=\"chips desc-title\">コマンド</td><td><span>{</span>";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ":<i>";
+  if (stack1 = helpers.placeholder) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.placeholder; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</i><span>}</span></td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">説明</td><td>";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">使用例</td><td class=\"chips-sample clickable\"><span>{</span>";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ":";
+  if (stack1 = helpers.sampleValue) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.sampleValue; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<span>}</span></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n";
+  return buffer;
+  });
+
+this["HBS"]["asset/tpl/modal/chips.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"hoge\">\n\n</div>\n";
+  return "<div id=\"chips-header\">\n  <h2>Chips for `CHA<span class=\"highlight\">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2428,6 +2462,36 @@ var Chant;
             });
         }
     };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    Chant.Chips = {
+        stamp: {
+            title: '@stamp',
+            placeholder: '画像URL',
+            description: '任意の画像を全ユーザの窓においてスタンプとして登録できます。このコマンドで1度スタンプ登録すると、ページをリロードしない限りボタンからいつでもスタンプ画像を投下できます',
+            sampleValue: 'https://pbs.twimg.com/media/BitWdO3CMAEb-4k.jpg'
+        },
+        emo: {
+            title: '@emo',
+            placeholder: 'GitHubのemojiコード',
+            description: '簡単に絵文字を出力することができます。GitHubのemojiコード全てに対応しています。詳しくは<a href="http://www.emoji-cheat-sheet.com/" target="_blank" class="light">Emoji cheat sheet for Campfire and GitHub</a>',
+            sampleValue: 'shit'
+        }
+    };
+    var Chip = (function () {
+        function Chip(obj) {
+            this.title = obj['title'];
+            this.placeholder = obj['placeholder'];
+            this.description = obj['description'];
+            this.sampleValue = obj['sampleValue'];
+        }
+        Chip.prototype.toSampleText = function () {
+            return '{' + this.title + ':' + this.sampleValue + '}';
+        };
+        return Chip;
+    })();
+    Chant.Chip = Chip;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
@@ -2633,7 +2697,7 @@ var Chant;
         },
         stamp: function (url) {
             var stampHTML = tmpl('tmpl_base_stamp', { url: url });
-            $('#stamps-container').prepend(stampHTML);
+            $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録ed' + stampHTML;
         },
         quote: function (text) {
@@ -2753,6 +2817,33 @@ var __extends = this.__extends || function (d, b) {
 };
 var Chant;
 (function (Chant) {
+    var ChipView = (function (_super) {
+        __extends(ChipView, _super);
+        function ChipView(chip) {
+            _super.call(this, {
+                delegate: false
+            });
+            this.chip = chip;
+            this.tpl = new Chant.HBSTemplate('modal/chip.hbs');
+        }
+        ChipView.prototype.events = function () {
+            return {
+                'click .chips-sample': 'inputSample'
+            };
+        };
+        ChipView.prototype.inputSample = function () {
+            $('input#message').val(this.chip.toSampleText()).focus();
+        };
+        ChipView.prototype.render = function () {
+            this.$el.append(this.tpl.render(this.chip));
+            return this;
+        };
+        return ChipView;
+    })(showv.View);
+    Chant.ChipView = ChipView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
     var HBSTemplate = (function () {
         function HBSTemplate(name) {
             this.name = name;
@@ -2766,25 +2857,91 @@ var Chant;
     })();
     Chant.HBSTemplate = HBSTemplate;
 })(Chant || (Chant = {}));
-
 var Chant;
 (function (Chant) {
-    var ModalView = (function (_super) {
-        __extends(ModalView, _super);
-        function ModalView() {
-            _super.call(this);
+    var ModalContentsView = (function (_super) {
+        __extends(ModalContentsView, _super);
+        function ModalContentsView(options) {
+            if (typeof options === "undefined") { options = {}; }
+            _super.call(this, {
+                tagName: 'div',
+                id: options.id || '',
+                className: options.className || 'modal-contents'
+            });
         }
-        return ModalView;
+        return ModalContentsView;
     })(showv.View);
-    Chant.ModalView = ModalView;
-    var IntroductionModalView = (function (_super) {
-        __extends(IntroductionModalView, _super);
-        function IntroductionModalView() {
-            _super.call(this);
-            this.tpl = new Chant.HBSTemplate('hoge.hbs');
-            console.log(this.tpl.render());
+    Chant.ModalContentsView = ModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ChipsModalContentsView = (function (_super) {
+        __extends(ChipsModalContentsView, _super);
+        function ChipsModalContentsView() {
+            _super.call(this, {
+                id: 'chips'
+            });
+            this.tpl = new Chant.HBSTemplate("modal/chips.hbs");
         }
-        return IntroductionModalView;
-    })(ModalView);
-    Chant.IntroductionModalView = IntroductionModalView;
+        ChipsModalContentsView.prototype.render = function () {
+            var stamp = new Chant.ChipView(new Chant.Chip(Chant.Chips.stamp));
+            var emo = new Chant.ChipView(new Chant.Chip(Chant.Chips.emo));
+            this.$el.append(this.tpl.render(), stamp.render().$el, emo.render().$el);
+            return this;
+        };
+        return ChipsModalContentsView;
+    })(Chant.ModalContentsView);
+    Chant.ChipsModalContentsView = ChipsModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ModalWrapperView = (function (_super) {
+        __extends(ModalWrapperView, _super);
+        function ModalWrapperView() {
+            _super.call(this, {
+                tagName: 'div',
+                className: 'modal-wrapper clickable'
+            });
+            this.background = '<div class="modal-background"></div>';
+        }
+        ModalWrapperView.prototype.events = function () {
+            return {
+                'click': 'fadeOut'
+            };
+        };
+        ModalWrapperView.prototype.fadeOut = function () {
+            var _this = this;
+            this.$el.fadeOut(ModalWrapperView.fadeDuration, function () {
+                _this.$el.remove();
+            });
+        };
+        ModalWrapperView.prototype.render = function () {
+            this.$el.append(this.background, this.contents.render().$el);
+            return this;
+        };
+
+        ModalWrapperView.prototype.show = function () {
+            this.$el.fadeIn(ModalWrapperView.fadeDuration);
+            return this;
+        };
+        ModalWrapperView.fadeDuration = 100;
+        return ModalWrapperView;
+    })(showv.View);
+    Chant.ModalWrapperView = ModalWrapperView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ChipsModalView = (function (_super) {
+        __extends(ChipsModalView, _super);
+        function ChipsModalView() {
+            _super.call(this);
+            this.contents = new Chant.ChipsModalContentsView();
+        }
+        ChipsModalView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            return this;
+        };
+        return ChipsModalView;
+    })(Chant.ModalWrapperView);
+    Chant.ChipsModalView = ChipsModalView;
 })(Chant || (Chant = {}));

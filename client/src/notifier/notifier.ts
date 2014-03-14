@@ -22,7 +22,7 @@ module Chant {
             $('title').text('!' + $('title').text());
         },
         onread: () => {
-            $('title').text('Chant');
+            $('title').text('CHANT');
         },
         init: () => {
             if (webkitNotifications.checkPermission() == 0) {
