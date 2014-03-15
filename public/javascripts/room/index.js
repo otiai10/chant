@@ -109,8 +109,8 @@ $(function(){
     Chant.Playlist().play(playlistIndex);
   });
 
-  $(document).on('click','.show-chips',function(){
-    var view = new Chant.ChipsModalView();
+  $(document).on('click','.show-tips',function(){
+    var view = new Chant.TipsModalView();
     $('body').append(view.render().$el.show());
   });
  

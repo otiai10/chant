@@ -2342,7 +2342,7 @@ Handlebars.template = Handlebars.VM.template;
 
 this["HBS"] = this["HBS"] || {};
 
-this["HBS"]["asset/tpl/modal/chip.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HBS"]["asset/tpl/modal/tip.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
@@ -2376,13 +2376,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["HBS"]["asset/tpl/modal/chips.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["HBS"]["asset/tpl/modal/tips.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"chips-header\">\n  <h2>Chips for `CHA<span class=\"highlight\">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
+  return "<div id=\"tips-header\">\n  <h2>Tips for `CHA<span class=\"highlight\">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
   });
 var Chant;
 (function (Chant) {
@@ -2816,48 +2816,6 @@ var __extends = this.__extends || function (d, b) {
 };
 var Chant;
 (function (Chant) {
-    var ChipView = (function (_super) {
-        __extends(ChipView, _super);
-        function ChipView(chip) {
-            _super.call(this, {
-                delegate: false
-            });
-            this.chip = chip;
-            this.tpl = new Chant.HBSTemplate('modal/chip.hbs');
-        }
-        ChipView.prototype.events = function () {
-            return {
-                'click .chips-sample': 'inputSample'
-            };
-        };
-        ChipView.prototype.inputSample = function () {
-            $('input#message').val(this.chip.toSampleText()).focus();
-        };
-        ChipView.prototype.render = function () {
-            this.$el.append(this.tpl.render(this.chip));
-            return this;
-        };
-        return ChipView;
-    })(showv.View);
-    Chant.ChipView = ChipView;
-})(Chant || (Chant = {}));
-var Chant;
-(function (Chant) {
-    var HBSTemplate = (function () {
-        function HBSTemplate(name) {
-            this.name = name;
-            this.template = null;
-            this.template = HBS['asset/tpl/' + name];
-        }
-        HBSTemplate.prototype.render = function (param) {
-            return this.template(param);
-        };
-        return HBSTemplate;
-    })();
-    Chant.HBSTemplate = HBSTemplate;
-})(Chant || (Chant = {}));
-var Chant;
-(function (Chant) {
     var ModalContentsView = (function (_super) {
         __extends(ModalContentsView, _super);
         function ModalContentsView(options) {
@@ -2874,23 +2832,18 @@ var Chant;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
-    var ChipsModalContentsView = (function (_super) {
-        __extends(ChipsModalContentsView, _super);
-        function ChipsModalContentsView() {
-            _super.call(this, {
-                id: 'chips'
-            });
-            this.tpl = new Chant.HBSTemplate("modal/chips.hbs");
+    var HBSTemplate = (function () {
+        function HBSTemplate(name) {
+            this.name = name;
+            this.template = null;
+            this.template = HBS['asset/tpl/' + name];
         }
-        ChipsModalContentsView.prototype.render = function () {
-            var stamp = new Chant.ChipView(new Chant.Chip(Chant.Chips.stamp));
-            var emo = new Chant.ChipView(new Chant.Chip(Chant.Chips.emo));
-            this.$el.append(this.tpl.render(), stamp.render().$el, emo.render().$el);
-            return this;
+        HBSTemplate.prototype.render = function (param) {
+            return this.template(param);
         };
-        return ChipsModalContentsView;
-    })(Chant.ModalContentsView);
-    Chant.ChipsModalContentsView = ChipsModalContentsView;
+        return HBSTemplate;
+    })();
+    Chant.HBSTemplate = HBSTemplate;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
@@ -2930,17 +2883,64 @@ var Chant;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
-    var ChipsModalView = (function (_super) {
-        __extends(ChipsModalView, _super);
-        function ChipsModalView() {
-            _super.call(this);
-            this.contents = new Chant.ChipsModalContentsView();
+    var TipView = (function (_super) {
+        __extends(TipView, _super);
+        function TipView(chip) {
+            _super.call(this, {
+                delegate: false
+            });
+            this.chip = chip;
+            this.tpl = new Chant.HBSTemplate('modal/tip.hbs');
         }
-        ChipsModalView.prototype.render = function () {
+        TipView.prototype.events = function () {
+            return {
+                'click .chips-sample': 'inputSample'
+            };
+        };
+        TipView.prototype.inputSample = function () {
+            $('input#message').val(this.chip.toSampleText()).focus();
+        };
+        TipView.prototype.render = function () {
+            this.$el.append(this.tpl.render(this.chip));
+            return this;
+        };
+        return TipView;
+    })(showv.View);
+    Chant.TipView = TipView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var TipsModalContentsView = (function (_super) {
+        __extends(TipsModalContentsView, _super);
+        function TipsModalContentsView() {
+            _super.call(this, {
+                id: 'chips'
+            });
+            this.tpl = new Chant.HBSTemplate("modal/tips.hbs");
+        }
+        TipsModalContentsView.prototype.render = function () {
+            var stamp = new Chant.TipView(new Chant.Chip(Chant.Chips.stamp));
+            var emo = new Chant.TipView(new Chant.Chip(Chant.Chips.emo));
+            this.$el.append(this.tpl.render(), stamp.render().$el, emo.render().$el);
+            return this;
+        };
+        return TipsModalContentsView;
+    })(Chant.ModalContentsView);
+    Chant.TipsModalContentsView = TipsModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var TipsModalView = (function (_super) {
+        __extends(TipsModalView, _super);
+        function TipsModalView() {
+            _super.call(this);
+            this.contents = new Chant.TipsModalContentsView();
+        }
+        TipsModalView.prototype.render = function () {
             _super.prototype.render.call(this);
             return this;
         };
-        return ChipsModalView;
+        return TipsModalView;
     })(Chant.ModalWrapperView);
-    Chant.ChipsModalView = ChipsModalView;
+    Chant.TipsModalView = TipsModalView;
 })(Chant || (Chant = {}));

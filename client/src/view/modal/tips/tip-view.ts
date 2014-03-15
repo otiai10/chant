@@ -1,7 +1,7 @@
 
 module Chant {
-    export class ChipView extends showv.View {
-        private tpl = new HBSTemplate('modal/chip.hbs');
+    export class TipView extends showv.View {
+        private tpl = new HBSTemplate('modal/tip.hbs');
         constructor(public chip: Chip){
             super({
                 delegate: false
@@ -15,7 +15,7 @@ module Chant {
         inputSample() {
             $('input#message').val(this.chip.toSampleText()).focus();
         }
-        render(): ChipView {
+        render(): TipView {
             this.$el.append(
                 this.tpl.render(this.chip)
             );

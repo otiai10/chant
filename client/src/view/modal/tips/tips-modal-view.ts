@@ -1,14 +1,14 @@
 /// <reference path="../../template.ts" />
 /// <reference path="../modal-wrapper-view.ts" />
-/// <reference path="./chips-modal-contents-view.ts" />
+/// <reference path="./tips-modal-contents-view.ts" />
 
 module Chant {
-    export class ChipsModalView extends ModalWrapperView {
-        public contents = new ChipsModalContentsView();
+    export class TipsModalView extends ModalWrapperView {
+        public contents = new TipsModalContentsView();
         constructor(){
             super();
         }
-        render(): ChipsModalView {
+        render(): TipsModalView {
             super.render();
             return this;
         }
