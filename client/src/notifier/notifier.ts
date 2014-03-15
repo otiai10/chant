@@ -47,7 +47,7 @@ module Chant {
             return event;
         },
         _show: (params: any) => {
-            if (! $('#enable-notification').attr('checked')) return;
+            if (! $('#enable-notification').is(':checked')) return;
             if (typeof params != 'object') params = {};
             var icon = params.icon || '/public/images/favicon.jpg';
             var title = params.title || 'CHANT!';

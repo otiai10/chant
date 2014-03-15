@@ -2546,7 +2546,7 @@ var Chant;
             return event;
         },
         _show: function (params) {
-            if (!$('#enable-notification').attr('checked'))
+            if (!$('#enable-notification').is(':checked'))
                 return;
             if (typeof params != 'object')
                 params = {};
