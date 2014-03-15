@@ -2512,7 +2512,6 @@ var Chant;
     Chant.Notifier = {
         isActive: true,
         onmessage: function (event) {
-            console.log(Chant.Notifier.isActive);
             if (event.Type == "leave" || event.Type == "join")
                 return;
             if (Chant.Notifier.isActive)
