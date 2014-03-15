@@ -2348,11 +2348,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div>\n  <h2>";
+  buffer += "<div>\n  <h2 class=\"tips tips-title\">";
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</h2>\n  <table>\n    <tbody>\n      <tr>\n        <td class=\"chips desc-title\">コマンド</td><td><span>{</span>";
+    + "</h2>\n  <table>\n    <tbody>\n      <tr>\n        <td class=\"tips desc-title\">コマンド</td><td><span>{</span>";
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -2360,11 +2360,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.placeholder) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.placeholder; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</i><span>}</span></td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">説明</td><td>";
+    + "</i><span>}</span></td>\n      </tr>\n      <tr>\n        <td class=\"tips desc-title\">説明</td><td>";
   if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"chips desc-title\">使用例</td><td class=\"chips-sample clickable\"><span>{</span>";
+  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"tips desc-title\">使用例</td><td class=\"tips-sample clickable\"><span>{</span>";
   if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -2894,7 +2894,7 @@ var Chant;
         }
         TipView.prototype.events = function () {
             return {
-                'click .chips-sample': 'inputSample'
+                'click .tips-sample': 'inputSample'
             };
         };
         TipView.prototype.inputSample = function () {

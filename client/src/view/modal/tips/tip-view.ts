@@ -9,7 +9,7 @@ module Chant {
         }
         events(): Object {
             return {
-                'click .chips-sample': 'inputSample'
+                'click .tips-sample': 'inputSample'
             }
         }
         inputSample() {
