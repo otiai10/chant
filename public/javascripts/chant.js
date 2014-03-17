@@ -2386,6 +2386,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   });
 var Chant;
 (function (Chant) {
+    function Imager(str) {
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+        var img = imgUrl.exec(str);
+        if (img != null && img.length) {
+            return str.replace(img[0], '<img src="' + img[0] + '">');
+        }
+        return str;
+    }
+    Chant.Imager = Imager;
     function Anchorize(str) {
         var ytb = _execYouTube(str);
         if (ytb)
@@ -2694,8 +2703,8 @@ var Chant;
             $(selector).css(style);
             return values;
         },
-        stamp: function (url) {
-            var stampHTML = tmpl('tmpl_base_stamp', { url: url });
+        stamp: function (val) {
+            var stampHTML = tmpl('tmpl_base_stamp', { raw: val, label: Chant.Imager(val) });
             $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録ed' + stampHTML;
         },

@@ -49,8 +49,8 @@ module Chant {
             $(selector).css(style);
             return values;
         },
-        stamp: (url) => {
-            var stampHTML = tmpl('tmpl_base_stamp', {url:url});
+        stamp: (val) => {
+            var stampHTML = tmpl('tmpl_base_stamp', {raw: val, label: Imager(val)});
             $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録ed' + stampHTML;
         },

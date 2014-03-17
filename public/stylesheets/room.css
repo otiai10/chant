@@ -111,9 +111,14 @@ div#stamps-container {
     width: 60px;
 }
 button.btn-stamp {
+    width: 100%;
+    max-width: 120px;
     cursor: pointer;
     border-radius: 10px;
     background-color: #fefefe;
+}
+button.btn-stamp>img {
+    width: 100%;
 }
 ol#thread {
     list-style: none;

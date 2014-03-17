@@ -86,7 +86,7 @@ $(function(){
     $('#message').focus();
   });
   $(document).on('click','button.btn-stamp', function(){
-    var message = $(this).find('img').attr('src');
+    var message = $(this).attr('data-raw');
     Chant.Socket().send(message);
     $('#message').focus();
   });

@@ -1,5 +1,14 @@
 
 module Chant {
+    export function Imager(str: string) {
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+        var img = imgUrl.exec(str);
+        if (img != null && img.length) {
+            return str.replace(img[0], '<img src="' + img[0] + '">');
+        }
+        return str;
+ 
+    }
     export function Anchorize(str: string) {
         var ytb = _execYouTube(str);
         if (ytb) return ytb;
