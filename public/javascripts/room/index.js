@@ -66,8 +66,14 @@ $(function(){
     Chant.Socket().send(message);
     $('#message').focus();
   });
-  document.getElementById('enable-notification').addEventListener('change', function(){
+  // affect settings
+  if (localStorage.getItem('enable-notification') === 'true') {
+    $('#enable-notification').attr('checked', true);
+  }
+  $(document).on('change','#enable-notification',function(){
     Chant.Notifier.init();
+    var isEnabled = $('#enable-notification').is(':checked');
+    localStorage.setItem('enable-notification', isEnabled);
   });
   $('#zawameku').on('click',function(){
     var message = '{@img:zawameku}';
