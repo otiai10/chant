@@ -16,7 +16,7 @@ module Chant {
             this.origin = origin;
 
             var matches = this.origin.match(/^\{@([a-z]+):([^}]+)\}$/);
-            if (matches.length < 3) return this;
+            if (matches == null || matches.length < 3) return this;
 
             this.name  = matches[1];
             if (! Protocols[Protocols[this.name]]) return this;
