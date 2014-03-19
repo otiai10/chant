@@ -51,6 +51,9 @@ div#footer>a:hover {
     font-size: x-small;
     color: #aaa;
 }
+.small {
+    font-size: x-small;
+}
 img.tl-img {
     max-width: 90%;
 }
@@ -107,6 +110,13 @@ div#player-wrapper {
     width: 410px;
     /* background-color: #ddd; */
 }
+span.to-stamp {
+    -webkit-opacity: 0;
+    -webkit-transition: all 0.05s linear;
+}
+span.to-stamp:hover {
+    -webkit-opacity: 0.5;
+}
 div#stamps-container {
     width: 60px;
 }
@@ -119,6 +129,9 @@ button.btn-stamp {
 }
 button.btn-stamp>img {
     width: 100%;
+}
+li.message {
+    margin-bottom: 10px;
 }
 ol#thread {
     list-style: none;

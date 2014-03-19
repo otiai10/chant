@@ -105,6 +105,14 @@ $(function(){
     Chant.Socket().send(message);
     $('#message').focus();
   });
+  $(document).on('click','.to-stamp',function(){
+    var $form = $('form#' + $(this).attr('data-time'));
+    var text = $form.find('[name=originalText]').val();
+    var message = '{@stamp:' + text + '}';
+    Chant.Socket().send(message);
+    $('#message').focus();
+  });
+
 
   $('#playlist-start').on('click',function(){
     Chant.Playlist().play(0);
