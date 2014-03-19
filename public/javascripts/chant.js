@@ -2649,69 +2649,65 @@ var Chant;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
-    function Protocol(str) {
-        var matches = str.match(/^\{@([a-z]+):(.+)\}$/);
-        if (matches == null || matches.length < 3)
-            return;
+    (function (Protocols) {
+        Protocols[Protocols["img"] = 0] = "img";
+        Protocols[Protocols["emo"] = 1] = "emo";
+        Protocols[Protocols["css"] = 2] = "css";
+        Protocols[Protocols["stamp"] = 3] = "stamp";
+        Protocols[Protocols["quote"] = 4] = "quote";
+    })(Chant.Protocols || (Chant.Protocols = {}));
+    var Protocols = Chant.Protocols;
+    var ProtocolExecuter = (function () {
+        function ProtocolExecuter(origin) {
+            this.ok = false;
+            this.origin = origin;
 
-        var protocol = matches[1];
-        var key = matches[2];
+            var matches = this.origin.match(/^\{@([a-z]+):([^}]+)\}$/);
+            if (matches.length < 3)
+                return this;
 
-        if (protocols[protocol] == undefined)
-            return;
+            this.name = matches[1];
+            if (!Protocols[Protocols[this.name]])
+                return this;
 
-        return {
-            protocol: protocol,
-            value: protocols[protocol](key)
+            this.value = matches[2];
+            this.ok = true;
+
+            this.result = this[this.name]();
+        }
+        ProtocolExecuter.prototype.emo = function () {
+            return '<img src="/public/images/emojis/' + this.value + '.png" width="40px">';
         };
-    }
-    Chant.Protocol = Protocol;
-
-    var protocols = {
-        img: function (key) {
-            var keys = {
-                'ohayo': function () {
-                    return '<img src="./public/images/ohayogozaimasu.jpg" class="tl-img">';
-                },
-                'odayakajanai': function () {
-                    return '<img src="./public/images/odayakajanai.jpg" class="tl-img">';
-                },
-                'okitekudasai': function () {
-                    return '<img src="./public/images/okitekudasai.jpg" class="tl-img">';
-                },
-                'zawameku': function () {
-                    return '<img src="./public/images/zawameku.jpg" class="tl-img">';
-                },
-                'chunchun': function () {
-                    return '<img src="./public/images/kotori.jpg" class="tl-img">';
-                }
+        ProtocolExecuter.prototype.img = function () {
+            var map = {
+                'ohayo': "ohayogozaimasu.jpg",
+                'odayakajanai': "odayakajanai.jpg",
+                'okitekudasai': "okitekudasai.jpg",
+                'zawameku': "zawameku.jpg",
+                'chunchun': "kotori.jpg"
             };
-            if (typeof keys[key] != 'function')
-                return;
-            return keys[key]();
-        },
-        emo: function (key) {
-            return '<img src="/public/images/emojis/' + key + '.png" width="40px">';
-        },
-        css: function (values) {
+            if (!map[this.value])
+                return this.origin;
+            return '<img src="./public/images/{src}" class="tl-img">'.replace('{src}', map[this.value]);
+        };
+        ProtocolExecuter.prototype.css = function () {
             var matches = values.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
             if (matches == null || matches.length < 4)
-                return;
+                return this.origin;
             var selector = matches[1];
             var style = {};
             style[matches[2]] = matches[3];
             $(selector).css(style);
-            return values;
-        },
-        stamp: function (val) {
-            var stampHTML = tmpl('tmpl_base_stamp', { raw: val, label: Chant.Imager(val) });
+            return this.origin;
+        };
+        ProtocolExecuter.prototype.stamp = function () {
+            var stampHTML = tmpl('tmpl_base_stamp', { raw: this.value, label: Chant.Imager(val) });
             $('#stamps-container').prepend($(stampHTML));
-            return 'スタンプ登録ed' + stampHTML;
-        },
-        quote: function (text) {
-            console.log(text);
-            var pattern = /{([^{^}]+)}{([^{^}]+)}{([^{^}]+)}/gi;
-            var matched = pattern.exec(text);
+            return 'スタンプ登録' + stampHTML;
+        };
+        ProtocolExecuter.prototype.quote = function () {
+            var pattern = /([^{^}]+)\|\|([^{^}]+)\|\|([^{^}]+)/gi;
+            var matched = pattern.exec(this.value);
             if (matched == null)
                 return;
             var quote = {
@@ -2720,8 +2716,23 @@ var Chant;
                 text: Chant.Anchorize(matched[3])
             };
             return tmpl('tmpl_event_message_quote', { quote: quote });
-        }
-    };
+        };
+        return ProtocolExecuter;
+    })();
+    Chant.ProtocolExecuter = ProtocolExecuter;
+    function Protocol(str) {
+        var chunks = str.match(/\{@([a-z]+):([^}]+)\}/g);
+        if (!chunks)
+            return;
+        $.map(chunks, function (chunk) {
+            var ex = new ProtocolExecuter(chunk);
+            if (!ex.ok)
+                return;
+            str = str.replace(ex.origin, ex.result);
+        });
+        return str;
+    }
+    Chant.Protocol = Protocol;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
@@ -2735,16 +2746,7 @@ var Chant;
             event = Chant.Notifier.detectMentioned(event);
 
             event.Time = new Chant.Time(event.Timestamp).format();
-
-            event.isQuote = false;
-            var prtcl = Chant.Protocol(event.Text);
-            if (prtcl) {
-                event.Text = prtcl.value;
-                if (prtcl.protocol == 'quote')
-                    event.isQuote = true;
-                return tmpl('tmpl_event_message', { event: event });
-            }
-            event.Text = Chant.Anchorize(event.Text);
+            event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
             return tmpl('tmpl_event_message', { event: event });
         };
         Render.join = function (event) {

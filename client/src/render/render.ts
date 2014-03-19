@@ -15,15 +15,7 @@ module Chant {
             event = Chant.Notifier.detectMentioned(event);
 
             event.Time = new Chant.Time(event.Timestamp).format();
-            // うわーきもい
-            event.isQuote = false;
-            var prtcl = Chant.Protocol(event.Text);
-            if (prtcl) {
-                event.Text = prtcl.value;
-                if (prtcl.protocol == 'quote') event.isQuote = true;
-                return tmpl('tmpl_event_message',{event:event});
-            }
-            event.Text = Chant.Anchorize(event.Text);
+            event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
             return tmpl('tmpl_event_message',{event:event});
         }
         private static join(event: any): string {
