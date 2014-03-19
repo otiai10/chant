@@ -41,7 +41,7 @@ module Chant {
             return '<img src="./public/images/{src}" class="tl-img">'.replace('{src}', map[this.value]);
         }
         css(): string {
-            var matches = values.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
+            var matches = this.value.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
             if (matches == null || matches.length < 4) return this.origin;
             var selector = matches[1];
             var style = {};
@@ -50,7 +50,7 @@ module Chant {
             return this.origin;
         }
         stamp(): string {
-            var stampHTML = tmpl('tmpl_base_stamp', {raw: this.value, label: Imager(val)});
+            var stampHTML = tmpl('tmpl_base_stamp', {raw: this.value, label: Imager(this.value)});
             $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録' + stampHTML;
         }
