@@ -37,12 +37,12 @@ module Chant {
                 'zawameku':     "zawameku.jpg",
                 'chunchun':     "kotori.jpg"
             };
-            if (! map[this.value]) return this.origin;
+            if (! map[this.value]) return this.abort();
             return '<img src="./public/images/{src}" class="tl-img">'.replace('{src}', map[this.value]);
         }
         css(): string {
             var matches = this.value.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
-            if (matches == null || matches.length < 4) return this.origin;
+            if (matches == null || matches.length < 4) return this.abort();
             var selector = matches[1];
             var style = {};
             style[matches[2]] = matches[3];
@@ -54,26 +54,44 @@ module Chant {
             $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録' + stampHTML;
         }
-        quote(): string {
-            var pattern = /([^{^}]+)\|\|([^{^}]+)\|\|([^{^}]+)/gi;
-            var matched = pattern.exec(this.value);
-            if (matched == null) return;
+        quote(str: string = null): string {
+            var targetValue = str || this.value;
+            var splits = targetValue.split('||');
+            var name = splits[0];
+            var icon = splits[1];
+            var text = splits[2];
+            // {{{
+            if (splits.length < 3) return this.abort();
+            if (3 < splits.length) {
+                // セパレータで分けてもまだ要素があるってことは、これはquoteのquoteなので、再帰する
+                text = Chant.Protocol(splits.splice(2).join('||') + '}');
+            } else {
+                text = Chant.Anchorize(text);
+            }
+            // }}}
             var quote = {
-                name: matched[1],
-                icon: matched[2],
-                text: Chant.Anchorize(matched[3])
+                name: name,
+                icon: icon,
+                text: text
             };
             return tmpl('tmpl_event_message_quote',{quote:quote});
+        }
+        abort(): string {
+            return this.origin;
         }
     }
     export function Protocol(str: string) {
         var chunks = str.match(/\{@([a-z]+):([^}]+)\}/g);
+        // プロトコルは含まれてない
         if (! chunks) return;
+        var response = str;
         $.map(chunks, (chunk) => {
             var ex = new ProtocolExecuter(chunk);
+            // エクゼキュータが受け付けてないならこれを無視
             if (! ex.ok) return;
-            str = str.replace(ex.origin, ex.result);
+            // エグゼキュータが受け付けている場合はこれを置換する
+            response = response.replace(ex.origin, ex.result);
         });
-        return str;
+        return response;
     }
 }

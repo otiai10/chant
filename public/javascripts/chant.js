@@ -2687,13 +2687,13 @@ var Chant;
                 'chunchun': "kotori.jpg"
             };
             if (!map[this.value])
-                return this.origin;
+                return this.abort();
             return '<img src="./public/images/{src}" class="tl-img">'.replace('{src}', map[this.value]);
         };
         ProtocolExecuter.prototype.css = function () {
             var matches = this.value.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
             if (matches == null || matches.length < 4)
-                return this.origin;
+                return this.abort();
             var selector = matches[1];
             var style = {};
             style[matches[2]] = matches[3];
@@ -2705,32 +2705,50 @@ var Chant;
             $('#stamps-container').prepend($(stampHTML));
             return 'スタンプ登録' + stampHTML;
         };
-        ProtocolExecuter.prototype.quote = function () {
-            var pattern = /([^{^}]+)\|\|([^{^}]+)\|\|([^{^}]+)/gi;
-            var matched = pattern.exec(this.value);
-            if (matched == null)
-                return;
+        ProtocolExecuter.prototype.quote = function (str) {
+            if (typeof str === "undefined") { str = null; }
+            var targetValue = str || this.value;
+            var splits = targetValue.split('||');
+            var name = splits[0];
+            var icon = splits[1];
+            var text = splits[2];
+
+            if (splits.length < 3)
+                return this.abort();
+            if (3 < splits.length) {
+                text = Chant.Protocol(splits.splice(2).join('||') + '}');
+            } else {
+                text = Chant.Anchorize(text);
+            }
+
             var quote = {
-                name: matched[1],
-                icon: matched[2],
-                text: Chant.Anchorize(matched[3])
+                name: name,
+                icon: icon,
+                text: text
             };
             return tmpl('tmpl_event_message_quote', { quote: quote });
+        };
+        ProtocolExecuter.prototype.abort = function () {
+            return this.origin;
         };
         return ProtocolExecuter;
     })();
     Chant.ProtocolExecuter = ProtocolExecuter;
     function Protocol(str) {
         var chunks = str.match(/\{@([a-z]+):([^}]+)\}/g);
+
         if (!chunks)
             return;
+        var response = str;
         $.map(chunks, function (chunk) {
             var ex = new ProtocolExecuter(chunk);
+
             if (!ex.ok)
                 return;
-            str = str.replace(ex.origin, ex.result);
+
+            response = response.replace(ex.origin, ex.result);
         });
-        return str;
+        return response;
     }
     Chant.Protocol = Protocol;
 })(Chant || (Chant = {}));

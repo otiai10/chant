@@ -101,8 +101,9 @@ $(function(){
     var name = $form.find('[name=screenName]').val();
     var icon = $form.find('[name=profileImageUrl]').val();
     var text = $form.find('[name=originalText]').val();
-    var message = '{@quote:' + name + '||' + icon + '||' + text + '}';
+    var message = ' {@quote:' + name + '||' + icon + '||' + text + '}';
     $('#message').val(message).focus();
+    $('#message')[0].setSelectionRange(0, 0);
   });
   $(document).on('click','.to-stamp',function(){
     var $form = $('form#' + $(this).attr('data-time'));
