@@ -19,6 +19,9 @@ module Chant {
 
             event.enableStamprize = (event.RawText.match("@quote")) ? false : true;
 
+            // いやー... しんどい... #15
+            if (event.RawText.match("@quote")) event.Text = event.Text.replace(/[\}]+$/, '');
+
             return tmpl('tmpl_event_message',{event:event});
         }
         private static join(event: any): string {

@@ -2768,6 +2768,9 @@ var Chant;
 
             event.enableStamprize = (event.RawText.match("@quote")) ? false : true;
 
+            if (event.RawText.match("@quote"))
+                event.Text = event.Text.replace(/[\}]+$/, '');
+
             return tmpl('tmpl_event_message', { event: event });
         };
         Render.join = function (event) {
