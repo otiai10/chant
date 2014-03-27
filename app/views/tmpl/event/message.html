@@ -4,7 +4,9 @@
     <div class="entry-meta">
       <span class="small"><%= event.User.ScreenName %></span>
       <span class="info-small clickable message-unique" data-time="<%= event.Timestamp %>"><%= event.Time %></span>
+      <% if (! event.isQuote) { %>
       <span class="info-small clickable to-stamp" data-time="<%= event.Timestamp %>">stamprize</span>
+      <% } %>
       <form id="<%= event.Timestamp %>">
         <input type="hidden" name="screenName" value="<%= event.User.ScreenName %>">
         <input type="hidden" name="profileImageUrl" value="<%= event.User.ProfileImageUrl %>">

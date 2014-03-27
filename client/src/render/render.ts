@@ -16,6 +16,9 @@ module Chant {
 
             event.Time = new Chant.Time(event.Timestamp).format();
             event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
+
+            event.isQuote = (event.RawText.match("@quote")) ? true : false;
+
             return tmpl('tmpl_event_message',{event:event});
         }
         private static join(event: any): string {
