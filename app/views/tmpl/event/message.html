@@ -4,7 +4,7 @@
     <div class="entry-meta">
       <span class="small"><%= event.User.ScreenName %></span>
       <span class="info-small clickable message-unique" data-time="<%= event.Timestamp %>"><%= event.Time %></span>
-      <% if (! event.isQuote) { %>
+      <% if (event.enableStamprize) { %>
       <span class="info-small clickable to-stamp" data-time="<%= event.Timestamp %>">stamprize</span>
       <% } %>
       <form id="<%= event.Timestamp %>">
