@@ -2785,7 +2785,7 @@ var Chant;
             return '';
         };
         Render.stamp = function (stamp) {
-            $('#stamp-container-horizontal').append(tmpl('tmpl_base_stamp', { raw: stamp.Value, label: Chant.Imager(stamp.Value) }));
+            $('#stamp-container-horizontal').prepend(tmpl('tmpl_base_stamp', { raw: stamp.Value, label: Chant.Imager(stamp.Value) }));
             return '';
         };
         Render.notification = function (event) {
