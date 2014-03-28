@@ -2387,7 +2387,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var Chant;
 (function (Chant) {
     function Imager(str) {
-        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
             return str.replace(img[0], '<img src="' + img[0] + '">');
