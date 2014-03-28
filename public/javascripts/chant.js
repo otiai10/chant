@@ -2767,12 +2767,21 @@ var Chant;
             event.Time = new Chant.Time(event.Timestamp).format();
             event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
 
-            event.enableStamprize = (event.RawText.match("@quote")) ? false : true;
+            event.enableStamprize = Render.enableStamprize(event.RawText);
 
             if (event.RawText.match("@quote"))
                 event.Text = event.Text.replace(/[\}]+$/, '');
 
             return tmpl('tmpl_event_message', { event: event });
+        };
+        Render.enableStamprize = function (text) {
+            if (text.match("@quote"))
+                return false;
+            if (text.match("@stamp"))
+                return false;
+            if (text.match("@img"))
+                return false;
+            return true;
         };
         Render.join = function (event) {
             return '';
