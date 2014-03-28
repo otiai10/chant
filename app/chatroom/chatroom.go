@@ -61,6 +61,7 @@ func Leave(user *model.User) {
 
 const archiveSize = 4
 const soundArchiveSize = 21
+const stampArchiveSize = 21
 
 var (
 	// Send a channel here to get room events back.  It will send the entire
@@ -77,6 +78,7 @@ var (
 	}
 
 	SoundTrack = list.New()
+    StampArchive = list.New()
 )
 
 // This function loops forever, handling the chat room pubsub
@@ -123,6 +125,14 @@ func chatroom() {
 					}
 					SoundTrack.PushBack(sound)
 				}
+                stamp, stampError := factory.StampFromText(event.Text)
+                if stampError == nil {
+					// fmt.Printf("このスタンプをアーカイブ:\t%+v\n", stamp)
+                    if StampArchive.Len() >= stampArchiveSize {
+                        StampArchive.Remove(StampArchive.Front())
+                    }
+                    StampArchive.PushBack(stamp)
+                }
 			}
 			if archive.Len() >= archiveSize {
 				archive.Remove(archive.Front())
