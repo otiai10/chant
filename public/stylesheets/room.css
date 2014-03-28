@@ -124,8 +124,6 @@ div#stamp-container-horizontal {
 }
 button.btn-stamp {
     vertical-align: top;
-    height: 40px;
-    width: 60px;
     cursor: pointer;
     border-radius: 10px;
     border: none;
@@ -133,10 +131,9 @@ button.btn-stamp {
                                 from(rgba(220,220,220, 0)),
                                 to(  rgba(220,220,220, 1))
                 );
-
 }
 button.btn-stamp>img {
-    width: 100%;
+    height: 40px;
 }
 li.message {
     margin-bottom: 10px;
