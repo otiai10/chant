@@ -120,7 +120,6 @@ span.to-stamp:hover {
 div#stamp-container-horizontal {
     position: relative;
     vertical-align: top;
-    max-height: 70px;
 }
 button.btn-stamp {
     vertical-align: top;
