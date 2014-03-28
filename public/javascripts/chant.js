@@ -2701,8 +2701,9 @@ var Chant;
             return this.origin;
         };
         ProtocolExecuter.prototype.stamp = function () {
-            var stampHTML = tmpl('tmpl_base_stamp', { raw: this.value, label: Chant.Imager(this.value) });
-            $('#stamps-container').prepend($(stampHTML));
+            var stamp = { raw: this.value, label: Chant.Imager(this.value) };
+            var stampHTML = tmpl('tmpl_base_stamp', stamp);
+            Chant.Render.Event.stamp({ Value: this.value });
             return 'スタンプ登録' + stampHTML;
         };
         ProtocolExecuter.prototype.quote = function (str) {
@@ -2783,6 +2784,10 @@ var Chant;
             Chant.Playlist().add(sound);
             return '';
         };
+        Render.stamp = function (stamp) {
+            $('#stamp-container-horizontal').append(tmpl('tmpl_base_stamp', { raw: stamp.Value, label: Chant.Imager(stamp.Value) }));
+            return '';
+        };
         Render.notification = function (event) {
             alert(event.Text);
             return '';
@@ -2816,6 +2821,7 @@ var Chant;
             join: Render.join,
             leave: Render.leave,
             sound: Render.sound,
+            stamp: Render.stamp,
             notification: Render.notification
         };
 

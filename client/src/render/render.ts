@@ -6,6 +6,7 @@ module Chant {
             join: Render.join,
             leave: Render.leave,
             sound: Render.sound,
+            stamp: Render.stamp,
             notification: Render.notification
         }
         private static message(event: any): string {
@@ -32,6 +33,12 @@ module Chant {
         }
         private static sound(sound: any): string {
             Chant.Playlist().add(sound);
+            return '';
+        }
+        private static stamp(stamp: any): string {
+            $('#stamp-container-horizontal').append(
+                tmpl('tmpl_base_stamp', {raw: stamp.Value, label: Imager(stamp.Value)})
+            );
             return '';
         }
         private static notification(event: any): string {

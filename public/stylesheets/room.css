@@ -117,15 +117,23 @@ span.to-stamp {
 span.to-stamp:hover {
     -webkit-opacity: 0.5;
 }
-div#stamps-container {
-    width: 60px;
+div#stamp-container-horizontal {
+    position: relative;
+    vertical-align: top;
+    max-height: 70px;
 }
 button.btn-stamp {
-    width: 100%;
-    max-width: 120px;
+    vertical-align: top;
+    height: 40px;
+    width: 60px;
     cursor: pointer;
     border-radius: 10px;
-    background-color: #fefefe;
+    border: none;
+    background: -webkit-gradient(linear, left top, left bottom,
+                                from(rgba(220,220,220, 0)),
+                                to(  rgba(220,220,220, 1))
+                );
+
 }
 button.btn-stamp>img {
     width: 100%;
