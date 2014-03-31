@@ -43,7 +43,7 @@ module Chant {
         }
         private static stamp(stamp: any): string {
             $('#stamp-container-horizontal').prepend(
-                tmpl('tmpl_base_stamp', {raw: stamp.Value, label: Imager(stamp.Value)})
+                tmpl('tmpl_base_stamp', {raw: stamp.Value, label: stamp.Value.slice(0,20) , display:  Imager(stamp.Value)})
             );
             return '';
         }

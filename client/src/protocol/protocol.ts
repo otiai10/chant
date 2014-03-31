@@ -50,7 +50,7 @@ module Chant {
             return this.origin;
         }
         stamp(): string {
-            var stamp = {raw: this.value, label: Imager(this.value)};
+            var stamp = {raw: this.value, label: this.value.slice(0,20), display: Imager(this.value)};
             var stampHTML = tmpl('tmpl_base_stamp', stamp);
             Chant.Render.Event.stamp({Value:this.value});
             return 'スタンプ登録' + stampHTML;

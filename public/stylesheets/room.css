@@ -131,7 +131,7 @@ button.btn-stamp {
                                 to(  rgba(220,220,220, 1))
                 );
 }
-button.btn-stamp>img {
+button.btn-stamp img {
     height: 40px;
 }
 li.message {
@@ -149,6 +149,13 @@ ol#thread>li:first-child {
 .entry-content-text {
     width:         90%;
     padding-left: 10px;
+}
+/***** スタンプも分割したほうがいいのかなー *****/
+.btn-stamp>div {
+    display: none;
+}
+.btn-stamp:hover > div, .btn-stamp:focus > div {
+    display: inherit;
 }
 
 /***** いやーこれ分割したほうがいいのかなー *****/
