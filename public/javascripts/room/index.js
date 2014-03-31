@@ -92,8 +92,10 @@ $(function(){
   });
 
   $(document).on('click','.user-icon',function(){
+    var $mess = $('#message');
+    var existingMessage = ($mess.val()) ? $mess.val() + ' ' : '';
     var message = '@' + $(this).attr('user-name') + ' ';
-    $('#message').val(message).focus();
+    $mess.val(existingMessage + message).focus();
   });
 
   $(document).on('click','.message-unique',function(){
