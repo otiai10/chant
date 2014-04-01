@@ -122,6 +122,8 @@ div#stamp-container-horizontal {
     vertical-align: top;
 }
 button.btn-stamp {
+    height: 36px;
+    width: 40px;
     vertical-align: top;
     cursor: pointer;
     border-radius: 10px;
@@ -132,7 +134,7 @@ button.btn-stamp {
                 );
 }
 button.btn-stamp img {
-    height: 40px;
+    max-height: 30px;
 }
 li.message {
     margin-bottom: 10px;
@@ -151,7 +153,7 @@ ol#thread>li:first-child {
     padding-left: 10px;
 }
 /***** スタンプも分割したほうがいいのかなー *****/
-.btn-stamp>div {
+.btn-stamp>div.stamp-display {
     display: none;
 }
 .btn-stamp:hover > div, .btn-stamp:focus > div {
