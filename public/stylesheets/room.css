@@ -55,7 +55,7 @@ div#footer>a:hover {
     font-size: x-small;
 }
 img.tl-img {
-    max-width: 90%;
+    max-width: 500px;
 }
 img.user-icon {
     cursor: pointer;
