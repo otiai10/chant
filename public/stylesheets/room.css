@@ -56,6 +56,7 @@ div#footer>a:hover {
 }
 img.tl-img {
     max-width: 500px;
+    box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
 }
 img.user-icon {
     cursor: pointer;
