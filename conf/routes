@@ -13,6 +13,8 @@ GET     /auth/callback                          Auth.Callback
 GET     /room                                   Room.Index
 GET     /room/leave                             Room.Leave
 
+GET     /preview                                Preview.Index
+
 WS      /websocket/room/socket                  WebSocket.RoomSocket
 
 # Map static resources from the /app/public folder to the /public path

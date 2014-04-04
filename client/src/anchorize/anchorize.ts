@@ -58,7 +58,13 @@ module Chant {
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
-            return str.replace(anc[0], '<a target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
+            // {{{
+            var id = Date.now() + '' + Math.floor(Math.random() * 100);//とりあえずˉ̞̭ ( ›◡ु‹ ) ˄̻ ̊
+            setTimeout(() => {
+                Chant.WebPreview.embed(id, anc[0]);
+            },0);
+            // }}}
+            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
         }
         return;
     }

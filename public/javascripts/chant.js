@@ -2449,7 +2449,13 @@ var Chant;
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
-            return str.replace(anc[0], '<a target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
+
+            var id = Date.now() + '' + Math.floor(Math.random() * 100);
+            setTimeout(function () {
+                Chant.WebPreview.embed(id, anc[0]);
+            }, 0);
+
+            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
         }
         return;
     };
@@ -2464,6 +2470,27 @@ var Chant;
                 dataType: 'jsonp',
                 success: function (res) {
                     $('#twitter' + id).html(res.html);
+                },
+                error: function (hoge) {
+                    console.log(hoge);
+                }
+            });
+        }
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    Chant.WebPreview = {
+        embed: function (id, url) {
+            var url = 'http://' + Conf.Server().Host + ':' + Conf.Server().Port + '/preview?url=' + url;
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function (ogDetail) {
+                    console.log(ogDetail);
+
+                    $('#' + id).html(tmpl('tmpl_base_preview', ogDetail));
                 },
                 error: function (hoge) {
                     console.log(hoge);
