@@ -2484,6 +2484,7 @@ var Chant;
         function OGDetail(Id, URL) {
             this.Id = Id;
             this.URL = URL;
+            this.Description = "undefined";
             this.Image = "";
             this.metas = [];
         }
@@ -2502,7 +2503,7 @@ var Chant;
                     return;
                 }
             });
-            if (this.Title && this.Description)
+            if (this.Title)
                 return true;
             return false;
         };

@@ -1,7 +1,7 @@
 module Chant {
     export class OGDetail {
         public Title: string;
-        public Description: string;
+        public Description: string = "undefined";
         public Image: string = "";
         public metas: any[] = [];
         constructor(public Id: string,
@@ -19,7 +19,7 @@ module Chant {
                     return;
                 }
             });
-            if (this.Title && this.Description) return true;
+            if (this.Title) return true;
             return false;
         }
     }
