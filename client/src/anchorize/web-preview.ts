@@ -2,7 +2,7 @@ module Chant {
     export class OGDetail {
         public Title: string;
         public Description: string;
-        public Image: string;
+        public Image: string = "";
         public metas: any[] = [];
         constructor(public Id: string,
                     public URL: string) {}
@@ -19,7 +19,7 @@ module Chant {
                     return;
                 }
             });
-            if (this.Title && this.Description && this.Image) return true;
+            if (this.Title && this.Description) return true;
             return false;
         }
     }

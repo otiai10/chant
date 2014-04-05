@@ -7,9 +7,13 @@
     </div>
     <div class="og-contents boxy">
       <div class="og-image">
-        <a href="<%= URL %>" target="_blank">
-          <img src="<%= Image %>">
-        </a>
+        <% if (Image != '') { %>
+          <a href="<%= URL %>" target="_blank">
+            <img src="<%= Image %>">
+          </a>
+        <% } else { %>
+          <span class="og-no-image">( ˘ω˘) no image</span>
+        <% } %>
       </div>
       <div class="og-description">
         <a href="<%= URL %>" target="_blank">
