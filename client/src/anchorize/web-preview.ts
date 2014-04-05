@@ -7,8 +7,7 @@ module Chant {
         constructor() {}
         ensure(): boolean {
             $.map(this.metas, (meta: any) => {
-                // console.log(this.metas[i]);
-                var name = meta.getAttribute("name");
+                var name = meta.getAttribute("name") || meta.getAttribute("property");
                 if (! name) return;
                 if (name.match(/image/i)) {
                     this.Image = meta.getAttribute('content');

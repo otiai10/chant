@@ -2487,7 +2487,7 @@ var Chant;
         OGDetail.prototype.ensure = function () {
             var _this = this;
             $.map(this.metas, function (meta) {
-                var name = meta.getAttribute("name");
+                var name = meta.getAttribute("name") || meta.getAttribute("property");
                 if (!name)
                     return;
                 if (name.match(/image/i)) {
