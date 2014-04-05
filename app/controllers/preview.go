@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/robfig/revel"
     "fmt"
+    "chant/app/infrastructure"
+    "chant/app/factory"
 )
 
 type Preview struct {
@@ -16,14 +18,21 @@ type WebOGDetail struct {
 }
 
 // さいしょのページレンダリングだけー
-func (c Preview) Index() revel.Result {
+func (c Preview) Index(url string) revel.Result {
     // TODO?: session check
+    /*
     og := WebOGDetail{
         "【画像】この画家かわいすぎワロタｗｗｗｗｗｗｗそして抜いたｗｗｗｗ : キニ速",
         "1：名無しさん：2014/04/03(木)22:54:45ID:iRiTwCkI2小松美羽って人なんだけどたまんねぇｗｗｗｗｗ  死生観をテーマに作品作ってるアーティストらしい 小松美羽長野県埴科郡坂城町出身。2004年（平成16年）に女子美術大学短期大学部を卒業した。2009年（平成21年）に「",
         "http://livedoor.blogimg.jp/kinisoku/imgs/8/3/83fc01da.jpg",
     }
-    fmt.Printf("[Preview Request]\n%+v", og)
+    */
+    fmt.Println(url)
+    client := &infrastructure.MyHttpClient{}
+    og, e := factory.CreateOGDetailFromResponse(client.Request(url))
+    if e != nil {
+        panic(e)
+    }
     return c.RenderJson(og)
 }
 

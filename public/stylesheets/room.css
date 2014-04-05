@@ -213,3 +213,22 @@ a.light:hover {
     left: -30px;
     top: -2px;
 }
+
+/***** いやーこれ分割したほうがいいのかなー *****/
+.web-preview {
+    width: 450px;
+}
+.og-title>h5 {
+    margin: 0;
+    margin-bottom: 5px;
+}
+.og-image {
+    width: 100px;
+}
+.og-image>img {
+    width: 90px;
+}
+.og-description {
+    width: 350px;
+    font-size: xx-small;
+}

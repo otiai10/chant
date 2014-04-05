@@ -1,11 +1,15 @@
 <script type="text/html" id="tmpl_base_preview">
-  <div class="web-preview boxy">
-    <div>
-      <img src="<%= Image %>">
-    </div>
-    <div>
+  <div class="web-preview">
+    <div class="og-title">
       <h5><%= Title %></h5>
-      <p><%= Description %></p>
+    </div>
+    <div class="og-contents boxy">
+      <div class="og-image">
+        <img src="<%= Image %>">
+      </div>
+      <div class="og-description">
+        <p><%= Description %></p>
+      </div>
     </div>
   </div>
 </script>
