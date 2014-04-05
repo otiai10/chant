@@ -77,8 +77,8 @@ var (
 		true,
 	}
 
-	SoundTrack = list.New()
-    StampArchive = list.New()
+	SoundTrack   = list.New()
+	StampArchive = list.New()
 )
 
 // This function loops forever, handling the chat room pubsub
@@ -125,14 +125,14 @@ func chatroom() {
 					}
 					SoundTrack.PushBack(sound)
 				}
-                stamp, stampError := factory.StampFromText(event.Text)
-                if stampError == nil {
+				stamp, stampError := factory.StampFromText(event.Text)
+				if stampError == nil {
 					// fmt.Printf("このスタンプをアーカイブ:\t%+v\n", stamp)
-                    if StampArchive.Len() >= stampArchiveSize {
-                        StampArchive.Remove(StampArchive.Front())
-                    }
-                    StampArchive.PushBack(stamp)
-                }
+					if StampArchive.Len() >= stampArchiveSize {
+						StampArchive.Remove(StampArchive.Front())
+					}
+					StampArchive.PushBack(stamp)
+				}
 			}
 			if archive.Len() >= archiveSize {
 				archive.Remove(archive.Front())
