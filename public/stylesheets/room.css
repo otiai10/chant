@@ -218,14 +218,17 @@ a.light:hover {
 .web-preview {
     width: 450px;
 }
-.og-title>h5 {
+.web-preview a {
+    color: -webkit-link;
+}
+.og-title>a>h5 {
     margin: 0;
     margin-bottom: 5px;
 }
 .og-image {
     width: 100px;
 }
-.og-image>img {
+.og-image>a>img {
     width: 90px;
 }
 .og-description {

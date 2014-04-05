@@ -2481,7 +2481,9 @@ var Chant;
 var Chant;
 (function (Chant) {
     var OGDetail = (function () {
-        function OGDetail() {
+        function OGDetail(Id, URL) {
+            this.Id = Id;
+            this.URL = URL;
             this.metas = [];
         }
         OGDetail.prototype.ensure = function () {
@@ -2508,13 +2510,13 @@ var Chant;
     Chant.OGDetail = OGDetail;
     Chant.WebPreview = {
         embed: function (id, url) {
-            var url = 'http://' + Conf.Server().Host + ':' + Conf.Server().Port + '/preview?url=' + url;
+            var apiURL = 'http://' + Conf.Server().Host + ':' + Conf.Server().Port + '/preview?url=' + url;
             $.ajax({
-                url: url,
+                url: apiURL,
                 method: 'GET',
                 dataType: 'json',
                 success: function (ogDetail) {
-                    var og = new OGDetail();
+                    var og = new OGDetail(id, url);
 
                     $.map($(ogDetail['PageContents']), function (el) {
                         if (!el.tagName)
@@ -2526,7 +2528,8 @@ var Chant;
                     });
                     if (!og.ensure())
                         return;
-                    $('#' + id).html(tmpl('tmpl_base_preview', og));
+
+                    $('#' + id).replaceWith(tmpl('tmpl_base_preview', og));
                 },
                 error: function (hoge) {
                     console.log(hoge);

@@ -4,7 +4,8 @@ module Chant {
         public Description: string;
         public Image: string;
         public metas: any[] = [];
-        constructor() {}
+        constructor(public Id: string,
+                    public URL: string) {}
         ensure(): boolean {
             $.map(this.metas, (meta: any) => {
                 var name = meta.getAttribute("name") || meta.getAttribute("property");
@@ -24,13 +25,13 @@ module Chant {
     }
     export var WebPreview = {
         embed: (id: string, url: string) => {
-            var url = 'http://'+Conf.Server().Host+':'+Conf.Server().Port+'/preview?url=' + url;
+            var apiURL = 'http://'+Conf.Server().Host+':'+Conf.Server().Port+'/preview?url=' + url;
             $.ajax({
-                url: url,
+                url: apiURL,
                 method: 'GET',
                 dataType: 'json',
                 success: function(ogDetail){
-                    var og = new OGDetail();
+                    var og = new OGDetail(id, url);
                     // $('#twitter' + id).html(res.html);
                     $.map($(ogDetail['PageContents']), (el: any) => {
                         if (! el.tagName) return;
@@ -38,7 +39,8 @@ module Chant {
                         if (el.tagName.match(/meta/i)) og.metas.push(el);
                     });
                     if (! og.ensure()) return;
-                    $('#' + id).html(tmpl('tmpl_base_preview', og));
+                    //$('#' + id).html(tmpl('tmpl_base_preview', og));
+                    $('#' + id).replaceWith(tmpl('tmpl_base_preview', og));
                 },
                 error: function(hoge){
                     console.log(hoge);
