@@ -216,7 +216,13 @@ a.light:hover {
 
 /***** いやーこれ分割したほうがいいのかなー *****/
 .web-preview {
-    width: 450px;
+    box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
+    padding: 10px;
+    border-radius: 5px;
+    border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
+    border-width: 1px;
+    border-style: solid;
+    width: 480px;
 }
 .web-preview a {
     color: -webkit-link;
@@ -232,7 +238,7 @@ a.light:hover {
     width: 90px;
 }
 .og-description {
-    width: 350px;
+    width: 380px;
     font-size: xx-small;
 }
 .og-no-image {
