@@ -2449,7 +2449,13 @@ var Chant;
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
-            return str.replace(anc[0], '<a target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
+
+            var id = Date.now() + '' + Math.floor(Math.random() * 100);
+            setTimeout(function () {
+                Chant.WebPreview.embed(id, anc[0]);
+            }, 0);
+
+            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
         }
         return;
     };
@@ -2464,6 +2470,68 @@ var Chant;
                 dataType: 'jsonp',
                 success: function (res) {
                     $('#twitter' + id).html(res.html);
+                },
+                error: function (hoge) {
+                    console.log(hoge);
+                }
+            });
+        }
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var OGDetail = (function () {
+        function OGDetail(Id, URL) {
+            this.Id = Id;
+            this.URL = URL;
+            this.Description = "undefined";
+            this.Image = "";
+            this.metas = [];
+        }
+        OGDetail.prototype.ensure = function () {
+            var _this = this;
+            $.map(this.metas, function (meta) {
+                var name = meta.getAttribute("name") || meta.getAttribute("property");
+                if (!name)
+                    return;
+                if (name.match(/image$/)) {
+                    _this.Image = meta.getAttribute('content');
+                    return;
+                }
+                if (name.match(/description/)) {
+                    _this.Description = meta.getAttribute('content');
+                    return;
+                }
+            });
+            if (this.Title)
+                return true;
+            return false;
+        };
+        return OGDetail;
+    })();
+    Chant.OGDetail = OGDetail;
+    Chant.WebPreview = {
+        embed: function (id, url) {
+            var apiURL = 'http://' + Conf.Server().Host + ':' + Conf.Server().Port + '/preview?url=' + url;
+            $.ajax({
+                url: apiURL,
+                method: 'GET',
+                dataType: 'json',
+                success: function (ogDetail) {
+                    var og = new OGDetail(id, url);
+
+                    $.map($(ogDetail['PageContents']), function (el) {
+                        if (!el.tagName)
+                            return;
+                        if (el.tagName.match(/title/i))
+                            og.Title = el.innerHTML;
+                        if (el.tagName.match(/meta/i))
+                            og.metas.push(el);
+                    });
+                    if (!og.ensure())
+                        return;
+
+                    $('#' + id).replaceWith(tmpl('tmpl_base_preview', og));
                 },
                 error: function (hoge) {
                     console.log(hoge);

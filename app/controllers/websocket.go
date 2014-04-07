@@ -47,11 +47,11 @@ func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 			return nil
 		}
 	}
-    for stamp := chatroom.StampArchive.Front(); stamp != nil; stamp = stamp.Next() {
+	for stamp := chatroom.StampArchive.Front(); stamp != nil; stamp = stamp.Next() {
 		if websocket.JSON.Send(ws, &stamp.Value) != nil {
 			return nil
 		}
-    }
+	}
 
 	// In order to select between websocket messages and subscription events, we
 	// need to stuff websocket events into a channel.
