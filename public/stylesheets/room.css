@@ -125,6 +125,7 @@ div#stamp-container-horizontal {
     vertical-align: top;
 }
 button.btn-stamp {
+    padding: 2px;
     height: 36px;
     width: 40px;
     vertical-align: top;
