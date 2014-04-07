@@ -224,7 +224,8 @@ a.light:hover {
     border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
     border-width: 1px;
     border-style: solid;
-    width: 480px;
+    width: 93%;
+    max-width: 480px;
 }
 .web-preview a {
     color: -webkit-link;
