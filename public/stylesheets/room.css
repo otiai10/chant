@@ -106,6 +106,7 @@ div#dynamic-container {
 }
 div#fixed-container {
     float: right;
+    margin-top: 24px;
 }
 div#player-wrapper {
     width: 410px;
