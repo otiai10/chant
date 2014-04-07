@@ -10,7 +10,7 @@ module Chant {
             $.map(this.metas, (meta: any) => {
                 var name = meta.getAttribute("name") || meta.getAttribute("property");
                 if (! name) return;
-                if (name.match(/image/i)) {
+                if (name.match(/image$/i)) {
                     this.Image = meta.getAttribute('content');
                     return;
                 }
