@@ -55,6 +55,7 @@ div#footer>a:hover {
     font-size: x-small;
 }
 img.tl-img {
+    width: 95%;
     max-width: 500px;
     /* box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px; */
 }
@@ -151,7 +152,7 @@ ol#thread>li:first-child {
 }
 */
 .entry-content-text {
-    width:         90%;
+    width:         85%;
     padding-left: 10px;
 }
 /***** スタンプも分割したほうがいいのかなー *****/
