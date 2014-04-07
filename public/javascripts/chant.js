@@ -2494,11 +2494,11 @@ var Chant;
                 var name = meta.getAttribute("name") || meta.getAttribute("property");
                 if (!name)
                     return;
-                if (name.match(/image$/i)) {
+                if (name.match(/image$/)) {
                     _this.Image = meta.getAttribute('content');
                     return;
                 }
-                if (name.match(/description/i)) {
+                if (name.match(/description/)) {
                     _this.Description = meta.getAttribute('content');
                     return;
                 }
