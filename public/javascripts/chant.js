@@ -2413,7 +2413,7 @@ var Chant;
     Chant.Anchorize = Anchorize;
 
     var _execYouTube = function (str) {
-        var youTubeUrl = /https?:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g;
+        var youTubeUrl = /https?:\/\/www\.youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+)/g;
         var ytb = youTubeUrl.exec(str);
         if (ytb && ytb.length > 1) {
             return tmpl('tmpl_base_youtube', { videoId: ytb[1] });
