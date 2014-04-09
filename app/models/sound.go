@@ -33,7 +33,7 @@ type YouTube struct {
 }
 
 func (yt YouTube) GetHash(url string) string {
-	exp, _ := regexp.Compile("(.+)/watch\\?v=([a-zA-Z0-9_-]+)")
+	exp, _ := regexp.Compile("(.+)/watch\\?.*v=([a-zA-Z0-9_-]+)")
 	matched := exp.FindAllStringSubmatch(url, 3)
 	return matched[0][2]
 }
