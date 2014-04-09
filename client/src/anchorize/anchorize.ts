@@ -46,7 +46,7 @@ module Chant {
         return;
     }
     var _execAnchor = (str) => {
-        var url = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9]+(\/[^\s<>"',;]*)?/gi;
+        var url = /https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+/gi
         var anc = url.exec(str);
         if (anc != null && anc[3] == 'twitter.') {
             var id = anc[4].replace(/^\/[^\/]+\/[^\/]+\//,'');
