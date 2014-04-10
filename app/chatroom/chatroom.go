@@ -61,7 +61,7 @@ func Leave(user *model.User) {
 
 const archiveSize = 4
 const soundArchiveSize = 21
-const stampArchiveSize = 21
+const stampArchiveSize = 40
 
 var (
 	// Send a channel here to get room events back.  It will send the entire
