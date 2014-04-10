@@ -55,8 +55,7 @@ div#footer>a:hover {
     font-size: x-small;
 }
 img.tl-img {
-    width: 95%;
-    max-width: 500px;
+    max-width: 400px;
     /* box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px; */
 }
 img.user-icon {
