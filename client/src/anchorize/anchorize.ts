@@ -46,10 +46,11 @@ module Chant {
         return;
     }
     var _execAnchor = (str) => {
-        var url = /https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+/gi
+        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi
         var anc = url.exec(str);
-        if (anc != null && anc[3] == 'twitter.') {
-            var id = anc[4].replace(/^\/[^\/]+\/[^\/]+\//,'');
+        if (anc != null && anc[2] && anc[2].match(/^twitter.com\//)) {
+            var matched = anc[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/);
+            var id = matched[3];
             setTimeout(function(){
                 Chant.Twitter.embed(id);
             },0);
