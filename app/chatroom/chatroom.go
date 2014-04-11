@@ -127,11 +127,15 @@ func chatroom() {
 				}
 				stamp, stampError := factory.StampFromText(event.Text)
 				if stampError == nil {
-					// fmt.Printf("このスタンプをアーカイブ:\t%+v\n", stamp)
-					if StampArchive.Len() >= stampArchiveSize {
-						StampArchive.Remove(StampArchive.Front())
-					}
-					StampArchive.PushBack(stamp)
+                    stampExisting := alreadyInStampArchive(stamp)
+                    if stampExisting != nil {
+                        StampArchive.MoveToBack(stampExisting)
+                    } else {
+                        StampArchive.PushBack(stamp)
+                    }
+                    if StampArchive.Len() >= stampArchiveSize {
+                        StampArchive.Remove(StampArchive.Front())
+                    }
 				}
 			}
 			if archive.Len() >= archiveSize {
@@ -152,6 +156,14 @@ func chatroom() {
 	}
 }
 
+func alreadyInStampArchive(newStamp model.Stamp) (elInArchive *list.Element) {
+    for el := StampArchive.Front(); el != nil; el = el.Next() {
+        if el.Value.(model.Stamp).RawText == newStamp.RawText {
+            elInArchive = el
+        }
+    }
+    return
+}
 func init() {
 	go chatroom()
 }
