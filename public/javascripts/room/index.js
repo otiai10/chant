@@ -89,6 +89,9 @@ $(function(){
     var message = $(this).attr('data-raw');
     Chant.Socket().send(message);
     $('#message').focus();
+    // LRU
+    var dummyStamprizeMessage = '{@stamp:' + message + '@use}';
+    Chant.Socket().send(dummyStamprizeMessage);
   });
 
   $(document).on('click','.user-icon',function(){

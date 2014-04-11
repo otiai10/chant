@@ -113,9 +113,6 @@ func chatroom() {
 				event.RoomInfo.Updated = true
 			}
 			// }}}
-			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				ch.Value.(chan Event) <- event
-			}
 			if event.Type == "message" {
 				sound, soundError := factory.SoundFromText(event.Text, event.User)
 				if soundError == nil {
@@ -136,6 +133,9 @@ func chatroom() {
 					if StampArchive.Len() >= stampArchiveSize {
 						StampArchive.Remove(StampArchive.Front())
 					}
+					if stamp.IsUsedEvent {
+						continue
+					}
 				}
 			}
 			if archive.Len() >= archiveSize {
@@ -143,6 +143,11 @@ func chatroom() {
 			}
 			if event.Type != "leave" && event.Type != "join" {
 				archive.PushBack(event)
+			}
+
+			// Finally, subscribe
+			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
+				ch.Value.(chan Event) <- event
 			}
 
 		case unsub := <-unsubscribe:
@@ -158,7 +163,7 @@ func chatroom() {
 
 func alreadyInStampArchive(newStamp model.Stamp) (elInArchive *list.Element) {
 	for el := StampArchive.Front(); el != nil; el = el.Next() {
-		if el.Value.(model.Stamp).RawText == newStamp.RawText {
+		if el.Value.(model.Stamp).Value == newStamp.Value {
 			elInArchive = el
 		}
 	}
