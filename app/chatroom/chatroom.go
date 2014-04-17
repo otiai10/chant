@@ -21,8 +21,9 @@ type Subscription struct {
 }
 
 type Info struct {
-	Users   map[string]*model.User
-	Updated bool
+	Users    map[string]*model.User
+	Updated  bool
+	AllUsers *list.List
 }
 
 // Owner of a subscription must cancel it when they stop listening to events.
@@ -75,6 +76,7 @@ var (
 	info = &Info{
 		make(map[string]*model.User),
 		true,
+		list.New(),
 	}
 
 	SoundTrack   = list.New()
@@ -101,17 +103,16 @@ func chatroom() {
 			// {{{ クソ
 			event.RoomInfo.Updated = false
 			if event.Type == "join" {
-				if _, already := info.Users[event.User.ScreenName]; !already {
-					info.Users[event.User.ScreenName] = event.User
-				}
-				event.RoomInfo = info
+				info.AllUsers.PushBack(event.User)
 				event.RoomInfo.Updated = true
 			}
 			if event.Type == "leave" {
-				delete(info.Users, event.User.ScreenName)
-				event.RoomInfo = info
+				// delete(info.Users, event.User.ScreenName)
+				leaveUser(event.User)
 				event.RoomInfo.Updated = true
 			}
+			restoreRoomUsers()
+			event.RoomInfo = info
 			// }}}
 			if event.Type == "message" {
 				sound, soundError := factory.SoundFromText(event.Text, event.User)
@@ -168,6 +169,23 @@ func alreadyInStampArchive(newStamp model.Stamp) (elInArchive *list.Element) {
 		}
 	}
 	return
+}
+func leaveUser(user *model.User) {
+	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
+		if u.Value.(*model.User).ScreenName == user.ScreenName {
+			// delete only one
+			_ = info.AllUsers.Remove(u)
+			return
+		}
+	}
+}
+func restoreRoomUsers() {
+	// TODO: DRY
+	info.Users = make(map[string]*model.User)
+	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
+		user := u.Value.(*model.User)
+		info.Users[user.ScreenName] = user
+	}
 }
 func init() {
 	go chatroom()
