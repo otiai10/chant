@@ -54,7 +54,7 @@ module Chant {
             setTimeout(function(){
                 Chant.Twitter.embed(id);
             },0);
-            return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank">' + str + '</a></div>';
+            return str.replace(anc[0], '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank">' + str + '</a></div>');
         }
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
