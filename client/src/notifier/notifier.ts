@@ -13,6 +13,69 @@ declare module webkitNotifications {
 }
 
 module Chant {
+    function getChromeVersion(): number {
+        return parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+    }
+    export class NotifierAlert {
+        constructor(){}
+        show(text: string, icon: string, title: string) {
+            window.alert(text);
+        }
+        init() {}
+    }
+    export class NotifierWithPrefix {
+        constructor(){}
+        show(text: string, icon: string, title: string) {
+            icon = icon || '/public/images/favicon.jpg';
+            title = title || 'CHANT!';
+            text = text || 'えら〜';
+            var notification = webkitNotifications.createNotification(
+                icon,
+                title,
+                text
+            );
+            notification.onclick = function(){
+                window.focus();
+            };
+            notification.show();
+        }
+        init() {
+            if (webkitNotifications.checkPermission() !== 0) {
+                webkitNotifications.requestPermission();
+            }
+        }
+    }
+    export class NotifierDefault {
+        constructor(){}
+        show(text: string, icon: string, title: string) {
+            var notification = new window['Notification'](
+                title || "CHANT",
+                {
+                    body: text || "えら〜",
+                    icon: icon || '/public/images/favicon.jpg'
+                }
+            );
+            notification.onclick = function(){
+                window.focus();
+            }
+        }
+        init() {
+            window['Notification'].requestPermission();
+        }
+    }
+    export function getNotifier(text?: string, icon?: string) {
+        if (getChromeVersion() < 28) return new NotifierAlert();
+        if (window['webkitNotifications']) return new NotifierWithPrefix();
+        return new NotifierDefault();
+    }
+    export function Notify(text: string, icon: string, title: string) {
+        if (! $('#enable-notification').is(':checked')) return;
+        var notifier = getNotifier();
+        notifier.show(text,icon,title);
+    }
+}
+
+module Chant {
     export var Notifier = {
         isActive: true,
         onmessage: (event: any) => {
@@ -24,11 +87,8 @@ module Chant {
             $('title').text('CHANT');
         },
         init: () => {
-            if (webkitNotifications.checkPermission() == 0) {
-                return;
-            } else {
-                webkitNotifications.requestPermission();
-            }
+            var notifier = getNotifier();
+            notifier.init();
         },
         detectMentioned: (event: any): any => {
             var mentioning = "@" + Conf.Me().ScreenName;
@@ -39,12 +99,16 @@ module Chant {
                     title: event.User.ScreenName,
                     text: event.Text
                 };
+                Notify(event.Text, event.User.ProfileImageUrl, event.User.ScreenName);
+                /*
                 Chant.Notifier._show(params);
+                */
                 var html = '<span class="mentioning">' + mentioning + '</span>';
                 event.Text = event.Text.replace(mentioning, html);
             }
             return event;
-        },
+        }
+        /*
         _show: (params: any) => {
             if (! $('#enable-notification').is(':checked')) return;
             if (typeof params != 'object') params = {};
@@ -61,5 +125,6 @@ module Chant {
             };
             notification.show();
         }
+        */
     }
 }
