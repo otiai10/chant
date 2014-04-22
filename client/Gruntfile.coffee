@@ -36,15 +36,21 @@ module.exports = (grunt) ->
             compile:
                 files:
                     "build/tpl/all.js": "asset/tpl/**/*.hbs"
+        uglify:
+            release:
+                files:
+                    "build/chant.js":["build/chant.js"] 
 
     grunt.loadNpmTasks 'grunt-typescript'
     grunt.loadNpmTasks 'grunt-contrib-concat'
     grunt.loadNpmTasks 'grunt-contrib-clean'
+    grunt.loadNpmTasks 'grunt-contrib-uglify'
     grunt.loadNpmTasks 'grunt-exec'
     grunt.loadNpmTasks 'grunt-regarde'
     grunt.loadNpmTasks 'grunt-contrib-handlebars'
 
     grunt.registerTask 'build',   ['handlebars','typescript:compile','concat:release','exec:release']
+    grunt.registerTask 'release', ['handlebars','typescript:compile','concat:release','uglify:release','exec:release']
     grunt.registerTask 'watch',   ['build', 'regarde:default']
 
     grunt.registerTask 'default', ['build']
