@@ -3,7 +3,7 @@ package controllers
 import (
 	"chant/app/chatroom"
 	"code.google.com/p/go.net/websocket"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 
 	"chant/app/models"
 

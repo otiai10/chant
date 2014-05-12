@@ -1,6 +1,6 @@
 package factory
 
-import "github.com/robfig/revel"
+import "github.com/revel/revel"
 import "chant/app/models"
 
 func ServerFromConf(conf *revel.MergedConfig) model.Server {

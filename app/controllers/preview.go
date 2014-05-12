@@ -4,7 +4,7 @@ import (
 	"chant/app/factory"
 	"chant/app/infrastructure"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 )
 
 type Preview struct {

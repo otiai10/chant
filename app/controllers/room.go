@@ -2,7 +2,7 @@ package controllers
 
 import (
 	//"code.google.com/p/go.net/websocket"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	//"github.com/robfig/revel/samples/chat/app/chatroom"
 
 	"fmt"

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/mrjones/oauth"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 
 	"encoding/json"
 	"fmt"

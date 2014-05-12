@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"chant/app/factory"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 )
 
 type Application struct {
