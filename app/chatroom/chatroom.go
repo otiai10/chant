@@ -122,6 +122,8 @@ func chatroom() {
 						SoundTrack.Remove(SoundTrack.Front())
 					}
 					SoundTrack.PushBack(sound)
+				} else {
+					revel.ERROR.Println("たぶんここ？", soundError)
 				}
 				stamp, stampError := factory.StampFromText(event.Text)
 				if stampError == nil {

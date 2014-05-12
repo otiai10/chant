@@ -24,7 +24,7 @@ func (c Preview) Index(url string) revel.Result {
 	client := &infrastructure.MyHttpClient{}
 	og, e := factory.CreateOGDetailFromResponse(client.Request(url))
 	if e != nil {
-		panic(e)
+		revel.ERROR.Println(e)
 	}
 	return c.RenderJson(og)
 }
