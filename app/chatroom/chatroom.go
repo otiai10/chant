@@ -5,6 +5,7 @@ import (
 	"chant/app/models"
 	"container/list"
 	"time"
+	// "github.com/revel/revel"
 )
 
 type Event struct {
@@ -123,7 +124,7 @@ func chatroom() {
 					}
 					SoundTrack.PushBack(sound)
 				} else {
-					revel.ERROR.Println("たぶんここ？", soundError)
+					// revel.ERROR.Println("たぶんここ？", soundError)
 				}
 				stamp, stampError := factory.StampFromText(event.Text)
 				if stampError == nil {
