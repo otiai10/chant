@@ -8,10 +8,16 @@
 
 # セットアップ
 
-[Goをインストール](https://gist.github.com/otiai10/6779454#comment-920223)
-
-[revelをインストール](https://gist.github.com/otiai10/6779454#comment-920230)
-
+goをインストール
+```
+ここ見て
+https://gist.github.com/otiai10/6779454#comment-920223
+```
+revelをインストール
+```
+go get github.com/revel/revel
+go install github.com/revel/cmd/revel
+```
 chantをクローン
 ```
 cd $GOPATH/src
