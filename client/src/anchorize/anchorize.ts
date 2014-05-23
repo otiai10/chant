@@ -41,7 +41,7 @@ module Chant {
         var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
-            return str.replace(img[0], /* _execAnchor(img[0]) + */'<a href="'+img[0]+'" target="_blank"><img src="' + img[0] + '" class="tl-img"></a>');
+            return str.replace(img[0], /* _execAnchor(img[0]) + */'<a href="'+img[0]+'" target="_blank" rel="noreferrer"><img src="' + img[0] + '" class="tl-img"></a>');
         }
         return;
     }
@@ -54,7 +54,7 @@ module Chant {
             setTimeout(function(){
                 Chant.Twitter.embed(id);
             },0);
-            return str.replace(anc[0], '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank">' + str + '</a></div>');
+            return str.replace(anc[0], '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + str + '</a></div>');
         }
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
@@ -65,7 +65,7 @@ module Chant {
                 Chant.WebPreview.embed(id, anc[0]);
             },0);
             // }}}
-            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '">' + innerText + '</a>');
+            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '" rel="noreferrer">' + innerText + '</a>');
         }
         return;
     }
