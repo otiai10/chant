@@ -10,6 +10,8 @@ module Chant {
  
     }
     export function Anchorize(str: string) {
+        var emo = _execEmo(str);
+        if (emo) return emo;
         var ytb = _execYouTube(str);
         if (ytb) return ytb;
         var sndcld = _execSoundCloud(str);
@@ -69,4 +71,12 @@ module Chant {
         }
         return;
     }
+    var _execEmo = (str: string) => {
+        var pattern: RegExp = /:([a-zA-Z0-9-+_]+):/gi;
+        var matches: RegExpExecArray = pattern.exec(str);
+        if (matches && matches.length > 1) {
+            return str.replace(matches[0], '<img src="/public/images/emojis/' + matches[1] + '.png" width="40px">');
+        }
+        return;
+    };
 }
