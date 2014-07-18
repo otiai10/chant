@@ -20,13 +20,14 @@ $(function(){
 
   // Message received on the socket
   var onmessage = function(event) {
-    debug("onmessage");
     display(JSON.parse(event.data))
     Chant.Notifier.onmessage(JSON.parse(event.data));
   };
   var onerror = function(event) {
   };
-  var onclose = function(event) {
+  var onclose = function(event) { };
+  var onreconnect = function() {
+    window.alert("hoge");
   };
   Chant.Socket.init({
     onmessage: onmessage,

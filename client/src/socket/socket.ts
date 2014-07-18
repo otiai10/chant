@@ -18,25 +18,22 @@ module Chant {
                 Chant.Notify(errorMessage);
                 throw new Error(errorMessage);
             }
-            if (force || _instance == null) {
+            if (force || _instance == null || _instance.readyState > WebSocket.OPEN) {
+                if (_instance) debug("RECONNECTED\t" + _instance.readyState);
                 _instance = new WebSocket('ws://'+Conf.Server().Host+':'+Conf.Server().Port+'/websocket/room/socket');
+                _instance.onopen = listen;
             }
-            if (_instance.readyState > WebSocket.OPEN) {
-                return instance(true);
-            }
-            on();
             return _instance;
         }
-        function on(events: ISocketEvents = null) {
-            if (events) _events = events;
+        function listen() {
             var doNothing = () => {};
             instance().onmessage = _events.onmessage || doNothing;
             instance().onerror   = _events.onerror || doNothing;
             instance().onclose   = _events.onclose || doNothing;
         }
         export function init(events?: ISocketEvents) {
+            _events = events || {};
             instance();
-            on(events);
         }
         export function send(message: string) {
             instance().send(message);
