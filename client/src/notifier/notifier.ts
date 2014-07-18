@@ -25,9 +25,7 @@ module Chant {
     }
     export class NotifierWithPrefix {
         constructor(){}
-        show(text: string,
-             icon: string = '/public/images/favicon.png',
-             title: string = 'CHANT!') {
+        show(text: string, icon: string, title: string) {
             var notification = webkitNotifications.createNotification(
                 icon,
                 title,
@@ -67,7 +65,9 @@ module Chant {
         if (window['webkitNotifications']) return new NotifierWithPrefix();
         return new NotifierDefault();
     }
-    export function Notify(text: string, icon: string = "", title: string = "") {
+    export function Notify(text: string,
+                           icon: string = '/public/images/favicon.png',
+                           title: string = 'CHANT!') {
         if (! $('#enable-notification').is(':checked')) return;
         var notifier = getNotifier();
         notifier.show(text,icon,title);

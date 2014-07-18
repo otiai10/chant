@@ -2616,8 +2616,6 @@ var Chant;
         function NotifierWithPrefix() {
         }
         NotifierWithPrefix.prototype.show = function (text, icon, title) {
-            if (typeof icon === "undefined") { icon = '/public/images/favicon.png'; }
-            if (typeof title === "undefined") { title = 'CHANT!'; }
             var notification = webkitNotifications.createNotification(icon, title, text);
             notification.onclick = function () {
                 window.focus();
@@ -2659,8 +2657,8 @@ var Chant;
     }
     Chant.getNotifier = getNotifier;
     function Notify(text, icon, title) {
-        if (typeof icon === "undefined") { icon = ""; }
-        if (typeof title === "undefined") { title = ""; }
+        if (typeof icon === "undefined") { icon = '/public/images/favicon.png'; }
+        if (typeof title === "undefined") { title = 'CHANT!'; }
         if (!$('#enable-notification').is(':checked'))
             return;
         var notifier = getNotifier();
