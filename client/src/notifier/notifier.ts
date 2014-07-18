@@ -26,7 +26,7 @@ module Chant {
     export class NotifierWithPrefix {
         constructor(){}
         show(text: string,
-             icon: string = '/public/images/favicon.jpg',
+             icon: string = '/public/images/favicon.png',
              title: string = 'CHANT!') {
             var notification = webkitNotifications.createNotification(
                 icon,

@@ -2616,7 +2616,7 @@ var Chant;
         function NotifierWithPrefix() {
         }
         NotifierWithPrefix.prototype.show = function (text, icon, title) {
-            if (typeof icon === "undefined") { icon = '/public/images/favicon.jpg'; }
+            if (typeof icon === "undefined") { icon = '/public/images/favicon.png'; }
             if (typeof title === "undefined") { title = 'CHANT!'; }
             var notification = webkitNotifications.createNotification(icon, title, text);
             notification.onclick = function () {
