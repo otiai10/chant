@@ -1,5 +1,6 @@
 var debug = (function(){
     return function(message) {
+        if (window.silent) return;
         var txt = "[" + new Date().toLocaleString() + "] " + message;
         var style = "color:orange";
         console.log("%c" + txt, style);
