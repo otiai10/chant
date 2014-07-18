@@ -4,10 +4,19 @@ declare module Conf {
     export function Me(): any;
 }
 module Chant {
+    enum WebSocketStatus {
+        CONNECTING = 0,
+        OPEN = 1,
+        CLOSING = 2,
+        CLOSED = 3,
+    }
     var _socket: any = null;
     export function Socket(force: boolean) {
         if (_socket) debug("WebSocket.readyState\t" + _socket.readyState);
-        if (force || _socket === null) {
+        if (window.navigator.onLine == false) {
+            return Chant.Notify("Network is offline");
+        }
+        if (force || _socket === null || _socket.readyState != WebSocketStatus.OPEN) {
             _socket = new WebSocket('ws://'+Conf.Server().Host+':'+Conf.Server().Port+'/websocket/room/socket');
         }
         if (_socket.readyState > WebSocket.OPEN) return Chant.Socket(true);

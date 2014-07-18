@@ -2616,9 +2616,8 @@ var Chant;
         function NotifierWithPrefix() {
         }
         NotifierWithPrefix.prototype.show = function (text, icon, title) {
-            icon = icon || '/public/images/favicon.jpg';
-            title = title || 'CHANT!';
-            text = text || 'えら〜';
+            if (typeof icon === "undefined") { icon = '/public/images/favicon.jpg'; }
+            if (typeof title === "undefined") { title = 'CHANT!'; }
             var notification = webkitNotifications.createNotification(icon, title, text);
             notification.onclick = function () {
                 window.focus();
@@ -2660,6 +2659,8 @@ var Chant;
     }
     Chant.getNotifier = getNotifier;
     function Notify(text, icon, title) {
+        if (typeof icon === "undefined") { icon = ""; }
+        if (typeof title === "undefined") { title = ""; }
         if (!$('#enable-notification').is(':checked'))
             return;
         var notifier = getNotifier();
@@ -2983,11 +2984,21 @@ var Chant;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
+    var WebSocketStatus;
+    (function (WebSocketStatus) {
+        WebSocketStatus[WebSocketStatus["CONNECTING"] = 0] = "CONNECTING";
+        WebSocketStatus[WebSocketStatus["OPEN"] = 1] = "OPEN";
+        WebSocketStatus[WebSocketStatus["CLOSING"] = 2] = "CLOSING";
+        WebSocketStatus[WebSocketStatus["CLOSED"] = 3] = "CLOSED";
+    })(WebSocketStatus || (WebSocketStatus = {}));
     var _socket = null;
     function Socket(force) {
         if (_socket)
             debug("WebSocket.readyState\t" + _socket.readyState);
-        if (force || _socket === null) {
+        if (window.navigator.onLine == false) {
+            return Chant.Notify("Network is offline");
+        }
+        if (force || _socket === null || _socket.readyState != 1 /* OPEN */) {
             _socket = new WebSocket('ws://' + Conf.Server().Host + ':' + Conf.Server().Port + '/websocket/room/socket');
         }
         if (_socket.readyState > WebSocket.OPEN)
