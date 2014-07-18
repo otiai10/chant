@@ -2986,7 +2986,7 @@ var Chant;
     var _socket = null;
     function Socket(force) {
         if (_socket)
-            debug(_socket.readyState);
+            debug("WebSocket.readyState\t" + _socket.readyState);
         if (force || _socket === null) {
             _socket = new WebSocket('ws://' + Conf.Server().Host + ':' + Conf.Server().Port + '/websocket/room/socket');
         }
