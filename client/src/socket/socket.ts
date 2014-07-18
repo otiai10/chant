@@ -4,22 +4,42 @@ declare module Conf {
     export function Me(): any;
 }
 module Chant {
-    enum WebSocketStatus {
-        CONNECTING = 0,
-        OPEN = 1,
-        CLOSING = 2,
-        CLOSED = 3,
+    export interface ISocketEvents {
+        onmessage?: (event: any) => any;
+        onerror?:   (event: any) => any;
+        onclose?:   (event: any) => any;
     }
-    var _socket: any = null;
-    export function Socket(force: boolean) {
-        if (_socket) debug("WebSocket.readyState\t" + _socket.readyState);
-        if (window.navigator.onLine == false) {
-            return Chant.Notify("Network is offline");
+    export module Socket {
+        var _instance: WebSocket = null;
+        var _events: ISocketEvents = {};
+        function instance(force: boolean = false): WebSocket {
+            if (window.navigator.onLine == false) {
+                var errorMessage = "オフラインだにゃー";
+                Chant.Notify(errorMessage);
+                throw new Error(errorMessage);
+            }
+            if (force || _instance == null) {
+                _instance = new WebSocket('ws://'+Conf.Server().Host+':'+Conf.Server().Port+'/websocket/room/socket');
+            }
+            if (_instance.readyState > WebSocket.OPEN) {
+                return instance(true);
+            }
+            on();
+            return _instance;
         }
-        if (force || _socket === null || _socket.readyState != WebSocketStatus.OPEN) {
-            _socket = new WebSocket('ws://'+Conf.Server().Host+':'+Conf.Server().Port+'/websocket/room/socket');
+        function on(events: ISocketEvents = null) {
+            if (events) _events = events;
+            var doNothing = () => {};
+            instance().onmessage = _events.onmessage || doNothing;
+            instance().onerror   = _events.onerror || doNothing;
+            instance().onclose   = _events.onclose || doNothing;
         }
-        if (_socket.readyState > WebSocket.OPEN) return Chant.Socket(true);
-        return _socket;
+        export function init(events?: ISocketEvents) {
+            instance();
+            on(events);
+        }
+        export function send(message: string) {
+            instance().send(message);
+        }
     }
 }

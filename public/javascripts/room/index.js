@@ -16,24 +16,23 @@ $(function(){
     }
   }
 
+ 
+
   // Message received on the socket
-  Chant.Socket().onmessage = function(event) {
+  var onmessage = function(event) {
     debug("onmessage");
     display(JSON.parse(event.data))
     Chant.Notifier.onmessage(JSON.parse(event.data));
   };
-
-  Chant.Socket().onerror = function(event) {
-    debug("onerror");
-    var connectForce = true;
-    Chant.Socket(connectForce);
+  var onerror = function(event) {
   };
-
-  Chant.Socket().onclose = function(event) {
-    debug("onclose");
-    var connectForce = true;
-    Chant.Socket(connectForce);
+  var onclose = function(event) {
   };
+  Chant.Socket.init({
+    onmessage: onmessage,
+    onerror: onerror,
+    onclose: onclose
+  });
 
   window.onfocus = function(){
     Chant.Notifier.isActive = true;
@@ -47,7 +46,7 @@ $(function(){
     var message = $('#message').val()
     if (message === '') return;
     $('#message').val('').focus();
-    Chant.Socket().send(message)
+    Chant.Socket.send(message)
   });
 
   $('#message').keypress(function(e) {
@@ -59,22 +58,22 @@ $(function(){
 
   $('#hey').on('click',function(){
     var message = 'ﾍｲｯ!ﾍｲｯ!ﾍｲｯ!';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   $('#start-dash').on('click',function(){
     var message = 'ｽﾀｰﾀﾞｯｼｭ!!!';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   $('#odayaka').on('click',function(){
     var message = '{@img:odayakajanai}';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   $('#plus1').on('click',function(){
     var message = '{@emo:+1}';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   // affect settings
@@ -88,21 +87,21 @@ $(function(){
   });
   $('#zawameku').on('click',function(){
     var message = '{@img:zawameku}';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   $('#chunchun').on('click',function(){
     var message = '{@img:chunchun}';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
   $(document).on('click','button.btn-stamp', function(){
     var message = $(this).attr('data-raw');
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
     // LRU
     var dummyStamprizeMessage = '{@stamp:' + message + '@use}';
-    Chant.Socket().send(dummyStamprizeMessage);
+    Chant.Socket.send(dummyStamprizeMessage);
   });
 
   $(document).on('click','.user-icon',function(){
@@ -125,7 +124,7 @@ $(function(){
     var $form = $('form#' + $(this).attr('data-time'));
     var text = $form.find('[name=originalText]').val();
     var message = '{@stamp:' + text + '}';
-    Chant.Socket().send(message);
+    Chant.Socket.send(message);
     $('#message').focus();
   });
 

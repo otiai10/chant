@@ -39,7 +39,7 @@ module.exports = (grunt) ->
         uglify:
             release:
                 files:
-                    "build/chant.min.js":["build/chant.js"] 
+                    "build/chant.js":["build/chant.js"] 
 
     grunt.loadNpmTasks 'grunt-typescript'
     grunt.loadNpmTasks 'grunt-contrib-concat'
