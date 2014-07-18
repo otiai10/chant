@@ -3004,6 +3004,14 @@ var Chant;
         return _socket;
     }
     Chant.Socket = Socket;
+    function AutoRecover() {
+        var keep = setInterval(function () {
+            if (window.navigator.onLine == false)
+                return;
+            Chant.Socket(true);
+        }, 3000);
+    }
+    Chant.AutoRecover = AutoRecover;
 })(Chant || (Chant = {}));
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

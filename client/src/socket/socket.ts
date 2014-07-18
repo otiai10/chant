@@ -22,4 +22,10 @@ module Chant {
         if (_socket.readyState > WebSocket.OPEN) return Chant.Socket(true);
         return _socket;
     }
+    export function AutoRecover() {
+        var keep = setInterval(() => {
+            if (window.navigator.onLine == false) return;
+            Chant.Socket(true);
+        }, 3000);
+    }
 }
