@@ -1,3 +1,10 @@
+var debug = (function(){
+    return function(message) {
+        var txt = "[" + new Date().toLocaleString() + "] " + message;
+        var style = "color:orange";
+        console.log("%c" + txt, style);
+    };
+})();
 $(function(){
   // Display a message
   var display = function(event) {
@@ -10,16 +17,19 @@ $(function(){
 
   // Message received on the socket
   Chant.Socket().onmessage = function(event) {
+    debug("onmessage");
     display(JSON.parse(event.data))
     Chant.Notifier.onmessage(JSON.parse(event.data));
   };
 
   Chant.Socket().onerror = function(event) {
+    debug("onerror");
     var connectForce = true;
     Chant.Socket(connectForce);
   };
 
   Chant.Socket().onclose = function(event) {
+    debug("onclose");
     var connectForce = true;
     Chant.Socket(connectForce);
   };

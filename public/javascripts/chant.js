@@ -1,2 +1,3134 @@
-var showv;!function(a){var b=function(){function a(a){"undefined"==typeof a&&(a={}),this.ensureOptions(a),this.ensureElemens(),this.delegateEvents()}return a.prototype.ensureOptions=function(a){return this.tagName=a.tagName||"div",this.className=a.className||"",this.id=a.id||"",this.delegate=null==a.delegate?!0:a.delegate,this.$el=a.$el||null,this.attr=a.attr||{},this},a.prototype.ensureElemens=function(){this.$el=this.$el||$("<"+this.tagName+">");var a=this.attr;return this.id&&(a.id=this.id),this.className&&(a["class"]=this.className),this.$el.attr(a),this},a.prototype.events=function(){return{}},a.prototype.delegateEvents=function(){var a=this,b=this.events();return $.map(b,function(c,d){var e=a.splitEventAndSelector(d),f=function(){a[b[e.rawKey]].apply(a)};a.$el.on.call(a.$el,e.evName,e.selector,f)}),this},a.prototype.splitEventAndSelector=function(a){var b=a.split(" ");return{rawKey:a,evName:b[0],selector:b[1]}},a.prototype.render=function(){return this},a}();a.View=b}(showv||(showv={}));var Handlebars={};!function(a,b){a.VERSION="1.0.0",a.COMPILER_REVISION=4,a.REVISION_CHANGES={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:">= 1.0.0"},a.helpers={},a.partials={};var c=Object.prototype.toString,d="[object Function]",e="[object Object]";a.registerHelper=function(b,d,f){if(c.call(b)===e){if(f||d)throw new a.Exception("Arg not supported with multiple helpers");a.Utils.extend(this.helpers,b)}else f&&(d.not=f),this.helpers[b]=d},a.registerPartial=function(b,d){c.call(b)===e?a.Utils.extend(this.partials,b):this.partials[b]=d},a.registerHelper("helperMissing",function(a){if(2===arguments.length)return b;throw new Error("Missing helper: '"+a+"'")}),a.registerHelper("blockHelperMissing",function(b,e){var f=e.inverse||function(){},g=e.fn,h=c.call(b);return h===d&&(b=b.call(this)),b===!0?g(this):b===!1||null==b?f(this):"[object Array]"===h?b.length>0?a.helpers.each(b,e):f(this):g(b)}),a.K=function(){},a.createFrame=Object.create||function(b){a.K.prototype=b;var c=new a.K;return a.K.prototype=null,c},a.logger={DEBUG:0,INFO:1,WARN:2,ERROR:3,level:3,methodMap:{0:"debug",1:"info",2:"warn",3:"error"},log:function(b,c){if(a.logger.level<=b){var d=a.logger.methodMap[b];"undefined"!=typeof console&&console[d]&&console[d].call(console,c)}}},a.log=function(b,c){a.logger.log(b,c)},a.registerHelper("each",function(b,e){var f,g=e.fn,h=e.inverse,i=0,j="",k=c.call(b);if(k===d&&(b=b.call(this)),e.data&&(f=a.createFrame(e.data)),b&&"object"==typeof b)if(b instanceof Array)for(var l=b.length;l>i;i++)f&&(f.index=i),j+=g(b[i],{data:f});else for(var m in b)b.hasOwnProperty(m)&&(f&&(f.key=m),j+=g(b[m],{data:f}),i++);return 0===i&&(j=h(this)),j}),a.registerHelper("if",function(b,e){var f=c.call(b);return f===d&&(b=b.call(this)),!b||a.Utils.isEmpty(b)?e.inverse(this):e.fn(this)}),a.registerHelper("unless",function(b,c){return a.helpers["if"].call(this,b,{fn:c.inverse,inverse:c.fn})}),a.registerHelper("with",function(b,e){var f=c.call(b);return f===d&&(b=b.call(this)),a.Utils.isEmpty(b)?void 0:e.fn(b)}),a.registerHelper("log",function(b,c){var d=c.data&&null!=c.data.level?parseInt(c.data.level,10):1;a.log(d,b)});var f=function(){function a(){this.yy={}}var b={trace:function(){},yy:{},symbols_:{error:2,root:3,program:4,EOF:5,simpleInverse:6,statements:7,statement:8,openInverse:9,closeBlock:10,openBlock:11,mustache:12,partial:13,CONTENT:14,COMMENT:15,OPEN_BLOCK:16,inMustache:17,CLOSE:18,OPEN_INVERSE:19,OPEN_ENDBLOCK:20,path:21,OPEN:22,OPEN_UNESCAPED:23,CLOSE_UNESCAPED:24,OPEN_PARTIAL:25,partialName:26,params:27,hash:28,dataName:29,param:30,STRING:31,INTEGER:32,BOOLEAN:33,hashSegments:34,hashSegment:35,ID:36,EQUALS:37,DATA:38,pathSegments:39,SEP:40,$accept:0,$end:1},terminals_:{2:"error",5:"EOF",14:"CONTENT",15:"COMMENT",16:"OPEN_BLOCK",18:"CLOSE",19:"OPEN_INVERSE",20:"OPEN_ENDBLOCK",22:"OPEN",23:"OPEN_UNESCAPED",24:"CLOSE_UNESCAPED",25:"OPEN_PARTIAL",31:"STRING",32:"INTEGER",33:"BOOLEAN",36:"ID",37:"EQUALS",38:"DATA",40:"SEP"},productions_:[0,[3,2],[4,2],[4,3],[4,2],[4,1],[4,1],[4,0],[7,1],[7,2],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[11,3],[9,3],[10,3],[12,3],[12,3],[13,3],[13,4],[6,2],[17,3],[17,2],[17,2],[17,1],[17,1],[27,2],[27,1],[30,1],[30,1],[30,1],[30,1],[30,1],[28,1],[34,2],[34,1],[35,3],[35,3],[35,3],[35,3],[35,3],[26,1],[26,1],[26,1],[29,2],[21,1],[39,3],[39,1]],performAction:function(a,b,c,d,e,f){var g=f.length-1;switch(e){case 1:return f[g-1];case 2:this.$=new d.ProgramNode([],f[g]);break;case 3:this.$=new d.ProgramNode(f[g-2],f[g]);break;case 4:this.$=new d.ProgramNode(f[g-1],[]);break;case 5:this.$=new d.ProgramNode(f[g]);break;case 6:this.$=new d.ProgramNode([],[]);break;case 7:this.$=new d.ProgramNode([]);break;case 8:this.$=[f[g]];break;case 9:f[g-1].push(f[g]),this.$=f[g-1];break;case 10:this.$=new d.BlockNode(f[g-2],f[g-1].inverse,f[g-1],f[g]);break;case 11:this.$=new d.BlockNode(f[g-2],f[g-1],f[g-1].inverse,f[g]);break;case 12:this.$=f[g];break;case 13:this.$=f[g];break;case 14:this.$=new d.ContentNode(f[g]);break;case 15:this.$=new d.CommentNode(f[g]);break;case 16:this.$=new d.MustacheNode(f[g-1][0],f[g-1][1]);break;case 17:this.$=new d.MustacheNode(f[g-1][0],f[g-1][1]);break;case 18:this.$=f[g-1];break;case 19:this.$=new d.MustacheNode(f[g-1][0],f[g-1][1],"&"===f[g-2][2]);break;case 20:this.$=new d.MustacheNode(f[g-1][0],f[g-1][1],!0);break;case 21:this.$=new d.PartialNode(f[g-1]);break;case 22:this.$=new d.PartialNode(f[g-2],f[g-1]);break;case 23:break;case 24:this.$=[[f[g-2]].concat(f[g-1]),f[g]];break;case 25:this.$=[[f[g-1]].concat(f[g]),null];break;case 26:this.$=[[f[g-1]],f[g]];break;case 27:this.$=[[f[g]],null];break;case 28:this.$=[[f[g]],null];break;case 29:f[g-1].push(f[g]),this.$=f[g-1];break;case 30:this.$=[f[g]];break;case 31:this.$=f[g];break;case 32:this.$=new d.StringNode(f[g]);break;case 33:this.$=new d.IntegerNode(f[g]);break;case 34:this.$=new d.BooleanNode(f[g]);break;case 35:this.$=f[g];break;case 36:this.$=new d.HashNode(f[g]);break;case 37:f[g-1].push(f[g]),this.$=f[g-1];break;case 38:this.$=[f[g]];break;case 39:this.$=[f[g-2],f[g]];break;case 40:this.$=[f[g-2],new d.StringNode(f[g])];break;case 41:this.$=[f[g-2],new d.IntegerNode(f[g])];break;case 42:this.$=[f[g-2],new d.BooleanNode(f[g])];break;case 43:this.$=[f[g-2],f[g]];break;case 44:this.$=new d.PartialNameNode(f[g]);break;case 45:this.$=new d.PartialNameNode(new d.StringNode(f[g]));break;case 46:this.$=new d.PartialNameNode(new d.IntegerNode(f[g]));break;case 47:this.$=new d.DataNode(f[g]);break;case 48:this.$=new d.IdNode(f[g]);break;case 49:f[g-2].push({part:f[g],separator:f[g-1]}),this.$=f[g-2];break;case 50:this.$=[{part:f[g]}]}},table:[{3:1,4:2,5:[2,7],6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],22:[1,14],23:[1,15],25:[1,16]},{1:[3]},{5:[1,17]},{5:[2,6],7:18,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,6],22:[1,14],23:[1,15],25:[1,16]},{5:[2,5],6:20,8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,5],22:[1,14],23:[1,15],25:[1,16]},{17:23,18:[1,22],21:24,29:25,36:[1,28],38:[1,27],39:26},{5:[2,8],14:[2,8],15:[2,8],16:[2,8],19:[2,8],20:[2,8],22:[2,8],23:[2,8],25:[2,8]},{4:29,6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,7],22:[1,14],23:[1,15],25:[1,16]},{4:30,6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,7],22:[1,14],23:[1,15],25:[1,16]},{5:[2,12],14:[2,12],15:[2,12],16:[2,12],19:[2,12],20:[2,12],22:[2,12],23:[2,12],25:[2,12]},{5:[2,13],14:[2,13],15:[2,13],16:[2,13],19:[2,13],20:[2,13],22:[2,13],23:[2,13],25:[2,13]},{5:[2,14],14:[2,14],15:[2,14],16:[2,14],19:[2,14],20:[2,14],22:[2,14],23:[2,14],25:[2,14]},{5:[2,15],14:[2,15],15:[2,15],16:[2,15],19:[2,15],20:[2,15],22:[2,15],23:[2,15],25:[2,15]},{17:31,21:24,29:25,36:[1,28],38:[1,27],39:26},{17:32,21:24,29:25,36:[1,28],38:[1,27],39:26},{17:33,21:24,29:25,36:[1,28],38:[1,27],39:26},{21:35,26:34,31:[1,36],32:[1,37],36:[1,28],39:26},{1:[2,1]},{5:[2,2],8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,2],22:[1,14],23:[1,15],25:[1,16]},{17:23,21:24,29:25,36:[1,28],38:[1,27],39:26},{5:[2,4],7:38,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,4],22:[1,14],23:[1,15],25:[1,16]},{5:[2,9],14:[2,9],15:[2,9],16:[2,9],19:[2,9],20:[2,9],22:[2,9],23:[2,9],25:[2,9]},{5:[2,23],14:[2,23],15:[2,23],16:[2,23],19:[2,23],20:[2,23],22:[2,23],23:[2,23],25:[2,23]},{18:[1,39]},{18:[2,27],21:44,24:[2,27],27:40,28:41,29:48,30:42,31:[1,45],32:[1,46],33:[1,47],34:43,35:49,36:[1,50],38:[1,27],39:26},{18:[2,28],24:[2,28]},{18:[2,48],24:[2,48],31:[2,48],32:[2,48],33:[2,48],36:[2,48],38:[2,48],40:[1,51]},{21:52,36:[1,28],39:26},{18:[2,50],24:[2,50],31:[2,50],32:[2,50],33:[2,50],36:[2,50],38:[2,50],40:[2,50]},{10:53,20:[1,54]},{10:55,20:[1,54]},{18:[1,56]},{18:[1,57]},{24:[1,58]},{18:[1,59],21:60,36:[1,28],39:26},{18:[2,44],36:[2,44]},{18:[2,45],36:[2,45]},{18:[2,46],36:[2,46]},{5:[2,3],8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,3],22:[1,14],23:[1,15],25:[1,16]},{14:[2,17],15:[2,17],16:[2,17],19:[2,17],20:[2,17],22:[2,17],23:[2,17],25:[2,17]},{18:[2,25],21:44,24:[2,25],28:61,29:48,30:62,31:[1,45],32:[1,46],33:[1,47],34:43,35:49,36:[1,50],38:[1,27],39:26},{18:[2,26],24:[2,26]},{18:[2,30],24:[2,30],31:[2,30],32:[2,30],33:[2,30],36:[2,30],38:[2,30]},{18:[2,36],24:[2,36],35:63,36:[1,64]},{18:[2,31],24:[2,31],31:[2,31],32:[2,31],33:[2,31],36:[2,31],38:[2,31]},{18:[2,32],24:[2,32],31:[2,32],32:[2,32],33:[2,32],36:[2,32],38:[2,32]},{18:[2,33],24:[2,33],31:[2,33],32:[2,33],33:[2,33],36:[2,33],38:[2,33]},{18:[2,34],24:[2,34],31:[2,34],32:[2,34],33:[2,34],36:[2,34],38:[2,34]},{18:[2,35],24:[2,35],31:[2,35],32:[2,35],33:[2,35],36:[2,35],38:[2,35]},{18:[2,38],24:[2,38],36:[2,38]},{18:[2,50],24:[2,50],31:[2,50],32:[2,50],33:[2,50],36:[2,50],37:[1,65],38:[2,50],40:[2,50]},{36:[1,66]},{18:[2,47],24:[2,47],31:[2,47],32:[2,47],33:[2,47],36:[2,47],38:[2,47]},{5:[2,10],14:[2,10],15:[2,10],16:[2,10],19:[2,10],20:[2,10],22:[2,10],23:[2,10],25:[2,10]},{21:67,36:[1,28],39:26},{5:[2,11],14:[2,11],15:[2,11],16:[2,11],19:[2,11],20:[2,11],22:[2,11],23:[2,11],25:[2,11]},{14:[2,16],15:[2,16],16:[2,16],19:[2,16],20:[2,16],22:[2,16],23:[2,16],25:[2,16]},{5:[2,19],14:[2,19],15:[2,19],16:[2,19],19:[2,19],20:[2,19],22:[2,19],23:[2,19],25:[2,19]},{5:[2,20],14:[2,20],15:[2,20],16:[2,20],19:[2,20],20:[2,20],22:[2,20],23:[2,20],25:[2,20]},{5:[2,21],14:[2,21],15:[2,21],16:[2,21],19:[2,21],20:[2,21],22:[2,21],23:[2,21],25:[2,21]},{18:[1,68]},{18:[2,24],24:[2,24]},{18:[2,29],24:[2,29],31:[2,29],32:[2,29],33:[2,29],36:[2,29],38:[2,29]},{18:[2,37],24:[2,37],36:[2,37]},{37:[1,65]},{21:69,29:73,31:[1,70],32:[1,71],33:[1,72],36:[1,28],38:[1,27],39:26},{18:[2,49],24:[2,49],31:[2,49],32:[2,49],33:[2,49],36:[2,49],38:[2,49],40:[2,49]},{18:[1,74]},{5:[2,22],14:[2,22],15:[2,22],16:[2,22],19:[2,22],20:[2,22],22:[2,22],23:[2,22],25:[2,22]},{18:[2,39],24:[2,39],36:[2,39]},{18:[2,40],24:[2,40],36:[2,40]},{18:[2,41],24:[2,41],36:[2,41]},{18:[2,42],24:[2,42],36:[2,42]},{18:[2,43],24:[2,43],36:[2,43]},{5:[2,18],14:[2,18],15:[2,18],16:[2,18],19:[2,18],20:[2,18],22:[2,18],23:[2,18],25:[2,18]}],defaultActions:{17:[2,1]},parseError:function(a){throw new Error(a)},parse:function(a){function b(){var a;return a=c.lexer.lex()||1,"number"!=typeof a&&(a=c.symbols_[a]||a),a}var c=this,d=[0],e=[null],f=[],g=this.table,h="",i=0,j=0,k=0;this.lexer.setInput(a),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,this.yy.parser=this,"undefined"==typeof this.lexer.yylloc&&(this.lexer.yylloc={});var l=this.lexer.yylloc;f.push(l);var m=this.lexer.options&&this.lexer.options.ranges;"function"==typeof this.yy.parseError&&(this.parseError=this.yy.parseError);for(var n,o,p,q,r,s,t,u,v,w={};;){if(p=d[d.length-1],this.defaultActions[p]?q=this.defaultActions[p]:((null===n||"undefined"==typeof n)&&(n=b()),q=g[p]&&g[p][n]),"undefined"==typeof q||!q.length||!q[0]){var x="";if(!k){v=[];for(s in g[p])this.terminals_[s]&&s>2&&v.push("'"+this.terminals_[s]+"'");x=this.lexer.showPosition?"Parse error on line "+(i+1)+":\n"+this.lexer.showPosition()+"\nExpecting "+v.join(", ")+", got '"+(this.terminals_[n]||n)+"'":"Parse error on line "+(i+1)+": Unexpected "+(1==n?"end of input":"'"+(this.terminals_[n]||n)+"'"),this.parseError(x,{text:this.lexer.match,token:this.terminals_[n]||n,line:this.lexer.yylineno,loc:l,expected:v})}}if(q[0]instanceof Array&&q.length>1)throw new Error("Parse Error: multiple actions possible at state: "+p+", token: "+n);switch(q[0]){case 1:d.push(n),e.push(this.lexer.yytext),f.push(this.lexer.yylloc),d.push(q[1]),n=null,o?(n=o,o=null):(j=this.lexer.yyleng,h=this.lexer.yytext,i=this.lexer.yylineno,l=this.lexer.yylloc,k>0&&k--);break;case 2:if(t=this.productions_[q[1]][1],w.$=e[e.length-t],w._$={first_line:f[f.length-(t||1)].first_line,last_line:f[f.length-1].last_line,first_column:f[f.length-(t||1)].first_column,last_column:f[f.length-1].last_column},m&&(w._$.range=[f[f.length-(t||1)].range[0],f[f.length-1].range[1]]),r=this.performAction.call(w,h,j,i,this.yy,q[1],e,f),"undefined"!=typeof r)return r;t&&(d=d.slice(0,-1*t*2),e=e.slice(0,-1*t),f=f.slice(0,-1*t)),d.push(this.productions_[q[1]][0]),e.push(w.$),f.push(w._$),u=g[d[d.length-2]][d[d.length-1]],d.push(u);break;case 3:return!0}}return!0}},c=function(){var a={EOF:1,parseError:function(a,b){if(!this.yy.parser)throw new Error(a);this.yy.parser.parseError(a,b)},setInput:function(a){return this._input=a,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this.options.ranges&&(this.yylloc.range=[0,0]),this.offset=0,this},input:function(){var a=this._input[0];this.yytext+=a,this.yyleng++,this.offset++,this.match+=a,this.matched+=a;var b=a.match(/(?:\r\n?|\n).*/g);return b?(this.yylineno++,this.yylloc.last_line++):this.yylloc.last_column++,this.options.ranges&&this.yylloc.range[1]++,this._input=this._input.slice(1),a},unput:function(a){var b=a.length,c=a.split(/(?:\r\n?|\n)/g);this._input=a+this._input,this.yytext=this.yytext.substr(0,this.yytext.length-b-1),this.offset-=b;var d=this.match.split(/(?:\r\n?|\n)/g);this.match=this.match.substr(0,this.match.length-1),this.matched=this.matched.substr(0,this.matched.length-1),c.length-1&&(this.yylineno-=c.length-1);var e=this.yylloc.range;return this.yylloc={first_line:this.yylloc.first_line,last_line:this.yylineno+1,first_column:this.yylloc.first_column,last_column:c?(c.length===d.length?this.yylloc.first_column:0)+d[d.length-c.length].length-c[0].length:this.yylloc.first_column-b},this.options.ranges&&(this.yylloc.range=[e[0],e[0]+this.yyleng-b]),this},more:function(){return this._more=!0,this},less:function(a){this.unput(this.match.slice(a))},pastInput:function(){var a=this.matched.substr(0,this.matched.length-this.match.length);return(a.length>20?"...":"")+a.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var a=this.match;return a.length<20&&(a+=this._input.substr(0,20-a.length)),(a.substr(0,20)+(a.length>20?"...":"")).replace(/\n/g,"")},showPosition:function(){var a=this.pastInput(),b=new Array(a.length+1).join("-");return a+this.upcomingInput()+"\n"+b+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0);var a,b,c,d,e;this._more||(this.yytext="",this.match="");for(var f=this._currentRules(),g=0;g<f.length&&(c=this._input.match(this.rules[f[g]]),!c||b&&!(c[0].length>b[0].length)||(b=c,d=g,this.options.flex));g++);return b?(e=b[0].match(/(?:\r\n?|\n).*/g),e&&(this.yylineno+=e.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:e?e[e.length-1].length-e[e.length-1].match(/\r?\n?/)[0].length:this.yylloc.last_column+b[0].length},this.yytext+=b[0],this.match+=b[0],this.matches=b,this.yyleng=this.yytext.length,this.options.ranges&&(this.yylloc.range=[this.offset,this.offset+=this.yyleng]),this._more=!1,this._input=this._input.slice(b[0].length),this.matched+=b[0],a=this.performAction.call(this,this.yy,this,f[d],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),a?a:void 0):""===this._input?this.EOF:this.parseError("Lexical error on line "+(this.yylineno+1)+". Unrecognized text.\n"+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var a=this.next();return"undefined"!=typeof a?a:this.lex()},begin:function(a){this.conditionStack.push(a)},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(a){this.begin(a)}};return a.options={},a.performAction=function(a,b,c,d){switch(c){case 0:return b.yytext="\\",14;case 1:if("\\"!==b.yytext.slice(-1)&&this.begin("mu"),"\\"===b.yytext.slice(-1)&&(b.yytext=b.yytext.substr(0,b.yyleng-1),this.begin("emu")),b.yytext)return 14;break;case 2:return 14;case 3:return"\\"!==b.yytext.slice(-1)&&this.popState(),"\\"===b.yytext.slice(-1)&&(b.yytext=b.yytext.substr(0,b.yyleng-1)),14;case 4:return b.yytext=b.yytext.substr(0,b.yyleng-4),this.popState(),15;case 5:return 25;case 6:return 16;case 7:return 20;case 8:return 19;case 9:return 19;case 10:return 23;case 11:return 22;case 12:this.popState(),this.begin("com");break;case 13:return b.yytext=b.yytext.substr(3,b.yyleng-5),this.popState(),15;case 14:return 22;case 15:return 37;case 16:return 36;case 17:return 36;case 18:return 40;case 19:break;case 20:return this.popState(),24;case 21:return this.popState(),18;case 22:return b.yytext=b.yytext.substr(1,b.yyleng-2).replace(/\\"/g,'"'),31;case 23:return b.yytext=b.yytext.substr(1,b.yyleng-2).replace(/\\'/g,"'"),31;case 24:return 38;case 25:return 33;case 26:return 33;case 27:return 32;case 28:return 36;case 29:return b.yytext=b.yytext.substr(1,b.yyleng-2),36;case 30:return"INVALID";case 31:return 5}},a.rules=[/^(?:\\\\(?=(\{\{)))/,/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|$)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\{\{>)/,/^(?:\{\{#)/,/^(?:\{\{\/)/,/^(?:\{\{\^)/,/^(?:\{\{\s*else\b)/,/^(?:\{\{\{)/,/^(?:\{\{&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{)/,/^(?:=)/,/^(?:\.(?=[}\/ ]))/,/^(?:\.\.)/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}\}\})/,/^(?:\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=[}\s]))/,/^(?:false(?=[}\s]))/,/^(?:-?[0-9]+(?=[}\s]))/,/^(?:[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.]))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/],a.conditions={mu:{rules:[5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],inclusive:!1},emu:{rules:[3],inclusive:!1},com:{rules:[4],inclusive:!1},INITIAL:{rules:[0,1,2,31],inclusive:!0}},a}();return b.lexer=c,a.prototype=b,b.Parser=a,new a}();a.Parser=f,a.parse=function(b){return b.constructor===a.AST.ProgramNode?b:(a.Parser.yy=a.AST,a.Parser.parse(b))},a.AST={},a.AST.ProgramNode=function(b,c){this.type="program",this.statements=b,c&&(this.inverse=new a.AST.ProgramNode(c))},a.AST.MustacheNode=function(a,b,c){this.type="mustache",this.escaped=!c,this.hash=b;var d=this.id=a[0],e=this.params=a.slice(1),f=this.eligibleHelper=d.isSimple;this.isHelper=f&&(e.length||b)},a.AST.PartialNode=function(a,b){this.type="partial",this.partialName=a,this.context=b},a.AST.BlockNode=function(b,c,d,e){var f=function(b,c){if(b.original!==c.original)throw new a.Exception(b.original+" doesn't match "+c.original)};f(b.id,e),this.type="block",this.mustache=b,this.program=c,this.inverse=d,this.inverse&&!this.program&&(this.isInverse=!0)},a.AST.ContentNode=function(a){this.type="content",this.string=a},a.AST.HashNode=function(a){this.type="hash",this.pairs=a},a.AST.IdNode=function(b){this.type="ID";for(var c="",d=[],e=0,f=0,g=b.length;g>f;f++){var h=b[f].part;if(c+=(b[f].separator||"")+h,".."===h||"."===h||"this"===h){if(d.length>0)throw new a.Exception("Invalid path: "+c);".."===h?e++:this.isScoped=!0}else d.push(h)}this.original=c,this.parts=d,this.string=d.join("."),this.depth=e,this.isSimple=1===b.length&&!this.isScoped&&0===e,this.stringModeValue=this.string},a.AST.PartialNameNode=function(a){this.type="PARTIAL_NAME",this.name=a.original},a.AST.DataNode=function(a){this.type="DATA",this.id=a},a.AST.StringNode=function(a){this.type="STRING",this.original=this.string=this.stringModeValue=a},a.AST.IntegerNode=function(a){this.type="INTEGER",this.original=this.integer=a,this.stringModeValue=Number(a)},a.AST.BooleanNode=function(a){this.type="BOOLEAN",this.bool=a,this.stringModeValue="true"===a},a.AST.CommentNode=function(a){this.type="comment",this.comment=a};var g=["description","fileName","lineNumber","message","name","number","stack"];a.Exception=function(){for(var a=Error.prototype.constructor.apply(this,arguments),b=0;b<g.length;b++)this[g[b]]=a[g[b]]},a.Exception.prototype=new Error,a.SafeString=function(a){this.string=a},a.SafeString.prototype.toString=function(){return this.string.toString()};var h={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"},i=/[&<>"'`]/g,j=/[&<>"'`]/,k=function(a){return h[a]||"&amp;"};a.Utils={extend:function(a,b){for(var c in b)b.hasOwnProperty(c)&&(a[c]=b[c])},escapeExpression:function(b){return b instanceof a.SafeString?b.toString():null==b||b===!1?"":(b=b.toString(),j.test(b)?b.replace(i,k):b)},isEmpty:function(a){return a||0===a?"[object Array]"===c.call(a)&&0===a.length?!0:!1:!0}};var l=a.Compiler=function(){},m=a.JavaScriptCompiler=function(){};l.prototype={compiler:l,disassemble:function(){for(var a,b,c,d=this.opcodes,e=[],f=0,g=d.length;g>f;f++)if(a=d[f],"DECLARE"===a.opcode)e.push("DECLARE "+a.name+"="+a.value);else{b=[];for(var h=0;h<a.args.length;h++)c=a.args[h],"string"==typeof c&&(c='"'+c.replace("\n","\\n")+'"'),b.push(c);e.push(a.opcode+" "+b.join(" "))}return e.join("\n")},equals:function(a){var b=this.opcodes.length;if(a.opcodes.length!==b)return!1;for(var c=0;b>c;c++){var d=this.opcodes[c],e=a.opcodes[c];if(d.opcode!==e.opcode||d.args.length!==e.args.length)return!1;for(var f=0;f<d.args.length;f++)if(d.args[f]!==e.args[f])return!1}if(b=this.children.length,a.children.length!==b)return!1;for(c=0;b>c;c++)if(!this.children[c].equals(a.children[c]))return!1;return!0},guid:0,compile:function(a,b){this.children=[],this.depths={list:[]},this.options=b;var c=this.options.knownHelpers;if(this.options.knownHelpers={helperMissing:!0,blockHelperMissing:!0,each:!0,"if":!0,unless:!0,"with":!0,log:!0},c)for(var d in c)this.options.knownHelpers[d]=c[d];return this.program(a)},accept:function(a){return this[a.type](a)},program:function(a){var b,c=a.statements;this.opcodes=[];for(var d=0,e=c.length;e>d;d++)b=c[d],this[b.type](b);return this.isSimple=1===e,this.depths.list=this.depths.list.sort(function(a,b){return a-b}),this},compileProgram:function(a){var b,c=(new this.compiler).compile(a,this.options),d=this.guid++;this.usePartial=this.usePartial||c.usePartial,this.children[d]=c;for(var e=0,f=c.depths.list.length;f>e;e++)b=c.depths.list[e],2>b||this.addDepth(b-1);return d},block:function(a){var b=a.mustache,c=a.program,d=a.inverse;c&&(c=this.compileProgram(c)),d&&(d=this.compileProgram(d));var e=this.classifyMustache(b);"helper"===e?this.helperMustache(b,c,d):"simple"===e?(this.simpleMustache(b),this.opcode("pushProgram",c),this.opcode("pushProgram",d),this.opcode("emptyHash"),this.opcode("blockValue")):(this.ambiguousMustache(b,c,d),this.opcode("pushProgram",c),this.opcode("pushProgram",d),this.opcode("emptyHash"),this.opcode("ambiguousBlockValue")),this.opcode("append")},hash:function(a){var b,c,d=a.pairs;this.opcode("pushHash");for(var e=0,f=d.length;f>e;e++)b=d[e],c=b[1],this.options.stringParams?(c.depth&&this.addDepth(c.depth),this.opcode("getContext",c.depth||0),this.opcode("pushStringParam",c.stringModeValue,c.type)):this.accept(c),this.opcode("assignToHash",b[0]);this.opcode("popHash")},partial:function(a){var b=a.partialName;this.usePartial=!0,a.context?this.ID(a.context):this.opcode("push","depth0"),this.opcode("invokePartial",b.name),this.opcode("append")},content:function(a){this.opcode("appendContent",a.string)},mustache:function(a){var b=this.options,c=this.classifyMustache(a);"simple"===c?this.simpleMustache(a):"helper"===c?this.helperMustache(a):this.ambiguousMustache(a),this.opcode(a.escaped&&!b.noEscape?"appendEscaped":"append")},ambiguousMustache:function(a,b,c){var d=a.id,e=d.parts[0],f=null!=b||null!=c;this.opcode("getContext",d.depth),this.opcode("pushProgram",b),this.opcode("pushProgram",c),this.opcode("invokeAmbiguous",e,f)},simpleMustache:function(a){var b=a.id;"DATA"===b.type?this.DATA(b):b.parts.length?this.ID(b):(this.addDepth(b.depth),this.opcode("getContext",b.depth),this.opcode("pushContext")),this.opcode("resolvePossibleLambda")},helperMustache:function(a,b,c){var d=this.setupFullMustacheParams(a,b,c),e=a.id.parts[0];if(this.options.knownHelpers[e])this.opcode("invokeKnownHelper",d.length,e);else{if(this.options.knownHelpersOnly)throw new Error("You specified knownHelpersOnly, but used the unknown helper "+e);this.opcode("invokeHelper",d.length,e)}},ID:function(a){this.addDepth(a.depth),this.opcode("getContext",a.depth);var b=a.parts[0];b?this.opcode("lookupOnContext",a.parts[0]):this.opcode("pushContext");for(var c=1,d=a.parts.length;d>c;c++)this.opcode("lookup",a.parts[c])},DATA:function(b){if(this.options.data=!0,b.id.isScoped||b.id.depth)throw new a.Exception("Scoped data references are not supported: "+b.original);this.opcode("lookupData");for(var c=b.id.parts,d=0,e=c.length;e>d;d++)this.opcode("lookup",c[d])},STRING:function(a){this.opcode("pushString",a.string)},INTEGER:function(a){this.opcode("pushLiteral",a.integer)},BOOLEAN:function(a){this.opcode("pushLiteral",a.bool)},comment:function(){},opcode:function(a){this.opcodes.push({opcode:a,args:[].slice.call(arguments,1)})},declare:function(a,b){this.opcodes.push({opcode:"DECLARE",name:a,value:b})},addDepth:function(a){if(isNaN(a))throw new Error("EWOT");0!==a&&(this.depths[a]||(this.depths[a]=!0,this.depths.list.push(a)))},classifyMustache:function(a){var b=a.isHelper,c=a.eligibleHelper,d=this.options;if(c&&!b){var e=a.id.parts[0];d.knownHelpers[e]?b=!0:d.knownHelpersOnly&&(c=!1)}return b?"helper":c?"ambiguous":"simple"},pushParams:function(a){for(var b,c=a.length;c--;)b=a[c],this.options.stringParams?(b.depth&&this.addDepth(b.depth),this.opcode("getContext",b.depth||0),this.opcode("pushStringParam",b.stringModeValue,b.type)):this[b.type](b)},setupMustacheParams:function(a){var b=a.params;return this.pushParams(b),a.hash?this.hash(a.hash):this.opcode("emptyHash"),b},setupFullMustacheParams:function(a,b,c){var d=a.params;return this.pushParams(d),this.opcode("pushProgram",b),this.opcode("pushProgram",c),a.hash?this.hash(a.hash):this.opcode("emptyHash"),d}};var n=function(a){this.value=a};m.prototype={nameLookup:function(a,b){return/^[0-9]+$/.test(b)?a+"["+b+"]":m.isValidJavaScriptVariableName(b)?a+"."+b:a+"['"+b+"']"},appendToBuffer:function(a){return this.environment.isSimple?"return "+a+";":{appendToBuffer:!0,content:a,toString:function(){return"buffer += "+a+";"}}},initializeBuffer:function(){return this.quotedString("")},namespace:"Handlebars",compile:function(b,c,d,e){this.environment=b,this.options=c||{},a.log(a.logger.DEBUG,this.environment.disassemble()+"\n\n"),this.name=this.environment.name,this.isChild=!!d,this.context=d||{programs:[],environments:[],aliases:{}},this.preamble(),this.stackSlot=0,this.stackVars=[],this.registers={list:[]},this.compileStack=[],this.inlineStack=[],this.compileChildren(b,c);var f,g=b.opcodes;for(this.i=0,r=g.length;this.i<r;this.i++)f=g[this.i],"DECLARE"===f.opcode?this[f.name]=f.value:this[f.opcode].apply(this,f.args);return this.createFunctionContext(e)},nextOpcode:function(){var a=this.environment.opcodes;return a[this.i+1]},eat:function(){this.i=this.i+1},preamble:function(){var a=[];if(this.isChild)a.push("");else{var b=this.namespace,c="helpers = this.merge(helpers, "+b+".helpers);";this.environment.usePartial&&(c=c+" partials = this.merge(partials, "+b+".partials);"),this.options.data&&(c+=" data = data || {};"),a.push(c)}a.push(this.environment.isSimple?"":", buffer = "+this.initializeBuffer()),this.lastContext=0,this.source=a},createFunctionContext:function(b){var c=this.stackVars.concat(this.registers.list);if(c.length>0&&(this.source[1]=this.source[1]+", "+c.join(", ")),!this.isChild)for(var d in this.context.aliases)this.context.aliases.hasOwnProperty(d)&&(this.source[1]=this.source[1]+", "+d+"="+this.context.aliases[d]);this.source[1]&&(this.source[1]="var "+this.source[1].substring(2)+";"),this.isChild||(this.source[1]+="\n"+this.context.programs.join("\n")+"\n"),this.environment.isSimple||this.source.push("return buffer;");for(var e=this.isChild?["depth0","data"]:["Handlebars","depth0","helpers","partials","data"],f=0,g=this.environment.depths.list.length;g>f;f++)e.push("depth"+this.environment.depths.list[f]);var h=this.mergeSource();if(!this.isChild){var i=a.COMPILER_REVISION,j=a.REVISION_CHANGES[i];h="this.compilerInfo = ["+i+",'"+j+"'];\n"+h}if(b)return e.push(h),Function.apply(this,e);var k="function "+(this.name||"")+"("+e.join(",")+") {\n  "+h+"}";return a.log(a.logger.DEBUG,k+"\n\n"),k},mergeSource:function(){for(var a,c="",d=0,e=this.source.length;e>d;d++){var f=this.source[d];f.appendToBuffer?a=a?a+"\n    + "+f.content:f.content:(a&&(c+="buffer += "+a+";\n  ",a=b),c+=f+"\n  ")}return c},blockValue:function(){this.context.aliases.blockHelperMissing="helpers.blockHelperMissing";var a=["depth0"];this.setupParams(0,a),this.replaceStack(function(b){return a.splice(1,0,b),"blockHelperMissing.call("+a.join(", ")+")"})},ambiguousBlockValue:function(){this.context.aliases.blockHelperMissing="helpers.blockHelperMissing";var a=["depth0"];this.setupParams(0,a);var b=this.topStack();a.splice(1,0,b),a[a.length-1]="options",this.source.push("if (!"+this.lastHelper+") { "+b+" = blockHelperMissing.call("+a.join(", ")+"); }")},appendContent:function(a){this.source.push(this.appendToBuffer(this.quotedString(a)))},append:function(){this.flushInline();var a=this.popStack();this.source.push("if("+a+" || "+a+" === 0) { "+this.appendToBuffer(a)+" }"),this.environment.isSimple&&this.source.push("else { "+this.appendToBuffer("''")+" }")},appendEscaped:function(){this.context.aliases.escapeExpression="this.escapeExpression",this.source.push(this.appendToBuffer("escapeExpression("+this.popStack()+")"))},getContext:function(a){this.lastContext!==a&&(this.lastContext=a)},lookupOnContext:function(a){this.push(this.nameLookup("depth"+this.lastContext,a,"context"))},pushContext:function(){this.pushStackLiteral("depth"+this.lastContext)},resolvePossibleLambda:function(){this.context.aliases.functionType='"function"',this.replaceStack(function(a){return"typeof "+a+" === functionType ? "+a+".apply(depth0) : "+a})},lookup:function(a){this.replaceStack(function(b){return b+" == null || "+b+" === false ? "+b+" : "+this.nameLookup(b,a,"context")})},lookupData:function(){this.push("data")},pushStringParam:function(a,b){this.pushStackLiteral("depth"+this.lastContext),this.pushString(b),"string"==typeof a?this.pushString(a):this.pushStackLiteral(a)},emptyHash:function(){this.pushStackLiteral("{}"),this.options.stringParams&&(this.register("hashTypes","{}"),this.register("hashContexts","{}"))},pushHash:function(){this.hash={values:[],types:[],contexts:[]}},popHash:function(){var a=this.hash;this.hash=b,this.options.stringParams&&(this.register("hashContexts","{"+a.contexts.join(",")+"}"),this.register("hashTypes","{"+a.types.join(",")+"}")),this.push("{\n    "+a.values.join(",\n    ")+"\n  }")},pushString:function(a){this.pushStackLiteral(this.quotedString(a))},push:function(a){return this.inlineStack.push(a),a},pushLiteral:function(a){this.pushStackLiteral(a)},pushProgram:function(a){this.pushStackLiteral(null!=a?this.programExpression(a):null)},invokeHelper:function(a,b){this.context.aliases.helperMissing="helpers.helperMissing";
-var c=this.lastHelper=this.setupHelper(a,b,!0),d=this.nameLookup("depth"+this.lastContext,b,"context");this.push(c.name+" || "+d),this.replaceStack(function(a){return a+" ? "+a+".call("+c.callParams+") : helperMissing.call("+c.helperMissingParams+")"})},invokeKnownHelper:function(a,b){var c=this.setupHelper(a,b);this.push(c.name+".call("+c.callParams+")")},invokeAmbiguous:function(a,b){this.context.aliases.functionType='"function"',this.pushStackLiteral("{}");var c=this.setupHelper(0,a,b),d=this.lastHelper=this.nameLookup("helpers",a,"helper"),e=this.nameLookup("depth"+this.lastContext,a,"context"),f=this.nextStack();this.source.push("if ("+f+" = "+d+") { "+f+" = "+f+".call("+c.callParams+"); }"),this.source.push("else { "+f+" = "+e+"; "+f+" = typeof "+f+" === functionType ? "+f+".apply(depth0) : "+f+"; }")},invokePartial:function(a){var b=[this.nameLookup("partials",a,"partial"),"'"+a+"'",this.popStack(),"helpers","partials"];this.options.data&&b.push("data"),this.context.aliases.self="this",this.push("self.invokePartial("+b.join(", ")+")")},assignToHash:function(a){var b,c,d=this.popStack();this.options.stringParams&&(c=this.popStack(),b=this.popStack());var e=this.hash;b&&e.contexts.push("'"+a+"': "+b),c&&e.types.push("'"+a+"': "+c),e.values.push("'"+a+"': ("+d+")")},compiler:m,compileChildren:function(a,b){for(var c,d,e=a.children,f=0,g=e.length;g>f;f++){c=e[f],d=new this.compiler;var h=this.matchExistingProgram(c);null==h?(this.context.programs.push(""),h=this.context.programs.length,c.index=h,c.name="program"+h,this.context.programs[h]=d.compile(c,b,this.context),this.context.environments[h]=c):(c.index=h,c.name="program"+h)}},matchExistingProgram:function(a){for(var b=0,c=this.context.environments.length;c>b;b++){var d=this.context.environments[b];if(d&&d.equals(a))return b}},programExpression:function(a){if(this.context.aliases.self="this",null==a)return"self.noop";for(var b,c=this.environment.children[a],d=c.depths.list,e=[c.index,c.name,"data"],f=0,g=d.length;g>f;f++)b=d[f],e.push(1===b?"depth0":"depth"+(b-1));return(0===d.length?"self.program(":"self.programWithDepth(")+e.join(", ")+")"},register:function(a,b){this.useRegister(a),this.source.push(a+" = "+b+";")},useRegister:function(a){this.registers[a]||(this.registers[a]=!0,this.registers.list.push(a))},pushStackLiteral:function(a){return this.push(new n(a))},pushStack:function(a){this.flushInline();var b=this.incrStack();return a&&this.source.push(b+" = "+a+";"),this.compileStack.push(b),b},replaceStack:function(a){var b,c="",d=this.isInline();if(d){var e=this.popStack(!0);if(e instanceof n)b=e.value;else{var f=this.stackSlot?this.topStackName():this.incrStack();c="("+this.push(f)+" = "+e+"),",b=this.topStack()}}else b=this.topStack();var g=a.call(this,b);return d?((this.inlineStack.length||this.compileStack.length)&&this.popStack(),this.push("("+c+g+")")):(/^stack/.test(b)||(b=this.nextStack()),this.source.push(b+" = ("+c+g+");")),b},nextStack:function(){return this.pushStack()},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var a=this.inlineStack;if(a.length){this.inlineStack=[];for(var b=0,c=a.length;c>b;b++){var d=a[b];d instanceof n?this.compileStack.push(d):this.pushStack(d)}}},isInline:function(){return this.inlineStack.length},popStack:function(a){var b=this.isInline(),c=(b?this.inlineStack:this.compileStack).pop();return!a&&c instanceof n?c.value:(b||this.stackSlot--,c)},topStack:function(a){var b=this.isInline()?this.inlineStack:this.compileStack,c=b[b.length-1];return!a&&c instanceof n?c.value:c},quotedString:function(a){return'"'+a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029")+'"'},setupHelper:function(a,b,c){var d=[];this.setupParams(a,d,c);var e=this.nameLookup("helpers",b,"helper");return{params:d,name:e,callParams:["depth0"].concat(d).join(", "),helperMissingParams:c&&["depth0",this.quotedString(b)].concat(d).join(", ")}},setupParams:function(a,b,c){var d,e,f,g=[],h=[],i=[];g.push("hash:"+this.popStack()),e=this.popStack(),f=this.popStack(),(f||e)&&(f||(this.context.aliases.self="this",f="self.noop"),e||(this.context.aliases.self="this",e="self.noop"),g.push("inverse:"+e),g.push("fn:"+f));for(var j=0;a>j;j++)d=this.popStack(),b.push(d),this.options.stringParams&&(i.push(this.popStack()),h.push(this.popStack()));return this.options.stringParams&&(g.push("contexts:["+h.join(",")+"]"),g.push("types:["+i.join(",")+"]"),g.push("hashContexts:hashContexts"),g.push("hashTypes:hashTypes")),this.options.data&&g.push("data:data"),g="{"+g.join(",")+"}",c?(this.register("options",g),b.push("options")):b.push(g),b.join(", ")}};for(var o="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield".split(" "),p=m.RESERVED_WORDS={},q=0,r=o.length;r>q;q++)p[o[q]]=!0;m.isValidJavaScriptVariableName=function(a){return!m.RESERVED_WORDS[a]&&/^[a-zA-Z_$][0-9a-zA-Z_$]+$/.test(a)?!0:!1},a.precompile=function(b,c){if(null==b||"string"!=typeof b&&b.constructor!==a.AST.ProgramNode)throw new a.Exception("You must pass a string or Handlebars AST to Handlebars.precompile. You passed "+b);c=c||{},"data"in c||(c.data=!0);var d=a.parse(b),e=(new l).compile(d,c);return(new m).compile(e,c)},a.compile=function(c,d){function e(){var e=a.parse(c),f=(new l).compile(e,d),g=(new m).compile(f,d,b,!0);return a.template(g)}if(null==c||"string"!=typeof c&&c.constructor!==a.AST.ProgramNode)throw new a.Exception("You must pass a string or Handlebars AST to Handlebars.compile. You passed "+c);d=d||{},"data"in d||(d.data=!0);var f;return function(a,b){return f||(f=e()),f.call(this,a,b)}},a.VM={template:function(b){var c={escapeExpression:a.Utils.escapeExpression,invokePartial:a.VM.invokePartial,programs:[],program:function(b,c,d){var e=this.programs[b];return d?e=a.VM.program(b,c,d):e||(e=this.programs[b]=a.VM.program(b,c)),e},merge:function(b,c){var d=b||c;return b&&c&&(d={},a.Utils.extend(d,c),a.Utils.extend(d,b)),d},programWithDepth:a.VM.programWithDepth,noop:a.VM.noop,compilerInfo:null};return function(d,e){e=e||{};var f=b.call(c,a,d,e.helpers,e.partials,e.data),g=c.compilerInfo||[],h=g[0]||1,i=a.COMPILER_REVISION;if(h!==i){if(i>h){var j=a.REVISION_CHANGES[i],k=a.REVISION_CHANGES[h];throw"Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+j+") or downgrade your runtime to an older version ("+k+")."}throw"Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+g[1]+")."}return f}},programWithDepth:function(a,b,c){var d=Array.prototype.slice.call(arguments,3),e=function(a,e){return e=e||{},b.apply(this,[a,e.data||c].concat(d))};return e.program=a,e.depth=d.length,e},program:function(a,b,c){var d=function(a,d){return d=d||{},b(a,d.data||c)};return d.program=a,d.depth=0,d},noop:function(){return""},invokePartial:function(c,d,e,f,g,h){var i={helpers:f,partials:g,data:h};if(c===b)throw new a.Exception("The partial "+d+" could not be found");if(c instanceof Function)return c(e,i);if(a.compile)return g[d]=a.compile(c,{data:h!==b}),g[d](e,i);throw new a.Exception("The partial "+d+" could not be compiled when running in runtime-only mode")}},a.template=a.VM.template}(Handlebars),this.HBS=this.HBS||{},this.HBS["asset/tpl/modal/tip.hbs"]=Handlebars.template(function(a,b,c,d,e){this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var f,g="",h="function",i=this.escapeExpression;return g+='<div>\n  <h2 class="tips tips-title">',(f=c.title)?f=f.call(b,{hash:{},data:e}):(f=b.title,f=typeof f===h?f.apply(b):f),g+=i(f)+'</h2>\n  <table>\n    <tbody>\n      <tr>\n        <td class="tips desc-title">コマンド</td><td><span>{</span>',(f=c.title)?f=f.call(b,{hash:{},data:e}):(f=b.title,f=typeof f===h?f.apply(b):f),g+=i(f)+":<i>",(f=c.placeholder)?f=f.call(b,{hash:{},data:e}):(f=b.placeholder,f=typeof f===h?f.apply(b):f),g+=i(f)+'</i><span>}</span></td>\n      </tr>\n      <tr>\n        <td class="tips desc-title">説明</td><td>',(f=c.description)?f=f.call(b,{hash:{},data:e}):(f=b.description,f=typeof f===h?f.apply(b):f),(f||0===f)&&(g+=f),g+='</td>\n      </tr>\n      <tr>\n        <td class="tips desc-title">使用例</td><td class="tips-sample clickable"><span>{</span>',(f=c.title)?f=f.call(b,{hash:{},data:e}):(f=b.title,f=typeof f===h?f.apply(b):f),g+=i(f)+":",(f=c.sampleValue)?f=f.call(b,{hash:{},data:e}):(f=b.sampleValue,f=typeof f===h?f.apply(b):f),g+=i(f)+"<span>}</span></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"}),this.HBS["asset/tpl/modal/tips.hbs"]=Handlebars.template(function(a,b,c,d,e){return this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{},'<div id="tips-header">\n  <h2>Tips for `CHA<span class="highlight">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n'});var Chant;!function(a){function b(a){var b=/((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi,c=b.exec(a);return null!=c&&c.length?a.replace(c[0],'<img src="'+c[0]+'">'):a}function c(a){var b=h(a);if(b)return b;var c=d(a);if(c)return c;var i=e(a);if(i)return i;var j=f(a);if(j)return j;var k=g(a);return k?k:a}a.Imager=b,a.Anchorize=c;var d=function(a){var b=/https?:\/\/www\.youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+)/g,c=b.exec(a);return c&&c.length>1?tmpl("tmpl_base_youtube",{videoId:c[1]}):null},e=function(a){var b=/(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g,c=b.exec(a);return c&&c.length>3?tmpl("tmpl_base_soundcloud",{videoId:c[1]}):null},f=function(a){var b=/((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi,c=b.exec(a);return null!=c&&c.length?a.replace(c[0],'<a href="'+c[0]+'" target="_blank" rel="noreferrer"><img src="'+c[0]+'" class="tl-img"></a>'):void 0},g=function(b){var c=/(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi,d=c.exec(b);if(null!=d&&d[2]&&d[2].match(/^twitter.com\//)){var e=d[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/),f=e[3];return setTimeout(function(){a.Twitter.embed(f)},0),b.replace(d[0],'<div id="twitter'+f+'"><a href="'+d[0]+'" target="_blank" rel="noreferrer">'+b+"</a></div>")}if(null!=d&&d.length){var g=100,h=d[0].length<g?d[0]:d[0].slice(0,g)+"...",f=Date.now()+""+Math.floor(100*Math.random());return setTimeout(function(){a.WebPreview.embed(f,d[0])},0),b.replace(d[0],'<a id="'+f+'" target="_blank" href="'+d[0]+'" rel="noreferrer">'+h+"</a>")}},h=function(a){var b=/:([a-zA-Z0-9-+_]+):/gi,c=b.exec(a);return c&&c.length>1?a.replace(c[0],'<img src="/public/images/emojis/'+c[1]+'.png" width="40px">'):void 0}}(Chant||(Chant={}));var Chant;!function(a){a.Twitter={embed:function(a){$.ajax({url:"https://api.twitter.com/1/statuses/oembed.json?id="+String(a),method:"GET",dataType:"jsonp",success:function(b){$("#twitter"+a).html(b.html)},error:function(a){console.log(a)}})}}}(Chant||(Chant={}));var Chant;!function(a){var b=function(){function a(a,b){this.Id=a,this.URL=b,this.Description="undefined",this.Image="",this.metas=[]}return a.prototype.ensure=function(){var a=this;return $.map(this.metas,function(b){var c=b.getAttribute("name")||b.getAttribute("property");if(c)return c.match(/image$/)?void(a.Image=b.getAttribute("content")):c.match(/description/)?void(a.Description=b.getAttribute("content")):void 0}),this.Title?!0:!1},a}();a.OGDetail=b,a.WebPreview={embed:function(a,c){var d="http://"+Conf.Server().Host+":"+Conf.Server().Port+"/preview?url="+c;$.ajax({url:d,method:"GET",dataType:"json",success:function(d){var e=new b(a,c);$.map($(d.PageContents),function(a){a.tagName&&(a.tagName.match(/title/i)&&(e.Title=a.innerHTML),a.tagName.match(/meta/i)&&e.metas.push(a))}),e.ensure()&&$("#"+a).replaceWith(tmpl("tmpl_base_preview",e))},error:function(a){console.log(a)}})}}}(Chant||(Chant={}));var Chant;!function(a){a.Chips={stamp:{title:"@stamp",placeholder:"画像URL",description:"任意の画像を全ユーザの窓においてスタンプとして登録できます。このコマンドで1度スタンプ登録すると、ページをリロードしない限りボタンからいつでもスタンプ画像を投下できます",sampleValue:"https://pbs.twimg.com/media/BitWdO3CMAEb-4k.jpg"},emo:{title:"@emo",placeholder:"GitHubのemojiコード",description:'簡単に絵文字を出力することができます。GitHubのemojiコード全てに対応しています。詳しくは<a href="http://www.emoji-cheat-sheet.com/" target="_blank" class="light">Emoji cheat sheet for Campfire and GitHub</a>',sampleValue:"shit"}};var b=function(){function a(a){this.title=a.title,this.placeholder=a.placeholder,this.description=a.description,this.sampleValue=a.sampleValue}return a.prototype.toSampleText=function(){return"{"+this.title+":"+this.sampleValue+"}"},a}();a.Chip=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(){function a(a){this.timestamp=a}return a.prototype.format=function(){var a=new Date(1e3*this.timestamp);return a.toLocaleString()},a}();a.Time=b}(Chant||(Chant={}));var Chant;!function(a){function b(){return parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1],10)}function c(){return b()<28?new e:window.webkitNotifications?new f:new g}function d(a,b,d){if($("#enable-notification").is(":checked")){var e=c();e.show(a,b,d)}}var e=function(){function a(){}return a.prototype.show=function(a){window.alert(a)},a.prototype.init=function(){},a}();a.NotifierAlert=e;var f=function(){function a(){}return a.prototype.show=function(a,b,c){b=b||"/public/images/favicon.jpg",c=c||"CHANT!",a=a||"えら〜";var d=webkitNotifications.createNotification(b,c,a);d.onclick=function(){window.focus()},d.show()},a.prototype.init=function(){0!==webkitNotifications.checkPermission()&&webkitNotifications.requestPermission()},a}();a.NotifierWithPrefix=f;var g=function(){function a(){}return a.prototype.show=function(a,b,c){var d=new window.Notification(c||"CHANT",{body:a||"えら〜",icon:b||"/public/images/favicon.jpg"});d.onclick=function(){window.focus()}},a.prototype.init=function(){window.Notification.requestPermission()},a}();a.NotifierDefault=g,a.getNotifier=c,a.Notify=d}(Chant||(Chant={}));var Chant;!function(a){a.Notifier={isActive:!0,onmessage:function(b){"leave"!=b.Type&&"join"!=b.Type&&(a.Notifier.isActive||$("title").text("!"+$("title").text()))},onread:function(){$("title").text("CHANT")},init:function(){var b=a.getNotifier();b.init()},detectMentioned:function(b){var c="@"+Conf.Me().ScreenName;if(!b.Text)return b;if(b.Text.match(c)||b.Text.match("@all")){{({icon:b.User.ProfileImageUrl,title:b.User.ScreenName,text:b.Text})}a.Notify(b.Text,b.User.ProfileImageUrl,b.User.ScreenName);var d='<span class="mentioning">'+c+"</span>";b.Text=b.Text.replace(c,d)}return b}}}(Chant||(Chant={}));var Chant;!function(a){var b=function(){function b(a){this.list=a,this.nowplaying=0,this.player="#player"}return b.prototype._play=function(b){if(this.list[b]){this.nowplaying=b;var c=this.list[b].Source.Vendor.Name,d=tmpl("tmpl_base_globalplayer",{Sound:this.list[b]});if($(this.player).html(d),a.Render.Playlist.update(),"youtube"==c){var e={allowScriptAccess:"always"},f={id:"player-youtube"},g=this.list[b].Source.Hash;setTimeout(function(){swfobject.embedSWF("http://www.youtube.com/v/"+g+"?enablejsapi=1&playerapiid=ytplayer","ytapiplayer","410","220","8",null,null,e,f)},0)}else if("soundcloud"==c){var h=document.getElementById("sc-widget"),i=SC.Widget(h),j=this.list[b].Source.Hash;i.load(j),i.bind(SC.Widget.Events.READY,function(){i.play()}),i.bind(SC.Widget.Events.FINISH,function(){a.Playlist().playNext()}),i.bind(SC.Widget.Events.ERROR,function(){a.Playlist().playNext()})}}},b.prototype.add=function(a){this.list.unshift(a)},b.prototype.play=function(a){a&&(this.nowplaying=a),this._play(this.nowplaying)},b.prototype.playNext=function(){this.nowplaying++,this.list.length<=this.nowplaying&&(this.nowplaying=0),this._play(this.nowplaying)},b}();a._Playlist=b}(Chant||(Chant={}));var Chant;!function(a){function b(b){return(b||null===c)&&(b=b||[],c=new a._Playlist(b)),c}var c=null;a.Playlist=b}(Chant||(Chant={}));var Chant;!function(a){function b(a){var b=a.match(/\{@([a-z]+):([^}]+)\}/g);if(b){var c=a;return $.map(b,function(a){var b=new d(a);b.ok&&(c=c.replace(b.origin,b.result))}),c}}!function(a){a[a.img=0]="img",a[a.emo=1]="emo",a[a.css=2]="css",a[a.stamp=3]="stamp",a[a.quote=4]="quote"}(a.Protocols||(a.Protocols={}));var c=a.Protocols,d=function(){function b(a){this.ok=!1,this.origin=a;var b=this.origin.match(/^\{@([a-z]+):([^}]+)\}$/);return null==b||b.length<3?this:(this.name=b[1],c[c[this.name]]?(this.value=b[2],this.ok=!0,void(this.result=this[this.name]())):this)}return b.prototype.emo=function(){return'<img src="/public/images/emojis/'+this.value+'.png" width="40px">'},b.prototype.img=function(){var a={ohayo:"ohayogozaimasu.jpg",odayakajanai:"odayakajanai.jpg",okitekudasai:"okitekudasai.jpg",zawameku:"zawameku.jpg",chunchun:"kotori.jpg"};return a[this.value]?'<img src="./public/images/{src}" class="tl-img">'.replace("{src}",a[this.value]):this.abort()},b.prototype.css=function(){var a=this.value.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);if(null==a||a.length<4)return this.abort();var b=a[1],c={};return c[a[2]]=a[3],$(b).css(c),this.origin},b.prototype.stamp=function(){var b={raw:this.value,label:this.value.slice(0,20),display:a.Imager(this.value)},c=tmpl("tmpl_base_stamp",b);return a.Render.Event.stamp({Value:this.value}),"スタンプ登録"+c},b.prototype.quote=function(b){"undefined"==typeof b&&(b=null);var c=b||this.value,d=c.split("||"),e=d[0],f=d[1],g=d[2];if(d.length<3)return this.abort();g=3<d.length?a.Protocol(d.splice(2).join("||")+"}"):a.Anchorize(g);var h={name:e,icon:f,text:g};return tmpl("tmpl_event_message_quote",{quote:h})},b.prototype.abort=function(){return this.origin},b}();a.ProtocolExecuter=d,a.Protocol=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(){function b(){}return b.message=function(c){return c.RawText=c.Text,c.isMention=!1,c=a.Notifier.detectMentioned(c),c.Time=new a.Time(c.Timestamp).format(),c.Text=a.Protocol(c.Text)||a.Anchorize(c.Text),c.enableStamprize=b.enableStamprize(c.RawText),c.RawText.match("@quote")&&(c.Text=c.Text.replace(/[\}]+$/,"")),tmpl("tmpl_event_message",{event:c})},b.enableStamprize=function(a){return a.match("@quote")?!1:a.match("@stamp")?!1:a.match("@img")?!1:!0},b.join=function(){return""},b.leave=function(){return""},b.sound=function(b){return a.Playlist().add(b),""},b.stamp=function(b){return $("#stamp-container-horizontal").prepend(tmpl("tmpl_base_stamp",{raw:b.Value,label:b.Value.slice(0,20),display:a.Imager(b.Value)})),""},b.notification=function(a){return alert(a.Text),""},b.default=function(a){return tmpl("tmpl_roominfo_users",{users:a.RoomInfo.Users})},b.update=function(b){b=b||a.Playlist().list;var c=a.Playlist().nowplaying,d=$.map(b,function(a,b){a.index=b;var d=!1;return c==b&&(d=!0),a.isNowPlaying=d,"youtube"==a.Source.Vendor.Name?a.title=a.Source.Hash:(a.Source.Vendor.Name="soundcloud")&&(a.title=a.Source.Hash.replace(/^https:\/\/soundcloud\.com/,"")),tmpl("tmpl_base_playlist_sound",a)}).join("");return $("#playlist").html(d),""},b.Event={message:b.message,join:b.join,leave:b.leave,sound:b.sound,stamp:b.stamp,notification:b.notification},b.RoomInfo={"default":b.default},b.Playlist={update:b.update},b}();a.Render=b}(Chant||(Chant={}));var Chant;!function(a){function b(b){return(b||null===c)&&(c=new WebSocket("ws://"+Conf.Server().Host+":"+Conf.Server().Port+"/websocket/room/socket")),c.readyState>WebSocket.OPEN?a.Socket(!0):c}var c=null;a.Socket=b}(Chant||(Chant={}));var __extends=this.__extends||function(a,b){function c(){this.constructor=a}for(var d in b)b.hasOwnProperty(d)&&(a[d]=b[d]);c.prototype=b.prototype,a.prototype=new c},Chant;!function(a){var b=function(a){function b(b){"undefined"==typeof b&&(b={}),a.call(this,{tagName:"div",id:b.id||"",className:b.className||"modal-contents"})}return __extends(b,a),b}(showv.View);a.ModalContentsView=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(){function a(a){this.name=a,this.template=null,this.template=HBS["asset/tpl/"+a]}return a.prototype.render=function(a){return this.template(a)},a}();a.HBSTemplate=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(a){function b(){a.call(this,{tagName:"div",className:"modal-wrapper clickable"}),this.background='<div class="modal-background"></div>'}return __extends(b,a),b.prototype.events=function(){return{click:"fadeOut"}},b.prototype.fadeOut=function(){var a=this;this.$el.fadeOut(b.fadeDuration,function(){a.$el.remove()})},b.prototype.render=function(){return this.$el.append(this.background,this.contents.render().$el),this},b.prototype.show=function(){return this.$el.fadeIn(b.fadeDuration),this},b.fadeDuration=100,b}(showv.View);a.ModalWrapperView=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(b){function c(c){b.call(this,{delegate:!1}),this.chip=c,this.tpl=new a.HBSTemplate("modal/tip.hbs")}return __extends(c,b),c.prototype.events=function(){return{"click .tips-sample":"inputSample"}},c.prototype.inputSample=function(){$("input#message").val(this.chip.toSampleText()).focus()},c.prototype.render=function(){return this.$el.append(this.tpl.render(this.chip)),this},c}(showv.View);a.TipView=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(b){function c(){b.call(this,{id:"chips"}),this.tpl=new a.HBSTemplate("modal/tips.hbs")}return __extends(c,b),c.prototype.render=function(){var b=new a.TipView(new a.Chip(a.Chips.stamp)),c=new a.TipView(new a.Chip(a.Chips.emo));return this.$el.append(this.tpl.render(),b.render().$el,c.render().$el),this},c}(a.ModalContentsView);a.TipsModalContentsView=b}(Chant||(Chant={}));var Chant;!function(a){var b=function(b){function c(){b.call(this),this.contents=new a.TipsModalContentsView}return __extends(c,b),c.prototype.render=function(){return b.prototype.render.call(this),this},c}(a.ModalWrapperView);a.TipsModalView=b}(Chant||(Chant={}));
+var showv;
+(function (showv) {
+    var View = (function () {
+        function View(options) {
+            if (typeof options === "undefined") { options = {}; }
+            this.ensureOptions(options);
+            this.ensureElemens();
+            this.delegateEvents();
+        }
+        View.prototype.ensureOptions = function (options) {
+            this.tagName = options.tagName || 'div';
+            this.className = options.className || '';
+            this.id = options.id || '';
+            this.delegate = (options.delegate == null) ? true : options.delegate;
+            this.$el = options.$el || null;
+            this.attr = options.attr || {};
+            return this;
+        };
+        View.prototype.ensureElemens = function () {
+            this.$el = this.$el || $('<' + this.tagName + '>');
+            var _attrs = this.attr;
+            if (this.id)
+                _attrs['id'] = this.id;
+            if (this.className)
+                _attrs['class'] = this.className;
+            this.$el.attr(_attrs);
+            return this;
+        };
+
+        View.prototype.events = function () {
+            return {};
+        };
+
+        View.prototype.delegateEvents = function () {
+            var _this = this;
+            var _events = this.events();
+            $.map(_events, function (eventFunctionName, eventNameAndSelector) {
+                var pair = _this.splitEventAndSelector(eventNameAndSelector);
+                var fn = function () {
+                    _this[_events[pair.rawKey]].apply(_this);
+                };
+                _this.$el.on.call(_this.$el, pair.evName, pair.selector, fn);
+            });
+            return this;
+        };
+
+        View.prototype.splitEventAndSelector = function (eventNameAndSelector) {
+            var splits = eventNameAndSelector.split(' ');
+            return {
+                rawKey: eventNameAndSelector,
+                evName: splits[0],
+                selector: splits[1]
+            };
+        };
+
+        View.prototype.render = function () {
+            return this;
+        };
+        return View;
+    })();
+    showv.View = View;
+})(showv || (showv = {}));
+
+/*
+
+Copyright (C) 2011 by Yehuda Katz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+
+// lib/handlebars/browser-prefix.js
+var Handlebars = {};
+
+(function(Handlebars, undefined) {
+;
+// lib/handlebars/base.js
+
+Handlebars.VERSION = "1.0.0";
+Handlebars.COMPILER_REVISION = 4;
+
+Handlebars.REVISION_CHANGES = {
+  1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
+  2: '== 1.0.0-rc.3',
+  3: '== 1.0.0-rc.4',
+  4: '>= 1.0.0'
+};
+
+Handlebars.helpers  = {};
+Handlebars.partials = {};
+
+var toString = Object.prototype.toString,
+    functionType = '[object Function]',
+    objectType = '[object Object]';
+
+Handlebars.registerHelper = function(name, fn, inverse) {
+  if (toString.call(name) === objectType) {
+    if (inverse || fn) { throw new Handlebars.Exception('Arg not supported with multiple helpers'); }
+    Handlebars.Utils.extend(this.helpers, name);
+  } else {
+    if (inverse) { fn.not = inverse; }
+    this.helpers[name] = fn;
+  }
+};
+
+Handlebars.registerPartial = function(name, str) {
+  if (toString.call(name) === objectType) {
+    Handlebars.Utils.extend(this.partials,  name);
+  } else {
+    this.partials[name] = str;
+  }
+};
+
+Handlebars.registerHelper('helperMissing', function(arg) {
+  if(arguments.length === 2) {
+    return undefined;
+  } else {
+    throw new Error("Missing helper: '" + arg + "'");
+  }
+});
+
+Handlebars.registerHelper('blockHelperMissing', function(context, options) {
+  var inverse = options.inverse || function() {}, fn = options.fn;
+
+  var type = toString.call(context);
+
+  if(type === functionType) { context = context.call(this); }
+
+  if(context === true) {
+    return fn(this);
+  } else if(context === false || context == null) {
+    return inverse(this);
+  } else if(type === "[object Array]") {
+    if(context.length > 0) {
+      return Handlebars.helpers.each(context, options);
+    } else {
+      return inverse(this);
+    }
+  } else {
+    return fn(context);
+  }
+});
+
+Handlebars.K = function() {};
+
+Handlebars.createFrame = Object.create || function(object) {
+  Handlebars.K.prototype = object;
+  var obj = new Handlebars.K();
+  Handlebars.K.prototype = null;
+  return obj;
+};
+
+Handlebars.logger = {
+  DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, level: 3,
+
+  methodMap: {0: 'debug', 1: 'info', 2: 'warn', 3: 'error'},
+
+  // can be overridden in the host environment
+  log: function(level, obj) {
+    if (Handlebars.logger.level <= level) {
+      var method = Handlebars.logger.methodMap[level];
+      if (typeof console !== 'undefined' && console[method]) {
+        console[method].call(console, obj);
+      }
+    }
+  }
+};
+
+Handlebars.log = function(level, obj) { Handlebars.logger.log(level, obj); };
+
+Handlebars.registerHelper('each', function(context, options) {
+  var fn = options.fn, inverse = options.inverse;
+  var i = 0, ret = "", data;
+
+  var type = toString.call(context);
+  if(type === functionType) { context = context.call(this); }
+
+  if (options.data) {
+    data = Handlebars.createFrame(options.data);
+  }
+
+  if(context && typeof context === 'object') {
+    if(context instanceof Array){
+      for(var j = context.length; i<j; i++) {
+        if (data) { data.index = i; }
+        ret = ret + fn(context[i], { data: data });
+      }
+    } else {
+      for(var key in context) {
+        if(context.hasOwnProperty(key)) {
+          if(data) { data.key = key; }
+          ret = ret + fn(context[key], {data: data});
+          i++;
+        }
+      }
+    }
+  }
+
+  if(i === 0){
+    ret = inverse(this);
+  }
+
+  return ret;
+});
+
+Handlebars.registerHelper('if', function(conditional, options) {
+  var type = toString.call(conditional);
+  if(type === functionType) { conditional = conditional.call(this); }
+
+  if(!conditional || Handlebars.Utils.isEmpty(conditional)) {
+    return options.inverse(this);
+  } else {
+    return options.fn(this);
+  }
+});
+
+Handlebars.registerHelper('unless', function(conditional, options) {
+  return Handlebars.helpers['if'].call(this, conditional, {fn: options.inverse, inverse: options.fn});
+});
+
+Handlebars.registerHelper('with', function(context, options) {
+  var type = toString.call(context);
+  if(type === functionType) { context = context.call(this); }
+
+  if (!Handlebars.Utils.isEmpty(context)) return options.fn(context);
+});
+
+Handlebars.registerHelper('log', function(context, options) {
+  var level = options.data && options.data.level != null ? parseInt(options.data.level, 10) : 1;
+  Handlebars.log(level, context);
+});
+;
+// lib/handlebars/compiler/parser.js
+/* Jison generated parser */
+var handlebars = (function(){
+var parser = {trace: function trace() { },
+yy: {},
+symbols_: {"error":2,"root":3,"program":4,"EOF":5,"simpleInverse":6,"statements":7,"statement":8,"openInverse":9,"closeBlock":10,"openBlock":11,"mustache":12,"partial":13,"CONTENT":14,"COMMENT":15,"OPEN_BLOCK":16,"inMustache":17,"CLOSE":18,"OPEN_INVERSE":19,"OPEN_ENDBLOCK":20,"path":21,"OPEN":22,"OPEN_UNESCAPED":23,"CLOSE_UNESCAPED":24,"OPEN_PARTIAL":25,"partialName":26,"params":27,"hash":28,"dataName":29,"param":30,"STRING":31,"INTEGER":32,"BOOLEAN":33,"hashSegments":34,"hashSegment":35,"ID":36,"EQUALS":37,"DATA":38,"pathSegments":39,"SEP":40,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",14:"CONTENT",15:"COMMENT",16:"OPEN_BLOCK",18:"CLOSE",19:"OPEN_INVERSE",20:"OPEN_ENDBLOCK",22:"OPEN",23:"OPEN_UNESCAPED",24:"CLOSE_UNESCAPED",25:"OPEN_PARTIAL",31:"STRING",32:"INTEGER",33:"BOOLEAN",36:"ID",37:"EQUALS",38:"DATA",40:"SEP"},
+productions_: [0,[3,2],[4,2],[4,3],[4,2],[4,1],[4,1],[4,0],[7,1],[7,2],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[11,3],[9,3],[10,3],[12,3],[12,3],[13,3],[13,4],[6,2],[17,3],[17,2],[17,2],[17,1],[17,1],[27,2],[27,1],[30,1],[30,1],[30,1],[30,1],[30,1],[28,1],[34,2],[34,1],[35,3],[35,3],[35,3],[35,3],[35,3],[26,1],[26,1],[26,1],[29,2],[21,1],[39,3],[39,1]],
+performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
+
+var $0 = $$.length - 1;
+switch (yystate) {
+case 1: return $$[$0-1]; 
+break;
+case 2: this.$ = new yy.ProgramNode([], $$[$0]); 
+break;
+case 3: this.$ = new yy.ProgramNode($$[$0-2], $$[$0]); 
+break;
+case 4: this.$ = new yy.ProgramNode($$[$0-1], []); 
+break;
+case 5: this.$ = new yy.ProgramNode($$[$0]); 
+break;
+case 6: this.$ = new yy.ProgramNode([], []); 
+break;
+case 7: this.$ = new yy.ProgramNode([]); 
+break;
+case 8: this.$ = [$$[$0]]; 
+break;
+case 9: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+break;
+case 10: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0]); 
+break;
+case 11: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0-1].inverse, $$[$0]); 
+break;
+case 12: this.$ = $$[$0]; 
+break;
+case 13: this.$ = $$[$0]; 
+break;
+case 14: this.$ = new yy.ContentNode($$[$0]); 
+break;
+case 15: this.$ = new yy.CommentNode($$[$0]); 
+break;
+case 16: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]); 
+break;
+case 17: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]); 
+break;
+case 18: this.$ = $$[$0-1]; 
+break;
+case 19:
+    // Parsing out the '&' escape token at this level saves ~500 bytes after min due to the removal of one parser node.
+    this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], $$[$0-2][2] === '&');
+  
+break;
+case 20: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], true); 
+break;
+case 21: this.$ = new yy.PartialNode($$[$0-1]); 
+break;
+case 22: this.$ = new yy.PartialNode($$[$0-2], $$[$0-1]); 
+break;
+case 23: 
+break;
+case 24: this.$ = [[$$[$0-2]].concat($$[$0-1]), $$[$0]]; 
+break;
+case 25: this.$ = [[$$[$0-1]].concat($$[$0]), null]; 
+break;
+case 26: this.$ = [[$$[$0-1]], $$[$0]]; 
+break;
+case 27: this.$ = [[$$[$0]], null]; 
+break;
+case 28: this.$ = [[$$[$0]], null]; 
+break;
+case 29: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+break;
+case 30: this.$ = [$$[$0]]; 
+break;
+case 31: this.$ = $$[$0]; 
+break;
+case 32: this.$ = new yy.StringNode($$[$0]); 
+break;
+case 33: this.$ = new yy.IntegerNode($$[$0]); 
+break;
+case 34: this.$ = new yy.BooleanNode($$[$0]); 
+break;
+case 35: this.$ = $$[$0]; 
+break;
+case 36: this.$ = new yy.HashNode($$[$0]); 
+break;
+case 37: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+break;
+case 38: this.$ = [$$[$0]]; 
+break;
+case 39: this.$ = [$$[$0-2], $$[$0]]; 
+break;
+case 40: this.$ = [$$[$0-2], new yy.StringNode($$[$0])]; 
+break;
+case 41: this.$ = [$$[$0-2], new yy.IntegerNode($$[$0])]; 
+break;
+case 42: this.$ = [$$[$0-2], new yy.BooleanNode($$[$0])]; 
+break;
+case 43: this.$ = [$$[$0-2], $$[$0]]; 
+break;
+case 44: this.$ = new yy.PartialNameNode($$[$0]); 
+break;
+case 45: this.$ = new yy.PartialNameNode(new yy.StringNode($$[$0])); 
+break;
+case 46: this.$ = new yy.PartialNameNode(new yy.IntegerNode($$[$0])); 
+break;
+case 47: this.$ = new yy.DataNode($$[$0]); 
+break;
+case 48: this.$ = new yy.IdNode($$[$0]); 
+break;
+case 49: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
+break;
+case 50: this.$ = [{part: $$[$0]}]; 
+break;
+}
+},
+table: [{3:1,4:2,5:[2,7],6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],22:[1,14],23:[1,15],25:[1,16]},{1:[3]},{5:[1,17]},{5:[2,6],7:18,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,6],22:[1,14],23:[1,15],25:[1,16]},{5:[2,5],6:20,8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,5],22:[1,14],23:[1,15],25:[1,16]},{17:23,18:[1,22],21:24,29:25,36:[1,28],38:[1,27],39:26},{5:[2,8],14:[2,8],15:[2,8],16:[2,8],19:[2,8],20:[2,8],22:[2,8],23:[2,8],25:[2,8]},{4:29,6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,7],22:[1,14],23:[1,15],25:[1,16]},{4:30,6:3,7:4,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,5],20:[2,7],22:[1,14],23:[1,15],25:[1,16]},{5:[2,12],14:[2,12],15:[2,12],16:[2,12],19:[2,12],20:[2,12],22:[2,12],23:[2,12],25:[2,12]},{5:[2,13],14:[2,13],15:[2,13],16:[2,13],19:[2,13],20:[2,13],22:[2,13],23:[2,13],25:[2,13]},{5:[2,14],14:[2,14],15:[2,14],16:[2,14],19:[2,14],20:[2,14],22:[2,14],23:[2,14],25:[2,14]},{5:[2,15],14:[2,15],15:[2,15],16:[2,15],19:[2,15],20:[2,15],22:[2,15],23:[2,15],25:[2,15]},{17:31,21:24,29:25,36:[1,28],38:[1,27],39:26},{17:32,21:24,29:25,36:[1,28],38:[1,27],39:26},{17:33,21:24,29:25,36:[1,28],38:[1,27],39:26},{21:35,26:34,31:[1,36],32:[1,37],36:[1,28],39:26},{1:[2,1]},{5:[2,2],8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,2],22:[1,14],23:[1,15],25:[1,16]},{17:23,21:24,29:25,36:[1,28],38:[1,27],39:26},{5:[2,4],7:38,8:6,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,4],22:[1,14],23:[1,15],25:[1,16]},{5:[2,9],14:[2,9],15:[2,9],16:[2,9],19:[2,9],20:[2,9],22:[2,9],23:[2,9],25:[2,9]},{5:[2,23],14:[2,23],15:[2,23],16:[2,23],19:[2,23],20:[2,23],22:[2,23],23:[2,23],25:[2,23]},{18:[1,39]},{18:[2,27],21:44,24:[2,27],27:40,28:41,29:48,30:42,31:[1,45],32:[1,46],33:[1,47],34:43,35:49,36:[1,50],38:[1,27],39:26},{18:[2,28],24:[2,28]},{18:[2,48],24:[2,48],31:[2,48],32:[2,48],33:[2,48],36:[2,48],38:[2,48],40:[1,51]},{21:52,36:[1,28],39:26},{18:[2,50],24:[2,50],31:[2,50],32:[2,50],33:[2,50],36:[2,50],38:[2,50],40:[2,50]},{10:53,20:[1,54]},{10:55,20:[1,54]},{18:[1,56]},{18:[1,57]},{24:[1,58]},{18:[1,59],21:60,36:[1,28],39:26},{18:[2,44],36:[2,44]},{18:[2,45],36:[2,45]},{18:[2,46],36:[2,46]},{5:[2,3],8:21,9:7,11:8,12:9,13:10,14:[1,11],15:[1,12],16:[1,13],19:[1,19],20:[2,3],22:[1,14],23:[1,15],25:[1,16]},{14:[2,17],15:[2,17],16:[2,17],19:[2,17],20:[2,17],22:[2,17],23:[2,17],25:[2,17]},{18:[2,25],21:44,24:[2,25],28:61,29:48,30:62,31:[1,45],32:[1,46],33:[1,47],34:43,35:49,36:[1,50],38:[1,27],39:26},{18:[2,26],24:[2,26]},{18:[2,30],24:[2,30],31:[2,30],32:[2,30],33:[2,30],36:[2,30],38:[2,30]},{18:[2,36],24:[2,36],35:63,36:[1,64]},{18:[2,31],24:[2,31],31:[2,31],32:[2,31],33:[2,31],36:[2,31],38:[2,31]},{18:[2,32],24:[2,32],31:[2,32],32:[2,32],33:[2,32],36:[2,32],38:[2,32]},{18:[2,33],24:[2,33],31:[2,33],32:[2,33],33:[2,33],36:[2,33],38:[2,33]},{18:[2,34],24:[2,34],31:[2,34],32:[2,34],33:[2,34],36:[2,34],38:[2,34]},{18:[2,35],24:[2,35],31:[2,35],32:[2,35],33:[2,35],36:[2,35],38:[2,35]},{18:[2,38],24:[2,38],36:[2,38]},{18:[2,50],24:[2,50],31:[2,50],32:[2,50],33:[2,50],36:[2,50],37:[1,65],38:[2,50],40:[2,50]},{36:[1,66]},{18:[2,47],24:[2,47],31:[2,47],32:[2,47],33:[2,47],36:[2,47],38:[2,47]},{5:[2,10],14:[2,10],15:[2,10],16:[2,10],19:[2,10],20:[2,10],22:[2,10],23:[2,10],25:[2,10]},{21:67,36:[1,28],39:26},{5:[2,11],14:[2,11],15:[2,11],16:[2,11],19:[2,11],20:[2,11],22:[2,11],23:[2,11],25:[2,11]},{14:[2,16],15:[2,16],16:[2,16],19:[2,16],20:[2,16],22:[2,16],23:[2,16],25:[2,16]},{5:[2,19],14:[2,19],15:[2,19],16:[2,19],19:[2,19],20:[2,19],22:[2,19],23:[2,19],25:[2,19]},{5:[2,20],14:[2,20],15:[2,20],16:[2,20],19:[2,20],20:[2,20],22:[2,20],23:[2,20],25:[2,20]},{5:[2,21],14:[2,21],15:[2,21],16:[2,21],19:[2,21],20:[2,21],22:[2,21],23:[2,21],25:[2,21]},{18:[1,68]},{18:[2,24],24:[2,24]},{18:[2,29],24:[2,29],31:[2,29],32:[2,29],33:[2,29],36:[2,29],38:[2,29]},{18:[2,37],24:[2,37],36:[2,37]},{37:[1,65]},{21:69,29:73,31:[1,70],32:[1,71],33:[1,72],36:[1,28],38:[1,27],39:26},{18:[2,49],24:[2,49],31:[2,49],32:[2,49],33:[2,49],36:[2,49],38:[2,49],40:[2,49]},{18:[1,74]},{5:[2,22],14:[2,22],15:[2,22],16:[2,22],19:[2,22],20:[2,22],22:[2,22],23:[2,22],25:[2,22]},{18:[2,39],24:[2,39],36:[2,39]},{18:[2,40],24:[2,40],36:[2,40]},{18:[2,41],24:[2,41],36:[2,41]},{18:[2,42],24:[2,42],36:[2,42]},{18:[2,43],24:[2,43],36:[2,43]},{5:[2,18],14:[2,18],15:[2,18],16:[2,18],19:[2,18],20:[2,18],22:[2,18],23:[2,18],25:[2,18]}],
+defaultActions: {17:[2,1]},
+parseError: function parseError(str, hash) {
+    throw new Error(str);
+},
+parse: function parse(input) {
+    var self = this, stack = [0], vstack = [null], lstack = [], table = this.table, yytext = "", yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+    this.lexer.setInput(input);
+    this.lexer.yy = this.yy;
+    this.yy.lexer = this.lexer;
+    this.yy.parser = this;
+    if (typeof this.lexer.yylloc == "undefined")
+        this.lexer.yylloc = {};
+    var yyloc = this.lexer.yylloc;
+    lstack.push(yyloc);
+    var ranges = this.lexer.options && this.lexer.options.ranges;
+    if (typeof this.yy.parseError === "function")
+        this.parseError = this.yy.parseError;
+    function popStack(n) {
+        stack.length = stack.length - 2 * n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+    function lex() {
+        var token;
+        token = self.lexer.lex() || 1;
+        if (typeof token !== "number") {
+            token = self.symbols_[token] || token;
+        }
+        return token;
+    }
+    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+    while (true) {
+        state = stack[stack.length - 1];
+        if (this.defaultActions[state]) {
+            action = this.defaultActions[state];
+        } else {
+            if (symbol === null || typeof symbol == "undefined") {
+                symbol = lex();
+            }
+            action = table[state] && table[state][symbol];
+        }
+        if (typeof action === "undefined" || !action.length || !action[0]) {
+            var errStr = "";
+            if (!recovering) {
+                expected = [];
+                for (p in table[state])
+                    if (this.terminals_[p] && p > 2) {
+                        expected.push("'" + this.terminals_[p] + "'");
+                    }
+                if (this.lexer.showPosition) {
+                    errStr = "Parse error on line " + (yylineno + 1) + ":\n" + this.lexer.showPosition() + "\nExpecting " + expected.join(", ") + ", got '" + (this.terminals_[symbol] || symbol) + "'";
+                } else {
+                    errStr = "Parse error on line " + (yylineno + 1) + ": Unexpected " + (symbol == 1?"end of input":"'" + (this.terminals_[symbol] || symbol) + "'");
+                }
+                this.parseError(errStr, {text: this.lexer.match, token: this.terminals_[symbol] || symbol, line: this.lexer.yylineno, loc: yyloc, expected: expected});
+            }
+        }
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error("Parse Error: multiple actions possible at state: " + state + ", token: " + symbol);
+        }
+        switch (action[0]) {
+        case 1:
+            stack.push(symbol);
+            vstack.push(this.lexer.yytext);
+            lstack.push(this.lexer.yylloc);
+            stack.push(action[1]);
+            symbol = null;
+            if (!preErrorSymbol) {
+                yyleng = this.lexer.yyleng;
+                yytext = this.lexer.yytext;
+                yylineno = this.lexer.yylineno;
+                yyloc = this.lexer.yylloc;
+                if (recovering > 0)
+                    recovering--;
+            } else {
+                symbol = preErrorSymbol;
+                preErrorSymbol = null;
+            }
+            break;
+        case 2:
+            len = this.productions_[action[1]][1];
+            yyval.$ = vstack[vstack.length - len];
+            yyval._$ = {first_line: lstack[lstack.length - (len || 1)].first_line, last_line: lstack[lstack.length - 1].last_line, first_column: lstack[lstack.length - (len || 1)].first_column, last_column: lstack[lstack.length - 1].last_column};
+            if (ranges) {
+                yyval._$.range = [lstack[lstack.length - (len || 1)].range[0], lstack[lstack.length - 1].range[1]];
+            }
+            r = this.performAction.call(yyval, yytext, yyleng, yylineno, this.yy, action[1], vstack, lstack);
+            if (typeof r !== "undefined") {
+                return r;
+            }
+            if (len) {
+                stack = stack.slice(0, -1 * len * 2);
+                vstack = vstack.slice(0, -1 * len);
+                lstack = lstack.slice(0, -1 * len);
+            }
+            stack.push(this.productions_[action[1]][0]);
+            vstack.push(yyval.$);
+            lstack.push(yyval._$);
+            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+            stack.push(newState);
+            break;
+        case 3:
+            return true;
+        }
+    }
+    return true;
+}
+};
+/* Jison generated lexer */
+var lexer = (function(){
+var lexer = ({EOF:1,
+parseError:function parseError(str, hash) {
+        if (this.yy.parser) {
+            this.yy.parser.parseError(str, hash);
+        } else {
+            throw new Error(str);
+        }
+    },
+setInput:function (input) {
+        this._input = input;
+        this._more = this._less = this.done = false;
+        this.yylineno = this.yyleng = 0;
+        this.yytext = this.matched = this.match = '';
+        this.conditionStack = ['INITIAL'];
+        this.yylloc = {first_line:1,first_column:0,last_line:1,last_column:0};
+        if (this.options.ranges) this.yylloc.range = [0,0];
+        this.offset = 0;
+        return this;
+    },
+input:function () {
+        var ch = this._input[0];
+        this.yytext += ch;
+        this.yyleng++;
+        this.offset++;
+        this.match += ch;
+        this.matched += ch;
+        var lines = ch.match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno++;
+            this.yylloc.last_line++;
+        } else {
+            this.yylloc.last_column++;
+        }
+        if (this.options.ranges) this.yylloc.range[1]++;
+
+        this._input = this._input.slice(1);
+        return ch;
+    },
+unput:function (ch) {
+        var len = ch.length;
+        var lines = ch.split(/(?:\r\n?|\n)/g);
+
+        this._input = ch + this._input;
+        this.yytext = this.yytext.substr(0, this.yytext.length-len-1);
+        //this.yyleng -= len;
+        this.offset -= len;
+        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+        this.match = this.match.substr(0, this.match.length-1);
+        this.matched = this.matched.substr(0, this.matched.length-1);
+
+        if (lines.length-1) this.yylineno -= lines.length-1;
+        var r = this.yylloc.range;
+
+        this.yylloc = {first_line: this.yylloc.first_line,
+          last_line: this.yylineno+1,
+          first_column: this.yylloc.first_column,
+          last_column: lines ?
+              (lines.length === oldLines.length ? this.yylloc.first_column : 0) + oldLines[oldLines.length - lines.length].length - lines[0].length:
+              this.yylloc.first_column - len
+          };
+
+        if (this.options.ranges) {
+            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+        }
+        return this;
+    },
+more:function () {
+        this._more = true;
+        return this;
+    },
+less:function (n) {
+        this.unput(this.match.slice(n));
+    },
+pastInput:function () {
+        var past = this.matched.substr(0, this.matched.length - this.match.length);
+        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+    },
+upcomingInput:function () {
+        var next = this.match;
+        if (next.length < 20) {
+            next += this._input.substr(0, 20-next.length);
+        }
+        return (next.substr(0,20)+(next.length > 20 ? '...':'')).replace(/\n/g, "");
+    },
+showPosition:function () {
+        var pre = this.pastInput();
+        var c = new Array(pre.length + 1).join("-");
+        return pre + this.upcomingInput() + "\n" + c+"^";
+    },
+next:function () {
+        if (this.done) {
+            return this.EOF;
+        }
+        if (!this._input) this.done = true;
+
+        var token,
+            match,
+            tempMatch,
+            index,
+            col,
+            lines;
+        if (!this._more) {
+            this.yytext = '';
+            this.match = '';
+        }
+        var rules = this._currentRules();
+        for (var i=0;i < rules.length; i++) {
+            tempMatch = this._input.match(this.rules[rules[i]]);
+            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                match = tempMatch;
+                index = i;
+                if (!this.options.flex) break;
+            }
+        }
+        if (match) {
+            lines = match[0].match(/(?:\r\n?|\n).*/g);
+            if (lines) this.yylineno += lines.length;
+            this.yylloc = {first_line: this.yylloc.last_line,
+                           last_line: this.yylineno+1,
+                           first_column: this.yylloc.last_column,
+                           last_column: lines ? lines[lines.length-1].length-lines[lines.length-1].match(/\r?\n?/)[0].length : this.yylloc.last_column + match[0].length};
+            this.yytext += match[0];
+            this.match += match[0];
+            this.matches = match;
+            this.yyleng = this.yytext.length;
+            if (this.options.ranges) {
+                this.yylloc.range = [this.offset, this.offset += this.yyleng];
+            }
+            this._more = false;
+            this._input = this._input.slice(match[0].length);
+            this.matched += match[0];
+            token = this.performAction.call(this, this.yy, this, rules[index],this.conditionStack[this.conditionStack.length-1]);
+            if (this.done && this._input) this.done = false;
+            if (token) return token;
+            else return;
+        }
+        if (this._input === "") {
+            return this.EOF;
+        } else {
+            return this.parseError('Lexical error on line '+(this.yylineno+1)+'. Unrecognized text.\n'+this.showPosition(),
+                    {text: "", token: null, line: this.yylineno});
+        }
+    },
+lex:function lex() {
+        var r = this.next();
+        if (typeof r !== 'undefined') {
+            return r;
+        } else {
+            return this.lex();
+        }
+    },
+begin:function begin(condition) {
+        this.conditionStack.push(condition);
+    },
+popState:function popState() {
+        return this.conditionStack.pop();
+    },
+_currentRules:function _currentRules() {
+        return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules;
+    },
+topState:function () {
+        return this.conditionStack[this.conditionStack.length-2];
+    },
+pushState:function begin(condition) {
+        this.begin(condition);
+    }});
+lexer.options = {};
+lexer.performAction = function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+
+var YYSTATE=YY_START
+switch($avoiding_name_collisions) {
+case 0: yy_.yytext = "\\"; return 14; 
+break;
+case 1:
+                                   if(yy_.yytext.slice(-1) !== "\\") this.begin("mu");
+                                   if(yy_.yytext.slice(-1) === "\\") yy_.yytext = yy_.yytext.substr(0,yy_.yyleng-1), this.begin("emu");
+                                   if(yy_.yytext) return 14;
+                                 
+break;
+case 2: return 14; 
+break;
+case 3:
+                                   if(yy_.yytext.slice(-1) !== "\\") this.popState();
+                                   if(yy_.yytext.slice(-1) === "\\") yy_.yytext = yy_.yytext.substr(0,yy_.yyleng-1);
+                                   return 14;
+                                 
+break;
+case 4: yy_.yytext = yy_.yytext.substr(0, yy_.yyleng-4); this.popState(); return 15; 
+break;
+case 5: return 25; 
+break;
+case 6: return 16; 
+break;
+case 7: return 20; 
+break;
+case 8: return 19; 
+break;
+case 9: return 19; 
+break;
+case 10: return 23; 
+break;
+case 11: return 22; 
+break;
+case 12: this.popState(); this.begin('com'); 
+break;
+case 13: yy_.yytext = yy_.yytext.substr(3,yy_.yyleng-5); this.popState(); return 15; 
+break;
+case 14: return 22; 
+break;
+case 15: return 37; 
+break;
+case 16: return 36; 
+break;
+case 17: return 36; 
+break;
+case 18: return 40; 
+break;
+case 19: /*ignore whitespace*/ 
+break;
+case 20: this.popState(); return 24; 
+break;
+case 21: this.popState(); return 18; 
+break;
+case 22: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\"/g,'"'); return 31; 
+break;
+case 23: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\'/g,"'"); return 31; 
+break;
+case 24: return 38; 
+break;
+case 25: return 33; 
+break;
+case 26: return 33; 
+break;
+case 27: return 32; 
+break;
+case 28: return 36; 
+break;
+case 29: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 36; 
+break;
+case 30: return 'INVALID'; 
+break;
+case 31: return 5; 
+break;
+}
+};
+lexer.rules = [/^(?:\\\\(?=(\{\{)))/,/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|$)))/,/^(?:[\s\S]*?--\}\})/,/^(?:\{\{>)/,/^(?:\{\{#)/,/^(?:\{\{\/)/,/^(?:\{\{\^)/,/^(?:\{\{\s*else\b)/,/^(?:\{\{\{)/,/^(?:\{\{&)/,/^(?:\{\{!--)/,/^(?:\{\{![\s\S]*?\}\})/,/^(?:\{\{)/,/^(?:=)/,/^(?:\.(?=[}\/ ]))/,/^(?:\.\.)/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}\}\})/,/^(?:\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=[}\s]))/,/^(?:false(?=[}\s]))/,/^(?:-?[0-9]+(?=[}\s]))/,/^(?:[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.]))/,/^(?:\[[^\]]*\])/,/^(?:.)/,/^(?:$)/];
+lexer.conditions = {"mu":{"rules":[5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"inclusive":false},"emu":{"rules":[3],"inclusive":false},"com":{"rules":[4],"inclusive":false},"INITIAL":{"rules":[0,1,2,31],"inclusive":true}};
+return lexer;})()
+parser.lexer = lexer;
+function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Parser;
+return new Parser;
+})();;
+// lib/handlebars/compiler/base.js
+
+Handlebars.Parser = handlebars;
+
+Handlebars.parse = function(input) {
+
+  // Just return if an already-compile AST was passed in.
+  if(input.constructor === Handlebars.AST.ProgramNode) { return input; }
+
+  Handlebars.Parser.yy = Handlebars.AST;
+  return Handlebars.Parser.parse(input);
+};
+;
+// lib/handlebars/compiler/ast.js
+Handlebars.AST = {};
+
+Handlebars.AST.ProgramNode = function(statements, inverse) {
+  this.type = "program";
+  this.statements = statements;
+  if(inverse) { this.inverse = new Handlebars.AST.ProgramNode(inverse); }
+};
+
+Handlebars.AST.MustacheNode = function(rawParams, hash, unescaped) {
+  this.type = "mustache";
+  this.escaped = !unescaped;
+  this.hash = hash;
+
+  var id = this.id = rawParams[0];
+  var params = this.params = rawParams.slice(1);
+
+  // a mustache is an eligible helper if:
+  // * its id is simple (a single part, not `this` or `..`)
+  var eligibleHelper = this.eligibleHelper = id.isSimple;
+
+  // a mustache is definitely a helper if:
+  // * it is an eligible helper, and
+  // * it has at least one parameter or hash segment
+  this.isHelper = eligibleHelper && (params.length || hash);
+
+  // if a mustache is an eligible helper but not a definite
+  // helper, it is ambiguous, and will be resolved in a later
+  // pass or at runtime.
+};
+
+Handlebars.AST.PartialNode = function(partialName, context) {
+  this.type         = "partial";
+  this.partialName  = partialName;
+  this.context      = context;
+};
+
+Handlebars.AST.BlockNode = function(mustache, program, inverse, close) {
+  var verifyMatch = function(open, close) {
+    if(open.original !== close.original) {
+      throw new Handlebars.Exception(open.original + " doesn't match " + close.original);
+    }
+  };
+
+  verifyMatch(mustache.id, close);
+  this.type = "block";
+  this.mustache = mustache;
+  this.program  = program;
+  this.inverse  = inverse;
+
+  if (this.inverse && !this.program) {
+    this.isInverse = true;
+  }
+};
+
+Handlebars.AST.ContentNode = function(string) {
+  this.type = "content";
+  this.string = string;
+};
+
+Handlebars.AST.HashNode = function(pairs) {
+  this.type = "hash";
+  this.pairs = pairs;
+};
+
+Handlebars.AST.IdNode = function(parts) {
+  this.type = "ID";
+
+  var original = "",
+      dig = [],
+      depth = 0;
+
+  for(var i=0,l=parts.length; i<l; i++) {
+    var part = parts[i].part;
+    original += (parts[i].separator || '') + part;
+
+    if (part === ".." || part === "." || part === "this") {
+      if (dig.length > 0) { throw new Handlebars.Exception("Invalid path: " + original); }
+      else if (part === "..") { depth++; }
+      else { this.isScoped = true; }
+    }
+    else { dig.push(part); }
+  }
+
+  this.original = original;
+  this.parts    = dig;
+  this.string   = dig.join('.');
+  this.depth    = depth;
+
+  // an ID is simple if it only has one part, and that part is not
+  // `..` or `this`.
+  this.isSimple = parts.length === 1 && !this.isScoped && depth === 0;
+
+  this.stringModeValue = this.string;
+};
+
+Handlebars.AST.PartialNameNode = function(name) {
+  this.type = "PARTIAL_NAME";
+  this.name = name.original;
+};
+
+Handlebars.AST.DataNode = function(id) {
+  this.type = "DATA";
+  this.id = id;
+};
+
+Handlebars.AST.StringNode = function(string) {
+  this.type = "STRING";
+  this.original =
+    this.string =
+    this.stringModeValue = string;
+};
+
+Handlebars.AST.IntegerNode = function(integer) {
+  this.type = "INTEGER";
+  this.original =
+    this.integer = integer;
+  this.stringModeValue = Number(integer);
+};
+
+Handlebars.AST.BooleanNode = function(bool) {
+  this.type = "BOOLEAN";
+  this.bool = bool;
+  this.stringModeValue = bool === "true";
+};
+
+Handlebars.AST.CommentNode = function(comment) {
+  this.type = "comment";
+  this.comment = comment;
+};
+;
+// lib/handlebars/utils.js
+
+var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
+
+Handlebars.Exception = function(message) {
+  var tmp = Error.prototype.constructor.apply(this, arguments);
+
+  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+  for (var idx = 0; idx < errorProps.length; idx++) {
+    this[errorProps[idx]] = tmp[errorProps[idx]];
+  }
+};
+Handlebars.Exception.prototype = new Error();
+
+// Build out our basic SafeString type
+Handlebars.SafeString = function(string) {
+  this.string = string;
+};
+Handlebars.SafeString.prototype.toString = function() {
+  return this.string.toString();
+};
+
+var escape = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#x27;",
+  "`": "&#x60;"
+};
+
+var badChars = /[&<>"'`]/g;
+var possible = /[&<>"'`]/;
+
+var escapeChar = function(chr) {
+  return escape[chr] || "&amp;";
+};
+
+Handlebars.Utils = {
+  extend: function(obj, value) {
+    for(var key in value) {
+      if(value.hasOwnProperty(key)) {
+        obj[key] = value[key];
+      }
+    }
+  },
+
+  escapeExpression: function(string) {
+    // don't escape SafeStrings, since they're already safe
+    if (string instanceof Handlebars.SafeString) {
+      return string.toString();
+    } else if (string == null || string === false) {
+      return "";
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = string.toString();
+
+    if(!possible.test(string)) { return string; }
+    return string.replace(badChars, escapeChar);
+  },
+
+  isEmpty: function(value) {
+    if (!value && value !== 0) {
+      return true;
+    } else if(toString.call(value) === "[object Array]" && value.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+;
+// lib/handlebars/compiler/compiler.js
+
+/*jshint eqnull:true*/
+var Compiler = Handlebars.Compiler = function() {};
+var JavaScriptCompiler = Handlebars.JavaScriptCompiler = function() {};
+
+// the foundHelper register will disambiguate helper lookup from finding a
+// function in a context. This is necessary for mustache compatibility, which
+// requires that context functions in blocks are evaluated by blockHelperMissing,
+// and then proceed as if the resulting value was provided to blockHelperMissing.
+
+Compiler.prototype = {
+  compiler: Compiler,
+
+  disassemble: function() {
+    var opcodes = this.opcodes, opcode, out = [], params, param;
+
+    for (var i=0, l=opcodes.length; i<l; i++) {
+      opcode = opcodes[i];
+
+      if (opcode.opcode === 'DECLARE') {
+        out.push("DECLARE " + opcode.name + "=" + opcode.value);
+      } else {
+        params = [];
+        for (var j=0; j<opcode.args.length; j++) {
+          param = opcode.args[j];
+          if (typeof param === "string") {
+            param = "\"" + param.replace("\n", "\\n") + "\"";
+          }
+          params.push(param);
+        }
+        out.push(opcode.opcode + " " + params.join(" "));
+      }
+    }
+
+    return out.join("\n");
+  },
+  equals: function(other) {
+    var len = this.opcodes.length;
+    if (other.opcodes.length !== len) {
+      return false;
+    }
+
+    for (var i = 0; i < len; i++) {
+      var opcode = this.opcodes[i],
+          otherOpcode = other.opcodes[i];
+      if (opcode.opcode !== otherOpcode.opcode || opcode.args.length !== otherOpcode.args.length) {
+        return false;
+      }
+      for (var j = 0; j < opcode.args.length; j++) {
+        if (opcode.args[j] !== otherOpcode.args[j]) {
+          return false;
+        }
+      }
+    }
+
+    len = this.children.length;
+    if (other.children.length !== len) {
+      return false;
+    }
+    for (i = 0; i < len; i++) {
+      if (!this.children[i].equals(other.children[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  },
+
+  guid: 0,
+
+  compile: function(program, options) {
+    this.children = [];
+    this.depths = {list: []};
+    this.options = options;
+
+    // These changes will propagate to the other compiler components
+    var knownHelpers = this.options.knownHelpers;
+    this.options.knownHelpers = {
+      'helperMissing': true,
+      'blockHelperMissing': true,
+      'each': true,
+      'if': true,
+      'unless': true,
+      'with': true,
+      'log': true
+    };
+    if (knownHelpers) {
+      for (var name in knownHelpers) {
+        this.options.knownHelpers[name] = knownHelpers[name];
+      }
+    }
+
+    return this.program(program);
+  },
+
+  accept: function(node) {
+    return this[node.type](node);
+  },
+
+  program: function(program) {
+    var statements = program.statements, statement;
+    this.opcodes = [];
+
+    for(var i=0, l=statements.length; i<l; i++) {
+      statement = statements[i];
+      this[statement.type](statement);
+    }
+    this.isSimple = l === 1;
+
+    this.depths.list = this.depths.list.sort(function(a, b) {
+      return a - b;
+    });
+
+    return this;
+  },
+
+  compileProgram: function(program) {
+    var result = new this.compiler().compile(program, this.options);
+    var guid = this.guid++, depth;
+
+    this.usePartial = this.usePartial || result.usePartial;
+
+    this.children[guid] = result;
+
+    for(var i=0, l=result.depths.list.length; i<l; i++) {
+      depth = result.depths.list[i];
+
+      if(depth < 2) { continue; }
+      else { this.addDepth(depth - 1); }
+    }
+
+    return guid;
+  },
+
+  block: function(block) {
+    var mustache = block.mustache,
+        program = block.program,
+        inverse = block.inverse;
+
+    if (program) {
+      program = this.compileProgram(program);
+    }
+
+    if (inverse) {
+      inverse = this.compileProgram(inverse);
+    }
+
+    var type = this.classifyMustache(mustache);
+
+    if (type === "helper") {
+      this.helperMustache(mustache, program, inverse);
+    } else if (type === "simple") {
+      this.simpleMustache(mustache);
+
+      // now that the simple mustache is resolved, we need to
+      // evaluate it by executing `blockHelperMissing`
+      this.opcode('pushProgram', program);
+      this.opcode('pushProgram', inverse);
+      this.opcode('emptyHash');
+      this.opcode('blockValue');
+    } else {
+      this.ambiguousMustache(mustache, program, inverse);
+
+      // now that the simple mustache is resolved, we need to
+      // evaluate it by executing `blockHelperMissing`
+      this.opcode('pushProgram', program);
+      this.opcode('pushProgram', inverse);
+      this.opcode('emptyHash');
+      this.opcode('ambiguousBlockValue');
+    }
+
+    this.opcode('append');
+  },
+
+  hash: function(hash) {
+    var pairs = hash.pairs, pair, val;
+
+    this.opcode('pushHash');
+
+    for(var i=0, l=pairs.length; i<l; i++) {
+      pair = pairs[i];
+      val  = pair[1];
+
+      if (this.options.stringParams) {
+        if(val.depth) {
+          this.addDepth(val.depth);
+        }
+        this.opcode('getContext', val.depth || 0);
+        this.opcode('pushStringParam', val.stringModeValue, val.type);
+      } else {
+        this.accept(val);
+      }
+
+      this.opcode('assignToHash', pair[0]);
+    }
+    this.opcode('popHash');
+  },
+
+  partial: function(partial) {
+    var partialName = partial.partialName;
+    this.usePartial = true;
+
+    if(partial.context) {
+      this.ID(partial.context);
+    } else {
+      this.opcode('push', 'depth0');
+    }
+
+    this.opcode('invokePartial', partialName.name);
+    this.opcode('append');
+  },
+
+  content: function(content) {
+    this.opcode('appendContent', content.string);
+  },
+
+  mustache: function(mustache) {
+    var options = this.options;
+    var type = this.classifyMustache(mustache);
+
+    if (type === "simple") {
+      this.simpleMustache(mustache);
+    } else if (type === "helper") {
+      this.helperMustache(mustache);
+    } else {
+      this.ambiguousMustache(mustache);
+    }
+
+    if(mustache.escaped && !options.noEscape) {
+      this.opcode('appendEscaped');
+    } else {
+      this.opcode('append');
+    }
+  },
+
+  ambiguousMustache: function(mustache, program, inverse) {
+    var id = mustache.id,
+        name = id.parts[0],
+        isBlock = program != null || inverse != null;
+
+    this.opcode('getContext', id.depth);
+
+    this.opcode('pushProgram', program);
+    this.opcode('pushProgram', inverse);
+
+    this.opcode('invokeAmbiguous', name, isBlock);
+  },
+
+  simpleMustache: function(mustache) {
+    var id = mustache.id;
+
+    if (id.type === 'DATA') {
+      this.DATA(id);
+    } else if (id.parts.length) {
+      this.ID(id);
+    } else {
+      // Simplified ID for `this`
+      this.addDepth(id.depth);
+      this.opcode('getContext', id.depth);
+      this.opcode('pushContext');
+    }
+
+    this.opcode('resolvePossibleLambda');
+  },
+
+  helperMustache: function(mustache, program, inverse) {
+    var params = this.setupFullMustacheParams(mustache, program, inverse),
+        name = mustache.id.parts[0];
+
+    if (this.options.knownHelpers[name]) {
+      this.opcode('invokeKnownHelper', params.length, name);
+    } else if (this.options.knownHelpersOnly) {
+      throw new Error("You specified knownHelpersOnly, but used the unknown helper " + name);
+    } else {
+      this.opcode('invokeHelper', params.length, name);
+    }
+  },
+
+  ID: function(id) {
+    this.addDepth(id.depth);
+    this.opcode('getContext', id.depth);
+
+    var name = id.parts[0];
+    if (!name) {
+      this.opcode('pushContext');
+    } else {
+      this.opcode('lookupOnContext', id.parts[0]);
+    }
+
+    for(var i=1, l=id.parts.length; i<l; i++) {
+      this.opcode('lookup', id.parts[i]);
+    }
+  },
+
+  DATA: function(data) {
+    this.options.data = true;
+    if (data.id.isScoped || data.id.depth) {
+      throw new Handlebars.Exception('Scoped data references are not supported: ' + data.original);
+    }
+
+    this.opcode('lookupData');
+    var parts = data.id.parts;
+    for(var i=0, l=parts.length; i<l; i++) {
+      this.opcode('lookup', parts[i]);
+    }
+  },
+
+  STRING: function(string) {
+    this.opcode('pushString', string.string);
+  },
+
+  INTEGER: function(integer) {
+    this.opcode('pushLiteral', integer.integer);
+  },
+
+  BOOLEAN: function(bool) {
+    this.opcode('pushLiteral', bool.bool);
+  },
+
+  comment: function() {},
+
+  // HELPERS
+  opcode: function(name) {
+    this.opcodes.push({ opcode: name, args: [].slice.call(arguments, 1) });
+  },
+
+  declare: function(name, value) {
+    this.opcodes.push({ opcode: 'DECLARE', name: name, value: value });
+  },
+
+  addDepth: function(depth) {
+    if(isNaN(depth)) { throw new Error("EWOT"); }
+    if(depth === 0) { return; }
+
+    if(!this.depths[depth]) {
+      this.depths[depth] = true;
+      this.depths.list.push(depth);
+    }
+  },
+
+  classifyMustache: function(mustache) {
+    var isHelper   = mustache.isHelper;
+    var isEligible = mustache.eligibleHelper;
+    var options    = this.options;
+
+    // if ambiguous, we can possibly resolve the ambiguity now
+    if (isEligible && !isHelper) {
+      var name = mustache.id.parts[0];
+
+      if (options.knownHelpers[name]) {
+        isHelper = true;
+      } else if (options.knownHelpersOnly) {
+        isEligible = false;
+      }
+    }
+
+    if (isHelper) { return "helper"; }
+    else if (isEligible) { return "ambiguous"; }
+    else { return "simple"; }
+  },
+
+  pushParams: function(params) {
+    var i = params.length, param;
+
+    while(i--) {
+      param = params[i];
+
+      if(this.options.stringParams) {
+        if(param.depth) {
+          this.addDepth(param.depth);
+        }
+
+        this.opcode('getContext', param.depth || 0);
+        this.opcode('pushStringParam', param.stringModeValue, param.type);
+      } else {
+        this[param.type](param);
+      }
+    }
+  },
+
+  setupMustacheParams: function(mustache) {
+    var params = mustache.params;
+    this.pushParams(params);
+
+    if(mustache.hash) {
+      this.hash(mustache.hash);
+    } else {
+      this.opcode('emptyHash');
+    }
+
+    return params;
+  },
+
+  // this will replace setupMustacheParams when we're done
+  setupFullMustacheParams: function(mustache, program, inverse) {
+    var params = mustache.params;
+    this.pushParams(params);
+
+    this.opcode('pushProgram', program);
+    this.opcode('pushProgram', inverse);
+
+    if(mustache.hash) {
+      this.hash(mustache.hash);
+    } else {
+      this.opcode('emptyHash');
+    }
+
+    return params;
+  }
+};
+
+var Literal = function(value) {
+  this.value = value;
+};
+
+JavaScriptCompiler.prototype = {
+  // PUBLIC API: You can override these methods in a subclass to provide
+  // alternative compiled forms for name lookup and buffering semantics
+  nameLookup: function(parent, name /* , type*/) {
+    if (/^[0-9]+$/.test(name)) {
+      return parent + "[" + name + "]";
+    } else if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
+      return parent + "." + name;
+    }
+    else {
+      return parent + "['" + name + "']";
+    }
+  },
+
+  appendToBuffer: function(string) {
+    if (this.environment.isSimple) {
+      return "return " + string + ";";
+    } else {
+      return {
+        appendToBuffer: true,
+        content: string,
+        toString: function() { return "buffer += " + string + ";"; }
+      };
+    }
+  },
+
+  initializeBuffer: function() {
+    return this.quotedString("");
+  },
+
+  namespace: "Handlebars",
+  // END PUBLIC API
+
+  compile: function(environment, options, context, asObject) {
+    this.environment = environment;
+    this.options = options || {};
+
+    Handlebars.log(Handlebars.logger.DEBUG, this.environment.disassemble() + "\n\n");
+
+    this.name = this.environment.name;
+    this.isChild = !!context;
+    this.context = context || {
+      programs: [],
+      environments: [],
+      aliases: { }
+    };
+
+    this.preamble();
+
+    this.stackSlot = 0;
+    this.stackVars = [];
+    this.registers = { list: [] };
+    this.compileStack = [];
+    this.inlineStack = [];
+
+    this.compileChildren(environment, options);
+
+    var opcodes = environment.opcodes, opcode;
+
+    this.i = 0;
+
+    for(l=opcodes.length; this.i<l; this.i++) {
+      opcode = opcodes[this.i];
+
+      if(opcode.opcode === 'DECLARE') {
+        this[opcode.name] = opcode.value;
+      } else {
+        this[opcode.opcode].apply(this, opcode.args);
+      }
+    }
+
+    return this.createFunctionContext(asObject);
+  },
+
+  nextOpcode: function() {
+    var opcodes = this.environment.opcodes;
+    return opcodes[this.i + 1];
+  },
+
+  eat: function() {
+    this.i = this.i + 1;
+  },
+
+  preamble: function() {
+    var out = [];
+
+    if (!this.isChild) {
+      var namespace = this.namespace;
+
+      var copies = "helpers = this.merge(helpers, " + namespace + ".helpers);";
+      if (this.environment.usePartial) { copies = copies + " partials = this.merge(partials, " + namespace + ".partials);"; }
+      if (this.options.data) { copies = copies + " data = data || {};"; }
+      out.push(copies);
+    } else {
+      out.push('');
+    }
+
+    if (!this.environment.isSimple) {
+      out.push(", buffer = " + this.initializeBuffer());
+    } else {
+      out.push("");
+    }
+
+    // track the last context pushed into place to allow skipping the
+    // getContext opcode when it would be a noop
+    this.lastContext = 0;
+    this.source = out;
+  },
+
+  createFunctionContext: function(asObject) {
+    var locals = this.stackVars.concat(this.registers.list);
+
+    if(locals.length > 0) {
+      this.source[1] = this.source[1] + ", " + locals.join(", ");
+    }
+
+    // Generate minimizer alias mappings
+    if (!this.isChild) {
+      for (var alias in this.context.aliases) {
+        if (this.context.aliases.hasOwnProperty(alias)) {
+          this.source[1] = this.source[1] + ', ' + alias + '=' + this.context.aliases[alias];
+        }
+      }
+    }
+
+    if (this.source[1]) {
+      this.source[1] = "var " + this.source[1].substring(2) + ";";
+    }
+
+    // Merge children
+    if (!this.isChild) {
+      this.source[1] += '\n' + this.context.programs.join('\n') + '\n';
+    }
+
+    if (!this.environment.isSimple) {
+      this.source.push("return buffer;");
+    }
+
+    var params = this.isChild ? ["depth0", "data"] : ["Handlebars", "depth0", "helpers", "partials", "data"];
+
+    for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
+      params.push("depth" + this.environment.depths.list[i]);
+    }
+
+    // Perform a second pass over the output to merge content when possible
+    var source = this.mergeSource();
+
+    if (!this.isChild) {
+      var revision = Handlebars.COMPILER_REVISION,
+          versions = Handlebars.REVISION_CHANGES[revision];
+      source = "this.compilerInfo = ["+revision+",'"+versions+"'];\n"+source;
+    }
+
+    if (asObject) {
+      params.push(source);
+
+      return Function.apply(this, params);
+    } else {
+      var functionSource = 'function ' + (this.name || '') + '(' + params.join(',') + ') {\n  ' + source + '}';
+      Handlebars.log(Handlebars.logger.DEBUG, functionSource + "\n\n");
+      return functionSource;
+    }
+  },
+  mergeSource: function() {
+    // WARN: We are not handling the case where buffer is still populated as the source should
+    // not have buffer append operations as their final action.
+    var source = '',
+        buffer;
+    for (var i = 0, len = this.source.length; i < len; i++) {
+      var line = this.source[i];
+      if (line.appendToBuffer) {
+        if (buffer) {
+          buffer = buffer + '\n    + ' + line.content;
+        } else {
+          buffer = line.content;
+        }
+      } else {
+        if (buffer) {
+          source += 'buffer += ' + buffer + ';\n  ';
+          buffer = undefined;
+        }
+        source += line + '\n  ';
+      }
+    }
+    return source;
+  },
+
+  // [blockValue]
+  //
+  // On stack, before: hash, inverse, program, value
+  // On stack, after: return value of blockHelperMissing
+  //
+  // The purpose of this opcode is to take a block of the form
+  // `{{#foo}}...{{/foo}}`, resolve the value of `foo`, and
+  // replace it on the stack with the result of properly
+  // invoking blockHelperMissing.
+  blockValue: function() {
+    this.context.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
+
+    var params = ["depth0"];
+    this.setupParams(0, params);
+
+    this.replaceStack(function(current) {
+      params.splice(1, 0, current);
+      return "blockHelperMissing.call(" + params.join(", ") + ")";
+    });
+  },
+
+  // [ambiguousBlockValue]
+  //
+  // On stack, before: hash, inverse, program, value
+  // Compiler value, before: lastHelper=value of last found helper, if any
+  // On stack, after, if no lastHelper: same as [blockValue]
+  // On stack, after, if lastHelper: value
+  ambiguousBlockValue: function() {
+    this.context.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
+
+    var params = ["depth0"];
+    this.setupParams(0, params);
+
+    var current = this.topStack();
+    params.splice(1, 0, current);
+
+    // Use the options value generated from the invocation
+    params[params.length-1] = 'options';
+
+    this.source.push("if (!" + this.lastHelper + ") { " + current + " = blockHelperMissing.call(" + params.join(", ") + "); }");
+  },
+
+  // [appendContent]
+  //
+  // On stack, before: ...
+  // On stack, after: ...
+  //
+  // Appends the string value of `content` to the current buffer
+  appendContent: function(content) {
+    this.source.push(this.appendToBuffer(this.quotedString(content)));
+  },
+
+  // [append]
+  //
+  // On stack, before: value, ...
+  // On stack, after: ...
+  //
+  // Coerces `value` to a String and appends it to the current buffer.
+  //
+  // If `value` is truthy, or 0, it is coerced into a string and appended
+  // Otherwise, the empty string is appended
+  append: function() {
+    // Force anything that is inlined onto the stack so we don't have duplication
+    // when we examine local
+    this.flushInline();
+    var local = this.popStack();
+    this.source.push("if(" + local + " || " + local + " === 0) { " + this.appendToBuffer(local) + " }");
+    if (this.environment.isSimple) {
+      this.source.push("else { " + this.appendToBuffer("''") + " }");
+    }
+  },
+
+  // [appendEscaped]
+  //
+  // On stack, before: value, ...
+  // On stack, after: ...
+  //
+  // Escape `value` and append it to the buffer
+  appendEscaped: function() {
+    this.context.aliases.escapeExpression = 'this.escapeExpression';
+
+    this.source.push(this.appendToBuffer("escapeExpression(" + this.popStack() + ")"));
+  },
+
+  // [getContext]
+  //
+  // On stack, before: ...
+  // On stack, after: ...
+  // Compiler value, after: lastContext=depth
+  //
+  // Set the value of the `lastContext` compiler value to the depth
+  getContext: function(depth) {
+    if(this.lastContext !== depth) {
+      this.lastContext = depth;
+    }
+  },
+
+  // [lookupOnContext]
+  //
+  // On stack, before: ...
+  // On stack, after: currentContext[name], ...
+  //
+  // Looks up the value of `name` on the current context and pushes
+  // it onto the stack.
+  lookupOnContext: function(name) {
+    this.push(this.nameLookup('depth' + this.lastContext, name, 'context'));
+  },
+
+  // [pushContext]
+  //
+  // On stack, before: ...
+  // On stack, after: currentContext, ...
+  //
+  // Pushes the value of the current context onto the stack.
+  pushContext: function() {
+    this.pushStackLiteral('depth' + this.lastContext);
+  },
+
+  // [resolvePossibleLambda]
+  //
+  // On stack, before: value, ...
+  // On stack, after: resolved value, ...
+  //
+  // If the `value` is a lambda, replace it on the stack by
+  // the return value of the lambda
+  resolvePossibleLambda: function() {
+    this.context.aliases.functionType = '"function"';
+
+    this.replaceStack(function(current) {
+      return "typeof " + current + " === functionType ? " + current + ".apply(depth0) : " + current;
+    });
+  },
+
+  // [lookup]
+  //
+  // On stack, before: value, ...
+  // On stack, after: value[name], ...
+  //
+  // Replace the value on the stack with the result of looking
+  // up `name` on `value`
+  lookup: function(name) {
+    this.replaceStack(function(current) {
+      return current + " == null || " + current + " === false ? " + current + " : " + this.nameLookup(current, name, 'context');
+    });
+  },
+
+  // [lookupData]
+  //
+  // On stack, before: ...
+  // On stack, after: data[id], ...
+  //
+  // Push the result of looking up `id` on the current data
+  lookupData: function(id) {
+    this.push('data');
+  },
+
+  // [pushStringParam]
+  //
+  // On stack, before: ...
+  // On stack, after: string, currentContext, ...
+  //
+  // This opcode is designed for use in string mode, which
+  // provides the string value of a parameter along with its
+  // depth rather than resolving it immediately.
+  pushStringParam: function(string, type) {
+    this.pushStackLiteral('depth' + this.lastContext);
+
+    this.pushString(type);
+
+    if (typeof string === 'string') {
+      this.pushString(string);
+    } else {
+      this.pushStackLiteral(string);
+    }
+  },
+
+  emptyHash: function() {
+    this.pushStackLiteral('{}');
+
+    if (this.options.stringParams) {
+      this.register('hashTypes', '{}');
+      this.register('hashContexts', '{}');
+    }
+  },
+  pushHash: function() {
+    this.hash = {values: [], types: [], contexts: []};
+  },
+  popHash: function() {
+    var hash = this.hash;
+    this.hash = undefined;
+
+    if (this.options.stringParams) {
+      this.register('hashContexts', '{' + hash.contexts.join(',') + '}');
+      this.register('hashTypes', '{' + hash.types.join(',') + '}');
+    }
+    this.push('{\n    ' + hash.values.join(',\n    ') + '\n  }');
+  },
+
+  // [pushString]
+  //
+  // On stack, before: ...
+  // On stack, after: quotedString(string), ...
+  //
+  // Push a quoted version of `string` onto the stack
+  pushString: function(string) {
+    this.pushStackLiteral(this.quotedString(string));
+  },
+
+  // [push]
+  //
+  // On stack, before: ...
+  // On stack, after: expr, ...
+  //
+  // Push an expression onto the stack
+  push: function(expr) {
+    this.inlineStack.push(expr);
+    return expr;
+  },
+
+  // [pushLiteral]
+  //
+  // On stack, before: ...
+  // On stack, after: value, ...
+  //
+  // Pushes a value onto the stack. This operation prevents
+  // the compiler from creating a temporary variable to hold
+  // it.
+  pushLiteral: function(value) {
+    this.pushStackLiteral(value);
+  },
+
+  // [pushProgram]
+  //
+  // On stack, before: ...
+  // On stack, after: program(guid), ...
+  //
+  // Push a program expression onto the stack. This takes
+  // a compile-time guid and converts it into a runtime-accessible
+  // expression.
+  pushProgram: function(guid) {
+    if (guid != null) {
+      this.pushStackLiteral(this.programExpression(guid));
+    } else {
+      this.pushStackLiteral(null);
+    }
+  },
+
+  // [invokeHelper]
+  //
+  // On stack, before: hash, inverse, program, params..., ...
+  // On stack, after: result of helper invocation
+  //
+  // Pops off the helper's parameters, invokes the helper,
+  // and pushes the helper's return value onto the stack.
+  //
+  // If the helper is not found, `helperMissing` is called.
+  invokeHelper: function(paramSize, name) {
+    this.context.aliases.helperMissing = 'helpers.helperMissing';
+
+    var helper = this.lastHelper = this.setupHelper(paramSize, name, true);
+    var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
+
+    this.push(helper.name + ' || ' + nonHelper);
+    this.replaceStack(function(name) {
+      return name + ' ? ' + name + '.call(' +
+          helper.callParams + ") " + ": helperMissing.call(" +
+          helper.helperMissingParams + ")";
+    });
+  },
+
+  // [invokeKnownHelper]
+  //
+  // On stack, before: hash, inverse, program, params..., ...
+  // On stack, after: result of helper invocation
+  //
+  // This operation is used when the helper is known to exist,
+  // so a `helperMissing` fallback is not required.
+  invokeKnownHelper: function(paramSize, name) {
+    var helper = this.setupHelper(paramSize, name);
+    this.push(helper.name + ".call(" + helper.callParams + ")");
+  },
+
+  // [invokeAmbiguous]
+  //
+  // On stack, before: hash, inverse, program, params..., ...
+  // On stack, after: result of disambiguation
+  //
+  // This operation is used when an expression like `{{foo}}`
+  // is provided, but we don't know at compile-time whether it
+  // is a helper or a path.
+  //
+  // This operation emits more code than the other options,
+  // and can be avoided by passing the `knownHelpers` and
+  // `knownHelpersOnly` flags at compile-time.
+  invokeAmbiguous: function(name, helperCall) {
+    this.context.aliases.functionType = '"function"';
+
+    this.pushStackLiteral('{}');    // Hash value
+    var helper = this.setupHelper(0, name, helperCall);
+
+    var helperName = this.lastHelper = this.nameLookup('helpers', name, 'helper');
+
+    var nonHelper = this.nameLookup('depth' + this.lastContext, name, 'context');
+    var nextStack = this.nextStack();
+
+    this.source.push('if (' + nextStack + ' = ' + helperName + ') { ' + nextStack + ' = ' + nextStack + '.call(' + helper.callParams + '); }');
+    this.source.push('else { ' + nextStack + ' = ' + nonHelper + '; ' + nextStack + ' = typeof ' + nextStack + ' === functionType ? ' + nextStack + '.apply(depth0) : ' + nextStack + '; }');
+  },
+
+  // [invokePartial]
+  //
+  // On stack, before: context, ...
+  // On stack after: result of partial invocation
+  //
+  // This operation pops off a context, invokes a partial with that context,
+  // and pushes the result of the invocation back.
+  invokePartial: function(name) {
+    var params = [this.nameLookup('partials', name, 'partial'), "'" + name + "'", this.popStack(), "helpers", "partials"];
+
+    if (this.options.data) {
+      params.push("data");
+    }
+
+    this.context.aliases.self = "this";
+    this.push("self.invokePartial(" + params.join(", ") + ")");
+  },
+
+  // [assignToHash]
+  //
+  // On stack, before: value, hash, ...
+  // On stack, after: hash, ...
+  //
+  // Pops a value and hash off the stack, assigns `hash[key] = value`
+  // and pushes the hash back onto the stack.
+  assignToHash: function(key) {
+    var value = this.popStack(),
+        context,
+        type;
+
+    if (this.options.stringParams) {
+      type = this.popStack();
+      context = this.popStack();
+    }
+
+    var hash = this.hash;
+    if (context) {
+      hash.contexts.push("'" + key + "': " + context);
+    }
+    if (type) {
+      hash.types.push("'" + key + "': " + type);
+    }
+    hash.values.push("'" + key + "': (" + value + ")");
+  },
+
+  // HELPERS
+
+  compiler: JavaScriptCompiler,
+
+  compileChildren: function(environment, options) {
+    var children = environment.children, child, compiler;
+
+    for(var i=0, l=children.length; i<l; i++) {
+      child = children[i];
+      compiler = new this.compiler();
+
+      var index = this.matchExistingProgram(child);
+
+      if (index == null) {
+        this.context.programs.push('');     // Placeholder to prevent name conflicts for nested children
+        index = this.context.programs.length;
+        child.index = index;
+        child.name = 'program' + index;
+        this.context.programs[index] = compiler.compile(child, options, this.context);
+        this.context.environments[index] = child;
+      } else {
+        child.index = index;
+        child.name = 'program' + index;
+      }
+    }
+  },
+  matchExistingProgram: function(child) {
+    for (var i = 0, len = this.context.environments.length; i < len; i++) {
+      var environment = this.context.environments[i];
+      if (environment && environment.equals(child)) {
+        return i;
+      }
+    }
+  },
+
+  programExpression: function(guid) {
+    this.context.aliases.self = "this";
+
+    if(guid == null) {
+      return "self.noop";
+    }
+
+    var child = this.environment.children[guid],
+        depths = child.depths.list, depth;
+
+    var programParams = [child.index, child.name, "data"];
+
+    for(var i=0, l = depths.length; i<l; i++) {
+      depth = depths[i];
+
+      if(depth === 1) { programParams.push("depth0"); }
+      else { programParams.push("depth" + (depth - 1)); }
+    }
+
+    return (depths.length === 0 ? "self.program(" : "self.programWithDepth(") + programParams.join(", ") + ")";
+  },
+
+  register: function(name, val) {
+    this.useRegister(name);
+    this.source.push(name + " = " + val + ";");
+  },
+
+  useRegister: function(name) {
+    if(!this.registers[name]) {
+      this.registers[name] = true;
+      this.registers.list.push(name);
+    }
+  },
+
+  pushStackLiteral: function(item) {
+    return this.push(new Literal(item));
+  },
+
+  pushStack: function(item) {
+    this.flushInline();
+
+    var stack = this.incrStack();
+    if (item) {
+      this.source.push(stack + " = " + item + ";");
+    }
+    this.compileStack.push(stack);
+    return stack;
+  },
+
+  replaceStack: function(callback) {
+    var prefix = '',
+        inline = this.isInline(),
+        stack;
+
+    // If we are currently inline then we want to merge the inline statement into the
+    // replacement statement via ','
+    if (inline) {
+      var top = this.popStack(true);
+
+      if (top instanceof Literal) {
+        // Literals do not need to be inlined
+        stack = top.value;
+      } else {
+        // Get or create the current stack name for use by the inline
+        var name = this.stackSlot ? this.topStackName() : this.incrStack();
+
+        prefix = '(' + this.push(name) + ' = ' + top + '),';
+        stack = this.topStack();
+      }
+    } else {
+      stack = this.topStack();
+    }
+
+    var item = callback.call(this, stack);
+
+    if (inline) {
+      if (this.inlineStack.length || this.compileStack.length) {
+        this.popStack();
+      }
+      this.push('(' + prefix + item + ')');
+    } else {
+      // Prevent modification of the context depth variable. Through replaceStack
+      if (!/^stack/.test(stack)) {
+        stack = this.nextStack();
+      }
+
+      this.source.push(stack + " = (" + prefix + item + ");");
+    }
+    return stack;
+  },
+
+  nextStack: function() {
+    return this.pushStack();
+  },
+
+  incrStack: function() {
+    this.stackSlot++;
+    if(this.stackSlot > this.stackVars.length) { this.stackVars.push("stack" + this.stackSlot); }
+    return this.topStackName();
+  },
+  topStackName: function() {
+    return "stack" + this.stackSlot;
+  },
+  flushInline: function() {
+    var inlineStack = this.inlineStack;
+    if (inlineStack.length) {
+      this.inlineStack = [];
+      for (var i = 0, len = inlineStack.length; i < len; i++) {
+        var entry = inlineStack[i];
+        if (entry instanceof Literal) {
+          this.compileStack.push(entry);
+        } else {
+          this.pushStack(entry);
+        }
+      }
+    }
+  },
+  isInline: function() {
+    return this.inlineStack.length;
+  },
+
+  popStack: function(wrapped) {
+    var inline = this.isInline(),
+        item = (inline ? this.inlineStack : this.compileStack).pop();
+
+    if (!wrapped && (item instanceof Literal)) {
+      return item.value;
+    } else {
+      if (!inline) {
+        this.stackSlot--;
+      }
+      return item;
+    }
+  },
+
+  topStack: function(wrapped) {
+    var stack = (this.isInline() ? this.inlineStack : this.compileStack),
+        item = stack[stack.length - 1];
+
+    if (!wrapped && (item instanceof Literal)) {
+      return item.value;
+    } else {
+      return item;
+    }
+  },
+
+  quotedString: function(str) {
+    return '"' + str
+      .replace(/\\/g, '\\\\')
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/\u2028/g, '\\u2028')   // Per Ecma-262 7.3 + 7.8.4
+      .replace(/\u2029/g, '\\u2029') + '"';
+  },
+
+  setupHelper: function(paramSize, name, missingParams) {
+    var params = [];
+    this.setupParams(paramSize, params, missingParams);
+    var foundHelper = this.nameLookup('helpers', name, 'helper');
+
+    return {
+      params: params,
+      name: foundHelper,
+      callParams: ["depth0"].concat(params).join(", "),
+      helperMissingParams: missingParams && ["depth0", this.quotedString(name)].concat(params).join(", ")
+    };
+  },
+
+  // the params and contexts arguments are passed in arrays
+  // to fill in
+  setupParams: function(paramSize, params, useRegister) {
+    var options = [], contexts = [], types = [], param, inverse, program;
+
+    options.push("hash:" + this.popStack());
+
+    inverse = this.popStack();
+    program = this.popStack();
+
+    // Avoid setting fn and inverse if neither are set. This allows
+    // helpers to do a check for `if (options.fn)`
+    if (program || inverse) {
+      if (!program) {
+        this.context.aliases.self = "this";
+        program = "self.noop";
+      }
+
+      if (!inverse) {
+       this.context.aliases.self = "this";
+        inverse = "self.noop";
+      }
+
+      options.push("inverse:" + inverse);
+      options.push("fn:" + program);
+    }
+
+    for(var i=0; i<paramSize; i++) {
+      param = this.popStack();
+      params.push(param);
+
+      if(this.options.stringParams) {
+        types.push(this.popStack());
+        contexts.push(this.popStack());
+      }
+    }
+
+    if (this.options.stringParams) {
+      options.push("contexts:[" + contexts.join(",") + "]");
+      options.push("types:[" + types.join(",") + "]");
+      options.push("hashContexts:hashContexts");
+      options.push("hashTypes:hashTypes");
+    }
+
+    if(this.options.data) {
+      options.push("data:data");
+    }
+
+    options = "{" + options.join(",") + "}";
+    if (useRegister) {
+      this.register('options', options);
+      params.push('options');
+    } else {
+      params.push(options);
+    }
+    return params.join(", ");
+  }
+};
+
+var reservedWords = (
+  "break else new var" +
+  " case finally return void" +
+  " catch for switch while" +
+  " continue function this with" +
+  " default if throw" +
+  " delete in try" +
+  " do instanceof typeof" +
+  " abstract enum int short" +
+  " boolean export interface static" +
+  " byte extends long super" +
+  " char final native synchronized" +
+  " class float package throws" +
+  " const goto private transient" +
+  " debugger implements protected volatile" +
+  " double import public let yield"
+).split(" ");
+
+var compilerWords = JavaScriptCompiler.RESERVED_WORDS = {};
+
+for(var i=0, l=reservedWords.length; i<l; i++) {
+  compilerWords[reservedWords[i]] = true;
+}
+
+JavaScriptCompiler.isValidJavaScriptVariableName = function(name) {
+  if(!JavaScriptCompiler.RESERVED_WORDS[name] && /^[a-zA-Z_$][0-9a-zA-Z_$]+$/.test(name)) {
+    return true;
+  }
+  return false;
+};
+
+Handlebars.precompile = function(input, options) {
+  if (input == null || (typeof input !== 'string' && input.constructor !== Handlebars.AST.ProgramNode)) {
+    throw new Handlebars.Exception("You must pass a string or Handlebars AST to Handlebars.precompile. You passed " + input);
+  }
+
+  options = options || {};
+  if (!('data' in options)) {
+    options.data = true;
+  }
+  var ast = Handlebars.parse(input);
+  var environment = new Compiler().compile(ast, options);
+  return new JavaScriptCompiler().compile(environment, options);
+};
+
+Handlebars.compile = function(input, options) {
+  if (input == null || (typeof input !== 'string' && input.constructor !== Handlebars.AST.ProgramNode)) {
+    throw new Handlebars.Exception("You must pass a string or Handlebars AST to Handlebars.compile. You passed " + input);
+  }
+
+  options = options || {};
+  if (!('data' in options)) {
+    options.data = true;
+  }
+  var compiled;
+  function compile() {
+    var ast = Handlebars.parse(input);
+    var environment = new Compiler().compile(ast, options);
+    var templateSpec = new JavaScriptCompiler().compile(environment, options, undefined, true);
+    return Handlebars.template(templateSpec);
+  }
+
+  // Template is only compiled on first use and cached after that point.
+  return function(context, options) {
+    if (!compiled) {
+      compiled = compile();
+    }
+    return compiled.call(this, context, options);
+  };
+};
+
+;
+// lib/handlebars/runtime.js
+
+Handlebars.VM = {
+  template: function(templateSpec) {
+    // Just add water
+    var container = {
+      escapeExpression: Handlebars.Utils.escapeExpression,
+      invokePartial: Handlebars.VM.invokePartial,
+      programs: [],
+      program: function(i, fn, data) {
+        var programWrapper = this.programs[i];
+        if(data) {
+          programWrapper = Handlebars.VM.program(i, fn, data);
+        } else if (!programWrapper) {
+          programWrapper = this.programs[i] = Handlebars.VM.program(i, fn);
+        }
+        return programWrapper;
+      },
+      merge: function(param, common) {
+        var ret = param || common;
+
+        if (param && common) {
+          ret = {};
+          Handlebars.Utils.extend(ret, common);
+          Handlebars.Utils.extend(ret, param);
+        }
+        return ret;
+      },
+      programWithDepth: Handlebars.VM.programWithDepth,
+      noop: Handlebars.VM.noop,
+      compilerInfo: null
+    };
+
+    return function(context, options) {
+      options = options || {};
+      var result = templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
+
+      var compilerInfo = container.compilerInfo || [],
+          compilerRevision = compilerInfo[0] || 1,
+          currentRevision = Handlebars.COMPILER_REVISION;
+
+      if (compilerRevision !== currentRevision) {
+        if (compilerRevision < currentRevision) {
+          var runtimeVersions = Handlebars.REVISION_CHANGES[currentRevision],
+              compilerVersions = Handlebars.REVISION_CHANGES[compilerRevision];
+          throw "Template was precompiled with an older version of Handlebars than the current runtime. "+
+                "Please update your precompiler to a newer version ("+runtimeVersions+") or downgrade your runtime to an older version ("+compilerVersions+").";
+        } else {
+          // Use the embedded version info since the runtime doesn't know about this revision yet
+          throw "Template was precompiled with a newer version of Handlebars than the current runtime. "+
+                "Please update your runtime to a newer version ("+compilerInfo[1]+").";
+        }
+      }
+
+      return result;
+    };
+  },
+
+  programWithDepth: function(i, fn, data /*, $depth */) {
+    var args = Array.prototype.slice.call(arguments, 3);
+
+    var program = function(context, options) {
+      options = options || {};
+
+      return fn.apply(this, [context, options.data || data].concat(args));
+    };
+    program.program = i;
+    program.depth = args.length;
+    return program;
+  },
+  program: function(i, fn, data) {
+    var program = function(context, options) {
+      options = options || {};
+
+      return fn(context, options.data || data);
+    };
+    program.program = i;
+    program.depth = 0;
+    return program;
+  },
+  noop: function() { return ""; },
+  invokePartial: function(partial, name, context, helpers, partials, data) {
+    var options = { helpers: helpers, partials: partials, data: data };
+
+    if(partial === undefined) {
+      throw new Handlebars.Exception("The partial " + name + " could not be found");
+    } else if(partial instanceof Function) {
+      return partial(context, options);
+    } else if (!Handlebars.compile) {
+      throw new Handlebars.Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
+    } else {
+      partials[name] = Handlebars.compile(partial, {data: data !== undefined});
+      return partials[name](context, options);
+    }
+  }
+};
+
+Handlebars.template = Handlebars.VM.template;
+;
+// lib/handlebars/browser-suffix.js
+})(Handlebars);
+;
+
+this["HBS"] = this["HBS"] || {};
+
+this["HBS"]["asset/tpl/modal/tip.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div>\n  <h2 class=\"tips tips-title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</h2>\n  <table>\n    <tbody>\n      <tr>\n        <td class=\"tips desc-title\">コマンド</td><td><span>{</span>";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ":<i>";
+  if (stack1 = helpers.placeholder) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.placeholder; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</i><span>}</span></td>\n      </tr>\n      <tr>\n        <td class=\"tips desc-title\">説明</td><td>";
+  if (stack1 = helpers.description) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</td>\n      </tr>\n      <tr>\n        <td class=\"tips desc-title\">使用例</td><td class=\"tips-sample clickable\"><span>{</span>";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ":";
+  if (stack1 = helpers.sampleValue) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.sampleValue; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "<span>}</span></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n";
+  return buffer;
+  });
+
+this["HBS"]["asset/tpl/modal/tips.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"tips-header\">\n  <h2>Tips for `CHA<span class=\"highlight\">N</span>T Command`</h2>\n  <p>CHANTでは、特殊なフォーマットの発言をすることでユーザが全ユーザの窓を操作することが可能です。</p>\n</div>\n";
+  });
+var Chant;
+(function (Chant) {
+    function Imager(str) {
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+        var img = imgUrl.exec(str);
+        if (img != null && img.length) {
+            return str.replace(img[0], '<img src="' + img[0] + '">');
+        }
+        return str;
+    }
+    Chant.Imager = Imager;
+    function Anchorize(str) {
+        var emo = _execEmo(str);
+        if (emo)
+            return emo;
+        var ytb = _execYouTube(str);
+        if (ytb)
+            return ytb;
+        var sndcld = _execSoundCloud(str);
+        if (sndcld)
+            return sndcld;
+        var img = _execImage(str);
+        if (img)
+            return img;
+        var anc = _execAnchor(str);
+        if (anc)
+            return anc;
+        return str;
+    }
+    Chant.Anchorize = Anchorize;
+
+    var _execYouTube = function (str) {
+        var youTubeUrl = /https?:\/\/www\.youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+)/g;
+        var ytb = youTubeUrl.exec(str);
+        if (ytb && ytb.length > 1) {
+            return tmpl('tmpl_base_youtube', { videoId: ytb[1] });
+        }
+        return null;
+    };
+    var _execSoundCloud = function (str) {
+        var soundCloudUrl = /(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g;
+        var sndcld = soundCloudUrl.exec(str);
+        if (sndcld && sndcld.length > 3) {
+            return tmpl('tmpl_base_soundcloud', { videoId: sndcld[1] });
+        }
+        return null;
+    };
+    var _execImage = function (str) {
+        var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+        var img = imgUrl.exec(str);
+        if (img != null && img.length) {
+            return str.replace(img[0], '<a href="' + img[0] + '" target="_blank" rel="noreferrer"><img src="' + img[0] + '" class="tl-img"></a>');
+        }
+        return;
+    };
+    var _execAnchor = function (str) {
+        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi;
+        var anc = url.exec(str);
+        if (anc != null && anc[2] && anc[2].match(/^twitter.com\//)) {
+            var matched = anc[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/);
+            var id = matched[3];
+            setTimeout(function () {
+                Chant.Twitter.embed(id);
+            }, 0);
+            return str.replace(anc[0], '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + str + '</a></div>');
+        }
+        if (anc != null && anc.length) {
+            var lenToTruncate = 100;
+            var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
+
+            var id = Date.now() + '' + Math.floor(Math.random() * 100);
+            setTimeout(function () {
+                Chant.WebPreview.embed(id, anc[0]);
+            }, 0);
+
+            return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '" rel="noreferrer">' + innerText + '</a>');
+        }
+        return;
+    };
+    var _execEmo = function (str) {
+        var pattern = /:([a-zA-Z0-9-+_]+):/gi;
+        var matches = pattern.exec(str);
+        if (matches && matches.length > 1) {
+            return str.replace(matches[0], '<img src="/public/images/emojis/' + matches[1] + '.png" width="40px">');
+        }
+        return;
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    Chant.Twitter = {
+        embed: function (id) {
+            $.ajax({
+                url: 'https://api.twitter.com/1/statuses/oembed.json?id=' + String(id),
+                method: 'GET',
+                dataType: 'jsonp',
+                success: function (res) {
+                    $('#twitter' + id).html(res.html);
+                },
+                error: function (hoge) {
+                    console.log(hoge);
+                }
+            });
+        }
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var OGDetail = (function () {
+        function OGDetail(Id, URL) {
+            this.Id = Id;
+            this.URL = URL;
+            this.Description = "undefined";
+            this.Image = "";
+            this.metas = [];
+        }
+        OGDetail.prototype.ensure = function () {
+            var _this = this;
+            $.map(this.metas, function (meta) {
+                var name = meta.getAttribute("name") || meta.getAttribute("property");
+                if (!name)
+                    return;
+                if (name.match(/image$/)) {
+                    _this.Image = meta.getAttribute('content');
+                    return;
+                }
+                if (name.match(/description/)) {
+                    _this.Description = meta.getAttribute('content');
+                    return;
+                }
+            });
+            if (this.Title)
+                return true;
+            return false;
+        };
+        return OGDetail;
+    })();
+    Chant.OGDetail = OGDetail;
+    Chant.WebPreview = {
+        embed: function (id, url) {
+            var apiURL = 'http://' + Conf.Server().Host + ':' + Conf.Server().Port + '/preview?url=' + url;
+            $.ajax({
+                url: apiURL,
+                method: 'GET',
+                dataType: 'json',
+                success: function (ogDetail) {
+                    var og = new OGDetail(id, url);
+
+                    $.map($(ogDetail['PageContents']), function (el) {
+                        if (!el.tagName)
+                            return;
+                        if (el.tagName.match(/title/i))
+                            og.Title = el.innerHTML;
+                        if (el.tagName.match(/meta/i))
+                            og.metas.push(el);
+                    });
+                    if (!og.ensure())
+                        return;
+
+                    $('#' + id).replaceWith(tmpl('tmpl_base_preview', og));
+                },
+                error: function (hoge) {
+                    console.log(hoge);
+                }
+            });
+        }
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    Chant.Chips = {
+        stamp: {
+            title: '@stamp',
+            placeholder: '画像URL',
+            description: '任意の画像を全ユーザの窓においてスタンプとして登録できます。このコマンドで1度スタンプ登録すると、ページをリロードしない限りボタンからいつでもスタンプ画像を投下できます',
+            sampleValue: 'https://pbs.twimg.com/media/BitWdO3CMAEb-4k.jpg'
+        },
+        emo: {
+            title: '@emo',
+            placeholder: 'GitHubのemojiコード',
+            description: '簡単に絵文字を出力することができます。GitHubのemojiコード全てに対応しています。詳しくは<a href="http://www.emoji-cheat-sheet.com/" target="_blank" class="light">Emoji cheat sheet for Campfire and GitHub</a>',
+            sampleValue: 'shit'
+        }
+    };
+    var Chip = (function () {
+        function Chip(obj) {
+            this.title = obj['title'];
+            this.placeholder = obj['placeholder'];
+            this.description = obj['description'];
+            this.sampleValue = obj['sampleValue'];
+        }
+        Chip.prototype.toSampleText = function () {
+            return '{' + this.title + ':' + this.sampleValue + '}';
+        };
+        return Chip;
+    })();
+    Chant.Chip = Chip;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var Time = (function () {
+        function Time(timestamp) {
+            this.timestamp = timestamp;
+        }
+        Time.prototype.format = function () {
+            var d = new Date(this.timestamp * 1000);
+            return d.toLocaleString();
+        };
+        return Time;
+    })();
+    Chant.Time = Time;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    function getChromeVersion() {
+        return parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+    }
+    var NotifierAlert = (function () {
+        function NotifierAlert() {
+        }
+        NotifierAlert.prototype.show = function (text, icon, title) {
+            window.alert(text);
+        };
+        NotifierAlert.prototype.init = function () {
+        };
+        return NotifierAlert;
+    })();
+    Chant.NotifierAlert = NotifierAlert;
+    var NotifierWithPrefix = (function () {
+        function NotifierWithPrefix() {
+        }
+        NotifierWithPrefix.prototype.show = function (text, icon, title) {
+            icon = icon || '/public/images/favicon.jpg';
+            title = title || 'CHANT!';
+            text = text || 'えら〜';
+            var notification = webkitNotifications.createNotification(icon, title, text);
+            notification.onclick = function () {
+                window.focus();
+            };
+            notification.show();
+        };
+        NotifierWithPrefix.prototype.init = function () {
+            if (webkitNotifications.checkPermission() !== 0) {
+                webkitNotifications.requestPermission();
+            }
+        };
+        return NotifierWithPrefix;
+    })();
+    Chant.NotifierWithPrefix = NotifierWithPrefix;
+    var NotifierDefault = (function () {
+        function NotifierDefault() {
+        }
+        NotifierDefault.prototype.show = function (text, icon, title) {
+            var notification = new window['Notification'](title || "CHANT", {
+                body: text || "えら〜",
+                icon: icon || '/public/images/favicon.jpg'
+            });
+            notification.onclick = function () {
+                window.focus();
+            };
+        };
+        NotifierDefault.prototype.init = function () {
+            window['Notification'].requestPermission();
+        };
+        return NotifierDefault;
+    })();
+    Chant.NotifierDefault = NotifierDefault;
+    function getNotifier(text, icon) {
+        if (getChromeVersion() < 28)
+            return new NotifierAlert();
+        if (window['webkitNotifications'])
+            return new NotifierWithPrefix();
+        return new NotifierDefault();
+    }
+    Chant.getNotifier = getNotifier;
+    function Notify(text, icon, title) {
+        if (!$('#enable-notification').is(':checked'))
+            return;
+        var notifier = getNotifier();
+        notifier.show(text, icon, title);
+    }
+    Chant.Notify = Notify;
+})(Chant || (Chant = {}));
+
+var Chant;
+(function (Chant) {
+    Chant.Notifier = {
+        isActive: true,
+        onmessage: function (event) {
+            if (event.Type == "leave" || event.Type == "join")
+                return;
+            if (Chant.Notifier.isActive)
+                return;
+            $('title').text('!' + $('title').text());
+        },
+        onread: function () {
+            $('title').text('CHANT');
+        },
+        init: function () {
+            var notifier = Chant.getNotifier();
+            notifier.init();
+        },
+        detectMentioned: function (event) {
+            var mentioning = "@" + Conf.Me().ScreenName;
+            if (!event.Text)
+                return event;
+            if (event.Text.match(mentioning) || event.Text.match('@all')) {
+                var params = {
+                    icon: event.User.ProfileImageUrl,
+                    title: event.User.ScreenName,
+                    text: event.Text
+                };
+                Chant.Notify(event.Text, event.User.ProfileImageUrl, event.User.ScreenName);
+
+                var html = '<span class="mentioning">' + mentioning + '</span>';
+                event.Text = event.Text.replace(mentioning, html);
+            }
+            return event;
+        }
+    };
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var _Playlist = (function () {
+        function _Playlist(list) {
+            this.list = list;
+            this.nowplaying = 0;
+            this.player = '#player';
+        }
+        _Playlist.prototype._play = function (index) {
+            if (!this.list[index])
+                return;
+            this.nowplaying = index;
+            var vendor = this.list[index].Source.Vendor.Name;
+            var html = tmpl('tmpl_base_globalplayer', { Sound: this.list[index] });
+
+            $(this.player).html(html);
+
+            Chant.Render.Playlist.update();
+            if (vendor == 'youtube') {
+                var params = { allowScriptAccess: "always" };
+                var atts = { id: "player-youtube" };
+                var videoId = this.list[index].Source.Hash;
+
+                setTimeout(function () {
+                    swfobject.embedSWF("http://www.youtube.com/v/" + videoId + "?enablejsapi=1&playerapiid=ytplayer", "ytapiplayer", "410", "220", "8", null, null, params, atts);
+                }, 0);
+            } else if (vendor == 'soundcloud') {
+                var widgetIframe = document.getElementById('sc-widget');
+                var widget = SC.Widget(widgetIframe);
+                var soudURL = this.list[index].Source.Hash;
+
+                widget.load(soudURL);
+
+                widget.bind(SC.Widget.Events.READY, function () {
+                    widget.play();
+                });
+                widget.bind(SC.Widget.Events.FINISH, function () {
+                    Chant.Playlist().playNext();
+                });
+                widget.bind(SC.Widget.Events.ERROR, function () {
+                    Chant.Playlist().playNext();
+                });
+            }
+        };
+
+        _Playlist.prototype.add = function (sound) {
+            this.list.unshift(sound);
+        };
+
+        _Playlist.prototype.play = function (index) {
+            if (index)
+                this.nowplaying = index;
+            this._play(this.nowplaying);
+        };
+
+        _Playlist.prototype.playNext = function () {
+            this.nowplaying++;
+            if (this.list.length <= this.nowplaying) {
+                this.nowplaying = 0;
+            }
+            this._play(this.nowplaying);
+        };
+        return _Playlist;
+    })();
+    Chant._Playlist = _Playlist;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var _playlist = null;
+    function Playlist(list) {
+        if (list || _playlist === null) {
+            list = list || [];
+            _playlist = new Chant._Playlist(list);
+        }
+        return _playlist;
+    }
+    Chant.Playlist = Playlist;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    (function (Protocols) {
+        Protocols[Protocols["img"] = 0] = "img";
+        Protocols[Protocols["emo"] = 1] = "emo";
+        Protocols[Protocols["css"] = 2] = "css";
+        Protocols[Protocols["stamp"] = 3] = "stamp";
+        Protocols[Protocols["quote"] = 4] = "quote";
+    })(Chant.Protocols || (Chant.Protocols = {}));
+    var Protocols = Chant.Protocols;
+    var ProtocolExecuter = (function () {
+        function ProtocolExecuter(origin) {
+            this.ok = false;
+            this.origin = origin;
+
+            var matches = this.origin.match(/^\{@([a-z]+):([^}]+)\}$/);
+            if (matches == null || matches.length < 3)
+                return this;
+
+            this.name = matches[1];
+            if (!Protocols[Protocols[this.name]])
+                return this;
+
+            this.value = matches[2];
+            this.ok = true;
+
+            this.result = this[this.name]();
+        }
+        ProtocolExecuter.prototype.emo = function () {
+            return '<img src="/public/images/emojis/' + this.value + '.png" width="40px">';
+        };
+        ProtocolExecuter.prototype.img = function () {
+            var map = {
+                'ohayo': "ohayogozaimasu.jpg",
+                'odayakajanai': "odayakajanai.jpg",
+                'okitekudasai': "okitekudasai.jpg",
+                'zawameku': "zawameku.jpg",
+                'chunchun': "kotori.jpg"
+            };
+            if (!map[this.value])
+                return this.abort();
+            return '<img src="./public/images/{src}" class="tl-img">'.replace('{src}', map[this.value]);
+        };
+        ProtocolExecuter.prototype.css = function () {
+            var matches = this.value.match(/^([a-zA-Z_\-#\.]+)\{([a-zA-Z]+):(.+)\}$/);
+            if (matches == null || matches.length < 4)
+                return this.abort();
+            var selector = matches[1];
+            var style = {};
+            style[matches[2]] = matches[3];
+            $(selector).css(style);
+            return this.origin;
+        };
+        ProtocolExecuter.prototype.stamp = function () {
+            var stamp = { raw: this.value, label: this.value.slice(0, 20), display: Chant.Imager(this.value) };
+            var stampHTML = tmpl('tmpl_base_stamp', stamp);
+            Chant.Render.Event.stamp({ Value: this.value });
+            return 'スタンプ登録' + stampHTML;
+        };
+        ProtocolExecuter.prototype.quote = function (str) {
+            if (typeof str === "undefined") { str = null; }
+            var targetValue = str || this.value;
+            var splits = targetValue.split('||');
+            var name = splits[0];
+            var icon = splits[1];
+            var text = splits[2];
+
+            if (splits.length < 3)
+                return this.abort();
+            if (3 < splits.length) {
+                text = Chant.Protocol(splits.splice(2).join('||') + '}');
+            } else {
+                text = Chant.Anchorize(text);
+            }
+
+            var quote = {
+                name: name,
+                icon: icon,
+                text: text
+            };
+            return tmpl('tmpl_event_message_quote', { quote: quote });
+        };
+        ProtocolExecuter.prototype.abort = function () {
+            return this.origin;
+        };
+        return ProtocolExecuter;
+    })();
+    Chant.ProtocolExecuter = ProtocolExecuter;
+    function Protocol(str) {
+        var chunks = str.match(/\{@([a-z]+):([^}]+)\}/g);
+
+        if (!chunks)
+            return;
+        var response = str;
+        $.map(chunks, function (chunk) {
+            var ex = new ProtocolExecuter(chunk);
+
+            if (!ex.ok)
+                return;
+
+            response = response.replace(ex.origin, ex.result);
+        });
+        return response;
+    }
+    Chant.Protocol = Protocol;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var Render = (function () {
+        function Render() {
+        }
+        Render.message = function (event) {
+            event.RawText = event.Text;
+
+            event.isMention = false;
+            event = Chant.Notifier.detectMentioned(event);
+
+            event.Time = new Chant.Time(event.Timestamp).format();
+            event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
+
+            event.enableStamprize = Render.enableStamprize(event.RawText);
+
+            if (event.RawText.match("@quote"))
+                event.Text = event.Text.replace(/[\}]+$/, '');
+
+            return tmpl('tmpl_event_message', { event: event });
+        };
+        Render.enableStamprize = function (text) {
+            if (text.match("@quote"))
+                return false;
+            if (text.match("@stamp"))
+                return false;
+            if (text.match("@img"))
+                return false;
+            return true;
+        };
+        Render.join = function (event) {
+            return '';
+        };
+        Render.leave = function (event) {
+            return '';
+        };
+        Render.sound = function (sound) {
+            Chant.Playlist().add(sound);
+            return '';
+        };
+        Render.stamp = function (stamp) {
+            $('#stamp-container-horizontal').prepend(tmpl('tmpl_base_stamp', { raw: stamp.Value, label: stamp.Value.slice(0, 20), display: Chant.Imager(stamp.Value) }));
+            return '';
+        };
+        Render.notification = function (event) {
+            alert(event.Text);
+            return '';
+        };
+
+        Render.default = function (event) {
+            return tmpl('tmpl_roominfo_users', { users: event.RoomInfo.Users });
+        };
+
+        Render.update = function (list) {
+            list = list || Chant.Playlist().list;
+            var nowplaying = Chant.Playlist().nowplaying;
+            var html = $.map(list, function (sound, index) {
+                sound.index = index;
+                var isNowPlaying = false;
+                if (nowplaying == index)
+                    isNowPlaying = true;
+                sound.isNowPlaying = isNowPlaying;
+                if (sound.Source.Vendor.Name == 'youtube') {
+                    sound.title = sound.Source.Hash;
+                } else if (sound.Source.Vendor.Name = 'soundcloud') {
+                    sound.title = sound.Source.Hash.replace(/^https:\/\/soundcloud\.com/, '');
+                }
+                return tmpl('tmpl_base_playlist_sound', sound);
+            }).join('');
+            $('#playlist').html(html);
+            return '';
+        };
+        Render.Event = {
+            message: Render.message,
+            join: Render.join,
+            leave: Render.leave,
+            sound: Render.sound,
+            stamp: Render.stamp,
+            notification: Render.notification
+        };
+
+        Render.RoomInfo = {
+            default: Render.default
+        };
+
+        Render.Playlist = {
+            update: Render.update
+        };
+        return Render;
+    })();
+    Chant.Render = Render;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var _socket = null;
+    function Socket(force) {
+        if (_socket)
+            debug(_socket.readyState);
+        if (force || _socket === null) {
+            _socket = new WebSocket('ws://' + Conf.Server().Host + ':' + Conf.Server().Port + '/websocket/room/socket');
+        }
+        if (_socket.readyState > WebSocket.OPEN)
+            return Chant.Socket(true);
+        return _socket;
+    }
+    Chant.Socket = Socket;
+})(Chant || (Chant = {}));
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Chant;
+(function (Chant) {
+    var ModalContentsView = (function (_super) {
+        __extends(ModalContentsView, _super);
+        function ModalContentsView(options) {
+            if (typeof options === "undefined") { options = {}; }
+            _super.call(this, {
+                tagName: 'div',
+                id: options.id || '',
+                className: options.className || 'modal-contents'
+            });
+        }
+        return ModalContentsView;
+    })(showv.View);
+    Chant.ModalContentsView = ModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var HBSTemplate = (function () {
+        function HBSTemplate(name) {
+            this.name = name;
+            this.template = null;
+            this.template = HBS['asset/tpl/' + name];
+        }
+        HBSTemplate.prototype.render = function (param) {
+            return this.template(param);
+        };
+        return HBSTemplate;
+    })();
+    Chant.HBSTemplate = HBSTemplate;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var ModalWrapperView = (function (_super) {
+        __extends(ModalWrapperView, _super);
+        function ModalWrapperView() {
+            _super.call(this, {
+                tagName: 'div',
+                className: 'modal-wrapper clickable'
+            });
+            this.background = '<div class="modal-background"></div>';
+        }
+        ModalWrapperView.prototype.events = function () {
+            return {
+                'click': 'fadeOut'
+            };
+        };
+        ModalWrapperView.prototype.fadeOut = function () {
+            var _this = this;
+            this.$el.fadeOut(ModalWrapperView.fadeDuration, function () {
+                _this.$el.remove();
+            });
+        };
+        ModalWrapperView.prototype.render = function () {
+            this.$el.append(this.background, this.contents.render().$el);
+            return this;
+        };
+
+        ModalWrapperView.prototype.show = function () {
+            this.$el.fadeIn(ModalWrapperView.fadeDuration);
+            return this;
+        };
+        ModalWrapperView.fadeDuration = 100;
+        return ModalWrapperView;
+    })(showv.View);
+    Chant.ModalWrapperView = ModalWrapperView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var TipView = (function (_super) {
+        __extends(TipView, _super);
+        function TipView(chip) {
+            _super.call(this, {
+                delegate: false
+            });
+            this.chip = chip;
+            this.tpl = new Chant.HBSTemplate('modal/tip.hbs');
+        }
+        TipView.prototype.events = function () {
+            return {
+                'click .tips-sample': 'inputSample'
+            };
+        };
+        TipView.prototype.inputSample = function () {
+            $('input#message').val(this.chip.toSampleText()).focus();
+        };
+        TipView.prototype.render = function () {
+            this.$el.append(this.tpl.render(this.chip));
+            return this;
+        };
+        return TipView;
+    })(showv.View);
+    Chant.TipView = TipView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var TipsModalContentsView = (function (_super) {
+        __extends(TipsModalContentsView, _super);
+        function TipsModalContentsView() {
+            _super.call(this, {
+                id: 'chips'
+            });
+            this.tpl = new Chant.HBSTemplate("modal/tips.hbs");
+        }
+        TipsModalContentsView.prototype.render = function () {
+            var stamp = new Chant.TipView(new Chant.Chip(Chant.Chips.stamp));
+            var emo = new Chant.TipView(new Chant.Chip(Chant.Chips.emo));
+            this.$el.append(this.tpl.render(), stamp.render().$el, emo.render().$el);
+            return this;
+        };
+        return TipsModalContentsView;
+    })(Chant.ModalContentsView);
+    Chant.TipsModalContentsView = TipsModalContentsView;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var TipsModalView = (function (_super) {
+        __extends(TipsModalView, _super);
+        function TipsModalView() {
+            _super.call(this);
+            this.contents = new Chant.TipsModalContentsView();
+        }
+        TipsModalView.prototype.render = function () {
+            _super.prototype.render.call(this);
+            return this;
+        };
+        return TipsModalView;
+    })(Chant.ModalWrapperView);
+    Chant.TipsModalView = TipsModalView;
+})(Chant || (Chant = {}));
