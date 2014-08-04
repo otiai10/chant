@@ -118,7 +118,8 @@ $(function(){
     var icon = $form.find('[name=profileImageUrl]').val();
     var text = $form.find('[name=originalText]').val();
     var message = ' {@quote:' + name + '||' + icon + '||' + text + '}';
-    $('#message').val(message).focus();
+    var current = $('#message').val();
+    $('#message').val(current + message).focus();
     $('#message')[0].setSelectionRange(0, 0);
   });
   $(document).on('click','.to-stamp',function(){
