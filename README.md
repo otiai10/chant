@@ -26,6 +26,8 @@ git clone git@github.com:otiai10/chant.git
 app.confを作成
 ```
 cp conf/app.conf.sample conf/app.conf
+vi conf/app.conf
+# http.host=your.hostname.com
 ```
 起動
 ```
