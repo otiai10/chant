@@ -2,22 +2,14 @@
 module Chant {
     export class TipView extends showv.View {
         private tpl = new HBSTemplate('modal/tip.hbs');
-        constructor(public chip: Chip){
+        constructor(public tip: Tip){
             super({
                 delegate: false
             });
         }
-        events(): Object {
-            return {
-                'click .tips-sample': 'inputSample'
-            }
-        }
-        inputSample() {
-            $('input#message').val(this.chip.toSampleText()).focus();
-        }
         render(): TipView {
             this.$el.append(
-                this.tpl.render(this.chip)
+                this.tpl.render(this.tip)
             );
             return this;
         }
