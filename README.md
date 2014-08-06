@@ -16,6 +16,7 @@ https://gist.github.com/otiai10/6779454#comment-920223
 revelをインストール
 ```
 go get github.com/revel/revel
+go get github.com/revel/cmd
 go install github.com/revel/cmd/revel
 ```
 chantをクローン
