@@ -34,10 +34,10 @@ module Chant {
     var _execSoundCloud = (str) => {
         var soundCloudUrl = /(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g;
         var sndcld = soundCloudUrl.exec(str);
-        if (sndcld && sndcld.length > 3) {
-            return /* _execAnchor(str) + */ tmpl('tmpl_base_soundcloud',{videoId:sndcld[1]});
-        }
-        return null;
+        if (! sndcld) return null;
+        if (sndcld.length < 4) return null;
+        if (sndcld[2] == "search") return null;
+        return /* _execAnchor(str) + */ tmpl('tmpl_base_soundcloud',{videoId:sndcld[1]});
     }
     var _execImage = (str) => {
         var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
