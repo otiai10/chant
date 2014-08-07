@@ -20,7 +20,7 @@ type WebOGDetail struct {
 // さいしょのページレンダリングだけー
 func (c Preview) Index(url string) revel.Result {
 	// TODO?: session check
-	fmt.Println(url)
+	// fmt.Println(url)
 	client := &infrastructure.MyHttpClient{}
 	og, e := factory.CreateOGDetailFromResponse(client.Request(url))
 	if e != nil {
