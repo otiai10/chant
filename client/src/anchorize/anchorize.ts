@@ -47,17 +47,22 @@ module Chant {
         }
         return;
     }
+    // つらw
+    var _execTwitter = (anc) => {
+        if (anc.length < 3) return;
+        var matched = anc[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/);
+        if (! matched || matched.length < 4) return;
+        var matched = anc[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/);
+        var id = matched[3];
+        setTimeout(() => {Chant.Twitter.embed(id);},0);
+        return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + anc[0] + '</a></div>';
+    }
     var _execAnchor = (str) => {
         var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi
         var anc = url.exec(str);
-        if (anc != null && anc[2] && anc[2].match(/^twitter.com\//)) {
-            var matched = anc[2].match(/(twitter.com)\/([^\/]+)\/status\/([0-9]+)/);
-            var id = matched[3];
-            setTimeout(function(){
-                Chant.Twitter.embed(id);
-            },0);
-            return str.replace(anc[0], '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + str + '</a></div>');
-        }
+        if (! anc) return;
+        var twitterEmbeded = _execTwitter(anc);
+        if (twitterEmbeded) return str.replace(anc[0], twitterEmbeded);
         if (anc != null && anc.length) {
             var lenToTruncate = 100;
             var innerText = (anc[0].length < lenToTruncate) ? anc[0] : anc[0].slice(0, lenToTruncate) + '...';
