@@ -24,7 +24,10 @@ type SoundCloud struct {
 }
 
 func (sc SoundCloud) GetHash(url string) string {
-	// サンクラの場合はこのままハッシュとして使う
+	exp := regexp.MustCompile("\\/search\\/")
+	if exp.MatchString(url) {
+		return ""
+	}
 	return url
 }
 

@@ -2,7 +2,7 @@ package factory
 
 import "time"
 import "chant/app/models"
-
+import "fmt"
 import "regexp"
 
 func SoundFromText(text string, user *model.User) (sound model.Sound, err error) {
@@ -12,25 +12,33 @@ func SoundFromText(text string, user *model.User) (sound model.Sound, err error)
 		err = NotSoundError{"ようつべとサンクラじゃない"}
 		return
 	}
+	source, err := soundSourceFromMatchedMap(matched[0])
+	if err != nil {
+		return
+	}
 	sound = model.Sound{
 		"sound",
 		user,
-		soundSourceFromMatchedMap(matched[0]),
+		source,
 		int(time.Now().Unix()),
 	}
 	err = nil
 	return
 }
 
-func soundSourceFromMatchedMap(matched []string) model.SoundSource {
+func soundSourceFromMatchedMap(matched []string) (source model.SoundSource, e error) {
 	url := matched[0]
 	vendor := vendorFromName(matched[2])
 	hash := vendor.GetHash(url)
-	return model.SoundSource{
+	if hash == "" {
+		e = fmt.Errorf("%sが無効なハッシュと言った", url)
+	}
+	source = model.SoundSource{
 		vendor,
 		url,
 		hash,
 	}
+	return
 }
 func vendorFromName(vendorName string) model.Vendor {
 	switch vendorName {
