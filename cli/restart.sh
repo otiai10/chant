@@ -1,2 +1,2 @@
 pkill chant
-nohup revel run chant prod > /dev/null &
+nohup revel run chant prod &

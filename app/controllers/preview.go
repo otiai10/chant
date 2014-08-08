@@ -3,7 +3,6 @@ package controllers
 import (
 	"chant/app/factory"
 	"chant/app/infrastructure"
-	"fmt"
 	"github.com/revel/revel"
 )
 
