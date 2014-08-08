@@ -65,7 +65,7 @@ module Chant {
         private static update(list?: any[]): string {
             list = list || Chant.Playlist().list;
             var nowplaying = Chant.Playlist().nowplaying;
-            var html = $.map(list, function(sound, index){
+            var html = $.map(list, function(sound: any, index){
                 sound.index = index;
                 var isNowPlaying = false;
                 if (nowplaying == index) isNowPlaying = true;
