@@ -6,7 +6,8 @@ module Chant {
         css,
         stamp,
         quote,
-        totsuzen
+        totsuzen,
+        tz
     }
     export class ProtocolExecuter {
         public origin: string;
@@ -83,6 +84,9 @@ module Chant {
             if (! this.value) return this.abort();
             var t = new Totsuzen(this.value);
             return t.toText();
+        }
+        tz(): string {
+            return this.totsuzen();
         }
         abort(): string {
             return this.origin;
