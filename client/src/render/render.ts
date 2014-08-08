@@ -7,7 +7,12 @@ module Chant {
             leave: Render.leave,
             sound: Render.sound,
             stamp: Render.stamp,
-            notification: Render.notification
+            notification: Render.notification,
+            keepalive: Render.keepalive
+        }
+        private static keepalive(event: any): string {
+            debug("Keep Alive");
+            return '';
         }
         private static message(event: any): string {
             event.RawText = event.Text;

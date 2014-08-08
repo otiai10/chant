@@ -42,6 +42,15 @@ func NewEvent(typ string, user *model.User, msg string) Event {
 		info,
 	}
 }
+func NewKeepAlive() Event {
+	return Event{
+		"keepalive",
+		&model.User{},
+		int(time.Now().Unix()),
+		"",
+		info,
+	}
+}
 
 func Subscribe() Subscription {
 	resp := make(chan Subscription)
@@ -73,6 +82,8 @@ var (
 	unsubscribe = make(chan (<-chan Event), 10)
 	// Send events here to publish them.
 	publish = make(chan Event, 10)
+
+	keepalive = time.Tick(50 * time.Second)
 
 	info = &Info{
 		make(map[string]*model.User),
@@ -152,6 +163,10 @@ func chatroom() {
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
 				ch.Value.(chan Event) <- event
+			}
+		case <-keepalive:
+			for subscriber := subscribers.Front(); subscriber != nil; subscriber = subscriber.Next() {
+				subscriber.Value.(chan Event) <- NewKeepAlive()
 			}
 
 		case unsub := <-unsubscribe:
