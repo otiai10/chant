@@ -36,7 +36,7 @@ module Chant {
                 this.getTopLine(),
                 this.getMiddleLine(),
                 this.getBottomLine()
-            ].join("\n");
+            ].join("<br>");
         }
     }
 }
