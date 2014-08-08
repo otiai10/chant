@@ -78,7 +78,9 @@ module Chant {
     export var Notifier = {
         isActive: true,
         onmessage: (event: any) => {
-            if (event.Type == "leave" || event.Type == "join") return;
+            if (event.Type == "leave"
+                || event.Type == "join"
+                || event.Type == "keepalive") return;
             if (Notifier.isActive) return;
             $('title').text('!' + $('title').text());
         },
