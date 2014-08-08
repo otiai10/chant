@@ -26,6 +26,10 @@ module Chant {
         tweet: {
             title: 'ツイッター埋め込み',
             description: 'ツイッターのパーマリンクURLを発言すると、ツイートの展開がされます。'
+        },
+        totsuzen: {
+            title: '突然の死',
+            description: "{@tz:突然の死} -><br>＿人人人人＿<br>＞ 突然の死 ＜<br>￣Y^Y^Y^Y￣"
         }
     };
     export class Tip {

@@ -19,6 +19,7 @@ module Chant {
             var emoji   = new TipView(new Tip(Tips.emoji));
             var youtube = new TipView(new Tip(Tips.youtube));
             var tweet   = new TipView(new Tip(Tips.tweet));
+            var tz      = new TipView(new Tip(Tips.totsuzen));
             this.$el.append(
                 this.tpl.render(),
                 mention.render().$el,
@@ -26,7 +27,8 @@ module Chant {
                 stamp.render().$el,
                 emoji.render().$el,
                 youtube.render().$el,
-                tweet.render().$el
+                tweet.render().$el,
+                tz.render().$el
             );
             return this;
         }
