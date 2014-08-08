@@ -1,3 +1,4 @@
+var silent = true;
 // とりあえず移植しただけだから糞すぎる
 module Chant {
     export class Render {
