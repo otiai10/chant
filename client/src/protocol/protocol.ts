@@ -1,10 +1,12 @@
+/// <reference path="./totsuzen/totsuzen.ts" />
 module Chant {
     export enum Protocols {
         img,
         emo,
         css,
         stamp,
-        quote
+        quote,
+        totsuzen
     }
     export class ProtocolExecuter {
         public origin: string;
@@ -76,6 +78,11 @@ module Chant {
                 text: text
             };
             return tmpl('tmpl_event_message_quote',{quote:quote});
+        }
+        totsuzen(): string {
+            if (! this.value) return this.abort();
+            var t = new Totsuzen(this.value);
+            return t.toText();
         }
         abort(): string {
             return this.origin;
