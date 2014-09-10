@@ -30,6 +30,9 @@ type Auth struct {
 }
 
 func getCallbackURL() string {
+	if callback, ok := revel.Config.String("auth.callback"); ok && callback != "" {
+		return fmt.Sprintf("http://%s/auth/callback", callback)
+	}
 	host, _ := revel.Config.String("http.host")
 	port, _ := revel.Config.String("http.port")
 	if port != "" {
