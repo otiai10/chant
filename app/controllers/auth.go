@@ -29,6 +29,15 @@ type Auth struct {
 	*revel.Controller
 }
 
+func getCallbackURL() string {
+	host, _ := revel.Config.String("http.host")
+	port, _ := revel.Config.String("http.port")
+	if port != "" {
+		port = ":" + port
+	}
+	return fmt.Sprintf("http://%s%s/auth/callback", host, port)
+}
+
 func (c Auth) Index(oauth_verifier string) revel.Result {
 
 	if _, nameExists := c.Session["screenName"]; nameExists {
@@ -42,12 +51,7 @@ func (c Auth) Index(oauth_verifier string) revel.Result {
 	// まずはverifier獲得した状態でリダイレクトするように促す
 	// このアプリケーションのコンシューマキーとコンシューマシークレットを用いて
 	// 一時的に使えるrequestTokenの取得を試みる
-	host, _ := revel.Config.String("http.host")
-	port, _ := revel.Config.String("http.port")
-	if port != "" {
-		port = ":" + port
-	}
-	requestToken, url, err := twitter.GetRequestTokenAndUrl(fmt.Sprintf("http://%s%s/auth/callback", host, port))
+	requestToken, url, err := twitter.GetRequestTokenAndUrl(getCallbackURL())
 	if err == nil {
 		// 一時的に使えるrequestTokenが取得できたので、サーバ側で一次保存しておく
 		c.Session["requestToken"] = requestToken.Token
