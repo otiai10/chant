@@ -1,6 +1,7 @@
 package model
 
 type Server struct {
-	Host string
-	Port string
+	Domains map[string]string
+	Host    string
+	Port    string
 }
