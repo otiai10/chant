@@ -77,11 +77,11 @@ const stampArchiveSize = 40
 var (
 	// Send a channel here to get room events back.  It will send the entire
 	// archive initially, and then new messages as they come in.
-	subscribe = make(chan (chan<- Subscription), 10)
+	subscribe = make(chan (chan<- Subscription), 1000)
 	// Send a channel here to unsubscribe.
-	unsubscribe = make(chan (<-chan Event), 10)
+	unsubscribe = make(chan (<-chan Event), 1000)
 	// Send events here to publish them.
-	publish = make(chan Event, 10)
+	publish = make(chan Event, 1000)
 
 	keepalive = time.Tick(50 * time.Second)
 
