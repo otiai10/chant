@@ -25,7 +25,7 @@ module Chant {
     }
     export var WebPreview = {
         embed: (id: string, url: string) => {
-            var apiURL = 'http://'+Conf.Server().Host+':'+Conf.Server().Port+'/preview?url=' + url;
+            var apiURL = 'http://'+Conf.Server().Domains["api"]+'/preview?url=' + url;
             $.ajax({
                 url: apiURL,
                 method: 'GET',
