@@ -1,5 +1,9 @@
 <div id="newMessage">
-  <input type="text" id="message" size="45" autocomplete="off" autofocus>
+  {{if .env.IsMobile}}
+    <input type="text" id="message" size="38" autocomplete="off" autofocus>
+  {{else}}
+    <input type="text" id="message" size="60" autocomplete="off" autofocus>
+  {{end}}
   <div id="stamp-container-horizontal"></div>
   <input type="submit" value="send" id="send" style="display:none"> 
   {{if .env.IsMobile}}
