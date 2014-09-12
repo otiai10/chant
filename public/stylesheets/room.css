@@ -7,7 +7,7 @@ html, body {
 
 body {
     width: 80%;
-    min-width: 800px;
+    /* min-width: 800px; */
     margin: 0 auto;
 }
 
@@ -27,7 +27,7 @@ div#footer {
     position: fixed;
     bottom: 0;
     width: 80%;
-    min-width: 800px;
+    /* min-width: 800px; */
     height: 20px;
     background: -webkit-gradient(linear, left top, left bottom,
                                 from(rgba(256,256,256, 0)),
@@ -190,7 +190,7 @@ div.modal-contents {
     z-index: 3;
     width: 80%;
     height: 100%;
-    min-width: 800px;
+    /* min-width: 800px; */
     margin: 0 auto;
     color: #fefefe;
 }
