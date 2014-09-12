@@ -80,7 +80,8 @@ module Chant {
         var pattern: RegExp = /:([a-zA-Z0-9-+_]+):/gi;
         var matches: RegExpExecArray = pattern.exec(str);
         if (matches && matches.length > 1) {
-            return str.replace(matches[0], '<img src="/public/images/emojis/' + matches[1] + '.png" width="40px">');
+            var toBeReplaced: RegExp = new RegExp(matches[0], "g");
+            return str.replace(toBeReplaced, '<img src="/public/images/emojis/' + matches[1] + '.png" width="40px">');
         }
         return null;
     };
