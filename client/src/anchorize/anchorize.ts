@@ -30,7 +30,7 @@ module Chant {
             return /* _execAnchor(str) + */ tmpl('tmpl_base_youtube',{videoId:ytb[1]});
         }
         return null;
-    }
+    };
     var _execSoundCloud = (str) => {
         var soundCloudUrl = /(https?:\/\/soundcloud\.com\/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+))/g;
         var sndcld = soundCloudUrl.exec(str);
@@ -38,15 +38,15 @@ module Chant {
         if (sndcld.length < 4) return null;
         if (sndcld[2] == "search") return null;
         return /* _execAnchor(str) + */ tmpl('tmpl_base_soundcloud',{videoId:sndcld[1]});
-    }
+    };
     var _execImage = (str) => {
         var imgUrl = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
         var img = imgUrl.exec(str);
         if (img != null && img.length) {
             return str.replace(img[0], /* _execAnchor(img[0]) + */'<a href="'+img[0]+'" target="_blank" rel="noreferrer"><img src="' + img[0] + '" class="tl-img"></a>');
         }
-        return;
-    }
+        return null;
+    };
     // つらw
     var _execTwitter = (anc) => {
         if (anc.length < 3) return;
@@ -56,9 +56,9 @@ module Chant {
         var id = matched[3];
         setTimeout(() => {Chant.Twitter.embed(id);},0);
         return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + anc[0] + '</a></div>';
-    }
+    };
     var _execAnchor = (str) => {
-        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi
+        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi;
         var anc = url.exec(str);
         if (! anc) return;
         var twitterEmbeded = _execTwitter(anc);
@@ -74,14 +74,14 @@ module Chant {
             // }}}
             return str.replace(anc[0], '<a id="' + id + '" target="_blank" href="' + anc[0] + '" rel="noreferrer">' + innerText + '</a>');
         }
-        return;
-    }
+        return null;
+    };
     var _execEmo = (str: string) => {
         var pattern: RegExp = /:([a-zA-Z0-9-+_]+):/gi;
         var matches: RegExpExecArray = pattern.exec(str);
         if (matches && matches.length > 1) {
             return str.replace(matches[0], '<img src="/public/images/emojis/' + matches[1] + '.png" width="40px">');
         }
-        return;
+        return null;
     };
 }
