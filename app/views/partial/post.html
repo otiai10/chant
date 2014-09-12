@@ -2,6 +2,10 @@
   <input type="text" id="message" size="45" autocomplete="off" autofocus>
   <div id="stamp-container-horizontal"></div>
   <input type="submit" value="send" id="send" style="display:none"> 
+  {{if .env.IsMobile}}
+    <div id="つらいスペース" style="height:10px"></div>
+  {{else}}
   <input type="submit" value="プレイリスト再生" id="playlist-start">
   <label class="clickable"><input type="checkbox" id="enable-notification">通知</label>
+  {{end}}
 </div>

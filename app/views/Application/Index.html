@@ -7,16 +7,10 @@
 {{template "partial/room/confscript.html" .}}
 
 {{template "partial/room/header.html"}}
-{{template "partial/post.html"}}
+{{template "partial/post.html" .}}
 {{template "partial/room/info.html"}}
-<div id="dynamic-container">
-    <div id="fixed-container" class="boxy">
-        {{template "partial/room/stamps.html"}}
-        {{template "partial/room/player.html"}}
-    </div>
-    {{template "partial/room/timeline.html"}}
-</div>
-{{template "partial/room/footer.html"}}
+{{template "partial/room/dynamic-container.html" .}}
+{{template "partial/room/footer.html" .}}
 
 <!-- templating -->
 {{template "tmpl/event/message.html"}}
