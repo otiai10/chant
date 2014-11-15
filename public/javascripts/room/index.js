@@ -115,7 +115,7 @@ $(function(){
   $(document).on('click','.message-unique',function(){
     var $form = $('form#' + $(this).attr('data-time'));
     var name = $form.find('[name=screenName]').val();
-    var icon = $form.find('[name=profileImageUrl]').val();
+    var icon = $form.find('[name=profileImageURL]').val();
     var text = $form.find('[name=originalText]').val();
     var message = ' {@quote:' + name + '||' + icon + '||' + text + '}';
     var current = $('#message').val();
