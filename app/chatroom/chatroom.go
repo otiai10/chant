@@ -155,6 +155,9 @@ func chatroom() {
 					// revel.ERROR.Println("たぶんここ？", soundError)
 				}
 				if stamp, err := factory.StampFromText(event.Text); err == nil {
+					if stamp.IsUsedEvent {
+						continue
+					}
 					addStamp(stamp)
 				}
 			}
