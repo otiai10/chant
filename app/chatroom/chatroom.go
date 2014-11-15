@@ -4,8 +4,11 @@ import (
 	"chant/app/factory"
 	"chant/app/models"
 	"container/list"
+	"log"
 	"time"
 	// "github.com/revel/revel"
+
+	"github.com/otiai10/rodeo"
 )
 
 type Event struct {
@@ -72,7 +75,7 @@ func Leave(user *model.User) {
 
 const archiveSize = 4
 const soundArchiveSize = 21
-const stampArchiveSize = 40
+const stampArchiveSize = 20
 
 var (
 	// Send a channel here to get room events back.  It will send the entire
@@ -92,7 +95,9 @@ var (
 	}
 
 	SoundTrack   = list.New()
-	StampArchive = list.New()
+	StampArchive = []model.Stamp{}
+
+	vaquero *rodeo.Vaquero
 )
 
 // This function loops forever, handling the chat room pubsub
@@ -137,20 +142,8 @@ func chatroom() {
 				} else {
 					// revel.ERROR.Println("たぶんここ？", soundError)
 				}
-				stamp, stampError := factory.StampFromText(event.Text)
-				if stampError == nil {
-					stampExisting := alreadyInStampArchive(stamp)
-					if stampExisting != nil {
-						StampArchive.MoveToBack(stampExisting)
-					} else {
-						StampArchive.PushBack(stamp)
-					}
-					if StampArchive.Len() >= stampArchiveSize {
-						StampArchive.Remove(StampArchive.Front())
-					}
-					if stamp.IsUsedEvent {
-						continue
-					}
+				if stamp, err := factory.StampFromText(event.Text); err == nil {
+					addStamp(stamp)
 				}
 			}
 			if archive.Len() >= archiveSize {
@@ -180,14 +173,6 @@ func chatroom() {
 	}
 }
 
-func alreadyInStampArchive(newStamp model.Stamp) (elInArchive *list.Element) {
-	for el := StampArchive.Front(); el != nil; el = el.Next() {
-		if el.Value.(model.Stamp).Value == newStamp.Value {
-			elInArchive = el
-		}
-	}
-	return
-}
 func leaveUser(user *model.User) {
 	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
 		if u.Value.(*model.User).ScreenName == user.ScreenName {
@@ -206,6 +191,7 @@ func restoreRoomUsers() {
 	}
 }
 func init() {
+	RestoreStamps()
 	go chatroom()
 }
 
@@ -223,4 +209,43 @@ func drain(ch <-chan Event) {
 			return
 		}
 	}
+}
+
+// RestoreStamps restores stamp archive from Database.
+func RestoreStamps() {
+	var err error
+	if vaquero, err = rodeo.NewVaquero("localhost", "6379"); err != nil {
+		log.Fatalln(err)
+	}
+	vaquero.Cast("chant.stamps", &StampArchive)
+}
+
+// SaveStamps saves stamps
+func SaveStamps() {
+	vaquero.Store("chant.stamps", StampArchive)
+	return
+}
+
+// addStamp adds stamp to archive, sort them by LRU and delete overflow
+func addStamp(stamp model.Stamp) {
+	// filter first
+	pool := []model.Stamp{}
+	for _, s := range StampArchive {
+		if s.Value != stamp.Value {
+			pool = append(pool, s)
+		}
+	}
+	// append new
+	StampArchive = append(pool, stamp)
+	// cut head
+	if len(StampArchive) > stampArchiveSize {
+		StampArchive = StampArchive[len(StampArchive)-stampArchiveSize:]
+	}
+	// FIXME: ここで毎回呼ぶのはクソ
+	SaveStamps()
+}
+
+// GetStampArchive returns stamp archives sorted by LRU
+func GetStampArchive() []model.Stamp {
+	return StampArchive
 }

@@ -47,8 +47,9 @@ func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 			return nil
 		}
 	}
-	for stamp := chatroom.StampArchive.Front(); stamp != nil; stamp = stamp.Next() {
-		if websocket.JSON.Send(ws, &stamp.Value) != nil {
+
+	for _, stamp := range chatroom.GetStampArchive() {
+		if websocket.JSON.Send(ws, stamp) != nil {
 			return nil
 		}
 	}
