@@ -2,18 +2,20 @@ package controllers
 
 import (
 	"chant/app/chatroom"
+	"chant/app/models"
+
 	"code.google.com/p/go.net/websocket"
 	"github.com/revel/revel"
-
-	"chant/app/models"
 
 	"html"
 )
 
+// WebSocket ...
 type WebSocket struct {
 	*revel.Controller
 }
 
+// RoomSocket ...
 func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	_, ok := c.Session["screenName"]
@@ -21,7 +23,7 @@ func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 		c.Redirect(Application.Index)
 	}
 
-	user := &model.User{
+	user := &models.User{
 		c.Session["Name"],
 		c.Session["screenName"],
 		c.Session["profileImageUrl"],

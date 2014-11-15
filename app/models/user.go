@@ -1,7 +1,8 @@
-package model
+package models
 
+// User ...
 type User struct {
 	Name            string
 	ScreenName      string
-	ProfileImageUrl string
+	ProfileImageURL string
 }

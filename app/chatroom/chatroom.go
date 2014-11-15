@@ -11,32 +11,36 @@ import (
 	"github.com/otiai10/rodeo"
 )
 
+// Event ...
 type Event struct {
 	Type      string // "join", "leave", or "message"
-	User      *model.User
+	User      *models.User
 	Timestamp int    // Unix timestamp (secs)
 	Text      string // What the user said (if Type == "message")
 	RoomInfo  *Info
 }
 
+// Subscription ...
 type Subscription struct {
 	Archive []Event      // All the events from the archive.
 	New     <-chan Event // New events coming in.
 }
 
+// Info ...
 type Info struct {
-	Users    map[string]*model.User
+	Users    map[string]*models.User
 	Updated  bool
 	AllUsers *list.List
 }
 
-// Owner of a subscription must cancel it when they stop listening to events.
+// Cancel Owner of a subscription must cancel it when they stop listening to events.
 func (s Subscription) Cancel() {
 	unsubscribe <- s.New // Unsubscribe the channel.
 	drain(s.New)         // Drain it, just in case there was a pending publish.
 }
 
-func NewEvent(typ string, user *model.User, msg string) Event {
+// NewEvent ...
+func NewEvent(typ string, user *models.User, msg string) Event {
 	return Event{
 		typ,
 		user,
@@ -45,31 +49,37 @@ func NewEvent(typ string, user *model.User, msg string) Event {
 		info,
 	}
 }
+
+// NewKeepAlive ...
 func NewKeepAlive() Event {
 	return Event{
 		"keepalive",
-		&model.User{},
+		&models.User{},
 		int(time.Now().Unix()),
 		"",
 		info,
 	}
 }
 
+// Subscribe ...
 func Subscribe() Subscription {
 	resp := make(chan Subscription)
 	subscribe <- resp
 	return <-resp
 }
 
-func Join(user *model.User) {
+// Join ...
+func Join(user *models.User) {
 	publish <- NewEvent("join", user, "")
 }
 
-func Say(user *model.User, message string) {
+// Say ...
+func Say(user *models.User, message string) {
 	publish <- NewEvent("message", user, message)
 }
 
-func Leave(user *model.User) {
+// Leave ...
+func Leave(user *models.User) {
 	publish <- NewEvent("leave", user, "")
 }
 
@@ -89,13 +99,15 @@ var (
 	keepalive = time.Tick(50 * time.Second)
 
 	info = &Info{
-		make(map[string]*model.User),
+		make(map[string]*models.User),
 		true,
 		list.New(),
 	}
 
-	SoundTrack   = list.New()
-	StampArchive = []model.Stamp{}
+	// SoundTrack ...
+	SoundTrack = list.New()
+	// StampArchive ...
+	StampArchive = []models.Stamp{}
 
 	vaquero *rodeo.Vaquero
 )
@@ -173,9 +185,9 @@ func chatroom() {
 	}
 }
 
-func leaveUser(user *model.User) {
+func leaveUser(user *models.User) {
 	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
-		if u.Value.(*model.User).ScreenName == user.ScreenName {
+		if u.Value.(*models.User).ScreenName == user.ScreenName {
 			// delete only one
 			_ = info.AllUsers.Remove(u)
 			return
@@ -184,9 +196,9 @@ func leaveUser(user *model.User) {
 }
 func restoreRoomUsers() {
 	// TODO: DRY
-	info.Users = make(map[string]*model.User)
+	info.Users = make(map[string]*models.User)
 	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
-		user := u.Value.(*model.User)
+		user := u.Value.(*models.User)
 		info.Users[user.ScreenName] = user
 	}
 }
@@ -227,9 +239,9 @@ func SaveStamps() {
 }
 
 // addStamp adds stamp to archive, sort them by LRU and delete overflow
-func addStamp(stamp model.Stamp) {
+func addStamp(stamp models.Stamp) {
 	// filter first
-	pool := []model.Stamp{}
+	pool := []models.Stamp{}
 	for _, s := range StampArchive {
 		if s.Value != stamp.Value {
 			pool = append(pool, s)
@@ -246,6 +258,6 @@ func addStamp(stamp model.Stamp) {
 }
 
 // GetStampArchive returns stamp archives sorted by LRU
-func GetStampArchive() []model.Stamp {
+func GetStampArchive() []models.Stamp {
 	return StampArchive
 }

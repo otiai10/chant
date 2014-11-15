@@ -4,6 +4,11 @@ http.port=9090
 
 module.static=github.com/revel/revel/modules/static
 
+twitter.key    = xxxxxxxxxxxxxxxxxxxxx
+twitter.secret = xxxxxxxxxxxxxxxxxxxxx
+redis.host = localhost
+redis.port = 6379
+
 [dev]
 mode.dev=true
 results.pretty=true

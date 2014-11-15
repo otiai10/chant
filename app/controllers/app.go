@@ -2,22 +2,25 @@ package controllers
 
 import (
 	"chant/app/factory"
-	"github.com/revel/revel"
 	"regexp"
+
+	"github.com/revel/revel"
 )
 
+// Application ...
 type Application struct {
 	*revel.Controller
 }
 
+// Env ...
 type Env struct {
 	IsMobile bool
 }
 
-// さいしょのページレンダリングだけー
+// Index さいしょのページレンダリングだけー
 func (c Application) Index() revel.Result {
 	if _, ok := c.Session["screenName"]; ok {
-		user, _ := factory.UserFronSession(c.Session)
+		user, _ := factory.UserFromSession(c.Session)
 		server := factory.ServerFromConf(revel.Config)
 		env := c.getEnv()
 		return c.Render(user, server, env)
@@ -40,9 +43,4 @@ func (c Application) isMobile() bool {
 		useragent = useragents[0]
 	}
 	return regexp.MustCompile("Mobile").MatchString(useragent)
-}
-
-func init() {
-	// revel.Controller.*が実行されるときに必ず呼べる？
-	// TWITTER.Debug(true)
 }

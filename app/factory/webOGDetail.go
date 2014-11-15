@@ -1,11 +1,6 @@
 package factory
 
-import (
-// "encoding/xml"
-// "fmt"
-)
-
-// ほんとはモデルに属するべき
+// WebOGDetail ...
 type WebOGDetail struct {
 	Title        string
 	Description  string
@@ -13,6 +8,7 @@ type WebOGDetail struct {
 	PageContents string
 }
 
+// CreateOGDetailFromResponse ...
 func CreateOGDetailFromResponse(xmlBytes []byte) (og WebOGDetail, err error) {
 	htmlString := string(xmlBytes)
 	og = WebOGDetail{

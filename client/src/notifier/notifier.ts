@@ -96,11 +96,11 @@ module Chant {
             if (! event.Text) return event;
             if (event.Text.match(mentioning) || event.Text.match('@all')) {
                 var params = {
-                    icon: event.User.ProfileImageUrl,
+                    icon: event.User.ProfileImageURL,
                     title: event.User.ScreenName,
                     text: event.Text
                 };
-                Notify(event.Text, event.User.ProfileImageUrl, event.User.ScreenName);
+                Notify(event.Text, event.User.ProfileImageURL, event.User.ScreenName);
                 /*
                 Chant.Notifier._show(params);
                 */

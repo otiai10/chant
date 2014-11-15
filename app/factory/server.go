@@ -3,7 +3,8 @@ package factory
 import "github.com/revel/revel"
 import "chant/app/models"
 
-func ServerFromConf(conf *revel.MergedConfig) (server model.Server) {
+// ServerFromConf ...
+func ServerFromConf(conf *revel.MergedConfig) (server models.Server) {
 	host, _ := conf.String("http.host")
 	port, _ := conf.String("http.port")
 	server.Host = host

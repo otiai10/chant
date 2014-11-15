@@ -1,11 +1,14 @@
 package factory
 
-import "time"
-import "chant/app/models"
-import "fmt"
-import "regexp"
+import (
+	"chant/app/models"
+	"fmt"
+	"regexp"
+	"time"
+)
 
-func SoundFromText(text string, user *model.User) (sound model.Sound, err error) {
+// SoundFromText ...
+func SoundFromText(text string, user *models.User) (sound models.Sound, err error) {
 	exp, _ := regexp.Compile("^(https?)://(soundcloud.com|www.youtube.com)/(.+)")
 	matched := exp.FindAllStringSubmatch(text, 1)
 	if len(matched) == 0 || len(matched[0]) < 4 {
@@ -16,7 +19,7 @@ func SoundFromText(text string, user *model.User) (sound model.Sound, err error)
 	if err != nil {
 		return
 	}
-	sound = model.Sound{
+	sound = models.Sound{
 		"sound",
 		user,
 		source,
@@ -26,36 +29,37 @@ func SoundFromText(text string, user *model.User) (sound model.Sound, err error)
 	return
 }
 
-func soundSourceFromMatchedMap(matched []string) (source model.SoundSource, e error) {
+func soundSourceFromMatchedMap(matched []string) (source models.SoundSource, e error) {
 	url := matched[0]
 	vendor := vendorFromName(matched[2])
 	hash := vendor.GetHash(url)
 	if hash == "" {
 		e = fmt.Errorf("%sが無効なハッシュと言った", url)
 	}
-	source = model.SoundSource{
+	source = models.SoundSource{
 		vendor,
 		url,
 		hash,
 	}
 	return
 }
-func vendorFromName(vendorName string) model.Vendor {
+func vendorFromName(vendorName string) models.Vendor {
 	switch vendorName {
 	case "www.youtube.com":
-		return model.YouTube{
+		return models.YouTube{
 			Name: "youtube",
 		}
 	case "soundcloud.com":
-		return model.SoundCloud{
+		return models.SoundCloud{
 			Name: "soundcloud",
 		}
 	}
-	return model.UnknownVendor{
+	return models.UnknownVendor{
 		Name: "unknown",
 	}
 }
 
+// NotSoundError ...
 type NotSoundError struct {
 	message string
 }

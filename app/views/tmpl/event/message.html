@@ -9,13 +9,13 @@
       <% } %>
       <form id="<%= event.Timestamp %>">
         <input type="hidden" name="screenName" value="<%= event.User.ScreenName %>">
-        <input type="hidden" name="profileImageUrl" value="<%= event.User.ProfileImageUrl %>">
+        <input type="hidden" name="profileImageURL" value="<%= event.User.ProfileImageURL %>">
         <input type="hidden" name="originalText" value="<%= event.isQuote ? 'quoted' : event.RawText %>">
       </form>
     </div>
     <div class="entry-content boxy">
       <div>
-        <img src="<%= event.User.ProfileImageUrl %>" class="user-icon" user-name="<%= event.User.ScreenName %>">
+        <img src="<%= event.User.ProfileImageURL %>" class="user-icon" user-name="<%= event.User.ScreenName %>">
       </div>
       <div class="entry-content-text">
         <%= event.Text %>

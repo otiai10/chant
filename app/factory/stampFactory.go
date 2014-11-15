@@ -1,12 +1,15 @@
 package factory
 
-import "time"
-import "chant/app/models"
+import (
+	"chant/app/models"
+	"time"
 
-import "regexp"
-import "strings"
+	"regexp"
+	"strings"
+)
 
-func StampFromText(text string) (stamp model.Stamp, err error) {
+// StampFromText ...
+func StampFromText(text string) (stamp models.Stamp, err error) {
 	exp, _ := regexp.Compile("^{@stamp:([^}]+)}$")
 	matched := exp.FindAllStringSubmatch(text, 1)
 	if len(matched) == 0 || len(matched[0]) < 2 {
@@ -18,7 +21,7 @@ func StampFromText(text string) (stamp model.Stamp, err error) {
 		used = true
 		matched[0][1] = strings.Replace(matched[0][1], "@use", "", 1)
 	}
-	stamp = model.Stamp{
+	stamp = models.Stamp{
 		"stamp",
 		matched[0][1],
 		matched[0][0],
@@ -28,6 +31,7 @@ func StampFromText(text string) (stamp model.Stamp, err error) {
 	return
 }
 
+// NotStampError ...
 type NotStampError struct {
 	message string
 }
