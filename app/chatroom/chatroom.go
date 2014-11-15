@@ -4,7 +4,6 @@ import (
 	"chant/app/factory"
 	"chant/app/models"
 	"container/list"
-	"log"
 	"time"
 	// "github.com/revel/revel"
 
@@ -109,7 +108,8 @@ var (
 	// StampArchive ...
 	StampArchive = []models.Stamp{}
 
-	vaquero *rodeo.Vaquero
+	vaquero    *rodeo.Vaquero
+	persistent = false
 )
 
 // This function loops forever, handling the chat room pubsub
@@ -230,8 +230,9 @@ func drain(ch <-chan Event) {
 func RestoreStamps() {
 	var err error
 	if vaquero, err = rodeo.NewVaquero("localhost", "6379"); err != nil {
-		log.Fatalln(err)
+		return
 	}
+	persistent = true
 	vaquero.Cast("chant.stamps", &StampArchive)
 }
 
@@ -257,7 +258,9 @@ func addStamp(stamp models.Stamp) {
 		StampArchive = StampArchive[len(StampArchive)-stampArchiveSize:]
 	}
 	// FIXME: ここで毎回呼ぶのはクソ
-	SaveStamps()
+	if persistent {
+		SaveStamps()
+	}
 }
 
 // GetStampArchive returns stamp archives sorted by LRU
