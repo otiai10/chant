@@ -156,7 +156,8 @@ func chatroom() {
 				}
 				if stamp, err := factory.StampFromText(event.Text); err == nil {
 					if stamp.IsUsedEvent {
-						continue
+						event.Type = "message"
+						event.Text = stamp.Value
 					}
 					addStamp(stamp)
 				}
