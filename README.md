@@ -8,28 +8,19 @@
 
 # セットアップ
 
-goをインストール
+dependencies
 ```
-ここ見て
-https://gist.github.com/otiai10/6779454#comment-920223
+go get github.com/revel/cmd/revel
+go get github.com/mrjones/oauth
 ```
-revelをインストール
-```
-go get github.com/revel/revel
-go get github.com/revel/cmd
-go install github.com/revel/cmd/revel
-```
-chantをクローン
-```
-cd $GOPATH/src
-git clone git@github.com:otiai10/chant.git
-```
+
 app.confを作成
 ```
 cp conf/app.conf.sample conf/app.conf
 vi conf/app.conf
 # http.host=your.hostname.com
 ```
+
 起動
 ```
 revel run chant
