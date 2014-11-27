@@ -29,8 +29,8 @@ module Chant {
             // いやー... しんどい... #15
             if (event.RawText.match("@quote")) event.Text = event.Text.replace(/[\}]+$/, '');
 
-            if (Chant.Client.MuteList.has(event.Text)) {
-              var btn = '<span style="color:#bbb" class="clickable unmute" data-unmute="'+event.Text+'">muted</span>';
+            if (Chant.Client.MuteList.has(event.RawText)) {
+              var btn = '<span style="color:#bbb" class="clickable unmute" data-unmute="'+event.RawText+'">muted</span>';
               event.Text = btn;
             }
 
