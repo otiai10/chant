@@ -16,8 +16,6 @@ $(function(){
     }
   }
 
- 
-
   // Message received on the socket
   var onmessage = function(event) {
     display(JSON.parse(event.data))
@@ -46,6 +44,7 @@ $(function(){
   $('#send').on('click',function(e) {
     var message = $('#message').val()
     if (message === '') return;
+    Chant.Client.process(message);
     $('#message').val('').focus();
     Chant.Socket.send(message)
   });
@@ -144,5 +143,9 @@ $(function(){
     var view = new Chant.TipsModalView();
     $('body').append(view.render().$el.show());
   });
- 
+
+  $(document).on('click','.unmute',function(){
+    var message = '{@unmute:' + $(this).attr('data-unmute') + '}';
+    $('#message').val(message).focus();
+  });
 });
