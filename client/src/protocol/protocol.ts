@@ -7,7 +7,8 @@ module Chant {
         stamp,
         quote,
         totsuzen,
-        tz
+        tz,
+        danger
     }
     export class ProtocolExecuter {
         public origin: string;
@@ -87,6 +88,10 @@ module Chant {
         }
         tz(): string {
             return this.totsuzen();
+        }
+        danger(): string {
+            var id = "danger-hidden-" + Date.now();
+            return '<span id="'+id+'" style="color:#bbb;font-size:x-large" class="danger-hidden clickable" data-dangerous="'+this.value+'">⚠</span>';
         }
         abort(): string {
             return this.origin;

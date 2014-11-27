@@ -148,4 +148,36 @@ $(function(){
     var message = '{@unmute:' + $(this).attr('data-unmute') + '}';
     $('#message').val(message).focus();
   });
+
+  $(document).on('click','.danger-hidden',function() {
+    $(this).replaceWith(Chant.Anchorize($(this).attr('data-dangerous')));
+      var $preview = $("#" + $(this).attr('id') + "-preview");
+      $preview.remove();
+  });
+  $(document).on({
+    'mouseenter': function() {
+      $("#" + $(this).attr('id') + "-preview").remove();
+      var coords = $(this).offset();
+      var id = $(this).attr('id') + "-preview";
+      var text = $(this).attr('data-dangerous');
+      var $preview = $('<div></div>');
+      $preview.attr({id: id}).css({
+        "zIndex": 2,
+        "position": "absolute",
+        "top": coords.top,
+        "left": coords.left + 50,
+        // "width": "200px",
+        // "height": "100px",
+        "opacity": "0.5",
+        "overflow": "scroll"
+      }).html(Chant.Anchorize(text));
+      $preview.hide().appendTo('body').fadeIn(50);
+    },
+    'mouseleave': function() {
+      var $preview = $("#" + $(this).attr('id') + "-preview");
+      $preview.fadeOut(50, function() {
+        $preview.remove();
+      });
+    }
+  }, '.danger-hidden');
 });
