@@ -58,7 +58,7 @@ module Chant {
         return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + anc[0] + '</a></div>';
     };
     var _execAnchor = (str) => {
-        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%]+)/gi;
+        var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi;
         var anc = url.exec(str);
         if (! anc) return;
         var twitterEmbeded = _execTwitter(anc);
