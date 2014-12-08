@@ -112,11 +112,11 @@ div#player-wrapper {
     width: 410px;
     /* background-color: #ddd; */
 }
-span.to-stamp {
+span.to-stamp, span.to-mute {
     -webkit-opacity: 0;
     -webkit-transition: all 0.05s linear;
 }
-span.to-stamp:hover {
+span.to-stamp:hover, span.to-mute:hover {
     -webkit-opacity: 0.5;
 }
 div#stamp-container-horizontal {

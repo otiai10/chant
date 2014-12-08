@@ -7,6 +7,9 @@
       <% if (event.enableStamprize) { %>
       <span class="info-small clickable to-stamp" data-time="<%= event.Timestamp %>">stamprize</span>
       <% } %>
+      <% if (event.enableStamprize) { %>
+      <span class="info-small clickable to-mute" data-time="<%= event.Timestamp %>">mute</span>
+      <% } %>
       <form id="<%= event.Timestamp %>">
         <input type="hidden" name="screenName" value="<%= event.User.ScreenName %>">
         <input type="hidden" name="profileImageURL" value="<%= event.User.ProfileImageURL %>">

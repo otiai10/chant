@@ -128,7 +128,12 @@ $(function(){
     Chant.Socket.send(message);
     $('#message').focus();
   });
-
+  $(document).on('click','.to-mute',function(){
+    var $form = $('form#' + $(this).attr('data-time'));
+    var text = $form.find('[name=originalText]').val();
+    var message = '{@mute:' + text + '}';
+    $('#message').val(message).focus();
+  });
 
   $('#playlist-start').on('click',function(){
     Chant.Playlist().play(0);
