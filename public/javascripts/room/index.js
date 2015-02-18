@@ -58,7 +58,7 @@ $(function(){
 
   $('#dangerize').on('click',function(){
     var message = $('#message').val();
-    if (message === '') return;
+    if (message === '') message = '突然の死';
     Chant.Socket.send("{@danger:" + message + "}");
     $('#message').val('').focus();
   });
