@@ -113,18 +113,20 @@ div#player-wrapper {
     /* background-color: #ddd; */
 }
 span.to-stamp, span.to-mute {
-    -webkit-opacity: 0;
-    -webkit-transition: all 0.05s linear;
+    opacity: 0;
+    transition: all 0.05s linear;
 }
 span.to-stamp:hover, span.to-mute:hover {
-    -webkit-opacity: 0.5;
+    opacity: 0.5;
 }
 .stealth {
-    -webkit-opacity: 0;
-    -webkit-transition: all 0.05s linear;
+    opacity: 0;
+    transition: all 0.05s linear;
 }
-.stealth:hover {
-    -webkit-opacity: 0.5;
+.stealth:hover, .stealth:focus {
+    opacity: 0.5;
+    border: none;
+    background: transparent;
 }
 div#stamp-container-horizontal {
     position: relative;
