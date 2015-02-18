@@ -58,13 +58,13 @@ $(function(){
 
   $('#dangerize').on('click',function(){
     var message = $('#message').val();
-    if (message === '') message = '突然の死';
+    if (message === '') return;
     Chant.Socket.send("{@danger:" + message + "}");
     $('#message').val('').focus();
   });
   $('#tzrize').on('click',function(){
     var message = $('#message').val();
-    if (message === '') return;
+    if (message === '') message = '突然の死';
     Chant.Socket.send("{@tz:" + message + "}");
     $('#message').val('').focus();
   });
