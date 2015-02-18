@@ -56,15 +56,17 @@ $(function(){
     }
   })
 
-  $('#hey').on('click',function(){
-    var message = 'ﾍｲｯ!ﾍｲｯ!ﾍｲｯ!';
-    Chant.Socket.send(message);
-    $('#message').focus();
+  $('#dangerize').on('click',function(){
+    var message = $('#message').val();
+    if (message === '') return;
+    Chant.Socket.send("{@danger:" + message + "}");
+    $('#message').val('').focus();
   });
-  $('#start-dash').on('click',function(){
-    var message = 'ｽﾀｰﾀﾞｯｼｭ!!!';
-    Chant.Socket.send(message);
-    $('#message').focus();
+  $('#tzrize').on('click',function(){
+    var message = $('#message').val();
+    if (message === '') return;
+    Chant.Socket.send("{@tz:" + message + "}");
+    $('#message').val('').focus();
   });
   $('#odayaka').on('click',function(){
     var message = '{@img:odayakajanai}';

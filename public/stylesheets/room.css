@@ -119,6 +119,13 @@ span.to-stamp, span.to-mute {
 span.to-stamp:hover, span.to-mute:hover {
     -webkit-opacity: 0.5;
 }
+.stealth {
+    -webkit-opacity: 0;
+    -webkit-transition: all 0.05s linear;
+}
+.stealth:hover {
+    -webkit-opacity: 0.5;
+}
 div#stamp-container-horizontal {
     position: relative;
     vertical-align: top;

@@ -3,9 +3,11 @@
     <input type="text" id="message" size="38" autocomplete="off" autofocus>
   {{else}}
     <input type="text" id="message" size="60" autocomplete="off" autofocus>
+    <span id="tzrize" class="info-small clickable stealth">totsuzen</span>
+    <span id="dangerize" class="info-small clickable stealth">danger</span>
   {{end}}
   <div id="stamp-container-horizontal"></div>
-  <input type="submit" value="send" id="send" style="display:none"> 
+  <input type="submit" value="send" id="send" style="display:none">
   {{if .env.IsMobile}}
     <div id="つらいスペース" style="height:10px"></div>
   {{else}}
