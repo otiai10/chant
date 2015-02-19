@@ -140,10 +140,14 @@ button.btn-stamp {
     cursor: pointer;
     border-radius: 10px;
     border: none;
+    overflow: hidden;
+    margin-top: 2px;
+    margin-bottom: 2px;
     background: -webkit-gradient(linear, left top, left bottom,
-                                from(rgba(220,220,220, 0)),
-                                to(  rgba(220,220,220, 1))
+                                 from(rgba(220,220,220, 0)),
+                                 to(  rgba(220,220,220, 1))
                 );
+    background: -moz-linear-gradient(top, rgba(220,220,220,0), rgba(220,220,220,1));
 }
 button.btn-stamp img {
     max-height: 30px;
