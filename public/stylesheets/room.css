@@ -82,6 +82,7 @@ blockquote img.user-icon {
 }
 .boxy {
     display: -webkit-box;
+    display: -moz-box;
 }
 #player {
     width:391px;
