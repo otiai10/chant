@@ -136,7 +136,13 @@ $(function(){
     var message = '{@mute:' + text + '}';
     $('#message').val(message).focus();
   });
-
+  $(document).on('click','.to-tz',function(){
+    var $form = $('form#' + $(this).attr('data-time'));
+    var text = $form.find('[name=originalText]').val();
+    var message = '{@tz:' + text + '}';
+    Chant.Socket.send(message);
+    $('#message').val('').focus();
+  });
   $('#playlist-start').on('click',function(){
     Chant.Playlist().play(0);
     $(this).remove();
