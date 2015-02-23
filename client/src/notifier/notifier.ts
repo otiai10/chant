@@ -61,7 +61,7 @@ module Chant {
         }
     }
     export function getNotifier(text?: string, icon?: string) {
-        if (getChromeVersion() < 28) return new NotifierAlert();
+        // if (getChromeVersion() < 28) return new NotifierAlert();
         if (window['webkitNotifications']) return new NotifierWithPrefix();
         return new NotifierDefault();
     }
