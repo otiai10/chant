@@ -17,8 +17,11 @@ module Chant {
         }
         private static message(event: any): string {
             if (event.Text === '大草原') {
-                event.Text = 'w';
-                for (var i = 0; i < 100; i++) event.Text += 'w';
+                event.Text = '';
+                for (var i = 0; i < 100; i++) {
+                    if (i % 10 == 0) event.Text += "<br>";
+                    event.Text += 'wwww';
+                }
             }
             event.RawText = event.Text;
 
