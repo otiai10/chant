@@ -3181,8 +3181,12 @@ var Chant;
             var doNothing = function () {
             };
             instance().onmessage = _events.onmessage || doNothing;
-            instance().onerror = _events.onerror || doNothing;
-            instance().onclose = _events.onclose || doNothing;
+            instance().onerror = _events.onerror || function (ev) {
+                console.log("ERROR", ev);
+            };
+            instance().onclose = _events.onclose || function (ev) {
+                console.log("CLOSE", ev);
+            };
         }
         function init(events) {
             _events = events || {};

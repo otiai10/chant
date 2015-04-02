@@ -28,8 +28,8 @@ module Chant {
         function listen() {
             var doNothing = () => {};
             instance().onmessage = _events.onmessage || doNothing;
-            instance().onerror   = _events.onerror || doNothing;
-            instance().onclose   = _events.onclose || doNothing;
+            instance().onerror   = _events.onerror || function(ev) { console.log("ERROR", ev); };
+            instance().onclose   = _events.onclose || function(ev) { console.log("CLOSE", ev); };
         }
         export function init(events?: ISocketEvents) {
             _events = events || {};
