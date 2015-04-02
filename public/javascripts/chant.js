@@ -3172,7 +3172,13 @@ var Chant;
             if (force || _instance == null || _instance.readyState > WebSocket.OPEN) {
                 if (_instance)
                     debug("RECONNECTED\t" + _instance.readyState);
-                _instance = new WebSocket('ws://' + Conf.Server().Host + ':' + Conf.Server().Port + '/websocket/room/socket');
+                try {
+                    // いやーここでtry-catchしてもどうせ非同期なのでは？
+                    _instance = new WebSocket('ws://' + Conf.Server().Host + ':' + Conf.Server().Port + '/websocket/room/socket');
+                }
+                catch (err) {
+                    console.log("CAUGHT", err);
+                }
                 _instance.onopen = listen;
             }
             return _instance;
