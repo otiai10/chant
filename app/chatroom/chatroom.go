@@ -17,6 +17,7 @@ type Event struct {
 	Timestamp int    // Unix timestamp (secs)
 	Text      string // What the user said (if Type == "message")
 	RoomInfo  *Info
+    Initial   bool // inital event
 }
 
 // Subscription ...
@@ -41,11 +42,11 @@ func (s Subscription) Cancel() {
 // NewEvent ...
 func NewEvent(typ string, user *models.User, msg string) Event {
 	return Event{
-		typ,
-		user,
-		int(time.Now().Unix()),
-		msg,
-		info,
+		Type: typ,
+		User: user,
+		Timestamp: int(time.Now().Unix()),
+		Text: msg,
+		RoomInfo: info,
 	}
 }
 
@@ -57,6 +58,7 @@ func NewKeepAlive() Event {
 		int(time.Now().Unix()),
 		"",
 		info,
+		false,
 	}
 }
 

@@ -10,6 +10,7 @@ module Chant {
         onclose?:   (event: any) => any;
     }
     export module Socket {
+        var _initialized = false;
         var _instance: WebSocket = null;
         var _events: ISocketEvents = {};
         function instance(force: boolean = false): WebSocket {
@@ -27,14 +28,21 @@ module Chant {
                     console.log("CAUGHT", err);
                 }
                 _instance.onopen = listen;
+                _instance.onclose = (ev) => {};
+                _instance.onerror = (ev) => {
+                    Notify("socket error");
+                    instance(true);
+                };
             }
             return _instance;
         }
         function listen() {
             var doNothing = () => {};
             instance().onmessage = _events.onmessage || doNothing;
+            /*
             instance().onerror   = _events.onerror || function(ev) { console.log("ERROR", ev); };
             instance().onclose   = _events.onclose || function(ev) { console.log("CLOSE", ev); };
+            */
         }
         export function init(events?: ISocketEvents) {
             _events = events || {};

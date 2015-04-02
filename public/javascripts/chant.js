@@ -3160,6 +3160,7 @@ var Chant;
 (function (Chant) {
     var Socket;
     (function (Socket) {
+        var _initialized = false;
         var _instance = null;
         var _events = {};
         function instance(force) {
@@ -3180,6 +3181,12 @@ var Chant;
                     console.log("CAUGHT", err);
                 }
                 _instance.onopen = listen;
+                _instance.onclose = function (ev) {
+                };
+                _instance.onerror = function (ev) {
+                    Chant.Notify("socket error");
+                    instance(true);
+                };
             }
             return _instance;
         }
@@ -3187,12 +3194,10 @@ var Chant;
             var doNothing = function () {
             };
             instance().onmessage = _events.onmessage || doNothing;
-            instance().onerror = _events.onerror || function (ev) {
-                console.log("ERROR", ev);
-            };
-            instance().onclose = _events.onclose || function (ev) {
-                console.log("CLOSE", ev);
-            };
+            /*
+            instance().onerror   = _events.onerror || function(ev) { console.log("ERROR", ev); };
+            instance().onclose   = _events.onclose || function(ev) { console.log("CLOSE", ev); };
+            */
         }
         function init(events) {
             _events = events || {};
