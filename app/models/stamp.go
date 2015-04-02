@@ -7,4 +7,5 @@ type Stamp struct {
 	RawText     string
 	Timestamp   int
 	IsUsedEvent bool
+	Initial     bool
 }

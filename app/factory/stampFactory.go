@@ -27,6 +27,7 @@ func StampFromText(text string) (stamp models.Stamp, err error) {
 		matched[0][0],
 		int(time.Now().Unix()),
 		used,
+		false,
 	}
 	return
 }

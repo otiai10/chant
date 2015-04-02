@@ -14,12 +14,21 @@ $(function(){
     if (event.RoomInfo && event.RoomInfo.Updated) {
         $('#room-info').html(Chant.Render.RoomInfo['default'](event));
     }
-  }
+  };
 
   // Message received on the socket
+  var alreadyInitialized = false;
   var onmessage = function(event) {
-    display(JSON.parse(event.data))
-    Chant.Notifier.onmessage(JSON.parse(event.data));
+    var data = JSON.parse(event.data);
+    if (alreadyInitialized && data.Initial) {
+      // skip
+      return;
+    }
+    if (! data.Initial) {
+      alreadyInitialized = true;
+    }
+    display(data);
+    Chant.Notifier.onmessage(data);
   };
   var onerror = function(event) {
   };

@@ -24,6 +24,7 @@ func SoundFromText(text string, user *models.User) (sound models.Sound, err erro
 		user,
 		source,
 		int(time.Now().Unix()),
+		false,
 	}
 	err = nil
 	return

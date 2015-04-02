@@ -8,6 +8,7 @@ type Sound struct {
 	Sharer    *User
 	Source    SoundSource
 	Timestamp int
+	Initial   bool
 }
 
 // Vendor ...

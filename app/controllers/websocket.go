@@ -38,6 +38,7 @@ func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	// Send down the archive.
 	for _, event := range subscription.Archive {
+		event.Initial = true
 		if websocket.JSON.Send(ws, &event) != nil {
 			// They disconnected
 			return nil
@@ -45,12 +46,15 @@ func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	}
 
 	for sound := chatroom.SoundTrack.Front(); sound != nil; sound = sound.Next() {
-		if websocket.JSON.Send(ws, &sound.Value) != nil {
+		s := (sound.Value).(models.Sound)
+		s.Initial = true
+		if websocket.JSON.Send(ws, s) != nil {
 			return nil
 		}
 	}
 
 	for _, stamp := range chatroom.GetStampArchive() {
+		stamp.Initial = true
 		if websocket.JSON.Send(ws, stamp) != nil {
 			return nil
 		}
