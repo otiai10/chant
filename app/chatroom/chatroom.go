@@ -12,20 +12,35 @@ import (
 	"github.com/otiai10/rodeo"
 )
 
+// Chatroom まだ使ってないけど、"chatroom"っていう単位はプロセス1-1じゃないはず
+type Chatroom struct {
+	ID       string // 適当なUUID
+	Archives struct {
+		Stamps []models.Stamp // インメモリで覚えているスタンプ
+		Sounds []models.Sound // インメモリで覚えているサウンド
+		Events []Event        // インメモリで覚えている発言イベント
+	}
+	Users map[string]struct { // 参加者
+		User         models.User  // 本来は、SubscriptionをUserに埋めたい
+		Subscription Subscription // とりあえずここにSubscription
+	}
+}
+
 // Event ...
 type Event struct {
-	Type      string // "join", "leave", or "message"
-	User      *models.User
-	Timestamp int    // Unix timestamp (secs)
-	Text      string // What the user said (if Type == "message")
-	RoomInfo  *Info
-	Initial   bool // inital event
+	// TODO: "stamp", "sound" とかもTypeで処理したい
+	Type      string       // "join", "leave", or "message" だけじゃなくてもいいよね
+	User      *models.User // イベント発行ユーザ。ユーザに紐づかないものはnil
+	Timestamp int          // タイムスタンプ
+	Text      string       // valueに相当するもの
+	RoomInfo  *Info        // 現在のRoomの状態を常に送信？ これいる？
+	Initial   bool         // アーカイブイベントを初期接続で送るイベントかどうか
 }
 
 // Subscription ...
 type Subscription struct {
-	Archive []Event      // All the events from the archive.
-	New     <-chan Event // New events coming in.
+	Archive []Event      // TODO: これはchatroom単位で管理するのでここにはいらないはず
+	New     <-chan Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
 // Info ...
@@ -134,6 +149,7 @@ func chatroom() {
 			ch <- Subscription{events, subscriber}
 
 		case event := <-publish:
+			log.Printf("%+v\n", event)
 			// {{{ クソ
 			event.RoomInfo.Updated = false
 			if event.Type == "join" {
