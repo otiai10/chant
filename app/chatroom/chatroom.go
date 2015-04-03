@@ -4,6 +4,7 @@ import (
 	"chant/app/factory"
 	"chant/app/models"
 	"container/list"
+	"html"
 	"log"
 	"time"
 	// "github.com/revel/revel"
@@ -18,7 +19,7 @@ type Event struct {
 	Timestamp int    // Unix timestamp (secs)
 	Text      string // What the user said (if Type == "message")
 	RoomInfo  *Info
-    Initial   bool // inital event
+	Initial   bool // inital event
 }
 
 // Subscription ...
@@ -43,11 +44,11 @@ func (s Subscription) Cancel() {
 // NewEvent ...
 func NewEvent(typ string, user *models.User, msg string) Event {
 	return Event{
-		Type: typ,
-		User: user,
+		Type:      typ,
+		User:      user,
 		Timestamp: int(time.Now().Unix()),
-		Text: msg,
-		RoomInfo: info,
+		Text:      msg,
+		RoomInfo:  info,
 	}
 }
 
@@ -77,6 +78,7 @@ func Join(user *models.User) {
 
 // Say ...
 func Say(user *models.User, message string) {
+	message = html.EscapeString(message)
 	publish <- NewEvent("message", user, message)
 }
 

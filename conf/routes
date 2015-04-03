@@ -17,4 +17,4 @@ GET     /preview                                Preview.Index
 GET     /public/*filepath                       Static.Serve("public")
 
 # ｳｪｯﾌﾞソケットｩコネクション
-WS      /websocket/room/socket                  WebSocket.RoomSocket
+WS      /websocket/room/socket                  ChantSocket.RoomSocket

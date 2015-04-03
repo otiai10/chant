@@ -6,104 +6,99 @@ import (
 
 	"code.google.com/p/go.net/websocket"
 	"github.com/revel/revel"
-
-	"html"
 )
 
-// WebSocket ...
-type WebSocket struct {
+// ChantSocket is controller to keep socket connection.
+type ChantSocket struct {
 	*revel.Controller
 }
 
-// RoomSocket ...
-func (c WebSocket) RoomSocket(ws *websocket.Conn) revel.Result {
+// RoomSocket handles `GET /websocket/room/socket` and `websocket connection`
+func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
+	// Twitterログインしてないひとはハンドシェイクしようとしてもダメです
 	_, ok := c.Session["screenName"]
 	if !ok {
 		c.Redirect(Application.Index)
 	}
 
+	// ハンドシェイクが成立したひとの情報をセッションから復元する
 	user := &models.User{
-		c.Session["Name"],
-		c.Session["screenName"],
-		c.Session["profileImageUrl"],
+		Name:            c.Session["Name"],
+		ScreenName:      c.Session["screenName"],
+		ProfileImageURL: c.Session["profileImageUrl"],
 	}
 
-	// Join the room.
+	// chatroomと接続
 	subscription := chatroom.Subscribe()
 	defer subscription.Cancel()
 
+	// chatroomに参加した事を告知
 	chatroom.Join(user)
 	defer chatroom.Leave(user)
 
-	// Send down the archive.
+	// chatroomに残ってるアーカイブイベントを吸収
+	// TODO: ここも別にsubscriptionのArchiveじゃなくていいと思う
+	// TODO: chatroom.EventArchive []Event
 	for _, event := range subscription.Archive {
 		event.Initial = true
 		if websocket.JSON.Send(ws, &event) != nil {
-			// They disconnected
-			return nil
+			return nil // 受け取れなければソケット終了
 		}
 	}
 
+	// chatroomに残ってるSoundを吸収
+	// TODO: これ、なんでcontainer/listである必要があるの？
+	// TODO: chatroom.StampArchive []Sound
 	for sound := chatroom.SoundTrack.Front(); sound != nil; sound = sound.Next() {
 		s := (sound.Value).(models.Sound)
 		s.Initial = true
 		if websocket.JSON.Send(ws, s) != nil {
-			return nil
+			return nil // 受け取れなければソケット終了
 		}
 	}
 
+	// chatroomに残ってるStampを吸収
 	for _, stamp := range chatroom.GetStampArchive() {
 		stamp.Initial = true
 		if websocket.JSON.Send(ws, stamp) != nil {
-			return nil
+			return nil // 受け取れなければソケット終了
 		}
 	}
 
-	// In order to select between websocket messages and subscription events, we
-	// need to stuff websocket events into a channel.
-	newMessages := make(chan string)
-	go func() {
-		var msg string
-		for {
-			err := websocket.Message.Receive(ws, &msg)
-			if err != nil {
-				close(newMessages)
-				return
-			}
+	// 自分自身のソケットから来る発言を受け取るチャンネル
+	myself := make(chan string)
+	// 自分自身のソケットから来る発言を流すgoroutineを流す
+	go listenMyself(ws, myself)
 
-			if 1024 < len(msg) {
-				notification := chatroom.NewEvent(
-					"notification",
-					user,
-					"1024字までですニャン",
-				)
-				_ = websocket.JSON.Send(ws, notification)
-			} else {
-				newMessages <- msg
-			}
-		}
-	}()
-
-	// Now listen for new events from either the websocket or the chatroom.
+	// リッスン！
 	for {
 		select {
 		case event := <-subscription.New:
+			// chatroomへのsubscriptionから新しいイベントが出てきたら
+			// それを自分のwebsocketに流し込む
 			if websocket.JSON.Send(ws, &event) != nil {
 				// They disconnected.
 				return nil
 			}
-		case msg, ok := <-newMessages:
-			// If the channel is closed, they disconnected.
+		case msg, ok := <-myself:
 			if !ok {
-				return nil
+				return nil // myselfがcloseしてればソケット終了
 			}
-
-			// Otherwise, say something.
-			// chatroom.Sayでやるべきな気がするけれど
-			escaped := html.EscapeString(msg)
-			chatroom.Say(user, escaped)
+			// chatroomに発言する
+			chatroom.Say(user, msg)
 		}
 	}
-	return nil
+}
+
+// 自分の発言をコネクションから受け取った発言をチャンネルに流す
+func listenMyself(conn *websocket.Conn, reciever chan<- string) {
+	var msg string
+	for {
+		if err := websocket.Message.Receive(conn, &msg); err != nil {
+			close(reciever)
+			return
+		}
+		reciever <- msg
+	}
 }
