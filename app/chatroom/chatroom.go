@@ -4,6 +4,7 @@ import (
 	"chant/app/factory"
 	"chant/app/models"
 	"container/list"
+	"log"
 	"time"
 	// "github.com/revel/revel"
 
@@ -86,7 +87,7 @@ func Leave(user *models.User) {
 
 const archiveSize = 4
 const soundArchiveSize = 21
-const stampArchiveSize = 18
+const stampArchiveSize = 25
 
 var (
 	// Send a channel here to get room events back.  It will send the entire
@@ -173,7 +174,14 @@ func chatroom() {
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				ch.Value.(chan Event) <- event
+				log.Println("[process]", "102", "時間くってる気がする")
+				if sub, ok := ch.Value.(chan Event); ok {
+					go func(sub chan Event, event Event) {
+						sub <- event
+						log.Println("[process]", "104", "goroutineにしてみた")
+					}(sub, event)
+				}
+				log.Println("[process]", "103", "listの単位終わり")
 			}
 		case <-keepalive:
 			for subscriber := subscribers.Front(); subscriber != nil; subscriber = subscriber.Next() {
