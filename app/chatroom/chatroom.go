@@ -5,25 +5,91 @@ import (
 	"chant/app/models"
 	"container/list"
 	"html"
-	"log"
 	"time"
 	// "github.com/revel/revel"
 
 	"github.com/otiai10/rodeo"
 )
 
-// Chatroom まだ使ってないけど、"chatroom"っていう単位はプロセス1-1じゃないはず
-type Chatroom struct {
-	ID       string // 適当なUUID
-	Archives struct {
-		Stamps []models.Stamp // インメモリで覚えているスタンプ
-		Sounds []models.Sound // インメモリで覚えているサウンド
-		Events []Event        // インメモリで覚えている発言イベント
+const archiveSize = 4
+const soundArchiveSize = 21
+const stampArchiveSize = 25
+
+var (
+	// Send a channel here to get room events back.  It will send the entire
+	// archive initially, and then new messages as they come in.
+	newcommer = make(chan (chan<- Subscription), 1000)
+	// ここにチャンネルを送ると、
+	unsubscribe = make(chan (<-chan Event), 1000)
+	// Send events here to publish them.
+	publish = make(chan Event, 1000)
+
+	keepalive = time.Tick(50 * time.Second)
+
+	info = &Info{
+		make(map[string]*models.User),
+		true,
+		list.New(),
 	}
-	Users map[string]struct { // 参加者
+
+	// SoundTrack ...
+	SoundTrack = list.New()
+	// StampArchive ...
+	StampArchive = []models.Stamp{}
+
+	vaquero    *rodeo.Vaquero
+	persistent = false
+	room       *Room
+)
+
+// GetRoom オンリーワンなChatroomを返す
+func GetRoom() *Room {
+	if room == nil {
+		room = new(Room)
+	}
+	return room
+}
+
+// Room まだ使ってないけど、"chatroom"っていう単位はプロセス1-1じゃないはず
+type Room struct {
+	ID string // 適当なUUID
+	// インメモリアーカイブ
+	Archives struct {
+		Stamps   []models.Stamp // インメモリで覚えているスタンプ
+		Sounds   []models.Sound // インメモリで覚えているサウンド
+		Messages []Event        // インメモリで覚えている発言イベント
+	}
+	// 参加者
+	Members map[string]struct { // 参加者
 		User         models.User  // 本来は、SubscriptionをUserに埋めたい
 		Subscription Subscription // とりあえずここにSubscription
 	}
+	// めた情報
+	Info interface{} // TODO
+	// いろいろあったときのチャンネル
+	Channels struct {
+		Entrance  chan (<-chan Subscription) // 部屋に新しいひとが入ってきたときの
+		Exit      chan (<-chan Event)        // 部屋から誰かが出て行ったときの
+		Publish   chan Event                 // イベントがあったときの
+		Heartbeat *time.Ticker               // 一定時間ごとに、こちらからkeepaliveを送りたい
+	}
+}
+
+// Archive RoomにArchiveしとくやつ
+func (r *Room) Archive(event Event) {
+	if event.Type == "message" {
+		r.Archives.Messages = append(r.Archives.Messages, event)
+		if len(r.Archives.Messages) > 5 {
+			r.Archives.Messages = r.Archives.Messages[:5]
+		}
+	}
+}
+
+// Forever Room 1個につき1回しか呼ばれない
+// Roomのライフサイクルと一致している
+// 当面は、1process - 1roomインスタンスで運用する
+func (r *Room) Forever() {
+
 }
 
 // Event ...
@@ -37,10 +103,9 @@ type Event struct {
 	Initial   bool         // アーカイブイベントを初期接続で送るイベントかどうか
 }
 
-// Subscription ...
+// Subscription 新しいイベントを伝えるためのチャンネルラッパー
 type Subscription struct {
-	Archive []Event      // TODO: これはchatroom単位で管理するのでここにはいらないはず
-	New     <-chan Event // 新しいイベントをこのsubscriberに伝えるチャンネル
+	New <-chan Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
 // Info ...
@@ -51,6 +116,7 @@ type Info struct {
 }
 
 // Cancel Owner of a subscription must cancel it when they stop listening to events.
+// Cancel
 func (s Subscription) Cancel() {
 	unsubscribe <- s.New // Unsubscribe the channel.
 	drain(s.New)         // Drain it, just in case there was a pending publish.
@@ -82,7 +148,7 @@ func NewKeepAlive() Event {
 // Subscribe ...
 func Subscribe() Subscription {
 	resp := make(chan Subscription)
-	subscribe <- resp
+	newcommer <- resp
 	return <-resp
 }
 
@@ -102,54 +168,18 @@ func Leave(user *models.User) {
 	publish <- NewEvent("leave", user, "")
 }
 
-const archiveSize = 4
-const soundArchiveSize = 21
-const stampArchiveSize = 25
-
-var (
-	// Send a channel here to get room events back.  It will send the entire
-	// archive initially, and then new messages as they come in.
-	subscribe = make(chan (chan<- Subscription), 1000)
-	// Send a channel here to unsubscribe.
-	unsubscribe = make(chan (<-chan Event), 1000)
-	// Send events here to publish them.
-	publish = make(chan Event, 1000)
-
-	keepalive = time.Tick(50 * time.Second)
-
-	info = &Info{
-		make(map[string]*models.User),
-		true,
-		list.New(),
-	}
-
-	// SoundTrack ...
-	SoundTrack = list.New()
-	// StampArchive ...
-	StampArchive = []models.Stamp{}
-
-	vaquero    *rodeo.Vaquero
-	persistent = false
-)
-
-// This function loops forever, handling the chat room pubsub
+// ここは、Room.Forever()に置き換えるよてい
 func chatroom() {
-	archive := list.New()
 	subscribers := list.New()
 
 	for {
 		select {
-		case ch := <-subscribe:
-			var events []Event
-			for e := archive.Front(); e != nil; e = e.Next() {
-				events = append(events, e.Value.(Event))
-			}
+		case ch := <-newcommer:
 			subscriber := make(chan Event, 10)
 			subscribers.PushBack(subscriber)
-			ch <- Subscription{events, subscriber}
+			ch <- Subscription{subscriber}
 
 		case event := <-publish:
-			log.Printf("%+v\n", event)
 			// {{{ クソ
 			event.RoomInfo.Updated = false
 			if event.Type == "join" {
@@ -183,12 +213,7 @@ func chatroom() {
 					addStamp(stamp)
 				}
 			}
-			if archive.Len() >= archiveSize {
-				archive.Remove(archive.Front())
-			}
-			if event.Type != "leave" && event.Type != "join" {
-				archive.PushBack(event)
-			}
+			GetRoom().Archive(event)
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
@@ -238,7 +263,7 @@ func init() {
 
 // Helpers
 
-// Drains a given channel of any messages.
+// イベントを受けるチャンネルを、イベントが流れ込んだときに詰まらないように、あとしまつする
 func drain(ch <-chan Event) {
 	for {
 		select {
@@ -292,4 +317,9 @@ func addStamp(stamp models.Stamp) {
 // GetStampArchive returns stamp archives sorted by LRU
 func GetStampArchive() []models.Stamp {
 	return StampArchive
+}
+
+// GetMessageArchive インメモリEventアーカイブを返す
+func GetMessageArchive() []Event {
+	return GetRoom().Archives.Messages
 }

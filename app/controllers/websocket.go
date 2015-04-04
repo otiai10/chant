@@ -31,16 +31,14 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	// chatroomと接続
 	subscription := chatroom.Subscribe()
-	defer subscription.Cancel()
+	defer subscription.Cancel() // subscriptionをやめる
 
 	// chatroomに参加した事を告知
 	chatroom.Join(user)
 	defer chatroom.Leave(user)
 
 	// chatroomに残ってるアーカイブイベントを吸収
-	// TODO: ここも別にsubscriptionのArchiveじゃなくていいと思う
-	// TODO: chatroom.EventArchive []Event
-	for _, event := range subscription.Archive {
+	for _, event := range chatroom.GetMessageArchive() {
 		event.Initial = true
 		if websocket.JSON.Send(ws, &event) != nil {
 			return nil // 受け取れなければソケット終了
