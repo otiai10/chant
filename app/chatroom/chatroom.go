@@ -20,16 +20,16 @@ var (
 	// archive initially, and then new messages as they come in.
 	newcommer = make(chan (chan<- Subscription), 1000)
 	// ここにチャンネルを送ると、
-	unsubscribe = make(chan (<-chan Event), 1000)
+	unsubscribe = make(chan (<-chan models.Event), 1000)
 	// Send events here to publish them.
-	publish = make(chan Event, 1000)
+	publish = make(chan models.Event, 1000)
 
 	keepalive = time.Tick(50 * time.Second)
 
-	info = &Info{
-		make(map[string]*models.User),
-		true,
-		list.New(),
+	info = &models.Info{
+		Users:    make(map[string]*models.User),
+		Updated:  true,
+		AllUsers: list.New(),
 	}
 
 	// SoundTrack ...
@@ -57,7 +57,7 @@ type Room struct {
 	Archives struct {
 		Stamps   []models.Stamp // インメモリで覚えているスタンプ
 		Sounds   []models.Sound // インメモリで覚えているサウンド
-		Messages []Event        // インメモリで覚えている発言イベント
+		Messages []models.Event // インメモリで覚えている発言イベント
 	}
 	// 参加者
 	Members map[string]struct { // 参加者
@@ -69,14 +69,14 @@ type Room struct {
 	// いろいろあったときのチャンネル
 	Channels struct {
 		Entrance  chan (<-chan Subscription) // 部屋に新しいひとが入ってきたときの
-		Exit      chan (<-chan Event)        // 部屋から誰かが出て行ったときの
-		Publish   chan Event                 // イベントがあったときの
+		Exit      chan (<-chan models.Event) // 部屋から誰かが出て行ったときの
+		Publish   chan models.Event          // イベントがあったときの
 		Heartbeat *time.Ticker               // 一定時間ごとに、こちらからkeepaliveを送りたい
 	}
 }
 
 // Archive RoomにArchiveしとくやつ
-func (r *Room) Archive(event Event) {
+func (r *Room) Archive(event models.Event) {
 	if event.Type == "message" {
 		r.Archives.Messages = append(r.Archives.Messages, event)
 		if len(r.Archives.Messages) > 5 {
@@ -92,27 +92,9 @@ func (r *Room) Forever() {
 
 }
 
-// Event ...
-type Event struct {
-	// TODO: "stamp", "sound" とかもTypeで処理したい
-	Type      string       // "join", "leave", or "message" だけじゃなくてもいいよね
-	User      *models.User // イベント発行ユーザ。ユーザに紐づかないものはnil
-	Timestamp int          // タイムスタンプ
-	Text      string       // valueに相当するもの
-	RoomInfo  *Info        // 現在のRoomの状態を常に送信？ これいる？
-	Initial   bool         // アーカイブイベントを初期接続で送るイベントかどうか
-}
-
 // Subscription 新しいイベントを伝えるためのチャンネルラッパー
 type Subscription struct {
-	New <-chan Event // 新しいイベントをこのsubscriberに伝えるチャンネル
-}
-
-// Info ...
-type Info struct {
-	Users    map[string]*models.User
-	Updated  bool
-	AllUsers *list.List
+	New <-chan models.Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
 // Cancel Owner of a subscription must cancel it when they stop listening to events.
@@ -123,8 +105,8 @@ func (s Subscription) Cancel() {
 }
 
 // NewEvent ...
-func NewEvent(typ string, user *models.User, msg string) Event {
-	return Event{
+func NewEvent(typ string, user *models.User, msg string) models.Event {
+	return models.Event{
 		Type:      typ,
 		User:      user,
 		Timestamp: int(time.Now().Unix()),
@@ -134,14 +116,14 @@ func NewEvent(typ string, user *models.User, msg string) Event {
 }
 
 // NewKeepAlive ...
-func NewKeepAlive() Event {
-	return Event{
-		"keepalive",
-		&models.User{},
-		int(time.Now().Unix()),
-		"",
-		info,
-		false,
+func NewKeepAlive() models.Event {
+	return models.Event{
+		Type:      "keepalive",
+		User:      &models.User{},
+		Timestamp: int(time.Now().Unix()),
+		Text:      "",
+		RoomInfo:  info,
+		Initial:   false,
 	}
 }
 
@@ -175,7 +157,7 @@ func chatroom() {
 	for {
 		select {
 		case ch := <-newcommer:
-			subscriber := make(chan Event, 10)
+			subscriber := make(chan models.Event, 10)
 			subscribers.PushBack(subscriber)
 			ch <- Subscription{subscriber}
 
@@ -217,20 +199,20 @@ func chatroom() {
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				if sub, ok := ch.Value.(chan Event); ok {
-					go func(sub chan Event, event Event) {
+				if sub, ok := ch.Value.(chan models.Event); ok {
+					go func(sub chan models.Event, event models.Event) {
 						sub <- event
 					}(sub, event)
 				}
 			}
 		case <-keepalive:
 			for subscriber := subscribers.Front(); subscriber != nil; subscriber = subscriber.Next() {
-				subscriber.Value.(chan Event) <- NewKeepAlive()
+				subscriber.Value.(chan models.Event) <- NewKeepAlive()
 			}
 
 		case unsub := <-unsubscribe:
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				if ch.Value.(chan Event) == unsub {
+				if ch.Value.(chan models.Event) == unsub {
 					subscribers.Remove(ch)
 					break
 				}
@@ -264,7 +246,7 @@ func init() {
 // Helpers
 
 // イベントを受けるチャンネルを、イベントが流れ込んだときに詰まらないように、あとしまつする
-func drain(ch <-chan Event) {
+func drain(ch <-chan models.Event) {
 	for {
 		select {
 		case _, ok := <-ch:
@@ -320,6 +302,6 @@ func GetStampArchive() []models.Stamp {
 }
 
 // GetMessageArchive インメモリEventアーカイブを返す
-func GetMessageArchive() []Event {
+func GetMessageArchive() []models.Event {
 	return GetRoom().Archives.Messages
 }
