@@ -11,7 +11,7 @@ import (
 	"github.com/otiai10/rodeo"
 )
 
-const archiveSize = 4
+const eventArchiveSize = 4
 const soundArchiveSize = 21
 const stampArchiveSize = 25
 
@@ -36,61 +36,12 @@ var (
 	SoundTrack = list.New()
 	// StampArchive ...
 	StampArchive = []models.Stamp{}
+	// EventArchive ...
+	EventArchive = []models.Event{}
 
 	vaquero    *rodeo.Vaquero
 	persistent = false
-	room       *Room
 )
-
-// GetRoom オンリーワンなChatroomを返す
-func GetRoom() *Room {
-	if room == nil {
-		room = new(Room)
-	}
-	return room
-}
-
-// Room まだ使ってないけど、"chatroom"っていう単位はプロセス1-1じゃないはず
-type Room struct {
-	ID string // 適当なUUID
-	// インメモリアーカイブ
-	Archives struct {
-		Stamps   []models.Stamp // インメモリで覚えているスタンプ
-		Sounds   []models.Sound // インメモリで覚えているサウンド
-		Messages []models.Event // インメモリで覚えている発言イベント
-	}
-	// 参加者
-	Members map[string]struct { // 参加者
-		User         models.User  // 本来は、SubscriptionをUserに埋めたい
-		Subscription Subscription // とりあえずここにSubscription
-	}
-	// めた情報
-	Info interface{} // TODO
-	// いろいろあったときのチャンネル
-	Channels struct {
-		Entrance  chan (<-chan Subscription) // 部屋に新しいひとが入ってきたときの
-		Exit      chan (<-chan models.Event) // 部屋から誰かが出て行ったときの
-		Publish   chan models.Event          // イベントがあったときの
-		Heartbeat *time.Ticker               // 一定時間ごとに、こちらからkeepaliveを送りたい
-	}
-}
-
-// Archive RoomにArchiveしとくやつ
-func (r *Room) Archive(event models.Event) {
-	if event.Type == "message" {
-		r.Archives.Messages = append(r.Archives.Messages, event)
-		if len(r.Archives.Messages) > 5 {
-			r.Archives.Messages = r.Archives.Messages[:5]
-		}
-	}
-}
-
-// Forever Room 1個につき1回しか呼ばれない
-// Roomのライフサイクルと一致している
-// 当面は、1process - 1roomインスタンスで運用する
-func (r *Room) Forever() {
-
-}
 
 // Subscription 新しいイベントを伝えるためのチャンネルラッパー
 type Subscription struct {
@@ -195,7 +146,12 @@ func chatroom() {
 					addStamp(stamp)
 				}
 			}
-			GetRoom().Archive(event)
+
+			// archive event
+			EventArchive = append(EventArchive, event)
+			if len(EventArchive) > eventArchiveSize {
+				EventArchive = EventArchive[len(EventArchive)-eventArchiveSize:]
+			}
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
@@ -303,5 +259,5 @@ func GetStampArchive() []models.Stamp {
 
 // GetMessageArchive インメモリEventアーカイブを返す
 func GetMessageArchive() []models.Event {
-	return GetRoom().Archives.Messages
+	return EventArchive
 }
