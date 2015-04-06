@@ -24,7 +24,7 @@ type Room struct {
 	// いろいろあったときのチャンネル
 	Channels struct {
 		// Entrance  chan (<-chan Subscription) // 部屋に新しいひとが入ってきたときの
-		Entrance  chan (<-chan *User)        // 部屋に新しいひとが入ってきたときの
+		Entrance  chan (<-chan *models.User) // 部屋に新しいひとが入ってきたときの
 		Exit      chan (<-chan models.Event) // 部屋から誰かが出て行ったときの
 		Publish   chan models.Event          // イベントがあったときの
 		Heartbeat *time.Ticker               // 一定時間ごとに、こちらからkeepaliveを送りたい
