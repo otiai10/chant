@@ -16,7 +16,12 @@ type MessageArchive struct {
 }
 
 // Add to implement Archives
-func (ma MessageArchive) Add(event models.Event) {
+func (ma *MessageArchive) Add(event models.Event) {
+	// ここでswitchしたくない
+	switch event.Type {
+	case "join", "leave":
+		return
+	}
 	ma.Messages = append(ma.Messages, event)
 	if len(ma.Messages) > ma.Size {
 		ma.Messages = ma.Messages[len(ma.Messages)-ma.Size:]
@@ -24,7 +29,7 @@ func (ma MessageArchive) Add(event models.Event) {
 }
 
 // Get to implement Archives
-func (ma MessageArchive) Get() []models.Event {
+func (ma *MessageArchive) Get() []models.Event {
 	return ma.Messages
 }
 

@@ -5,14 +5,18 @@ import (
 	"time"
 )
 
+var rooms = map[string]*Room{
+	"__default": nil,
+}
+
 // Room まだ使ってないけど、"chatroom"っていう単位はプロセス1-1じゃないはず
 type Room struct {
 	ID string // 適当なUUID
 	// インメモリアーカイブ
 	Archives struct {
-		Stamps   []models.Stamp // インメモリで覚えているスタンプ
-		Sounds   []models.Sound // インメモリで覚えているサウンド
-		Messages []models.Event // インメモリで覚えている発言イベント
+		Stamps   []models.Stamp  // インメモリで覚えているスタンプ
+		Sounds   []models.Sound  // インメモリで覚えているサウンド
+		Messages *MessageArchive // インメモリで覚えている発言イベント
 	}
 	// 参加者
 	Members map[string]struct { // 参加者
@@ -33,7 +37,17 @@ type Room struct {
 
 // Get roomのインスタンスを取得
 func Get() *Room {
-	return &Room{}
+	id := "__default"
+	room, ok := rooms[id]
+	if !ok || room == nil {
+		room = &Room{ID: id}
+		room.Archives.Messages = &MessageArchive{
+			Size:     10,
+			Messages: []models.Event{},
+		}
+	}
+	rooms[id] = room
+	return room
 }
 
 // Forever Room 1個につき1回しか呼ばれない

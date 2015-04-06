@@ -3,6 +3,7 @@ package chatroom
 import (
 	"chant/app/factory"
 	"chant/app/models"
+	"chant/app/room"
 	"container/list"
 	"html"
 	"time"
@@ -148,10 +149,7 @@ func chatroom() {
 			}
 
 			// archive event
-			EventArchive = append(EventArchive, event)
-			if len(EventArchive) > eventArchiveSize {
-				EventArchive = EventArchive[len(EventArchive)-eventArchiveSize:]
-			}
+			room.Get().Archives.Messages.Add(event)
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
@@ -259,5 +257,5 @@ func GetStampArchive() []models.Stamp {
 
 // GetMessageArchive インメモリEventアーカイブを返す
 func GetMessageArchive() []models.Event {
-	return EventArchive
+	return room.Get().Archives.Messages.Get()
 }
