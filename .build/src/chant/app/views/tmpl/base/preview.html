@@ -1,0 +1,25 @@
+<script type="text/html" id="tmpl_base_preview">
+  <div id="<%= Id %>" class="web-preview">
+    <div class="og-title">
+      <a href="<%= URL %>" target="_blank" rel="noreferrer">
+        <h5><%= Title %></h5>
+      </a>
+    </div>
+    <div class="og-contents boxy">
+      <div class="og-image">
+        <% if (Image != '') { %>
+          <a href="<%= URL %>" target="_blank" rel="noreferrer">
+            <img src="<%= Image %>">
+          </a>
+        <% } else { %>
+          <span class="og-no-image">( ˘ω˘) no image</span>
+        <% } %>
+      </div>
+      <div class="og-description">
+        <a href="<%= URL %>" target="_blank" rel="noreferrer">
+          <p><%= Description %></p>
+        </a>
+      </div>
+    </div>
+  </div>
+</script>
