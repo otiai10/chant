@@ -61,7 +61,7 @@ func NewEvent(typ string, user *models.User, msg string) models.Event {
 	return models.Event{
 		Type:      typ,
 		User:      user,
-		Timestamp: int(time.Now().Unix()),
+		Timestamp: time.Now().UnixNano(),
 		Text:      msg,
 		RoomInfo:  info,
 	}
@@ -72,7 +72,7 @@ func NewKeepAlive() models.Event {
 	return models.Event{
 		Type:      "keepalive",
 		User:      &models.User{},
-		Timestamp: int(time.Now().Unix()),
+		Timestamp: time.Now().UnixNano(),
 		Text:      "",
 		RoomInfo:  info,
 		Initial:   false,
