@@ -12,6 +12,8 @@ module Chant {
     export function Anchorize(str: string) {
         var emo = _execEmo(str);
         if (emo) return emo;
+        var vine = _execVine(str);
+        if (vine) return vine;
         var ytb = _execYouTube(str);
         if (ytb) return ytb;
         var sndcld = _execSoundCloud(str);
@@ -56,6 +58,11 @@ module Chant {
         var id = matched[3];
         setTimeout(() => {Chant.Twitter.embed(id);},0);
         return '<div id="twitter' + id + '"><a href="' + anc[0] + '" target="_blank" rel="noreferrer">' + anc[0] + '</a></div>';
+    };
+    var _execVine = (str) => {
+        var matched = str.match(/(https?:\/\/vine.co\/v\/[^\/]+)\/?.*/);
+        if (! matched || matched.length < 2) return;
+        return tmpl('tmpl_base_vine',{vineURL:matched[1]});
     };
     var _execAnchor = (str) => {
         var url = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi;
