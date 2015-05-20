@@ -1,22 +1,20 @@
 # Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
 
-module:testrunner
-
-# Login
+# セッションが無ければログイン画面, あればチャットルームをレンダリングする
 GET     /                                       Application.Index
 
+# TwitterのOAuth用のエンドポイント
 GET     /auth                                   Auth.Index
 GET     /auth/callback                          Auth.Callback
 
-GET     /room                                   Room.Index
+# 退室するためだけの遷移
 GET     /room/leave                             Room.Leave
 
+# クライアントサイドから、URLの展開用。なんか時々バグる
 GET     /preview                                Preview.Index
 
-WS      /websocket/room/socket                  WebSocket.RoomSocket
-
-# Map static resources from the /app/public folder to the /public path
+# スタティックpath
 GET     /public/*filepath                       Static.Serve("public")
 
+# ｳｪｯﾌﾞソケットｩコネクション
+WS      /websocket/room/socket                  ChantSocket.RoomSocket

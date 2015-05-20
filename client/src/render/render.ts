@@ -16,20 +16,20 @@ module Chant {
             return '';
         }
         private static message(event: any): string {
-            if (event.Text === '大草原') {
-                event.Text = '';
+            if (event.text === '大草原') {
+                event.text = '';
                 for (var i = 0; i < 100; i++) {
-                    if (i % 10 == 0) event.Text += "<br>";
-                    event.Text += 'wwww';
+                    if (i % 10 == 0) event.text += "<br>";
+                    event.text += 'wwww';
                 }
             }
-            event.RawText = event.Text;
+            event.RawText = event.text;
 
             event.isMention = false;
             event = Chant.Notifier.detectMentioned(event);
 
-            event.Time = new Chant.Time(event.Timestamp).format();
-            event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
+            event.time = new Chant.Time(event.timestamp).format();
+            event.text = Chant.Protocol(event.text) || Chant.Anchorize(event.text);
 
             event.enableStamprize = Render.enableStamprize(event.RawText);
 

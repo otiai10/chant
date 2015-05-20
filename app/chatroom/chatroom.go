@@ -3,70 +3,87 @@ package chatroom
 import (
 	"chant/app/factory"
 	"chant/app/models"
+	"chant/app/room"
 	"container/list"
-	"log"
+	"encoding/json"
+	"html"
 	"time"
 	// "github.com/revel/revel"
 
 	"github.com/otiai10/rodeo"
 )
 
-// Event ...
-type Event struct {
-	Type      string // "join", "leave", or "message"
-	User      *models.User
-	Timestamp int    // Unix timestamp (secs)
-	Text      string // What the user said (if Type == "message")
-	RoomInfo  *Info
-    Initial   bool // inital event
-}
+const eventArchiveSize = 4
+const soundArchiveSize = 21
+const stampArchiveSize = 25
 
-// Subscription ...
+var (
+	// Send a channel here to get room events back.  It will send the entire
+	// archive initially, and then new messages as they come in.
+	newcommer = make(chan (chan<- Subscription), 1000)
+	// ここにチャンネルを送ると、
+	unsubscribe = make(chan (<-chan models.Event), 1000)
+	// Send events here to publish them.
+	publish = make(chan models.Event, 1000)
+
+	keepalive = time.Tick(50 * time.Second)
+
+	info = &models.Info{
+		Users:    make(map[string]*models.User),
+		Updated:  true,
+		AllUsers: list.New(),
+	}
+
+	// SoundTrack ...
+	SoundTrack = list.New()
+	// StampArchive ...
+	StampArchive = []models.Stamp{}
+	// EventArchive ...
+	EventArchive = []models.Event{}
+
+	vaquero    *rodeo.Vaquero
+	persistent = false
+)
+
+// Subscription 新しいイベントを伝えるためのチャンネルラッパー
 type Subscription struct {
-	Archive []Event      // All the events from the archive.
-	New     <-chan Event // New events coming in.
-}
-
-// Info ...
-type Info struct {
-	Users    map[string]*models.User
-	Updated  bool
-	AllUsers *list.List
+	New <-chan models.Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
 // Cancel Owner of a subscription must cancel it when they stop listening to events.
+// Cancel
 func (s Subscription) Cancel() {
 	unsubscribe <- s.New // Unsubscribe the channel.
 	drain(s.New)         // Drain it, just in case there was a pending publish.
 }
 
 // NewEvent ...
-func NewEvent(typ string, user *models.User, msg string) Event {
-	return Event{
-		Type: typ,
-		User: user,
-		Timestamp: int(time.Now().Unix()),
-		Text: msg,
-		RoomInfo: info,
+func NewEvent(typ string, user *models.User, msg string) models.Event {
+	return models.Event{
+		Type:      typ,
+		User:      user,
+		Timestamp: time.Now().UnixNano(),
+		Text:      msg,
+		RoomInfo:  info,
 	}
 }
 
 // NewKeepAlive ...
-func NewKeepAlive() Event {
-	return Event{
-		"keepalive",
-		&models.User{},
-		int(time.Now().Unix()),
-		"",
-		info,
-		false,
+func NewKeepAlive() models.Event {
+	return models.Event{
+		Type:      "keepalive",
+		User:      &models.User{},
+		Timestamp: time.Now().UnixNano(),
+		Text:      "",
+		RoomInfo:  info,
+		Initial:   false,
 	}
 }
 
 // Subscribe ...
 func Subscribe() Subscription {
 	resp := make(chan Subscription)
-	subscribe <- resp
+	newcommer <- resp
 	return <-resp
 }
 
@@ -77,6 +94,12 @@ func Join(user *models.User) {
 
 // Say ...
 func Say(user *models.User, message string) {
+	ev := models.Event{}
+	if err := json.Unmarshal([]byte(message), &ev); err != nil {
+		publish <- ev
+		return
+	}
+	message = html.EscapeString(message)
 	publish <- NewEvent("message", user, message)
 }
 
@@ -85,51 +108,16 @@ func Leave(user *models.User) {
 	publish <- NewEvent("leave", user, "")
 }
 
-const archiveSize = 4
-const soundArchiveSize = 21
-const stampArchiveSize = 25
-
-var (
-	// Send a channel here to get room events back.  It will send the entire
-	// archive initially, and then new messages as they come in.
-	subscribe = make(chan (chan<- Subscription), 1000)
-	// Send a channel here to unsubscribe.
-	unsubscribe = make(chan (<-chan Event), 1000)
-	// Send events here to publish them.
-	publish = make(chan Event, 1000)
-
-	keepalive = time.Tick(50 * time.Second)
-
-	info = &Info{
-		make(map[string]*models.User),
-		true,
-		list.New(),
-	}
-
-	// SoundTrack ...
-	SoundTrack = list.New()
-	// StampArchive ...
-	StampArchive = []models.Stamp{}
-
-	vaquero    *rodeo.Vaquero
-	persistent = false
-)
-
-// This function loops forever, handling the chat room pubsub
+// ここは、Room.Forever()に置き換えるよてい
 func chatroom() {
-	archive := list.New()
 	subscribers := list.New()
 
 	for {
 		select {
-		case ch := <-subscribe:
-			var events []Event
-			for e := archive.Front(); e != nil; e = e.Next() {
-				events = append(events, e.Value.(Event))
-			}
-			subscriber := make(chan Event, 10)
+		case ch := <-newcommer:
+			subscriber := make(chan models.Event, 10)
 			subscribers.PushBack(subscriber)
-			ch <- Subscription{events, subscriber}
+			ch <- Subscription{subscriber}
 
 		case event := <-publish:
 			// {{{ クソ
@@ -165,32 +153,26 @@ func chatroom() {
 					addStamp(stamp)
 				}
 			}
-			if archive.Len() >= archiveSize {
-				archive.Remove(archive.Front())
-			}
-			if event.Type != "leave" && event.Type != "join" {
-				archive.PushBack(event)
-			}
+
+			// archive event
+			room.Get().Archives.Messages.Add(event)
 
 			// Finally, subscribe
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				log.Println("[process]", "102", "時間くってる気がする")
-				if sub, ok := ch.Value.(chan Event); ok {
-					go func(sub chan Event, event Event) {
+				if sub, ok := ch.Value.(chan models.Event); ok {
+					go func(sub chan models.Event, event models.Event) {
 						sub <- event
-						log.Println("[process]", "104", "goroutineにしてみた")
 					}(sub, event)
 				}
-				log.Println("[process]", "103", "listの単位終わり")
 			}
 		case <-keepalive:
 			for subscriber := subscribers.Front(); subscriber != nil; subscriber = subscriber.Next() {
-				subscriber.Value.(chan Event) <- NewKeepAlive()
+				subscriber.Value.(chan models.Event) <- NewKeepAlive()
 			}
 
 		case unsub := <-unsubscribe:
 			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				if ch.Value.(chan Event) == unsub {
+				if ch.Value.(chan models.Event) == unsub {
 					subscribers.Remove(ch)
 					break
 				}
@@ -223,8 +205,8 @@ func init() {
 
 // Helpers
 
-// Drains a given channel of any messages.
-func drain(ch <-chan Event) {
+// イベントを受けるチャンネルを、イベントが流れ込んだときに詰まらないように、あとしまつする
+func drain(ch <-chan models.Event) {
 	for {
 		select {
 		case _, ok := <-ch:
@@ -277,4 +259,9 @@ func addStamp(stamp models.Stamp) {
 // GetStampArchive returns stamp archives sorted by LRU
 func GetStampArchive() []models.Stamp {
 	return StampArchive
+}
+
+// GetMessageArchive インメモリEventアーカイブを返す
+func GetMessageArchive() []models.Event {
+	return room.Get().Archives.Messages.Get()
 }
