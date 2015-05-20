@@ -2620,12 +2620,64 @@ var Chant;
 })(Chant || (Chant = {}));
 var Chant;
 (function (Chant) {
+    var EvFactory = (function () {
+        function EvFactory() {
+        }
+        EvFactory.Create = function (type, value) {
+            return new Chant.Ev(type, value);
+        };
+        EvFactory.Decode = function (raw) {
+            var type;
+            var value;
+            try {
+                var ev = JSON.parse(raw);
+                type = ev["type"];
+                value = ev["value"];
+            }
+            catch (e) {
+                type = "message";
+                value = raw;
+            }
+            return new Chant.Ev(type, value);
+        };
+        EvFactory.Encode = function (ev) {
+            return ev.ToString();
+        };
+        return EvFactory;
+    })();
+    Chant.EvFactory = EvFactory;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
+    var Type = {
+        Join: "join",
+        Leave: "leave",
+        StampAdd: "stamp.add",
+        StampUse: "stamp.user",
+        Message: "message",
+        Keepalive: "keepalive"
+    };
+    var Ev = (function () {
+        function Ev(type, value) {
+            this.type = type;
+            this.value = value;
+        }
+        Ev.prototype.ToString = function () {
+            this.text = String(this.value);
+            return JSON.stringify(this);
+        };
+        return Ev;
+    })();
+    Chant.Ev = Ev;
+})(Chant || (Chant = {}));
+var Chant;
+(function (Chant) {
     var Time = (function () {
         function Time(timestamp) {
             this.timestamp = timestamp;
         }
         Time.prototype.format = function () {
-            var d = new Date(this.timestamp * 1000);
+            var d = new Date(this.timestamp / 1000000);
             return d.toLocaleString();
         };
         return Time;
@@ -3072,19 +3124,19 @@ var Chant;
             return '';
         };
         Render.message = function (event) {
-            if (event.Text === '大草原') {
-                event.Text = '';
+            if (event.text === '大草原') {
+                event.text = '';
                 for (var i = 0; i < 100; i++) {
                     if (i % 10 == 0)
-                        event.Text += "<br>";
-                    event.Text += 'wwww';
+                        event.text += "<br>";
+                    event.text += 'wwww';
                 }
             }
-            event.RawText = event.Text;
+            event.RawText = event.text;
             event.isMention = false;
             event = Chant.Notifier.detectMentioned(event);
-            event.Time = new Chant.Time(event.Timestamp).format();
-            event.Text = Chant.Protocol(event.Text) || Chant.Anchorize(event.Text);
+            event.time = new Chant.Time(event.timestamp).format();
+            event.text = Chant.Protocol(event.text) || Chant.Anchorize(event.text);
             event.enableStamprize = Render.enableStamprize(event.RawText);
             // いやー... しんどい... #15
             if (event.RawText.match("@quote"))

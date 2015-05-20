@@ -5,6 +5,7 @@ import (
 	"chant/app/models"
 	"chant/app/room"
 	"container/list"
+	"encoding/json"
 	"html"
 	"time"
 	// "github.com/revel/revel"
@@ -93,6 +94,11 @@ func Join(user *models.User) {
 
 // Say ...
 func Say(user *models.User, message string) {
+	ev := models.Event{}
+	if err := json.Unmarshal([]byte(message), &ev); err != nil {
+		publish <- ev
+		return
+	}
 	message = html.EscapeString(message)
 	publish <- NewEvent("message", user, message)
 }

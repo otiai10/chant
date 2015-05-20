@@ -4,8 +4,8 @@ import (
 	"chant/app/chatroom"
 	"chant/app/models"
 
-	"code.google.com/p/go.net/websocket"
 	"github.com/revel/revel"
+	"golang.org/x/net/websocket"
 )
 
 // ChantSocket is controller to keep socket connection.

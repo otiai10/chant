@@ -9,8 +9,9 @@ var debug = (function(){
 $(function(){
   // Display a message
   var display = function(event) {
+    console.log(event);
     //$(tmpl('message_tmpl', {event: event})).hide().prependTo('#thread').fadeIn(80);
-    $(Chant.Render.Event[event.Type](event)).hide().prependTo('#thread').fadeIn(100);
+    $(Chant.Render.Event[event.type](event)).hide().prependTo('#thread').fadeIn(100);
     if (event.RoomInfo && event.RoomInfo.Updated) {
         $('#room-info').html(Chant.Render.RoomInfo['default'](event));
     }
@@ -55,7 +56,9 @@ $(function(){
     if (message === '') return;
     Chant.Client.process(message);
     $('#message').val('').focus();
-    Chant.Socket.send(message)
+    Chant.Socket.send(
+      Chant.EvFactory.Create("message", message).ToString()
+    );
   });
 
   $('#message').keypress(function(e) {
