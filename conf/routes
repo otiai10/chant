@@ -2,6 +2,8 @@
 
 # セッションが無ければログイン画面, あればチャットルームをレンダリングする
 GET     /                                       Application.Index
+# Twitterログイン用のページ
+GET     /login                                  Application.Login
 
 # TwitterのOAuth用のエンドポイント
 GET     /auth                                   Auth.Index
