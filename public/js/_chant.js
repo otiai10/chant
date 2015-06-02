@@ -30,6 +30,11 @@ var Message = React.createClass({displayName: "Message",
 var Messages = React.createClass({displayName: "Messages",
   getInitialState: function() {
     // ここでサーバと通信する
+    var _instance = new WebSocket('ws://localhost:14000/websocket/room/socket');
+    _instance.onopen = function(ev) { console.log('open', ev); };
+    _instance.onclose = function(ev) { console.log('close', ev); };
+    _instance.onerror = function(ev) { console.log('error', ev); };
+    _instance.onmessage = function(ev) { console.log('mess', ev); };
     return {
       messages: [
         {text:"fooooo"},
