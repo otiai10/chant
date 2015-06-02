@@ -1,0 +1,19 @@
+{
+    "name": "chant-client",
+    "version": "0.1.0",
+    "devDependencies": {
+        "gulp": "3.9.0",
+        "gulp-plumber": "*",
+        "gulp-react": "2.0.0",
+        "gulp-using": "*",
+        "gulp-concat": "*",
+        "coffee-script": "*" 
+    },
+    "dependencies": {
+        "react": "0.13.3"
+    },
+    "scripts": {
+        "react": "gulp react",
+        "watch": "gulp watch"
+    }
+}

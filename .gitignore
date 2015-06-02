@@ -27,3 +27,6 @@ _testmain.go
 # IntelliJ
 .idea/*
 *.iml
+
+# client
+client/node_modules/*
