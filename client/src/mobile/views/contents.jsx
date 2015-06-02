@@ -32,8 +32,8 @@ var Messages = React.createClass({
     window.alert("did mount");
   },
   render: function() {
-    var messages = this.state.messages.map(function(message) {
-      return <Message text={message.text} />
+    var messages = this.state.messages.map(function(message, i) {
+      return <Message text={message.text} key={i} />
     });
     return (
       <div>
