@@ -10,7 +10,6 @@ import (
 
 // Auth action controller
 type Auth struct {
-	// embed
 	*revel.Controller
 }
 
@@ -26,17 +25,15 @@ func getCallbackURL() string {
 	return fmt.Sprintf("http://%s%s/auth/callback", host, port)
 }
 
-// Index ...
-func (c Auth) Index(oauth_verifier string) revel.Result {
+// Index `GET /auth`
+// 1) すでにセッションがある -> Roomへ
+// 2) TwitterのAuth画面へ
+func (c Auth) Index() revel.Result {
 
 	if _, nameExists := c.Session["screenName"]; nameExists {
 		// 既にセッションを持っているのでルームにリダイレクトする
-		return c.Redirect(Room.Index)
+		return c.Redirect(Application.Index)
 	}
-
-	// oauth_verifierが無い状態でこのURLを叩いたとき
-	// つまり、ユーザの最初のAuthenticateへのアクセスである
-
 	// まずはverifier獲得した状態でリダイレクトするように促す
 	// このアプリケーションのコンシューマキーとコンシューマシークレットを用いて
 	// 一時的に使えるrequestTokenの取得を試みる

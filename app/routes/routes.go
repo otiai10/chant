@@ -28,11 +28,9 @@ var Auth tAuth
 
 
 func (_ tAuth) Index(
-		oauth_verifier string,
 		) string {
 	args := make(map[string]string)
 	
-	revel.Unbind(args, "oauth_verifier", oauth_verifier)
 	return revel.MainRouter.Reverse("Auth.Index", args).Url
 }
 

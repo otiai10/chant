@@ -55,7 +55,6 @@ func main() {
 			&revel.MethodType{
 				Name: "Index",
 				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "oauth_verifier", Type: reflect.TypeOf((*string)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
