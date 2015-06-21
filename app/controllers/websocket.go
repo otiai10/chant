@@ -106,9 +106,9 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 				return nil
 			}
 		case msg, ok := <-myself:
-			revel.INFO.Println("myselfチャンネルがcloseしていれば、このループを終了してdeferを呼ぶ")
 			if !ok {
-				return nil // myselfがcloseしてればソケット終了
+				revel.INFO.Println("myselfチャンネルがcloseしていれば、このループを終了してdeferを呼ぶ")
+				return nil
 			}
 			myroom.Say(user, msg)
 			fmt.Println(msg, ok, " <-myself")
@@ -124,6 +124,7 @@ func listenMyself(conn *websocket.Conn, reciever chan<- string) {
 			close(reciever)
 			return
 		}
+		revel.INFO.Println(msg, &msg)
 		reciever <- msg
 	}
 }
