@@ -4,6 +4,27 @@ package routes
 import "github.com/revel/revel"
 
 
+type tAuth struct {}
+var Auth tAuth
+
+
+func (_ tAuth) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Auth.Index", args).Url
+}
+
+func (_ tAuth) Callback(
+		oauth_verifier string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "oauth_verifier", oauth_verifier)
+	return revel.MainRouter.Reverse("Auth.Callback", args).Url
+}
+
+
 type tPreview struct {}
 var Preview tPreview
 
@@ -67,27 +88,6 @@ func (_ tApplication) Login(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("Application.Login", args).Url
-}
-
-
-type tAuth struct {}
-var Auth tAuth
-
-
-func (_ tAuth) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Auth.Index", args).Url
-}
-
-func (_ tAuth) Callback(
-		oauth_verifier string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "oauth_verifier", oauth_verifier)
-	return revel.MainRouter.Reverse("Auth.Callback", args).Url
 }
 
 

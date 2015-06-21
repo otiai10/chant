@@ -8,7 +8,7 @@ gulp.task 'react', () =>
     gulp.src ['./src/**/*.jsx', './src/*.jsx']
         .pipe plumber() # エラーでも続けて
         .pipe using() # ファイル名出して
-        .pipe concat '_chant.js' # ひとつのファイルにして
+        .pipe concat '_chant.jsx' # ひとつのファイルにして
         .pipe react() # jsxをビルドして
         .pipe gulp.dest 'dest/'
         .pipe gulp.dest '../public/js/'
