@@ -4,6 +4,39 @@ package routes
 import "github.com/revel/revel"
 
 
+type tChantSocket struct {}
+var ChantSocket tChantSocket
+
+
+func (_ tChantSocket) RoomSocket(
+		ws interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "ws", ws)
+	return revel.MainRouter.Reverse("ChantSocket.RoomSocket", args).Url
+}
+
+
+type tApplication struct {}
+var Application tApplication
+
+
+func (_ tApplication) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Application.Index", args).Url
+}
+
+func (_ tApplication) Login(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Application.Login", args).Url
+}
+
+
 type tAuth struct {}
 var Auth tAuth
 
@@ -55,39 +88,6 @@ func (_ tRoom) Leave(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("Room.Leave", args).Url
-}
-
-
-type tChantSocket struct {}
-var ChantSocket tChantSocket
-
-
-func (_ tChantSocket) RoomSocket(
-		ws interface{},
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "ws", ws)
-	return revel.MainRouter.Reverse("ChantSocket.RoomSocket", args).Url
-}
-
-
-type tApplication struct {}
-var Application tApplication
-
-
-func (_ tApplication) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Application.Index", args).Url
-}
-
-func (_ tApplication) Login(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Application.Login", args).Url
 }
 
 

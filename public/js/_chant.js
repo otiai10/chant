@@ -77,7 +77,26 @@ var Contents = React.createClass({displayName: "Contents",
                     React.createElement("div", {className: "col s12 m8"}, 
                         React.createElement(Messages, null)
                     ), 
-                    React.createElement("div", {className: "col s12 m4"}
+                    React.createElement("div", {className: "col s12 m4"}, 
+                        React.createElement("div", {className: "card"}, 
+                            React.createElement("div", {className: "card-image"}, 
+                                React.createElement("div", {className: "video-container"}, 
+                                    React.createElement("iframe", {
+                                        width: "853", 
+                                        height: "480", 
+                                        src: "//www.youtube.com/embed/Q8TXgCzxEnw?rel=0", 
+                                        allowfullscreen: true}
+                                    )
+                                )
+                            ), 
+                            React.createElement("div", {className: "card-content"}, 
+                                React.createElement("p", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa. ...aaaaaaaaaaaaaaaaaaaaaaa")
+                            ), 
+                            React.createElement("div", {className: "card-action"}, 
+                                React.createElement("a", {href: "#"}, React.createElement("i", {className: "mdi-av-skip-previous"})), 
+                                React.createElement("a", {href: "#"}, React.createElement("i", {className: "mdi-av-skip-next"}))
+                            )
+                        )
                     )
                 )
             )

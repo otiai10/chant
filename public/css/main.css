@@ -27,3 +27,7 @@ button.stamp {
 button.stamp:active {
     background-color: white;
 }
+/* とりあえず */
+iframe {
+    border: none;
+}
