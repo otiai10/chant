@@ -25,11 +25,51 @@ chant.Send = function(/* string */typ/* string */, /* any */value) {
 var Contents = React.createClass({
     render: function() {
         return (
-            <div className="row">
-                <div className="col s12">
-                    <h1>CHANT v1</h1>
-                    <TextInput />
-                    <Messages />
+            <div>
+                <div className="row">
+                    <div className="col s12">
+                        <h1 className="modest">{this.props.name} v1</h1>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col s12">
+                        <img src={this.props.myself.profile_image_url} className="user-icon myself" />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col s12 m6">
+                        <TextInput />
+                    </div>
+                    <div className="col s12 m6">
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>女医と結婚したい</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>女医と結婚したい</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>女医と結婚したい</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                        <button className="stamp"><span>foobarbuz</span></button>
+                        <button className="stamp"><span>foo</span></button>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col s12 m8">
+                        <Messages />
+                    </div>
+                    <div className="col s12 m4">
+                    </div>
                 </div>
             </div>
         );
@@ -53,6 +93,7 @@ var TextInput = React.createClass({
                 onChange={this.onChange}
                 value={value}
                 className="materialize-textarea"
+                style={{paddingTop: 0}}
                 placeholder="press enter to send ⏎"
             ></textarea>
         );
@@ -108,7 +149,6 @@ var Messages = React.createClass({
         });
         return (
             <div>
-                <p>メッセージ↓↓</p>
                 {messages}
             </div>
         );

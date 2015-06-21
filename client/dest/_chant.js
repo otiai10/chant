@@ -1,7 +1,7 @@
 // onready的なこと
 setTimeout(function(){
   React.render(
-    React.createElement(Contents, {name: "World"}),
+    React.createElement(Contents, {name: "World", myself: Config.myself}),
     // document.body
     document.getElementById('container')
   );
@@ -34,11 +34,51 @@ chant.Send = function(/* string */typ/* string */, /* any */value) {
 var Contents = React.createClass({displayName: "Contents",
     render: function() {
         return (
-            React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col s12"}, 
-                    React.createElement("h1", null, "CHANT v1"), 
-                    React.createElement(TextInput, null), 
-                    React.createElement(Messages, null)
+            React.createElement("div", null, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col s12"}, 
+                        React.createElement("h1", {className: "modest"}, this.props.name, " v1")
+                    )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col s12"}, 
+                        React.createElement("img", {src: this.props.myself.profile_image_url, className: "user-icon myself"})
+                    )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col s12 m6"}, 
+                        React.createElement(TextInput, null)
+                    ), 
+                    React.createElement("div", {className: "col s12 m6"}, 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "女医と結婚したい")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "女医と結婚したい")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "女医と結婚したい")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foobarbuz")), 
+                        React.createElement("button", {className: "stamp"}, React.createElement("span", null, "foo"))
+                    )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col s12 m8"}, 
+                        React.createElement(Messages, null)
+                    ), 
+                    React.createElement("div", {className: "col s12 m4"}
+                    )
                 )
             )
         );
@@ -62,6 +102,7 @@ var TextInput = React.createClass({displayName: "TextInput",
                 onChange: this.onChange, 
                 value: value, 
                 className: "materialize-textarea", 
+                style: {paddingTop: 0}, 
                 placeholder: "press enter to send ⏎"
             })
         );
@@ -117,7 +158,6 @@ var Messages = React.createClass({displayName: "Messages",
         });
         return (
             React.createElement("div", null, 
-                React.createElement("p", null, "メッセージ↓↓"), 
                 messages
             )
         );

@@ -17,5 +17,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui">
     <link rel="apple-touch-icon" href="/public/img/apple-touch-icon.png"/>
 
+    {{range .moreStyles}}
+      <link rel="stylesheet" href="/public/css/{{.}}">
+    {{end}}
+
   </head>
   <body>

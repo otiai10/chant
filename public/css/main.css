@@ -1,0 +1,29 @@
+/* ひかえめなタイトル */
+h1.modest {
+    color: #ff9800;
+}
+
+img.user-icon {
+    cursor: pointer;
+    border-radius: 30px;
+}
+img.user-icon.myself:after {
+    content: "XXXX";
+    width: 30px;
+    height: 30px;
+    background-color: black;
+}
+button.stamp {
+    font-size: xx-small;
+    text-align: center;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    background-color: #dddddd;
+    cursor: pointer;
+}
+button.stamp:active {
+    background-color: white;
+}
