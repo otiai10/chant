@@ -16,7 +16,7 @@ type Env struct {
 // 1) すでにログインしてたらApp/Indexをレンダリングする.
 // 2) ログインしていない場合、App/Loginにリダイレクトする.
 func (c Application) Index() revel.Result {
-	if _, ok := c.Session["screenName"]; ok {
+	if _, ok := c.Session["screen_name"]; ok {
 		return c.Render()
 		//return c.Redirect(Room.Index)
 	}

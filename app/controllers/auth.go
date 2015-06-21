@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"chant.v1/app/models"
 	"github.com/mrjones/oauth"
 	"github.com/revel/revel"
 )
@@ -30,7 +31,7 @@ func getCallbackURL() string {
 // 2) TwitterのAuth画面へ
 func (c Auth) Index() revel.Result {
 
-	if _, nameExists := c.Session["screenName"]; nameExists {
+	if _, nameExists := c.Session["screen_name"]; nameExists {
 		// 既にセッションを持っているのでルームにリダイレクトする
 		return c.Redirect(Application.Index)
 	}
@@ -80,26 +81,21 @@ func (c *Auth) Callback(oauth_verifier string) revel.Result {
 			accessToken,
 		)
 		defer resp.Body.Close()
-		account := struct {
-			Name            string `json:"name"`
-			ProfileImageURL string `json:"profile_image_url"`
-			ScreenName      string `json:"screen_name"`
-		}{}
-		_ = json.NewDecoder(resp.Body).Decode(&account)
+		user := &models.User{}
+		if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+			revel.ERROR.Println("decode error", err)
+		}
 		// }}}
+
 		// セッションに格納する
-		c.Session["name"] = account.Name
-		c.Session["screenName"] = account.ScreenName
-		c.Session["profileImageUrl"] = account.ProfileImageURL
+		b, _ := json.Marshal(user)
+		c.Session["screen_name"] = user.ScreenName
+		c.Session["user_raw"] = string(b)
+
 	} else {
 		// 失敗したので、エラーを吐く
 		revel.ERROR.Println("requestTokenとoauth_verifierを用いてaccessTokenを得たかったけど失敗したの図:\t", err)
 	}
 
 	return c.Redirect(Application.Index)
-}
-
-func init() {
-	// revel.Controller.*が実行されるときに必ず呼べる？
-	// twitter.Debug(true)
 }

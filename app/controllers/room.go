@@ -11,7 +11,7 @@ type Room struct {
 
 // Index ...
 func (c Room) Index() revel.Result {
-	user, ok := c.Session["screenName"]
+	user, ok := c.Session["screen_name"]
 	if !ok {
 		return c.Redirect(Application.Index)
 		//return c.RenderTemplate("Application/Index.html")
@@ -23,7 +23,7 @@ func (c Room) Index() revel.Result {
 func (c Room) Leave() revel.Result {
 	// TODO: このへんもレポジトリ的な
 	delete(c.Session, "name")
-	delete(c.Session, "screenName")
-	delete(c.Session, "profileImageUrl")
+	delete(c.Session, "screen_name")
+	delete(c.Session, "profile_image_url")
 	return c.Redirect(Application.Index)
 }
