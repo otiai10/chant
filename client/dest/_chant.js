@@ -10,7 +10,7 @@ var chant = chant || {};
 chant.__socket = null;
 chant.socket = function(force) {
     if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://localhost:14000/websocket/room/socket');
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
     }
     return chant.__socket;
 };

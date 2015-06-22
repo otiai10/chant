@@ -4,6 +4,20 @@ package routes
 import "github.com/revel/revel"
 
 
+type tPreview struct {}
+var Preview tPreview
+
+
+func (_ tPreview) Index(
+		url string,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "url", url)
+	return revel.MainRouter.Reverse("Preview.Index", args).Url
+}
+
+
 type tRoom struct {}
 var Room tRoom
 
@@ -74,20 +88,6 @@ func (_ tAuth) Callback(
 	
 	revel.Unbind(args, "oauth_verifier", oauth_verifier)
 	return revel.MainRouter.Reverse("Auth.Callback", args).Url
-}
-
-
-type tPreview struct {}
-var Preview tPreview
-
-
-func (_ tPreview) Index(
-		url string,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "url", url)
-	return revel.MainRouter.Reverse("Preview.Index", args).Url
 }
 
 

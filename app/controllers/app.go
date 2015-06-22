@@ -25,8 +25,12 @@ func (c Application) Index() revel.Result {
 			// とりあえず
 			return c.Redirect("/login")
 		}
+
 		Config := ServerConfig{
 			Myself: user,
+			Server: map[string]interface{}{
+				"host": getHost(),
+			},
 		}
 		return c.Render(Config)
 		//return c.Redirect(Room.Index)
@@ -42,4 +46,14 @@ func (c Application) Login() revel.Result {
 
 type ServerConfig struct {
 	Myself interface{} `json:"myself"`
+	Server interface{} `json:"server"`
+}
+
+func getHost() string {
+	host, _ := revel.Config.String("http.host")
+	port, _ := revel.Config.String("http.port")
+	if port != "" {
+		port = ":" + port
+	}
+	return host + port
 }
