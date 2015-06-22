@@ -10,6 +10,7 @@ var Contents = React.createClass({
         var self = this;
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
+            console.log(payload);
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
@@ -33,14 +34,14 @@ var Contents = React.createClass({
         this.setState({messages: this.state.messages});
     },
     join(ev) {
-        if (ev.user.id_str == Config.myself.id_str) {
-            return;// abort
-        }
-        this.state.members[ev.user.id_str] = ev.user;
+        this.state.members = ev.value;
+        delete this.state.members[Config.myself.id_str];
         this.setState({members: this.state.members});
     },
     leave(ev) {
-        console.log(ev);
+        this.state.members = ev.value;
+        delete this.state.members[Config.myself.id_str];
+        this.setState({members: this.state.members});
     },
     render: function() {
         var messages = this.state.messages.map(function(message, i) {
@@ -125,17 +126,5 @@ var Contents = React.createClass({
                 </div>
             </div>
         );
-    }
-});
-
-var Members = React.createClass({
-    render() {
-        var members = [];
-        for (var id in this.props.members) {
-            members.push(
-                <img src={this.props.members[id].profile_image_url} className="user-icon" />
-            );
-        }
-        return <span>{members}</span>;
     }
 });

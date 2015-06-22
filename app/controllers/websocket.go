@@ -14,6 +14,7 @@ type ChantSocket struct {
 }
 
 // RoomSocket handles `GET /websocket/room/socket` and `websocket connection`
+// websocketが繋がったときの挙動を定義している
 func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
@@ -24,11 +25,14 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	myroom := chatroom.GetRoom()
 
+	// 自分のJoinを自分に伝えるために、Subscribeのあとに呼ぶ
 	subscription := myroom.Subscribe()
-	defer myroom.Unsubscribe(subscription)
-
 	myroom.Join(user)
-	defer myroom.Leave(user)
+	defer func(){
+		// 自分のLeaveを自分に送ってロックしてしまうので、drainをさきに呼ぶ
+		myroom.Unsubscribe(subscription)
+		myroom.Leave(user)
+	}()
 
 	// 自分自身のソケットから来る発言を受け取るチャンネル
 	myself := make(chan string)
@@ -64,7 +68,6 @@ func listenMyself(conn *websocket.Conn, reciever chan<- string) {
 			close(reciever)
 			return
 		}
-		revel.INFO.Println(msg, &msg)
 		reciever <- msg
 	}
 }

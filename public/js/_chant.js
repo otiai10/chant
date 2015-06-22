@@ -6,6 +6,32 @@ setTimeout(function(){
   );
 }, 0);
 
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+
+
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
@@ -18,6 +44,7 @@ var Contents = React.createClass({displayName: "Contents",
         var self = this;
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
+            console.log(payload);
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
@@ -41,14 +68,14 @@ var Contents = React.createClass({displayName: "Contents",
         this.setState({messages: this.state.messages});
     },
     join(ev) {
-        if (ev.user.id_str == Config.myself.id_str) {
-            return;// abort
-        }
-        this.state.members[ev.user.id_str] = ev.user;
+        this.state.members = ev.value;
+        delete this.state.members[Config.myself.id_str];
         this.setState({members: this.state.members});
     },
     leave(ev) {
-        console.log(ev);
+        this.state.members = ev.value;
+        delete this.state.members[Config.myself.id_str];
+        this.setState({members: this.state.members});
     },
     render: function() {
         var messages = this.state.messages.map(function(message, i) {
@@ -135,6 +162,7 @@ var Contents = React.createClass({displayName: "Contents",
         );
     }
 });
+
 
 var Members = React.createClass({displayName: "Members",
     render() {
@@ -294,28 +322,3 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     }
 });
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-

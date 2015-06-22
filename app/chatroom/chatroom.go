@@ -26,7 +26,7 @@ type Room struct {
 	publish     chan *models.Event
 	terminate   chan interface{}
 	subscribers *list.List
-	Info        interface{}
+	members     *list.List
 }
 
 // Open Roomごとに部屋を開く. foreverなgoroutineをつくる.
@@ -39,7 +39,6 @@ func (room *Room) Serve() {
 		// 受信用のチャンネルを返してあげる必要がある.
 		case sub := <-room.entrance:
 			room.subscribers.PushBack(sub)
-			log.Println("room.entrance", sub)
 			// Roomは、
 		// 出口にsubscriptionを投げられたら
 		// subscriptionをRoomのsubscribersから抹消する必要がある.
@@ -60,7 +59,6 @@ func (room *Room) Serve() {
 					the.New <- ev
 				}
 			}
-			log.Println("room.publish", ev)
 		// Roomは、
 		// なんらかの不具合があったときに
 		// foreverなルーチンを終了して死ぬ.
@@ -77,6 +75,7 @@ func newRoom() *Room {
 		exit:        make(chan Subscription),
 		publish:     make(chan *models.Event),
 		subscribers: list.New(),
+		members:     list.New(),
 	}
 	go room.Serve()
 	return room
@@ -135,12 +134,37 @@ func (room *Room) Say(user *models.User, msg string) {
 }
 
 func (room *Room) Join(user *models.User) {
+	room.members.PushBack(user)
 	event := new(models.Event)
 	event.User = user
 	event.Type = models.JOIN
+	event.Value = room.getUniqueUsers()
 	room.publish <- event
 }
 
 func (room *Room) Leave(user *models.User) {
+	room.removeOneUser(user)
+	event := new(models.Event)
+	event.User = user
+	event.Type = models.LEAVE
+	event.Value = room.getUniqueUsers()
+	room.publish <- event
+}
 
+func (room *Room) getUniqueUsers() map[string]*models.User {
+	res := map[string]*models.User{}
+	for e := room.members.Front(); e != nil; e = e.Next() {
+		user := e.Value.(*models.User)
+		res[user.IDstr] = user
+	}
+	return res
+}
+
+func (room *Room) removeOneUser(user *models.User) {
+	for e := room.members.Front(); e != nil; e = e.Next() {
+		if the := e.Value.(*models.User); the.IDstr == user.IDstr {
+			room.members.Remove(e)
+			return
+		}
+	}
 }
