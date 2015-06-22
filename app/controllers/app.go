@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/revel/revel"
 	"chant.v1/app/models"
+	"github.com/revel/revel"
 )
 
 // Application ...

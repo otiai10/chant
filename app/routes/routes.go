@@ -4,6 +4,25 @@ package routes
 import "github.com/revel/revel"
 
 
+type tRoom struct {}
+var Room tRoom
+
+
+func (_ tRoom) Index(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Room.Index", args).Url
+}
+
+func (_ tRoom) Leave(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Room.Leave", args).Url
+}
+
+
 type tChantSocket struct {}
 var ChantSocket tChantSocket
 
@@ -69,25 +88,6 @@ func (_ tPreview) Index(
 	
 	revel.Unbind(args, "url", url)
 	return revel.MainRouter.Reverse("Preview.Index", args).Url
-}
-
-
-type tRoom struct {}
-var Room tRoom
-
-
-func (_ tRoom) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Room.Index", args).Url
-}
-
-func (_ tRoom) Leave(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Room.Leave", args).Url
 }
 
 

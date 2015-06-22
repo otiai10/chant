@@ -1,18 +1,36 @@
 package models
 
-type EventType string
+import (
+	"encoding/json"
+	"time"
+)
 
+// めんどい // type EventType string
 const (
-	ETJoin      EventType = "join"
-	ETLeave     EventType = "leave"
-	ETMessage   EventType = "message"
-	ETStamprize EventType = "stamprize"
+	JOIN      = "join"
+	LEAVE     = "leave"
+	MESSAGE   = "message"
+	STAMPRIZE = "stamprize"
 )
 
 type Event struct {
-	Type      EventType   `json:"type"`      // このイベントの種別
+	Type      string      `json:"type"`      // このイベントの種別
 	Raw       string      `json:"raw"`       // このイベントの内容を
 	Value     interface{} `json:"value"`     // このイベントの内容
-	Timestamp uint64      `json:"timestamp"` // このイベントのpublish時間
+	Timestamp int64       `json:"timestamp"` // このイベントのpublish時間
 	User      *User       `json:"user"`      // このイベントの発起人
+}
+
+func ConstructEvent(user *User, raw string) (*Event, error) {
+	event := new(Event)
+	if err := json.Unmarshal([]byte(raw), event); err != nil {
+		return event, err
+	}
+	event.Timestamp = time.Now().UnixNano()
+	event.User = user
+	switch event.Type {
+	case MESSAGE:
+		event.Value = event.Raw
+	}
+	return event, nil
 }

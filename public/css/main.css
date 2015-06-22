@@ -1,3 +1,8 @@
+/* ぜんたい */
+body {
+    background-color: #fefefe;
+}
+
 /* ひかえめなタイトル */
 h1.modest {
     color: #ff9800;
@@ -30,4 +35,37 @@ button.stamp:active {
 /* とりあえず */
 iframe {
     border: none;
+}
+
+div.box {
+    width: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+}
+
+span.meta {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+div.entry {
+    margin-bottom: 20px;
+}
+
+div.message-wrapper {
+    margin-left: 6px;
+}
+
+div.meta-wrapper {
+    margin-bottom: 6px;
+}
+
+/* transition */
+.example-appear {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.example-appear.example-appear-active {
+    opacity: 1;
 }

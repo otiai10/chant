@@ -1,8 +1,7 @@
 // onready的なこと
 setTimeout(function(){
   React.render(
-    <Contents name="World" myself={Config.myself} />,
-    // document.body
+    <Contents name="CHANT" myself={Config.myself} />,
     document.getElementById('container')
   );
 }, 0);
