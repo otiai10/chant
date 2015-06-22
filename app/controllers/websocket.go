@@ -6,6 +6,7 @@ import (
 
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
+	"chant.v1/app/repository"
 )
 
 // ChantSocket is controller to keep socket connection.
@@ -38,6 +39,10 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	myself := make(chan string)
 	// 自分自身のソケットから来る発言を流すgoroutineを流す
 	go listenMyself(ws, myself)
+
+	for _, event := range repository.GetMessages(0) {
+		websocket.JSON.Send(ws, &event)
+	}
 
 	// トゥッティ!　私たちが心を奪う!!
 	for {

@@ -1,20 +1,19 @@
 package repository
 
-import "chant.v1/app/models"
-
+import (
+	"chant.v1/app/models"
+)
 
 // DefaultRepository コードのスタックを使ったやつ.
 type DefaultRepository struct {
-	members map[string]*models.User
+	messages []*models.Event
 }
 
-func NewDefaultRepository() Repository {
-	return &DefaultRepository{
-		members: map[string]*models.User{},
-	}
-}
-
-func (repo *DefaultRepository) AddMember(user *models.User) error {
-	repo.members[user.IDstr] = user
+func (repo *DefaultRepository) PushMessage(ev *models.Event) error {
+	repo.messages = append(repo.messages, ev)
 	return nil
+}
+
+func (repo *DefaultRepository) GetMessages(from int64) []*models.Event {
+	return repo.messages
 }

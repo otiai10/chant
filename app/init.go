@@ -41,5 +41,5 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 }
 
 func InitDB() {
-	repository.InitWithInstance(repository.NewDefaultRepository())
+	repository.InitWithInstance(&repository.DefaultRepository{})
 }

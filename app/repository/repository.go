@@ -7,21 +7,29 @@ import (
 
 // Repository オンメモリとか、Redisとか.
 type Repository interface {
-	AddMember(*models.User) error
+	PushMessage(*models.Event) error
+	GetMessages(int64) []*models.Event
 }
 
 var (
-	_instance Repository
+	_impl Repository
 )
 
 func InitWithInstance(repo Repository) error {
-	if _instance != nil {
+	if _impl != nil {
 		return fmt.Errorf("repository is already initialized")
 	}
-	_instance = repo
+	_impl = repo
 	return nil
 }
 
-func AddMember(user *models.User) error {
-	return _instance.AddMember(user)
+func PushMessage(ev *models.Event) error {
+	if _impl == nil {
+		return fmt.Errorf("init repository first!!")
+	}
+	return _impl.PushMessage(ev)
+}
+
+func GetMessages(from int64) []*models.Event {
+	return _impl.GetMessages(from)
 }

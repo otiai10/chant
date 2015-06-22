@@ -8,6 +8,7 @@ import (
 	// "time"
 
 	"chant.v1/app/models"
+	"chant.v1/app/repository"
 	// "github.com/revel/revel"
 
 	"log"
@@ -130,6 +131,7 @@ func (room *Room) Say(user *models.User, msg string) {
 		// TODO: なんかする
 		return
 	}
+	repository.PushMessage(event)
 	room.publish <- event
 }
 
