@@ -43,8 +43,10 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 func InitDB() {
 	var repo repository.Repository
 	switch revel.Config.StringDefault("repository", "default") {
-	case "default":
-		repo = &repository.DefaultRepository{}
+		case "redis":
+		repo = &repository.RedisRepository{
+			Host: "localhost", Port: "6379",
+		}
 	default:
 		repo = &repository.DefaultRepository{}
 	}
