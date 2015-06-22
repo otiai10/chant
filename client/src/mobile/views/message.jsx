@@ -5,10 +5,18 @@ var Message = React.createClass({
         return (
             <div className="entry">
                 <MessageMeta message={this.props.message} />
-                <div className="box">
-                    <MessageIcon message={this.props.message} />
-                    <MessageContent message={this.props.message} />
-                </div>
+                <MessageEntry message={this.props.message} />
+            </div>
+        );
+    }
+});
+
+var MessageEntry = React.createClass({
+    render: function () {
+        return (
+            <div className="box">
+                <MessageIcon message={this.props.message}/>
+                <MessageContent message={this.props.message}/>
             </div>
         );
     }
@@ -48,17 +56,36 @@ var MessageContent = React.createClass({
 
 var MessageRecursive = React.createClass({
     render: function() {
-        if (false) {
+        if (this.props.message.value.children) {
             return (
-                <blockquote>
-                    <MessageRecursive message={this.props.message.children} />
-                </blockquote>
-            );
-        }
-        return (
-             <div className="message-wrapper">
                 <div>
-                    {this.props.message.value}
+                    <div>{this.props.message.value.text}</div>
+                    <blockquote>
+                        <MessageEntry message={this.props.message.value.children} />
+                    </blockquote>
+                </div>
+            );
+                {/*
+                <div className="message-wrapper">
+                    <div>
+                        {this.props.message.value.text}
+                    </div>
+                    <blockquote>
+                        <MessageRecursive message={this.props.message.value.children} />
+                    </blockquote>
+                </div>
+                */}
+        }
+        return <MessageAnchorable message={this.props.message} />;
+    }
+});
+
+var MessageAnchorable = React.createClass({
+    render: function() {
+        return (
+            <div className="message-wrapper">
+                <div>
+                    {this.props.message.value.text}
                 </div>
             </div>
         );

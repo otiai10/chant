@@ -24,6 +24,11 @@ _testmain.go
 *.test
 *.prof
 
+# Revel App
+app/tmp/*
+app/routes/*
+conf/app.conf
+
 # IntelliJ
 .idea/*
 *.iml

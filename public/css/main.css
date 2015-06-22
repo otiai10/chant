@@ -1,11 +1,15 @@
 /* ぜんたい */
 body {
-    background-color: #fefefe;
+    background-color: #fafafa;
 }
 
 /* ひかえめなタイトル */
 h1.modest {
     color: #ff9800;
+    font-size: 1em;
+    line-height: 2.2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 img.user-icon {
@@ -53,11 +57,11 @@ div.entry {
 }
 
 div.message-wrapper {
-    margin-left: 6px;
+    margin-left: 8px;
 }
 
 div.meta-wrapper {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 /* transition */
@@ -68,4 +72,19 @@ div.meta-wrapper {
 
 .example-appear.example-appear-active {
     opacity: 1;
+}
+
+blockquote {
+    border-left: 8px solid #e0e0e0;
+    margin-top:    8px;
+    margin-bottom: 0;
+    padding-left:  8px;
+}
+
+blockquote img.user-icon {
+    width: 32px;
+}
+
+.members>span>img.user-icon {
+    margin-right: 8px;
 }

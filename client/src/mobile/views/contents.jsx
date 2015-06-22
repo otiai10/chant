@@ -3,7 +3,53 @@
  * onmessageからのディスパッチとか
  */
 var Contents = React.createClass({
+    getInitialState: function() {
+        chant.socket().onopen = function(ev) { console.log('open', ev); };
+        chant.socket().onclose = function(ev) { console.log('close', ev); };
+        chant.socket().onerror = function(ev) { console.log('error', ev); };
+        var self = this;
+        chant.socket().onmessage = function(ev) {
+            var payload = JSON.parse(ev.data);
+            switch (payload.type) {
+                case "message":
+                    self.newMessage(payload);
+                    break;
+                case "join":
+                    self.join(payload);
+                    break;
+                case "leave":
+                    self.leave(payload);
+                    break;
+            }
+            document.title = "!" + document.title;
+        };
+        return {
+            messages: [],
+            members: {}
+        };
+    },
+    newMessage(message) {
+        this.state.messages.unshift(message);
+        this.setState({messages: this.state.messages});
+    },
+    join(ev) {
+        if (ev.user.id_str == Config.myself.id_str) {
+            return;// abort
+        }
+        this.state.members[ev.user.id_str] = ev.user;
+        this.setState({members: this.state.members});
+    },
+    leave(ev) {
+        console.log(ev);
+    },
     render: function() {
+        var messages = this.state.messages.map(function(message, i) {
+            return (
+                <div className="entry" transitionName="example">
+                    <Message message={message} id={i} key={i} />
+                </div>
+            );
+        });
         return (
             <div>
                 <div className="row">
@@ -12,8 +58,11 @@ var Contents = React.createClass({
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col s12">
-                        <img src={this.props.myself.profile_image_url} className="user-icon myself" />
+                    <div className="col s12 members">
+                        <span>
+                            <img src={this.props.myself.profile_image_url} className="user-icon myself" />
+                        </span>
+                        <Members members={this.state.members} />
                     </div>
                 </div>
                 <div className="row">
@@ -48,7 +97,7 @@ var Contents = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col s12 m8">
-                        <Messages />
+                        <Messages messages={this.state.messages} />
                     </div>
                     <div className="col s12 m4">
                         {/*
@@ -76,5 +125,17 @@ var Contents = React.createClass({
                 </div>
             </div>
         );
+    }
+});
+
+var Members = React.createClass({
+    render() {
+        var members = [];
+        for (var id in this.props.members) {
+            members.push(
+                <img src={this.props.members[id].profile_image_url} className="user-icon" />
+            );
+        }
+        return <span>{members}</span>;
     }
 });

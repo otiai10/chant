@@ -6,38 +6,58 @@ setTimeout(function(){
   );
 }, 0);
 
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-
-
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
  */
 var Contents = React.createClass({displayName: "Contents",
+    getInitialState: function() {
+        chant.socket().onopen = function(ev) { console.log('open', ev); };
+        chant.socket().onclose = function(ev) { console.log('close', ev); };
+        chant.socket().onerror = function(ev) { console.log('error', ev); };
+        var self = this;
+        chant.socket().onmessage = function(ev) {
+            var payload = JSON.parse(ev.data);
+            switch (payload.type) {
+                case "message":
+                    self.newMessage(payload);
+                    break;
+                case "join":
+                    self.join(payload);
+                    break;
+                case "leave":
+                    self.leave(payload);
+                    break;
+            }
+            document.title = "!" + document.title;
+        };
+        return {
+            messages: [],
+            members: {}
+        };
+    },
+    newMessage(message) {
+        this.state.messages.unshift(message);
+        this.setState({messages: this.state.messages});
+    },
+    join(ev) {
+        if (ev.user.id_str == Config.myself.id_str) {
+            return;// abort
+        }
+        this.state.members[ev.user.id_str] = ev.user;
+        this.setState({members: this.state.members});
+    },
+    leave(ev) {
+        console.log(ev);
+    },
     render: function() {
+        var messages = this.state.messages.map(function(message, i) {
+            return (
+                React.createElement("div", {className: "entry", transitionName: "example"}, 
+                    React.createElement(Message, {message: message, id: i, key: i})
+                )
+            );
+        });
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "row"}, 
@@ -46,8 +66,11 @@ var Contents = React.createClass({displayName: "Contents",
                     )
                 ), 
                 React.createElement("div", {className: "row"}, 
-                    React.createElement("div", {className: "col s12"}, 
-                        React.createElement("img", {src: this.props.myself.profile_image_url, className: "user-icon myself"})
+                    React.createElement("div", {className: "col s12 members"}, 
+                        React.createElement("span", null, 
+                            React.createElement("img", {src: this.props.myself.profile_image_url, className: "user-icon myself"})
+                        ), 
+                        React.createElement(Members, {members: this.state.members})
                     )
                 ), 
                 React.createElement("div", {className: "row"}, 
@@ -82,7 +105,7 @@ var Contents = React.createClass({displayName: "Contents",
                 ), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col s12 m8"}, 
-                        React.createElement(Messages, null)
+                        React.createElement(Messages, {messages: this.state.messages})
                     ), 
                     React.createElement("div", {className: "col s12 m4"}
                         /*
@@ -113,6 +136,17 @@ var Contents = React.createClass({displayName: "Contents",
     }
 });
 
+var Members = React.createClass({displayName: "Members",
+    render() {
+        var members = [];
+        for (var id in this.props.members) {
+            members.push(
+                React.createElement("img", {src: this.props.members[id].profile_image_url, className: "user-icon"})
+            );
+        }
+        return React.createElement("span", null, members);
+    }
+});
 // var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Message = React.createClass({displayName: "Message",
@@ -120,10 +154,18 @@ var Message = React.createClass({displayName: "Message",
         return (
             React.createElement("div", {className: "entry"}, 
                 React.createElement(MessageMeta, {message: this.props.message}), 
-                React.createElement("div", {className: "box"}, 
-                    React.createElement(MessageIcon, {message: this.props.message}), 
-                    React.createElement(MessageContent, {message: this.props.message})
-                )
+                React.createElement(MessageEntry, {message: this.props.message})
+            )
+        );
+    }
+});
+
+var MessageEntry = React.createClass({displayName: "MessageEntry",
+    render: function () {
+        return (
+            React.createElement("div", {className: "box"}, 
+                React.createElement(MessageIcon, {message: this.props.message}), 
+                React.createElement(MessageContent, {message: this.props.message})
             )
         );
     }
@@ -163,17 +205,36 @@ var MessageContent = React.createClass({displayName: "MessageContent",
 
 var MessageRecursive = React.createClass({displayName: "MessageRecursive",
     render: function() {
-        if (false) {
+        if (this.props.message.value.children) {
             return (
-                React.createElement("blockquote", null, 
-                    React.createElement(MessageRecursive, {message: this.props.message.children})
+                React.createElement("div", null, 
+                    React.createElement("div", null, this.props.message.value.text), 
+                    React.createElement("blockquote", null, 
+                        React.createElement(MessageEntry, {message: this.props.message.value.children})
+                    )
                 )
             );
+                {/*
+                <div className="message-wrapper">
+                    <div>
+                        {this.props.message.value.text}
+                    </div>
+                    <blockquote>
+                        <MessageRecursive message={this.props.message.value.children} />
+                    </blockquote>
+                </div>
+                */}
         }
+        return React.createElement(MessageAnchorable, {message: this.props.message});
+    }
+});
+
+var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
+    render: function() {
         return (
-             React.createElement("div", {className: "message-wrapper"}, 
+            React.createElement("div", {className: "message-wrapper"}, 
                 React.createElement("div", null, 
-                    this.props.message.value
+                    this.props.message.value.text
                 )
             )
         );
@@ -182,34 +243,8 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 // var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Messages = React.createClass({displayName: "Messages",
-    getInitialState: function() {
-        chant.socket().onopen = function(ev) { console.log('open', ev); };
-        chant.socket().onclose = function(ev) { console.log('close', ev); };
-        chant.socket().onerror = function(ev) { console.log('error', ev); };
-        var self = this;
-        chant.socket().onmessage = function(ev) {
-            // FIXME: そうじゃないだろ感ある
-            var payload = JSON.parse(ev.data);
-            // TODO: ここでごにょごにょする？
-            switch (payload.type) {
-            case "message":
-                payload.value = payload.value.replace("\n", "<br>");
-                self.state.messages.unshift(payload);
-            }
-            self.setState({messages: self.state.messages});
-            // TODO: ここでごにょごにょするのいやだよ
-            document.title = "!" + document.title;
-        };
-
-        return {
-            messages: []
-        };
-    },
-    componentDidMount: function() {
-        // window.alert("did mount");
-    },
     render: function() {
-        var messages = this.state.messages.map(function(message, i) {
+        var messages = this.props.messages.map(function(message, i) {
             return (
                 React.createElement("div", {className: "entry", transitionName: "example"}, 
                     React.createElement(Message, {message: message, id: i, key: i})
@@ -259,3 +294,28 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     }
 });
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+

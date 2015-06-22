@@ -129,12 +129,16 @@ func (room *Room) Say(user *models.User, msg string) {
 	if err != nil {
 		fmt.Println("construct event error", err)
 		// TODO: なんかする
+		return
 	}
 	room.publish <- event
 }
 
 func (room *Room) Join(user *models.User) {
-
+	event := new(models.Event)
+	event.User = user
+	event.Type = models.JOIN
+	room.publish <- event
 }
 
 func (room *Room) Leave(user *models.User) {
