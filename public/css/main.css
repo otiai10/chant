@@ -53,7 +53,7 @@ span.meta {
 }
 
 div.entry {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 div.message-wrapper {
@@ -61,7 +61,7 @@ div.message-wrapper {
 }
 
 div.meta-wrapper {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 /* transition */

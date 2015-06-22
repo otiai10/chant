@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/revel/revel"
 	"chant.v1/app/repository"
+	"github.com/revel/revel"
 )
 
 func init() {
@@ -41,5 +41,12 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 }
 
 func InitDB() {
-	repository.InitWithInstance(&repository.DefaultRepository{})
+	var repo repository.Repository
+	switch revel.Config.StringDefault("repository", "default") {
+	case "default":
+		repo = &repository.DefaultRepository{}
+	default:
+		repo = &repository.DefaultRepository{}
+	}
+	repository.InitWithInstance(repo)
 }
