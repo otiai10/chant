@@ -7,6 +7,24 @@ setTimeout(function(){
 }, 0);
 
 var chant = chant || {};
+chant._notification = {
+
+};
+chant.notify = function(title, body, icon, onclick, onclose) {
+    onclick = onclick || function() {window.focus();};
+    onclose = onclose || function() {};
+    var note = new window.Notification(
+        title || 'CHANT',
+        {
+            body: body || 'おだやかじゃないわね',
+            icon: icon || ''
+        }
+    );
+    note.onclick = onclick;
+    note.onclise = onclose;
+};
+
+var chant = chant || {};
 chant.__socket = null;
 chant.socket = function(force) {
     if (!chant.__socket || force) {
@@ -89,7 +107,7 @@ var Contents = React.createClass({displayName: "Contents",
             React.createElement("div", null, 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col s12"}, 
-                        React.createElement("h1", {className: "modest"}, this.props.name, " v1")
+                        React.createElement("h1", {className: "modest pull-right"}, React.createElement("img", {src: "/public/img/title.png", width: "60px"}))
                     )
                 ), 
                 React.createElement("div", {className: "row"}, 

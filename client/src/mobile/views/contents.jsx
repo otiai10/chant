@@ -55,7 +55,7 @@ var Contents = React.createClass({
             <div>
                 <div className="row">
                     <div className="col s12">
-                        <h1 className="modest">{this.props.name} v1</h1>
+                        <h1 className="modest pull-right"><img src="/public/img/title.png" width="60px"/></h1>
                     </div>
                 </div>
                 <div className="row">
