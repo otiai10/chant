@@ -57,7 +57,8 @@ div.entry {
 }
 
 div.message-wrapper {
-    margin-left: 8px;
+    margin-left:  8px;
+    margin-right: 12px;
 }
 
 div.meta-wrapper {
