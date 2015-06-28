@@ -20,6 +20,7 @@ var TextInput = React.createClass({
         );
     },
     onChange: function(ev) {
+        chant.clearUnread();// TODO: うーむ
         this.setState({value: ev.target.value});
     },
     onKeyDown: function(ev) {

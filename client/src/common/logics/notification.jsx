@@ -19,9 +19,9 @@ chant.notify = function(body, title, icon, onclick, onclose) {
 
 chant.notifier = {
     notify: function(message) {
-        chant.addUnread();
         // ignore my message
         if (message.user.id_str == Config.myself.id_str) return;
+        chant.addUnread();
         // detect @all or @me
         var exp = new RegExp('@all|@' + Config.myself.screen_name);
         if (!exp.test(message.value.text)) return;

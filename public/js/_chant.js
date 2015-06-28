@@ -13,83 +13,6 @@ setTimeout(function(){
     };
 }, 0);
 
-var chant = chant || {};
-chant._notification = {
-
-};
-chant.notify = function(body, title, icon, onclick, onclose) {
-    onclick = onclick || function() {window.focus();};
-    onclose = onclose || function() {};
-    if (icon) icon = icon.replace('_normal', '_bigger');
-    var note = new window.Notification(
-        title || 'CHANT',
-        {
-            body: body || 'おだやかじゃないわね',
-            icon: icon || '/public/img/icon.png'
-        }
-    );
-    note.onclick = onclick;
-    note.onclise = onclose;
-};
-
-chant.notifier = {
-    notify: function(message) {
-        chant.addUnread();
-        // ignore my message
-        if (message.user.id_str == Config.myself.id_str) return;
-        // detect @all or @me
-        var exp = new RegExp('@all|@' + Config.myself.screen_name);
-        if (!exp.test(message.value.text)) return;
-        chant.notify(
-            message.value.text,
-            message.user.screen_name,
-            message.user.profile_image_url
-        );
-    }
-};
-
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-
-
-var chant = chant || {};
-
-chant.isCurrentPage = false;
-
-chant.addUnread = function(ev) {
-    if (chant.isCurrentPage) return;
-    document.title = '!' + document.title;
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
-};
-chant.clearUnread = function(ev) {
-    document.title = document.title.replace(/!/g, '');
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
-};
-
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
@@ -286,6 +209,7 @@ var MessageMeta = React.createClass({displayName: "MessageMeta",
     stamprize: function() {
         chant.Send('stamprize', JSON.stringify(this.props.message));
         document.getElementsByTagName('textarea')[0].focus();
+        chant.clearUnread();// うーむ
     }
 });
 
@@ -425,6 +349,7 @@ var TextInput = React.createClass({displayName: "TextInput",
         );
     },
     onChange: function(ev) {
+        chant.clearUnread();// TODO: うーむ
         this.setState({value: ev.target.value});
     },
     onKeyDown: function(ev) {
@@ -440,3 +365,79 @@ var TextInput = React.createClass({displayName: "TextInput",
         this.setState({value: this.state.value + ' ' + text})
     }
 });
+var chant = chant || {};
+chant._notification = {
+
+};
+chant.notify = function(body, title, icon, onclick, onclose) {
+    onclick = onclick || function() {window.focus();};
+    onclose = onclose || function() {};
+    if (icon) icon = icon.replace('_normal', '_bigger');
+    var note = new window.Notification(
+        title || 'CHANT',
+        {
+            body: body || 'おだやかじゃないわね',
+            icon: icon || '/public/img/icon.png'
+        }
+    );
+    note.onclick = onclick;
+    note.onclise = onclose;
+};
+
+chant.notifier = {
+    notify: function(message) {
+        // ignore my message
+        if (message.user.id_str == Config.myself.id_str) return;
+        chant.addUnread();
+        // detect @all or @me
+        var exp = new RegExp('@all|@' + Config.myself.screen_name);
+        if (!exp.test(message.value.text)) return;
+        chant.notify(
+            message.value.text,
+            message.user.screen_name,
+            message.user.profile_image_url
+        );
+    }
+};
+
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+
+
+var chant = chant || {};
+
+chant.isCurrentPage = false;
+
+chant.addUnread = function(ev) {
+    if (chant.isCurrentPage) return;
+    document.title = '!' + document.title;
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
+};
+chant.clearUnread = function(ev) {
+    document.title = document.title.replace(/!/g, '');
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
+};

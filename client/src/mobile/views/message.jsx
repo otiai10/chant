@@ -35,6 +35,7 @@ var MessageMeta = React.createClass({
     stamprize: function() {
         chant.Send('stamprize', JSON.stringify(this.props.message));
         document.getElementsByTagName('textarea')[0].focus();
+        chant.clearUnread();// うーむ
     }
 });
 
