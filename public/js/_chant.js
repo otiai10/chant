@@ -74,23 +74,22 @@ var Contents = React.createClass({displayName: "Contents",
                     self.leave(payload);
                     break;
             }
-            document.title = "!" + document.title;
         };
         return {
             messages: [],
             members: {}
         };
     },
-    newMessage(message) {
+    newMessage: function(message) {
         this.state.messages.unshift(message);
         this.setState({messages: this.state.messages});
     },
-    join(ev) {
+    join: function(ev) {
         this.state.members = ev.value;
         delete this.state.members[Config.myself.id_str];
         this.setState({members: this.state.members});
     },
-    leave(ev) {
+    leave: function(ev) {
         this.state.members = ev.value;
         delete this.state.members[Config.myself.id_str];
         this.setState({members: this.state.members});
@@ -183,7 +182,7 @@ var Contents = React.createClass({displayName: "Contents",
 
 
 var Members = React.createClass({displayName: "Members",
-    render() {
+    render: function() {
         var members = [];
         for (var id in this.props.members) {
             members.push(
