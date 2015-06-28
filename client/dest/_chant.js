@@ -13,6 +13,83 @@ setTimeout(function(){
     };
 }, 0);
 
+var chant = chant || {};
+chant._notification = {
+
+};
+chant.notify = function(body, title, icon, onclick, onclose) {
+    onclick = onclick || function() {window.focus();};
+    onclose = onclose || function() {};
+    if (icon) icon = icon.replace('_normal', '_bigger');
+    var note = new window.Notification(
+        title || 'CHANT',
+        {
+            body: body || 'おだやかじゃないわね',
+            icon: icon || '/public/img/icon.png'
+        }
+    );
+    note.onclick = onclick;
+    note.onclise = onclose;
+};
+
+chant.notifier = {
+    notify: function(message) {
+        chant.addUnread();
+        // ignore my message
+        if (message.user.id_str == Config.myself.id_str) return;
+        // detect @all or @me
+        var exp = new RegExp('@all|@' + Config.myself.screen_name);
+        if (!exp.test(message.value.text)) return;
+        chant.notify(
+            message.value.text,
+            message.user.screen_name,
+            message.user.profile_image_url
+        );
+    }
+};
+
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+
+
+var chant = chant || {};
+
+chant.isCurrentPage = false;
+
+chant.addUnread = function(ev) {
+    if (chant.isCurrentPage) return;
+    document.title = '!' + document.title;
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
+};
+chant.clearUnread = function(ev) {
+    document.title = document.title.replace(/!/g, '');
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
+};
+
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
@@ -20,8 +97,14 @@ setTimeout(function(){
 var Contents = React.createClass({displayName: "Contents",
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
-        chant.socket().onclose = function(ev) { console.log('close', ev); };
-        chant.socket().onerror = function(ev) { console.log('error', ev); };
+        chant.socket().onclose = function(ev) {
+            console.log('close', ev);
+            chant.notify("disconnected with code: " + ev.code);
+        };
+        chant.socket().onerror = function(ev) {
+            console.log('error', ev);
+            chant.notify('ERROR!!');
+        };
         var self = this;
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
@@ -29,7 +112,6 @@ var Contents = React.createClass({displayName: "Contents",
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
-                    chant.addUnread();
                     break;
                 case "join":
                     self.join(payload);
@@ -44,9 +126,14 @@ var Contents = React.createClass({displayName: "Contents",
             members: {}
         };
     },
+    setText: function(text) {
+        this.refs.TextInput.appendTextValue(text);
+        this.refs.TextInput.getDOMNode().focus();
+    },
     newMessage: function(message) {
         this.state.messages.unshift(message);
         this.setState({messages: this.state.messages});
+        chant.notifier.notify(message);
     },
     join: function(ev) {
         this.state.members = ev.value;
@@ -76,14 +163,14 @@ var Contents = React.createClass({displayName: "Contents",
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col s12 members"}, 
                         React.createElement("span", null, 
-                            React.createElement("img", {src: this.props.myself.profile_image_url, className: "user-icon myself"})
+                            React.createElement(Icon, {setText: this.setText, user: this.props.myself})
                         ), 
-                        React.createElement(Members, {members: this.state.members})
+                        React.createElement(Members, {setText: this.setText, members: this.state.members})
                     )
                 ), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col s12 m6"}, 
-                        React.createElement(TextInput, null)
+                        React.createElement(TextInput, {ref: "TextInput"})
                     ), 
                     React.createElement("div", {className: "col s12 m6"}
                         /*
@@ -113,7 +200,7 @@ var Contents = React.createClass({displayName: "Contents",
                 ), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col s12 m8"}, 
-                        React.createElement(Messages, {messages: this.state.messages})
+                        React.createElement(Messages, {setText: this.setText, messages: this.state.messages})
                     ), 
                     React.createElement("div", {className: "col s12 m4"}
                         /*
@@ -144,18 +231,34 @@ var Contents = React.createClass({displayName: "Contents",
     }
 });
 
-
+/**
+ * Icon
+ */
+var Icon = React.createClass({displayName: "Icon",
+    render: function() {
+        return (
+            React.createElement("img", {onClick: this.onClick, src: this.props.user.profile_image_url, className: "user-icon"})
+        );
+    },
+    onClick: function(ev) {
+        this.props.setText('@' + this.props.user.screen_name);
+    }
+});
+/**
+ * Members
+ */
 var Members = React.createClass({displayName: "Members",
     render: function() {
         var members = [];
         for (var id in this.props.members) {
             members.push(
-                React.createElement("img", {src: this.props.members[id].profile_image_url, className: "user-icon"})
+                React.createElement(Icon, {setText: this.props.setText, user: this.props.members[id]})
             );
         }
         return React.createElement("span", null, members);
     }
 });
+
 // var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Message = React.createClass({displayName: "Message",
@@ -163,7 +266,7 @@ var Message = React.createClass({displayName: "Message",
         return (
             React.createElement("div", {className: "entry"}, 
                 React.createElement(MessageMeta, {message: this.props.message}), 
-                React.createElement(MessageEntry, {message: this.props.message})
+                React.createElement(MessageEntry, {setText: this.props.setText, message: this.props.message})
             )
         );
     }
@@ -173,7 +276,7 @@ var MessageEntry = React.createClass({displayName: "MessageEntry",
     render: function () {
         return (
             React.createElement("div", {className: "box"}, 
-                React.createElement(MessageIcon, {message: this.props.message}), 
+                React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message}), 
                 React.createElement(MessageContent, {message: this.props.message})
             )
         );
@@ -196,7 +299,7 @@ var MessageIcon = React.createClass({displayName: "MessageIcon",
     render: function() {
         return (
             React.createElement("div", null, 
-                React.createElement("img", {src: this.props.message.user.profile_image_url, className: "user-icon"})
+                React.createElement(Icon, {setText: this.props.setText, user: this.props.message.user})
             )
         );
     }
@@ -253,10 +356,11 @@ var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
 
 var Messages = React.createClass({displayName: "Messages",
     render: function() {
+        var self = this;
         var messages = this.props.messages.map(function(message, i) {
             return (
                 React.createElement("div", {className: "entry", transitionName: "example"}, 
-                    React.createElement(Message, {message: message, id: i, key: i})
+                    React.createElement(Message, {setText: self.props.setText, message: message, id: i, key: i})
                 )
             );
         });
@@ -276,14 +380,13 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     },
     render: function() {
-        var value = this.state.value;
         return (
             React.createElement("textarea", {
                 cols: "3", 
                 rows: "3", 
                 onKeyDown: this.onKeyDown, 
                 onChange: this.onChange, 
-                value: value, 
+                value: this.state.value, 
                 className: "materialize-textarea", 
                 style: {paddingTop: 0}, 
                 placeholder: "Shift + ⏎ to newline"
@@ -301,64 +404,8 @@ var TextInput = React.createClass({displayName: "TextInput",
             this.setState({value: ""});
             return ev.preventDefault();
         }
+    },
+    appendTextValue: function(text) {
+        this.setState({value: this.state.value + ' ' + text})
     }
 });
-var chant = chant || {};
-chant._notification = {
-
-};
-chant.notify = function(title, body, icon, onclick, onclose) {
-    onclick = onclick || function() {window.focus();};
-    onclose = onclose || function() {};
-    var note = new window.Notification(
-        title || 'CHANT',
-        {
-            body: body || 'おだやかじゃないわね',
-            icon: icon || ''
-        }
-    );
-    note.onclick = onclick;
-    note.onclise = onclose;
-};
-
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-
-
-var chant = chant || {};
-
-chant.isCurrentPage = false;
-
-chant.addUnread = function(ev) {
-    if (chant.isCurrentPage) return;
-    document.title = '!' + document.title;
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
-};
-chant.clearUnread = function(ev) {
-    document.title = document.title.replace(/!/g, '');
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
-};

@@ -5,7 +5,7 @@ var Message = React.createClass({
         return (
             <div className="entry">
                 <MessageMeta message={this.props.message} />
-                <MessageEntry message={this.props.message} />
+                <MessageEntry setText={this.props.setText} message={this.props.message} />
             </div>
         );
     }
@@ -15,7 +15,7 @@ var MessageEntry = React.createClass({
     render: function () {
         return (
             <div className="box">
-                <MessageIcon message={this.props.message}/>
+                <MessageIcon setText={this.props.setText} message={this.props.message}/>
                 <MessageContent message={this.props.message}/>
             </div>
         );
@@ -38,7 +38,7 @@ var MessageIcon = React.createClass({
     render: function() {
         return (
             <div>
-                <img src={this.props.message.user.profile_image_url} className="user-icon" />
+                <Icon setText={this.props.setText} user={this.props.message.user} />
             </div>
         );
     }

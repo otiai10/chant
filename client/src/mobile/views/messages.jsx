@@ -2,10 +2,11 @@
 
 var Messages = React.createClass({
     render: function() {
+        var self = this;
         var messages = this.props.messages.map(function(message, i) {
             return (
                 <div className="entry" transitionName="example">
-                    <Message message={message} id={i} key={i} />
+                    <Message setText={self.props.setText} message={message} id={i} key={i} />
                 </div>
             );
         });

@@ -5,8 +5,14 @@
 var Contents = React.createClass({
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
-        chant.socket().onclose = function(ev) { console.log('close', ev); };
-        chant.socket().onerror = function(ev) { console.log('error', ev); };
+        chant.socket().onclose = function(ev) {
+            console.log('close', ev);
+            chant.notify("disconnected with code: " + ev.code);
+        };
+        chant.socket().onerror = function(ev) {
+            console.log('error', ev);
+            chant.notify('ERROR!!');
+        };
         var self = this;
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
@@ -14,7 +20,6 @@ var Contents = React.createClass({
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
-                    chant.addUnread();
                     break;
                 case "join":
                     self.join(payload);
@@ -29,9 +34,14 @@ var Contents = React.createClass({
             members: {}
         };
     },
+    setText: function(text) {
+        this.refs.TextInput.appendTextValue(text);
+        this.refs.TextInput.getDOMNode().focus();
+    },
     newMessage: function(message) {
         this.state.messages.unshift(message);
         this.setState({messages: this.state.messages});
+        chant.notifier.notify(message);
     },
     join: function(ev) {
         this.state.members = ev.value;
@@ -61,14 +71,14 @@ var Contents = React.createClass({
                 <div className="row">
                     <div className="col s12 members">
                         <span>
-                            <img src={this.props.myself.profile_image_url} className="user-icon myself" />
+                            <Icon setText={this.setText} user={this.props.myself} />
                         </span>
-                        <Members members={this.state.members} />
+                        <Members setText={this.setText} members={this.state.members} />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col s12 m6">
-                        <TextInput />
+                        <TextInput ref="TextInput" />
                     </div>
                     <div className="col s12 m6">
                         {/*
@@ -98,7 +108,7 @@ var Contents = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col s12 m8">
-                        <Messages messages={this.state.messages} />
+                        <Messages setText={this.setText} messages={this.state.messages} />
                     </div>
                     <div className="col s12 m4">
                         {/*
