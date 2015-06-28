@@ -1,54 +1,17 @@
 // onready的なこと
 setTimeout(function(){
-  React.render(
-    React.createElement(Contents, {name: "CHANT", myself: Config.myself}),
-    document.getElementById('container')
-  );
-}, 0);
-
-var chant = chant || {};
-chant._notification = {
-
-};
-chant.notify = function(title, body, icon, onclick, onclose) {
-    onclick = onclick || function() {window.focus();};
-    onclose = onclose || function() {};
-    var note = new window.Notification(
-        title || 'CHANT',
-        {
-            body: body || 'おだやかじゃないわね',
-            icon: icon || ''
-        }
+    chant.isCurrentPage = true;
+    React.render(
+        React.createElement(Contents, {name: "CHANT", myself: Config.myself}),
+        document.getElementById('container')
     );
-    note.onclick = onclick;
-    note.onclise = onclose;
-};
-
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-
+    window.onfocus = function() {
+        chant.clearUnread();
+    };
+    window.onblur = function () {
+        chant.isCurrentPage = false;
+    };
+}, 0);
 
 /**
  * socketの管理は、ここでやるべきかもしれない
@@ -66,6 +29,7 @@ var Contents = React.createClass({displayName: "Contents",
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
+                    chant.addUnread();
                     break;
                 case "join":
                     self.join(payload);
@@ -339,3 +303,62 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     }
 });
+var chant = chant || {};
+chant._notification = {
+
+};
+chant.notify = function(title, body, icon, onclick, onclose) {
+    onclick = onclick || function() {window.focus();};
+    onclose = onclose || function() {};
+    var note = new window.Notification(
+        title || 'CHANT',
+        {
+            body: body || 'おだやかじゃないわね',
+            icon: icon || ''
+        }
+    );
+    note.onclick = onclick;
+    note.onclise = onclose;
+};
+
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+
+
+var chant = chant || {};
+
+chant.isCurrentPage = false;
+
+chant.addUnread = function(ev) {
+    if (chant.isCurrentPage) return;
+    document.title = '!' + document.title;
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
+};
+chant.clearUnread = function(ev) {
+    document.title = document.title.replace(/!/g, '');
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
+};

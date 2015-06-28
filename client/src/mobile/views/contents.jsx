@@ -14,6 +14,7 @@ var Contents = React.createClass({
             switch (payload.type) {
                 case "message":
                     self.newMessage(payload);
+                    chant.addUnread();
                     break;
                 case "join":
                     self.join(payload);

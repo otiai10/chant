@@ -1,7 +1,14 @@
 // onready的なこと
 setTimeout(function(){
-  React.render(
-    <Contents name="CHANT" myself={Config.myself} />,
-    document.getElementById('container')
-  );
+    chant.isCurrentPage = true;
+    React.render(
+        <Contents name="CHANT" myself={Config.myself} />,
+        document.getElementById('container')
+    );
+    window.onfocus = function() {
+        chant.clearUnread();
+    };
+    window.onblur = function () {
+        chant.isCurrentPage = false;
+    };
 }, 0);
