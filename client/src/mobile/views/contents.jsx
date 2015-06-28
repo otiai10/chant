@@ -21,6 +21,9 @@ var Contents = React.createClass({
                 case "message":
                     self.newMessage(payload);
                     break;
+                case "stamprize":
+                    self.newStamprize(payload);
+                    break;
                 case "join":
                     self.join(payload);
                     break;
@@ -31,6 +34,7 @@ var Contents = React.createClass({
         };
         return {
             messages: [],
+            stamps: [],
             members: {}
         };
     },
@@ -42,6 +46,14 @@ var Contents = React.createClass({
         this.state.messages.unshift(message);
         this.setState({messages: this.state.messages});
         chant.notifier.notify(message);
+    },
+    newStamprize: function(stamprized) {
+        this.state.stamps.unshift(stamprized);
+        this.state.messages.unshift(stamprized);
+        this.setState({
+            messages: this.state.messages,
+            stamps: this.state.stamps
+        });
     },
     join: function(ev) {
         this.state.members = ev.value;
@@ -81,29 +93,7 @@ var Contents = React.createClass({
                         <TextInput ref="TextInput" />
                     </div>
                     <div className="col s12 m6">
-                        {/*
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        */}
+                        <Stamps stamps={this.state.stamps} />
                     </div>
                 </div>
                 <div className="row">

@@ -28,9 +28,13 @@ var MessageMeta = React.createClass({
         return (
             <div className="meta-wrapper">
                 <span className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>
-                <span className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>
+                <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>
             </div>
         );
+    },
+    stamprize: function() {
+        chant.Send('stamprize', JSON.stringify(this.props.message));
+        document.getElementsByTagName('textarea')[0].focus();
     }
 });
 
@@ -48,12 +52,29 @@ var MessageContent = React.createClass({
     render: function() {
         return (
             <div className="message-wrapper">
-                <MessageRecursive message={this.props.message} />
+                <MessageInclusive message={this.props.message} />
             </div>
         );
     }
 });
 
+var MessageInclusive = React.createClass({
+    render: function() {
+        switch (this.props.message.type) {
+        case "stamprize":
+            return (
+                <div>
+                    <div>stamprize</div>
+                    <blockquote>
+                        <MessageEntry message={this.props.message.value} />
+                    </blockquote>
+                </div>
+            );
+        default:
+            return <MessageRecursive message={this.props.message} />;
+        }
+    }
+});
 var MessageRecursive = React.createClass({
     render: function() {
         if (this.props.message.value.children) {

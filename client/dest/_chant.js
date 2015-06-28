@@ -113,6 +113,9 @@ var Contents = React.createClass({displayName: "Contents",
                 case "message":
                     self.newMessage(payload);
                     break;
+                case "stamprize":
+                    self.newStamprize(payload);
+                    break;
                 case "join":
                     self.join(payload);
                     break;
@@ -123,6 +126,7 @@ var Contents = React.createClass({displayName: "Contents",
         };
         return {
             messages: [],
+            stamps: [],
             members: {}
         };
     },
@@ -134,6 +138,14 @@ var Contents = React.createClass({displayName: "Contents",
         this.state.messages.unshift(message);
         this.setState({messages: this.state.messages});
         chant.notifier.notify(message);
+    },
+    newStamprize: function(stamprized) {
+        this.state.stamps.unshift(stamprized);
+        this.state.messages.unshift(stamprized);
+        this.setState({
+            messages: this.state.messages,
+            stamps: this.state.stamps
+        });
     },
     join: function(ev) {
         this.state.members = ev.value;
@@ -172,30 +184,8 @@ var Contents = React.createClass({displayName: "Contents",
                     React.createElement("div", {className: "col s12 m6"}, 
                         React.createElement(TextInput, {ref: "TextInput"})
                     ), 
-                    React.createElement("div", {className: "col s12 m6"}
-                        /*
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>女医と結婚したい</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        <button className="stamp"><span>foobarbuz</span></button>
-                        <button className="stamp"><span>foo</span></button>
-                        */
+                    React.createElement("div", {className: "col s12 m6"}, 
+                        React.createElement(Stamps, {stamps: this.state.stamps})
                     )
                 ), 
                 React.createElement("div", {className: "row"}, 
@@ -289,9 +279,13 @@ var MessageMeta = React.createClass({displayName: "MessageMeta",
         return (
             React.createElement("div", {className: "meta-wrapper"}, 
                 React.createElement("span", {className: "meta"}, React.createElement("small", {className: "grey-text text-lighten-2"}, time.toLocaleString())), 
-                React.createElement("span", {className: "meta stealth"}, React.createElement("small", {className: "grey-text text-lighten-2"}, "stamprize"))
+                React.createElement("span", {onClick: this.stamprize, className: "meta stealth"}, React.createElement("small", {className: "grey-text text-lighten-2"}, "stamprize"))
             )
         );
+    },
+    stamprize: function() {
+        chant.Send('stamprize', JSON.stringify(this.props.message));
+        document.getElementsByTagName('textarea')[0].focus();
     }
 });
 
@@ -309,12 +303,29 @@ var MessageContent = React.createClass({displayName: "MessageContent",
     render: function() {
         return (
             React.createElement("div", {className: "message-wrapper"}, 
-                React.createElement(MessageRecursive, {message: this.props.message})
+                React.createElement(MessageInclusive, {message: this.props.message})
             )
         );
     }
 });
 
+var MessageInclusive = React.createClass({displayName: "MessageInclusive",
+    render: function() {
+        switch (this.props.message.type) {
+        case "stamprize":
+            return (
+                React.createElement("div", null, 
+                    React.createElement("div", null, "stamprize"), 
+                    React.createElement("blockquote", null, 
+                        React.createElement(MessageEntry, {message: this.props.message.value})
+                    )
+                )
+            );
+        default:
+            return React.createElement(MessageRecursive, {message: this.props.message});
+        }
+    }
+});
 var MessageRecursive = React.createClass({displayName: "MessageRecursive",
     render: function() {
         if (this.props.message.value.children) {
@@ -369,6 +380,29 @@ var Messages = React.createClass({displayName: "Messages",
     }
 });
 
+
+var Stamps = React.createClass({displayName: "Stamps",
+   render: function() {
+       var stamps = this.props.stamps.map(function(stamp) {
+           stamp.source = stamp.value;
+           return React.createElement(Stamp, {stamp: stamp});
+       });
+       return React.createElement("div", null, stamps);
+   }
+});
+
+var Stamp = React.createClass({displayName: "Stamp",
+    render: function() {
+        var text = (function(src) {
+            if (src.length < 10) return src;
+            return src.slice(0, 10) + '...';
+        })(this.props.stamp.source.value.text);
+        return React.createElement("button", {onClick: this.useStamp, className: "stamp"}, text);
+    },
+    useStamp: function () {
+        chant.Send("stampuse", this.props.stamp.source.raw);
+    }
+});
 var TextInput = React.createClass({displayName: "TextInput",
     getInitialState: function() {
         return {

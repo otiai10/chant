@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"time"
+	"log"
 )
 
 // めんどい // type EventType string
@@ -11,6 +12,7 @@ const (
 	LEAVE     = "leave"
 	MESSAGE   = "message"
 	STAMPRIZE = "stamprize"
+	STAMPUSE  = "stampuse"
 )
 
 type Event struct {
@@ -31,6 +33,18 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 	event.User = user
 	switch event.Type {
 	case MESSAGE:
+		event.Value = map[string]interface{}{
+			"text": event.Raw,
+		}
+	case STAMPRIZE:
+		stamprized, err := ConstructEvent(user, event.Raw)
+		if err != nil {
+			log.Println("stamprize error", err)
+		}
+		event.Value = stamprized
+	case STAMPUSE:
+		// messageに偽装する
+		event.Type = MESSAGE
 		event.Value = map[string]interface{}{
 			"text": event.Raw,
 		}
