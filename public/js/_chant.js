@@ -343,13 +343,10 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 
 var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     render: function() {
-        return (
-            React.createElement("div", {className: "message-wrapper"}, 
-                React.createElement("div", null, 
-                    this.props.message.value.text
-                )
-            )
-        );
+        var lines = this.props.message.value.text.split('\n').map(function(line) {
+            return React.createElement("p", {className: "line-wrap"}, line);
+        });
+        return React.createElement("div", {className: "message-wrapper"}, lines);
     }
 });
 // var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;

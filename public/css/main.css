@@ -89,3 +89,7 @@ blockquote img.user-icon {
 .members>span>img.user-icon {
     margin-right: 8px;
 }
+
+p.line-wrap {
+    margin: 0;
+}
