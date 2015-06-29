@@ -112,7 +112,7 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
         var value = this.props.text;
         var self = this;
         this.props.ExprWrappers.map(function(ew) {
-           value = self.exprAndWrap(value, ew);
+          value = self.exprAndWrap(value, ew);
         });
         myself.innerHTML = value;
     },
@@ -120,7 +120,7 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     exprAndWrap: function(value, ew /* interface ExprWrapper */) {
         if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
         var matches = ew.expr().exec(value) || [];
-        if (matches.length == 0) return;
+        if (matches.length == 0) return value;
         value = value.split(matches[0]).join(ew.wrap(matches[0]));
         return value;
     },
@@ -138,6 +138,7 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
         };
     }
 });
+
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
@@ -410,6 +411,7 @@ var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
         return React.createElement("div", {className: "message-wrapper"}, lines);
     }
 });
+
 // var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Messages = React.createClass({displayName: "Messages",
