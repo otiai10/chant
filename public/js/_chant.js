@@ -119,18 +119,18 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     // expr and wrap
     exprAndWrap: function(value, ew /* interface ExprWrapper */) {
         if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
-        (ew.expr().exec(value) || []).map(function(found) {
-            value = value.split(found).join(ew.wrap(found));
-        });
+        var matches = ew.expr().exec(value) || [];
+        if (matches.length == 0) return;
+        value = value.split(matches[0]).join(ew.wrap(matches[0]));
         return value;
     },
     getDefaultProps: function() {
         var sampleExprWrapper = {
             expr: function () /* RegExp */ {
-                return /おっぱい/gi;
+                return /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
             },
             wrap: function (value) /* string */ {
-                return '<span style="background-color:yellow">' + value + '</span>';
+                return '<a href="' + value + '"><img class="entry-image" src="' + value + '" /></a>';
             }
         };
         return {

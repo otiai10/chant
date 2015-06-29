@@ -93,3 +93,7 @@ blockquote img.user-icon {
 p.line-wrap {
     margin: 0;
 }
+
+img.entry-image {
+    width: 100%;
+}
