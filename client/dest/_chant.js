@@ -13,6 +13,131 @@ setTimeout(function(){
     };
 }, 0);
 
+var chant = chant || {};
+chant._notification = {
+
+};
+chant.notify = function(body, title, icon, onclick, onclose) {
+    onclick = onclick || function() {window.focus();};
+    onclose = onclose || function() {};
+    if (icon) icon = icon.replace('_normal', '_bigger');
+    var note = new window.Notification(
+        title || 'CHANT',
+        {
+            body: body || 'おだやかじゃないわね',
+            icon: icon || '/public/img/icon.png'
+        }
+    );
+    note.onclick = onclick;
+    note.onclise = onclose;
+};
+
+chant.notifier = {
+    notify: function(message) {
+        // ignore my message
+        if (message.user.id_str == Config.myself.id_str) return;
+        chant.addUnread();
+        // detect @all or @me
+        var exp = new RegExp('@all|@' + Config.myself.screen_name);
+        if (!exp.test(message.value.text)) return;
+        chant.notify(
+            message.value.text,
+            message.user.screen_name,
+            message.user.profile_image_url
+        );
+    }
+};
+
+var chant = chant || {};
+chant.__socket = null;
+chant.socket = function(force) {
+    if (!chant.__socket || force) {
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+    }
+    return chant.__socket;
+};
+
+/**
+ * おくるやつ
+ * @param typ
+ * @param value
+ * @constructor
+ */
+chant.Send = function(/* string */typ/* string */, /* any */value) {
+    if (typeof value.trim == 'function' && value.trim().length == 0) {
+        return;// do nothing
+    }
+    chant.socket().send(JSON.stringify({
+        type:typ,
+        raw:value
+    }));
+};
+
+
+var chant = chant || {};
+
+chant.isCurrentPage = false;
+
+chant.addUnread = function(ev) {
+    if (chant.isCurrentPage) return;
+    document.title = '!' + document.title;
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
+};
+chant.clearUnread = function(ev) {
+    document.title = document.title.replace(/!/g, '');
+    var favicon = document.getElementById("favicon");
+    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
+};
+
+
+var AnchorizableText = React.createClass({displayName: "AnchorizableText",
+    // render it first
+    render: function () {
+        return React.createElement('div', {
+            ref: 'ATSelf'
+        }, this.props.text);
+    },
+    // anchorize it after mount
+    componentDidMount: function() {
+        this.anchorize();
+    },
+    // anchorize it after update
+    componentDidUpdate: function() {
+        this.anchorize();
+    },
+    // anchorize execution
+    anchorize: function() {
+        var myself = React.findDOMNode(this.refs.ATSelf);
+        var value = this.props.text;
+        var self = this;
+        this.props.ExprWrappers.map(function(ew) {
+           value = self.exprAndWrap(value, ew);
+        });
+        myself.innerHTML = value;
+    },
+    // expr and wrap
+    exprAndWrap: function(value, ew /* interface ExprWrapper */) {
+        if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
+        (ew.expr().exec(value) || []).map(function(found) {
+            value = value.split(found).join(ew.wrap(found));
+        });
+        return value;
+    },
+    getDefaultProps: function() {
+        var sampleExprWrapper = {
+            expr: function () /* RegExp */ {
+                return /おっぱい/gi;
+            },
+            wrap: function (value) /* string */ {
+                return '<span style="background-color:yellow">' + value + '</span>';
+            }
+        };
+        return {
+            ExprWrappers: [sampleExprWrapper]
+        };
+    }
+});
 /**
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
@@ -279,7 +404,8 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
-            return React.createElement("p", {className: "line-wrap"}, line);
+            // return <p className="line-wrap">{line}</p>;
+            return React.createElement("p", {className: "line-wrap"}, React.createElement(AnchorizableText, {text: line}));
         });
         return React.createElement("div", {className: "message-wrapper"}, lines);
     }
@@ -365,79 +491,3 @@ var TextInput = React.createClass({displayName: "TextInput",
         this.setState({value: this.state.value + ' ' + text})
     }
 });
-var chant = chant || {};
-chant._notification = {
-
-};
-chant.notify = function(body, title, icon, onclick, onclose) {
-    onclick = onclick || function() {window.focus();};
-    onclose = onclose || function() {};
-    if (icon) icon = icon.replace('_normal', '_bigger');
-    var note = new window.Notification(
-        title || 'CHANT',
-        {
-            body: body || 'おだやかじゃないわね',
-            icon: icon || '/public/img/icon.png'
-        }
-    );
-    note.onclick = onclick;
-    note.onclise = onclose;
-};
-
-chant.notifier = {
-    notify: function(message) {
-        // ignore my message
-        if (message.user.id_str == Config.myself.id_str) return;
-        chant.addUnread();
-        // detect @all or @me
-        var exp = new RegExp('@all|@' + Config.myself.screen_name);
-        if (!exp.test(message.value.text)) return;
-        chant.notify(
-            message.value.text,
-            message.user.screen_name,
-            message.user.profile_image_url
-        );
-    }
-};
-
-var chant = chant || {};
-chant.__socket = null;
-chant.socket = function(force) {
-    if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
-    }
-    return chant.__socket;
-};
-
-/**
- * おくるやつ
- * @param typ
- * @param value
- * @constructor
- */
-chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
-        return;// do nothing
-    }
-    chant.socket().send(JSON.stringify({
-        type:typ,
-        raw:value
-    }));
-};
-
-
-var chant = chant || {};
-
-chant.isCurrentPage = false;
-
-chant.addUnread = function(ev) {
-    if (chant.isCurrentPage) return;
-    document.title = '!' + document.title;
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.unread.mini.png");
-};
-chant.clearUnread = function(ev) {
-    document.title = document.title.replace(/!/g, '');
-    var favicon = document.getElementById("favicon");
-    favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
-};

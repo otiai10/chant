@@ -105,7 +105,8 @@ var MessageRecursive = React.createClass({
 var MessageAnchorable = React.createClass({
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
-            return <p className="line-wrap">{line}</p>;
+            // return <p className="line-wrap">{line}</p>;
+            return <p className="line-wrap"><AnchorizableText text={line} /></p>;
         });
         return <div className="message-wrapper">{lines}</div>;
     }
