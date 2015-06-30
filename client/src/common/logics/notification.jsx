@@ -13,6 +13,7 @@ chant.notify = function(body, title, icon, onclick, onclose) {
             icon: icon || '/public/img/icon.png'
         }
     );
+    console.log(note);
     note.onclick = onclick;
     note.onclise = onclose;
 };

@@ -28,6 +28,7 @@ chant.notify = function(body, title, icon, onclick, onclose) {
             icon: icon || '/public/img/icon.png'
         }
     );
+    console.log(note);
     note.onclick = onclick;
     note.onclise = onclose;
 };
@@ -184,8 +185,10 @@ var Contents = React.createClass({displayName: "Contents",
         this.refs.TextInput.getDOMNode().focus();
     },
     newMessage: function(message) {
-        this.state.messages.unshift(message);
-        this.setState({messages: this.state.messages});
+        // this.state.messages.unshift(message);
+        // var newMessages = this.state.messages;
+        var messages = [message].concat(this.state.messages);
+        this.setState({messages: messages});
         chant.notifier.notify(message);
     },
     newStamprize: function(stamprized) {
@@ -419,11 +422,9 @@ var Messages = React.createClass({displayName: "Messages",
     var self = this;
     var messages = this.props.messages.map(function(message, i) {
       return (
-        React.createElement("div", {className: "entry"}, 
-          React.createElement(Message, {setText: self.props.setText, message: message, id: i, key: i})
-        )
+        React.createElement(Message, {key: message.timestamp, setText: this.props.setText, message: message})
       );
-    });
+    }.bind(this));
     return (
       React.createElement(ReactCSSTransitionGroup, {transitionName: "example"}, 
         messages

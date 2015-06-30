@@ -5,11 +5,9 @@ var Messages = React.createClass({
     var self = this;
     var messages = this.props.messages.map(function(message, i) {
       return (
-        <div className="entry">
-          <Message setText={self.props.setText} message={message} id={i} key={i} />
-        </div>
+        <Message key={message.timestamp} setText={this.props.setText} message={message}></Message>
       );
-    });
+    }.bind(this));
     return (
       <ReactCSSTransitionGroup transitionName="example">
         {messages}

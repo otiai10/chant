@@ -43,8 +43,10 @@ var Contents = React.createClass({
         this.refs.TextInput.getDOMNode().focus();
     },
     newMessage: function(message) {
-        this.state.messages.unshift(message);
-        this.setState({messages: this.state.messages});
+        // this.state.messages.unshift(message);
+        // var newMessages = this.state.messages;
+        var messages = [message].concat(this.state.messages);
+        this.setState({messages: messages});
         chant.notifier.notify(message);
     },
     newStamprize: function(stamprized) {
