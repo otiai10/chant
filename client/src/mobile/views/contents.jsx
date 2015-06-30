@@ -80,12 +80,7 @@ var Contents = React.createClass({
         });
         return (
             <div>
-                <div className="row">
-                    <div className="col s12">
-                        <h1 className="modest pull-right"><img src="/public/img/title.png" width="60px"/></h1>
-                    </div>
-                </div>
-                <div className="row">
+                <div className="row members-wrapper">
                     <div className="col s12 members">
                         <span>
                             <Icon setText={this.setText} user={this.props.myself} />
@@ -93,7 +88,7 @@ var Contents = React.createClass({
                         <Members setText={this.setText} members={this.state.members} />
                     </div>
                 </div>
-                <div className="row">
+                <div className="row textinput-wrapper">
                     <div className="col s12 m6">
                         <TextInput ref="TextInput" />
                     </div>

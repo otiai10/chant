@@ -223,12 +223,7 @@ var Contents = React.createClass({displayName: "Contents",
         });
         return (
             React.createElement("div", null, 
-                React.createElement("div", {className: "row"}, 
-                    React.createElement("div", {className: "col s12"}, 
-                        React.createElement("h1", {className: "modest pull-right"}, React.createElement("img", {src: "/public/img/title.png", width: "60px"}))
-                    )
-                ), 
-                React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "row members-wrapper"}, 
                     React.createElement("div", {className: "col s12 members"}, 
                         React.createElement("span", null, 
                             React.createElement(Icon, {setText: this.setText, user: this.props.myself})
@@ -236,7 +231,7 @@ var Contents = React.createClass({displayName: "Contents",
                         React.createElement(Members, {setText: this.setText, members: this.state.members})
                     )
                 ), 
-                React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "row textinput-wrapper"}, 
                     React.createElement("div", {className: "col s12 m6"}, 
                         React.createElement(TextInput, {ref: "TextInput"})
                     ), 
