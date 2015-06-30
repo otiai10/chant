@@ -412,24 +412,24 @@ var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     }
 });
 
-// var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Messages = React.createClass({displayName: "Messages",
-    render: function() {
-        var self = this;
-        var messages = this.props.messages.map(function(message, i) {
-            return (
-                React.createElement("div", {className: "entry", transitionName: "example"}, 
-                    React.createElement(Message, {setText: self.props.setText, message: message, id: i, key: i})
-                )
-            );
-        });
-        return (
-            React.createElement("div", null, 
-                messages
-            )
-        );
-    }
+  render: function() {
+    var self = this;
+    var messages = this.props.messages.map(function(message, i) {
+      return (
+        React.createElement("div", {className: "entry"}, 
+          React.createElement(Message, {setText: self.props.setText, message: message, id: i, key: i})
+        )
+      );
+    });
+    return (
+      React.createElement(ReactCSSTransitionGroup, {transitionName: "example"}, 
+        messages
+      )
+    );
+  }
 });
 
 

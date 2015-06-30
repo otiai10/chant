@@ -66,12 +66,12 @@ div.meta-wrapper {
 }
 
 /* transition */
-.example-appear {
+.example-enter {
     opacity: 0.01;
     transition: opacity .5s ease-in;
 }
 
-.example-appear.example-appear-active {
+.example-enter.example-enter-active {
     opacity: 1;
 }
 
