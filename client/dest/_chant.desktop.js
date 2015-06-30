@@ -1,4 +1,4 @@
-// onready的なこと
+// entry point
 setTimeout(function(){
     chant.isCurrentPage = true;
     React.render(
@@ -146,6 +146,9 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
  * onmessageからのディスパッチとか
  */
 var Contents = React.createClass({displayName: "Contents",
+    componentDidMount: function() {
+      console.info("Desktop build : _chant.desktop.js");
+    },
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
         chant.socket().onclose = function(ev) {

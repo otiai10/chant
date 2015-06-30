@@ -1,4 +1,4 @@
-// onready的なこと
+// entry point
 setTimeout(function(){
     chant.isCurrentPage = true;
     React.render(

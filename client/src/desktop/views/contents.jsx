@@ -4,7 +4,7 @@
  */
 var Contents = React.createClass({
     componentDidMount: function() {
-      console.info("Mobile build : _chant.mobile.js");
+      console.info("Desktop build : _chant.desktop.js");
     },
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };

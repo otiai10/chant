@@ -8,6 +8,10 @@
 <div class="container" id="container">
 </div>
 
-<script type="text/javascript" src="/public/js/_chant.js"></script>
+{{if .Config.Agent.is_mobile}}
+  <script type="text/javascript" src="/public/js/_chant.mobile.js"></script>
+{{else}}
+  <script type="text/javascript" src="/public/js/_chant.desktop.js"></script>
+{{end}}
 
 {{template "footer.html" .}}
