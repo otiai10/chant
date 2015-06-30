@@ -9,11 +9,8 @@ GET     /login                                  Application.Login
 GET     /auth                                   Auth.Index
 GET     /auth/callback                          Auth.Callback
 
-# 退室するためだけの遷移
-GET     /room/leave                             Room.Leave
-
 # クライアントサイドから、URLの展開用。なんか時々バグる
-GET     /preview                                Preview.Index
+# GET     /preview                                Preview.Index
 
 # スタティックpath
 GET     /public/*filepath                       Static.Serve("public")

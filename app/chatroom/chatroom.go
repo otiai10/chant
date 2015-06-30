@@ -1,27 +1,24 @@
 package chatroom
 
 import (
-	// "chant/app/factory"
 	"container/list"
-	// "encoding/json"
-	// "html"
-	// "time"
 
 	"chant.v1/app/models"
 	"chant.v1/app/repository"
-	// "github.com/revel/revel"
 
 	"log"
 
-	// "github.com/otiai10/rodeo"
 	"fmt"
 )
 
+// Name - *Room のハッシュテーブル
 var rooms = map[string]*Room{
 	"default": nil,
 }
 
+// Room ひとつの名前を持った部屋に対応
 type Room struct {
+	Name        string
 	entrance    chan Subscription
 	exit        chan Subscription
 	publish     chan *models.Event
@@ -30,7 +27,7 @@ type Room struct {
 	members     *list.List
 }
 
-// Open Roomごとに部屋を開く. foreverなgoroutineをつくる.
+// Serve Roomごとに部屋を開く. foreverなgoroutineをつくる.
 func (room *Room) Serve() {
 	for {
 		select {
@@ -91,6 +88,8 @@ func newRoom() *Room {
 	return room
 }
 
+// GetRoom id(Name)からRoomをひいてくる.
+// 指定されなければdefaultを採用する.
 func GetRoom(id ...string) *Room {
 	id = append(id, "default") // id指定がなければdefaultを使う
 	room, ok := rooms[id[0]]
@@ -133,6 +132,9 @@ type Subscription struct {
 	New chan *models.Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
+// Say Roomへの発言の窓口となるメソッド.
+// Controllerからしか呼んではいけない. (so far)
+// TODO: アプリケーションサーバでエラーが起きたときに、Roomが自発的に呼ぶかも？
 func (room *Room) Say(user *models.User, msg string) {
 	event, err := models.ConstructEvent(user, msg)
 	if err != nil {
@@ -144,6 +146,7 @@ func (room *Room) Say(user *models.User, msg string) {
 	room.publish <- event
 }
 
+// Join ユーザがこのRoomにJoinしてきたときの処理をすべて行う.
 func (room *Room) Join(user *models.User) {
 	room.members.PushBack(user)
 	event := new(models.Event)
@@ -153,6 +156,7 @@ func (room *Room) Join(user *models.User) {
 	room.publish <- event
 }
 
+// Leave ユーザが接続を切ったりしたときに退出する処理をすべて行う.
 func (room *Room) Leave(user *models.User) {
 	room.removeOneUser(user)
 	event := new(models.Event)
