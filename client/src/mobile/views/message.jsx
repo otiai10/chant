@@ -87,16 +87,6 @@ var MessageRecursive = React.createClass({
                     </blockquote>
                 </div>
             );
-                {/*
-                <div className="message-wrapper">
-                    <div>
-                        {this.props.message.value.text}
-                    </div>
-                    <blockquote>
-                        <MessageRecursive message={this.props.message.value.children} />
-                    </blockquote>
-                </div>
-                */}
         }
         return <MessageAnchorable message={this.props.message} />;
     }
@@ -105,8 +95,7 @@ var MessageRecursive = React.createClass({
 var MessageAnchorable = React.createClass({
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
-            // return <p className="line-wrap">{line}</p>;
-            return <p className="line-wrap"><AnchorizableText text={line} /></p>;
+            return <AnchorizableText text={line}></AnchorizableText>;
         });
         return <div className="message-wrapper">{lines}</div>;
     }

@@ -2,7 +2,8 @@
 var AnchorizableText = React.createClass({
     // render it first
     render: function () {
-        return React.createElement('div', {
+        return React.createElement('p', {
+            className: 'line-wrap',
             ref: 'ATSelf'
         }, this.props.text);
     },
@@ -28,7 +29,7 @@ var AnchorizableText = React.createClass({
     exprAndWrap: function(value, ew /* interface ExprWrapper */) {
         if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
         var matches = ew.expr().exec(value) || [];
-        if (matches.length == 0) return value;
+        if (matches.length === 0) return value;
         value = value.split(matches[0]).join(ew.wrap(matches[0]));
         return value;
     },

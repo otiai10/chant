@@ -95,7 +95,8 @@ chant.clearUnread = function(ev) {
 var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     // render it first
     render: function () {
-        return React.createElement('div', {
+        return React.createElement('p', {
+            className: 'line-wrap',
             ref: 'ATSelf'
         }, this.props.text);
     },
@@ -121,7 +122,7 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     exprAndWrap: function(value, ew /* interface ExprWrapper */) {
         if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
         var matches = ew.expr().exec(value) || [];
-        if (matches.length == 0) return value;
+        if (matches.length === 0) return value;
         value = value.split(matches[0]).join(ew.wrap(matches[0]));
         return value;
     },
@@ -390,16 +391,6 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
                     )
                 )
             );
-                {/*
-                <div className="message-wrapper">
-                    <div>
-                        {this.props.message.value.text}
-                    </div>
-                    <blockquote>
-                        <MessageRecursive message={this.props.message.value.children} />
-                    </blockquote>
-                </div>
-                */}
         }
         return React.createElement(MessageAnchorable, {message: this.props.message});
     }
@@ -408,8 +399,7 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
-            // return <p className="line-wrap">{line}</p>;
-            return React.createElement("p", {className: "line-wrap"}, React.createElement(AnchorizableText, {text: line}));
+            return React.createElement(AnchorizableText, {text: line});
         });
         return React.createElement("div", {className: "message-wrapper"}, lines);
     }
@@ -461,7 +451,7 @@ var TextInput = React.createClass({displayName: "TextInput",
         return {
             value: '',
             rows: 3
-        }
+        };
     },
     render: function() {
         return (
@@ -482,7 +472,7 @@ var TextInput = React.createClass({displayName: "TextInput",
         this.setState({value: ev.target.value});
     },
     onKeyDown: function(ev) {
-        const enterKey = 13;
+        var enterKey = 13;
         var txt = ev.target.value;
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
@@ -491,6 +481,6 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     },
     appendTextValue: function(text) {
-        this.setState({value: this.state.value + ' ' + text})
+        this.setState({value: this.state.value + ' ' + text});
     }
 });

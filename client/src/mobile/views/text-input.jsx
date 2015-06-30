@@ -3,7 +3,7 @@ var TextInput = React.createClass({
         return {
             value: '',
             rows: 3
-        }
+        };
     },
     render: function() {
         return (
@@ -24,7 +24,7 @@ var TextInput = React.createClass({
         this.setState({value: ev.target.value});
     },
     onKeyDown: function(ev) {
-        const enterKey = 13;
+        var enterKey = 13;
         var txt = ev.target.value;
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
@@ -33,6 +33,6 @@ var TextInput = React.createClass({
         }
     },
     appendTextValue: function(text) {
-        this.setState({value: this.state.value + ' ' + text})
+        this.setState({value: this.state.value + ' ' + text});
     }
 });
