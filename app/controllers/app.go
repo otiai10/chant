@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"regexp"
+
 	"chant.v1/app/models"
 	"github.com/revel/revel"
 )
+
+var mobile = regexp.MustCompile("/Mobile|iPhone|Android|BlackBerry/")
 
 // Application ...
 type Application struct {
@@ -31,6 +35,9 @@ func (c Application) Index() revel.Result {
 			Server: map[string]interface{}{
 				"host": getHost(),
 			},
+			Agent: map[string]interface{}{
+				"is_mobile": mobile.MatchString(c.Request.UserAgent()),
+			},
 		}
 		return c.Render(Config)
 		//return c.Redirect(Room.Index)
@@ -44,9 +51,12 @@ func (c Application) Login() revel.Result {
 	return c.Render()
 }
 
+// ServerConfig サーバサイドで取得したエニシングを
+// クライアントに埋め込みたいときにつかうサムシング.
 type ServerConfig struct {
 	Myself interface{} `json:"myself"`
 	Server interface{} `json:"server"`
+	Agent  interface{} `json:"agent"`
 }
 
 func getHost() string {
