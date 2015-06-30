@@ -9,7 +9,7 @@ var Messages = React.createClass({
       );
     }.bind(this));
     return (
-      <ReactCSSTransitionGroup transitionName="example">
+      <ReactCSSTransitionGroup transitionName="newentry">
         {messages}
       </ReactCSSTransitionGroup>
     );

@@ -426,7 +426,7 @@ var Messages = React.createClass({displayName: "Messages",
       );
     }.bind(this));
     return (
-      React.createElement(ReactCSSTransitionGroup, {transitionName: "example"}, 
+      React.createElement(ReactCSSTransitionGroup, {transitionName: "newentry"}, 
         messages
       )
     );
