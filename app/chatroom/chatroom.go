@@ -50,6 +50,9 @@ func (room *Room) Serve() {
 					room.subscribers.Remove(one)
 				}
 			}
+			// unhandlableなsubscriptionが残ってると、そいつのせいでblockするので
+			// exitに来たchanは必ずdrainにかけなければならない
+			// XXX: これ、room.subscribers.Removeの前にinvokeしてもいいんじゃね？
 			room.drain(sub)
 		// Roomは、
 		// publish用のチャンネルに新しいイベントを流し込まれたとき、
@@ -57,7 +60,13 @@ func (room *Room) Serve() {
 		case ev := <-room.publish:
 			for one := room.subscribers.Front(); one != nil; one = one.Next() {
 				if the, ok := one.Value.(Subscription); ok {
-					the.New <- ev
+					// 誰かへのpublishが詰まっても、全体として詰まらないようにするため、
+					// 各人へのpublishはgoroutineにして独立させる.
+					// 逆にいえば、ここはsub.Newへの流し込みが、チャンネルの先でhandle仕切れてない
+					// ので詰まり現象が発生しているのではないかと推測している.
+					go func(sub Subscription, ev *models.Event) {
+						sub.New <- ev
+					}(the, ev)
 				}
 			}
 		// Roomは、
