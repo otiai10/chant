@@ -60,7 +60,7 @@ div.meta-wrapper {
 /* transition */
 .newentry-enter {
     opacity: 0.01;
-    transition: opacity .5s ease-in;
+    transition: 0.2s;
 }
 
 .newentry-enter.newentry-enter-active {
