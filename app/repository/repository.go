@@ -8,7 +8,7 @@ import (
 
 // Repository オンメモリとか、Redisとか.
 type Repository interface {
-	PushMessage(*models.Event) error
+	PushMessage(...*models.Event) error
 	GetMessages(int, int64) []*models.Event
 }
 
@@ -26,11 +26,11 @@ func InitWithInstance(repo Repository) error {
 }
 
 // PushMessage ...
-func PushMessage(ev *models.Event) error {
+func PushMessage(evs ...*models.Event) error {
 	if _impl == nil {
 		return fmt.Errorf("init repository first")
 	}
-	return _impl.PushMessage(ev)
+	return _impl.PushMessage(evs...)
 }
 
 // GetMessages ...

@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"time"
-
 	"chant.v1/app/chatroom"
 	"chant.v1/app/models"
 
@@ -42,8 +40,8 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	// 自分自身のソケットから来る発言を流すgoroutineを流す
 	go listenMyself(ws, myself)
 
-	// メッセージアーカイブ
-	for _, event := range repository.GetMessages(10, time.Now().Unix()) {
+	// メッセージアーカイブを、最新の、最大10件を取得する
+	for _, event := range repository.GetMessages(10, -1) {
 		websocket.JSON.Send(ws, &event)
 	}
 

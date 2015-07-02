@@ -5,7 +5,7 @@ import (
 	"github.com/otiai10/rodeo"
 )
 
-const (
+var (
 	rediskey = "chant."
 )
 
@@ -19,9 +19,11 @@ type RedisRepository struct {
 }
 
 // PushMessage ...
-func (repo *RedisRepository) PushMessage(ev *models.Event) error {
+func (repo *RedisRepository) PushMessage(evs ...*models.Event) error {
 	repo.ensure()
-	repo.messages.Add(ev.Timestamp/1000000, ev)
+	for _, ev := range evs {
+		repo.messages.Add(ev.Timestamp/1000000, ev)
+	}
 	return nil
 }
 

@@ -49,7 +49,7 @@ func InitRepository() {
 			Host: "localhost", Port: "6379",
 		}
 	default:
-		repo = &repository.DefaultRepository{}
+		repo = repository.NewDefaultRepository()
 	}
 	repository.InitWithInstance(repo)
 }
