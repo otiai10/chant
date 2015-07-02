@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"time"
+
 	"chant.v1/app/chatroom"
 	"chant.v1/app/models"
 
@@ -41,7 +43,7 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	go listenMyself(ws, myself)
 
 	// メッセージアーカイブ
-	for _, event := range repository.GetMessages(0) {
+	for _, event := range repository.GetMessages(10, time.Now().Unix()) {
 		websocket.JSON.Send(ws, &event)
 	}
 

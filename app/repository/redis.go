@@ -9,7 +9,7 @@ const (
 	rediskey = "chant."
 )
 
-// DefaultRepository コードのスタックを使ったやつ.
+// RedisRepository Redisつかったやつ.
 type RedisRepository struct {
 	Host     string
 	Port     string
@@ -18,13 +18,15 @@ type RedisRepository struct {
 	messages *rodeo.SortedSet
 }
 
+// PushMessage ...
 func (repo *RedisRepository) PushMessage(ev *models.Event) error {
 	repo.ensure()
 	repo.messages.Add(ev.Timestamp/1000000, ev)
 	return nil
 }
 
-func (repo *RedisRepository) GetMessages(from int64) []*models.Event {
+// GetMessages ...
+func (repo *RedisRepository) GetMessages(count int, from int64) []*models.Event {
 	repo.ensure()
 	events := []*models.Event{}
 	for _, val := range repo.messages.Range(0) {

@@ -24,7 +24,7 @@ func init() {
 
 	// register startup functions with OnAppStart
 	// ( order dependent )
-	revel.OnAppStart(InitDB)
+	revel.OnAppStart(InitRepository)
 	// revel.OnAppStart(FillCache)
 }
 
@@ -40,10 +40,11 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	fc[0](c, fc[1:]) // Execute the next filter stage.
 }
 
-func InitDB() {
+// InitRepository ...
+func InitRepository() {
 	var repo repository.Repository
 	switch revel.Config.StringDefault("repository", "default") {
-		case "redis":
+	case "redis":
 		repo = &repository.RedisRepository{
 			Host: "localhost", Port: "6379",
 		}
