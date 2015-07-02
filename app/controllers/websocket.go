@@ -4,9 +4,9 @@ import (
 	"chant.v1/app/chatroom"
 	"chant.v1/app/models"
 
+	"chant.v1/app/repository"
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
-	"chant.v1/app/repository"
 )
 
 // ChantSocket is controller to keep socket connection.
@@ -27,9 +27,9 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	myroom := chatroom.GetRoom()
 
 	// 自分のJoinを自分に伝えるために、Subscribeのあとに呼ぶ
-	subscription := myroom.Subscribe()
+	subscription := myroom.Subscribe(user)
 	myroom.Join(user)
-	defer func(){
+	defer func() {
 		// 自分のLeaveを自分に送ってロックしてしまうので、drainをさきに呼ぶ
 		myroom.Unsubscribe(subscription)
 		myroom.Leave(user)

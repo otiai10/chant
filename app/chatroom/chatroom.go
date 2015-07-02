@@ -2,6 +2,7 @@ package chatroom
 
 import (
 	"container/list"
+	"time"
 
 	"chant.v1/app/models"
 	"chant.v1/app/repository"
@@ -10,6 +11,8 @@ import (
 
 	"fmt"
 )
+
+const bufsize = 100
 
 // Name - *Room のハッシュテーブル
 var rooms = map[string]*Room{
@@ -62,7 +65,9 @@ func (room *Room) Serve() {
 					// 逆にいえば、ここはsub.Newへの流し込みが、チャンネルの先でhandle仕切れてない
 					// ので詰まり現象が発生しているのではないかと推測している.
 					go func(sub Subscription, ev *models.Event) {
+						start := time.Now()
 						sub.New <- ev
+						log.Printf("[publish]\t%v\t%v\tto:%s\n", time.Now().Sub(start), ev.Type, sub.ID)
 					}(the, ev)
 				}
 			}
@@ -78,9 +83,9 @@ func (room *Room) Serve() {
 
 func newRoom() *Room {
 	room := &Room{
-		entrance:    make(chan Subscription),
-		exit:        make(chan Subscription),
-		publish:     make(chan *models.Event),
+		entrance:    make(chan Subscription, bufsize),
+		exit:        make(chan Subscription, bufsize),
+		publish:     make(chan *models.Event, bufsize),
 		subscribers: list.New(),
 		members:     list.New(),
 	}
@@ -101,8 +106,11 @@ func GetRoom(id ...string) *Room {
 }
 
 // Subscribe は呼ばれると、このroomのsubscribersに登録されたsubscriptionが提供される。
-func (room *Room) Subscribe() Subscription {
-	subscription := Subscription{New: make(chan *models.Event)}
+func (room *Room) Subscribe(user *models.User) Subscription {
+	subscription := Subscription{
+		ID:  user.ScreenName,
+		New: make(chan *models.Event),
+	}
 	room.entrance <- subscription
 	return subscription
 }
@@ -129,6 +137,7 @@ func (room *Room) drain(subscription Subscription) {
 
 // Subscription 新しいイベントを伝えるためのチャンネルラッパー
 type Subscription struct {
+	ID  string             // サブスクリプションに名前をつけましょ
 	New chan *models.Event // 新しいイベントをこのsubscriberに伝えるチャンネル
 }
 
