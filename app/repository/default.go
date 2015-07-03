@@ -6,15 +6,21 @@ import (
 	"chant.v1/app/models"
 )
 
+const (
+	defaultMessageArchiveSize = 60
+)
+
 // DefaultRepository コードのスタックを使ったやつ.
 type DefaultRepository struct {
-	all *list.List
+	all                *list.List
+	MessageArchiveSize int
 }
 
 // NewDefaultRepository ...
 func NewDefaultRepository() *DefaultRepository {
 	return &DefaultRepository{
-		all: list.New(),
+		all:                list.New(),
+		MessageArchiveSize: defaultMessageArchiveSize,
 	}
 }
 
@@ -22,6 +28,9 @@ func NewDefaultRepository() *DefaultRepository {
 func (repo *DefaultRepository) PushMessage(evs ...*models.Event) error {
 	for _, ev := range evs {
 		repo.all.PushBack(ev)
+	}
+	for repo.MessageArchiveSize < repo.all.Len() {
+		repo.all.Remove(repo.all.Front())
 	}
 	return nil
 }

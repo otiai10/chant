@@ -42,4 +42,18 @@ func TestDefauRepository(t *testing.T) {
 	Expect(t, len(events)).ToBe(2)
 	Expect(t, events[0].Value).ToBe("001")
 	Expect(t, events[1].Value).ToBe("002")
+
+	Because(t, "archive size", func(t *testing.T) {
+		repo := NewDefaultRepository()
+		repo.MessageArchiveSize = 20
+		InitWithInstance(repo, true)
+		for i := 0; i < 60; i++ {
+			PushMessage(&models.Event{
+				Timestamp: int64(i),
+				Value:     i,
+			})
+		}
+		events = GetMessages(100, -1)
+		Expect(t, len(events)).ToBe(20)
+	})
 }

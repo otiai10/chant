@@ -17,7 +17,12 @@ var (
 )
 
 // InitWithInstance ...
-func InitWithInstance(repo Repository) error {
+func InitWithInstance(repo Repository, force ...bool) error {
+	force = append(force, false)
+	if force[0] {
+		_impl = repo
+		return nil
+	}
 	if _impl != nil {
 		return fmt.Errorf("repository is already initialized")
 	}
