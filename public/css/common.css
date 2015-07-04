@@ -57,7 +57,9 @@ span.meta {
 
 div.message-wrapper {
     margin-left:  8px;
+    /*
     margin-right: 12px;
+    */
 }
 
 div.meta-wrapper {
@@ -94,5 +96,6 @@ p.line-wrap {
 }
 
 img.entry-image {
-    width: 100%;
+  max-height: 400px;
+  max-width: 100%;
 }

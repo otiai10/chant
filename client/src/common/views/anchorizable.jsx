@@ -4,7 +4,7 @@ var __image = function() {
   var m = expr.exec(this.props.text);
   if (!m) return; // do nothing
   var c = __arraynize(this.props.text, m[0], function(sub) {
-        return <a href={sub} target="_blank"><img src={sub}></img></a>;
+        return <a href={sub} target="_blank"><img src={sub} className="entry-image"></img></a>;
   });
   this.setState({_c: c});
   return true;

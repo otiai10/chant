@@ -14,9 +14,13 @@ var Message = React.createClass({
 var MessageEntry = React.createClass({
     render: function () {
         return (
-            <div className="box">
+            <div className="row">
+              <div className="col s1">
                 <MessageIcon setText={this.props.setText} message={this.props.message}/>
+              </div>
+              <div className="col s11">
                 <MessageContent message={this.props.message}/>
+              </div>
             </div>
         );
     }
@@ -97,6 +101,6 @@ var MessageAnchorable = React.createClass({
         var lines = this.props.message.value.text.split('\n').map(function(line) {
             return <AnchorizableText text={line}></AnchorizableText>;
         });
-        return <div className="message-wrapper">{lines}</div>;
+        return <div>{lines}</div>;
     }
 });

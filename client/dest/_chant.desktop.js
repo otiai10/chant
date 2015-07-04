@@ -97,7 +97,7 @@ var __image = function() {
   var m = expr.exec(this.props.text);
   if (!m) return; // do nothing
   var c = __arraynize(this.props.text, m[0], function(sub) {
-        return React.createElement("a", {href: sub, target: "_blank"}, React.createElement("img", {src: sub}));
+        return React.createElement("a", {href: sub, target: "_blank"}, React.createElement("img", {src: sub, className: "entry-image"}));
   });
   this.setState({_c: c});
   return true;
@@ -190,9 +190,13 @@ var Message = React.createClass({displayName: "Message",
 var MessageEntry = React.createClass({displayName: "MessageEntry",
     render: function () {
         return (
-            React.createElement("div", {className: "box"}, 
-                React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message}), 
+            React.createElement("div", {className: "row"}, 
+              React.createElement("div", {className: "col s1"}, 
+                React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message})
+              ), 
+              React.createElement("div", {className: "col s11"}, 
                 React.createElement(MessageContent, {message: this.props.message})
+              )
             )
         );
     }
@@ -273,7 +277,7 @@ var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
         var lines = this.props.message.value.text.split('\n').map(function(line) {
             return React.createElement(AnchorizableText, {text: line});
         });
-        return React.createElement("div", {className: "message-wrapper"}, lines);
+        return React.createElement("div", null, lines);
     }
 });
 
