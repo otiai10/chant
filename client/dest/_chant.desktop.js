@@ -91,44 +91,66 @@ chant.clearUnread = function(ev) {
     favicon.setAttribute("href", "/public/img/icon.chant.mini.png");
 };
 
-
+// {{{ bind(this)すれば外からでもいいという意味でとりあえずここに宣言します
+var __image = function() {
+  var expr = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)/gi;
+  var m = expr.exec(this.props.text);
+  if (!m) return; // do nothing
+  var c = __arraynize(this.props.text, m[0], function(sub) {
+        return React.createElement("a", {href: sub, target: "_blank"}, React.createElement("img", {src: sub}));
+  });
+  this.setState({_c: c});
+  return true;
+};
+var __link = function() {
+  var expr = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi;
+  var m = expr.exec(this.props.text);
+  if (!m) return; // do nothing;
+  var c = __arraynize(this.props.text, m[0], function(sub) {
+        return React.createElement("a", {href: sub, target: "_blank"}, sub);
+  });
+  this.setState({_c: c});
+  return true;
+};
+var __arraynize = function(src, sub, gen) /* []string */ {
+  var c = [];
+  var splitted = src.split(sub);
+  for (var i = 0; i < splitted.length; i++) {
+      if (splitted[i].length === 0) { // this element is the target itself
+        c.push(gen(sub));
+        continue;
+      }
+      if (i === splitted.length - 1) {// this element is the last
+        c.push(splitted[i]);
+        continue;
+      }
+      c.push(splitted[i]);
+      c.push(React.createElement("div", null, gen(sub)));
+  }
+  return c;
+};
+// }}}
 var AnchorizableText = React.createClass({displayName: "AnchorizableText",
+    getInitialState: function() {
+      return {
+        _c: this.props.text
+      };
+    },
     // render it first
     render: function () {
         return React.createElement('p', {
             className: 'line-wrap',
             ref: 'ATSelf'
-        }, this.props.text);
+        }, this.state._c);
     },
     // anchorize it after mount
     componentDidMount: function() {
         this.anchorize();
     },
-    // anchorize it after update
-    componentDidUpdate: function() {
-        this.anchorize();
-    },
     // anchorize execution
     anchorize: function() {
-        var myself = React.findDOMNode(this.refs.ATSelf);
-        var value = this.props.text;
-        var self = this;
-        for (var i = 0; i < this.props.ExprWrappers.length; i++) {
-          var v = this.exprAndWrap(value, this.props.ExprWrappers[i]);
-          if (v) {
-            myself.innerHTML = v;
-            return;
-          }
-        }
-        myself.innerHTML = value;
-    },
-    // expr and wrap
-    exprAndWrap: function(value, ew /* interface ExprWrapper */) {
-        if (typeof ew.expr != 'function' || typeof ew.wrap != 'function') return value;
-        var matches = ew.expr().exec(value) || [];
-        if (matches.length === 0) return null;
-        value = value.split(matches[0]).join(ew.wrap(matches[0]));
-        return value;
+        if (__image.bind(this)()) {}
+        else if (__link.bind(this)()) {}
     },
     getDefaultProps: function() {
         var sampleExprWrapper = {
@@ -141,7 +163,9 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
         };
         var normalURLExprWrapper = {
             expr: function() { return /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi; },
-            wrap: function(value) { return '<a href="' + value + '" target="_blank">' + value + '</a>'; }
+            wrap: function(value) {
+              return '<a href="' + value + '" target="_blank">' + value + '</a>';
+            }
         };
         return {
             ExprWrappers: [sampleExprWrapper, normalURLExprWrapper]
