@@ -22,12 +22,19 @@ button.stamp {
     font-size: xx-small;
     text-align: center;
     height: 30px;
+    /* max-width: 40px; */
     border-radius: 5px;
     border: none;
     margin-right: 2px;
     margin-bottom: 2px;
     background-color: #dddddd;
     cursor: pointer;
+}
+button.stamp img {
+    max-height: 90%;
+    max-width:  90%;
+    margin: auto auto;
+    vertical-align: middle;
 }
 button.stamp:active {
     background-color: white;

@@ -1,19 +1,26 @@
 {
     "name": "chant-client",
     "version": "0.1.0",
+    "directories": {
+        "test": "test"
+    },
     "devDependencies": {
         "gulp": "3.9.0",
         "gulp-plumber": "*",
         "gulp-react": "2.0.0",
         "gulp-using": "*",
         "gulp-concat": "*",
-        "coffee-script": "*" 
+        "coffee-script": "*",
+        "mocha": "*",
+        "chai": "*"
     },
     "dependencies": {
         "react": "0.13.3"
     },
     "scripts": {
         "react": "gulp react",
-        "watch": "gulp watch"
+        "watch": "gulp watch",
+        "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script/register",
+        "tst": "npm test"
     }
 }

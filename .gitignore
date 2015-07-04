@@ -24,6 +24,9 @@ _testmain.go
 *.test
 *.prof
 
+# log
+*.log
+
 # Revel App
 app/tmp/*
 app/routes/*

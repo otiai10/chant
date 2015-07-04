@@ -92,6 +92,38 @@ chant.clearUnread = function(ev) {
 };
 
 
+var Stamps = React.createClass({displayName: "Stamps",
+  render: function() {
+    var stamps = this.props.stamps.map(function(stamp) {
+      stamp.source = stamp.value;
+      return React.createElement(Stamp, {stamp: stamp});
+    });
+    return React.createElement("div", null, stamps);
+  }
+});
+
+var Stamp = React.createClass({displayName: "Stamp",
+  render: function() {
+    var content = this.createContent();
+    return (
+      React.createElement("button", {onClick: this.useStamp, className: "stamp"}, content)
+    );
+  },
+  createContent: function() {
+    var content = this.props.stamp.source.value.text || '';
+    var imgexp = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)/gi;
+    var matches = imgexp.exec(content);
+    if (matches) return React.createElement("img", {src: matches[0]});
+    if (content.length > this.maxlen) return content.slice(0, this.maxlen) + '...';
+    return content;
+  },
+  maxlen: 15,
+  useStamp: function () {
+    chant.Send("stampuse", this.props.stamp.source.raw);
+  }
+});
+
+
 var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     // render it first
     render: function () {
@@ -421,29 +453,6 @@ var Messages = React.createClass({displayName: "Messages",
   }
 });
 
-
-var Stamps = React.createClass({displayName: "Stamps",
-   render: function() {
-       var stamps = this.props.stamps.map(function(stamp) {
-           stamp.source = stamp.value;
-           return React.createElement(Stamp, {stamp: stamp});
-       });
-       return React.createElement("div", null, stamps);
-   }
-});
-
-var Stamp = React.createClass({displayName: "Stamp",
-    render: function() {
-        var text = (function(src) {
-            if (src.length < 10) return src;
-            return src.slice(0, 10) + '...';
-        })(this.props.stamp.source.value.text);
-        return React.createElement("button", {onClick: this.useStamp, className: "stamp"}, text);
-    },
-    useStamp: function () {
-        chant.Send("stampuse", this.props.stamp.source.raw);
-    }
-});
 var TextInput = React.createClass({displayName: "TextInput",
     getInitialState: function() {
         return {
