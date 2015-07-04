@@ -161,10 +161,10 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     getDefaultProps: function() {
         var sampleExprWrapper = {
             expr: function () /* RegExp */ {
-                return /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)$/gi;
+                return /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)/gi;
             },
             wrap: function (value) /* string */ {
-                return '<a href="' + value + '"><img class="entry-image" src="' + value + '" /></a>';
+                return '<a href="' + value + '" target="_blank"><img class="entry-image" src="' + value + '" /></a>';
             }
         };
         return {
