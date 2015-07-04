@@ -28,7 +28,8 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 
 	// 自分のJoinを自分に伝えるために、Subscribeのあとに呼ぶ
 	subscription := myroom.Subscribe(user)
-	myroom.Join(user)
+	// 自分自身のjoinイベントを確実に自分自身へ送る
+	websocket.JSON.Send(ws, myroom.Join(user))
 	defer func() {
 		// 自分のLeaveを自分に送ってロックしてしまうので、drainをさきに呼ぶ
 		myroom.Unsubscribe(subscription)

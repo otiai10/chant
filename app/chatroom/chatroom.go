@@ -156,13 +156,15 @@ func (room *Room) Say(user *models.User, msg string) {
 }
 
 // Join ユーザがこのRoomにJoinしてきたときの処理をすべて行う.
-func (room *Room) Join(user *models.User) {
+// Subscribeでsubscriptionの登録はできてるのだから、joinイベントの発行しかしてない気がする
+func (room *Room) Join(user *models.User) *models.Event {
 	room.members.PushBack(user)
 	event := new(models.Event)
 	event.User = user
 	event.Type = models.JOIN
 	event.Value = room.getUniqueUsers()
 	room.publish <- event
+	return event
 }
 
 // Leave ユーザが接続を切ったりしたときに退出する処理をすべて行う.
