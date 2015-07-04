@@ -113,6 +113,7 @@ var __link = function() {
   return true;
 };
 var __arraynize = function(src, sub, gen) /* []string */ {
+  if (src.trim() === sub) return [gen(sub)];
   var c = [];
   var splitted = src.split(sub);
   for (var i = 0; i < splitted.length; i++) {
@@ -170,6 +171,109 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
         return {
             ExprWrappers: [sampleExprWrapper, normalURLExprWrapper]
         };
+    }
+});
+
+// var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+var Message = React.createClass({displayName: "Message",
+    render: function() {
+        return (
+            React.createElement("div", {className: "entry"}, 
+                React.createElement(MessageMeta, {message: this.props.message}), 
+                React.createElement(MessageEntry, {setText: this.props.setText, message: this.props.message})
+            )
+        );
+    }
+});
+
+var MessageEntry = React.createClass({displayName: "MessageEntry",
+    render: function () {
+        return (
+            React.createElement("div", {className: "box"}, 
+                React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message}), 
+                React.createElement(MessageContent, {message: this.props.message})
+            )
+        );
+    }
+});
+
+var MessageMeta = React.createClass({displayName: "MessageMeta",
+    render: function() {
+        var time = new Date(this.props.message.timestamp / 1000000);
+        return (
+            React.createElement("div", {className: "meta-wrapper"}, 
+                React.createElement("span", {className: "meta"}, React.createElement("small", {className: "grey-text text-lighten-2"}, time.toLocaleString())), 
+                React.createElement("span", {onClick: this.stamprize, className: "meta stealth"}, React.createElement("small", {className: "grey-text text-lighten-2"}, "stamprize"))
+            )
+        );
+    },
+    stamprize: function() {
+        chant.Send('stamprize', JSON.stringify(this.props.message));
+        document.getElementsByTagName('textarea')[0].focus();
+        chant.clearUnread();// うーむ
+    }
+});
+
+var MessageIcon = React.createClass({displayName: "MessageIcon",
+    render: function() {
+        return (
+            React.createElement("div", null, 
+                React.createElement(Icon, {setText: this.props.setText, user: this.props.message.user})
+            )
+        );
+    }
+});
+
+var MessageContent = React.createClass({displayName: "MessageContent",
+    render: function() {
+        return (
+            React.createElement("div", {className: "message-wrapper"}, 
+                React.createElement(MessageInclusive, {message: this.props.message})
+            )
+        );
+    }
+});
+
+var MessageInclusive = React.createClass({displayName: "MessageInclusive",
+    render: function() {
+        switch (this.props.message.type) {
+        case "stamprize":
+            return (
+                React.createElement("div", null, 
+                    React.createElement("div", null, "stamprize"), 
+                    React.createElement("blockquote", null, 
+                        React.createElement(MessageEntry, {message: this.props.message.value})
+                    )
+                )
+            );
+        default:
+            return React.createElement(MessageRecursive, {message: this.props.message});
+        }
+    }
+});
+var MessageRecursive = React.createClass({displayName: "MessageRecursive",
+    render: function() {
+        if (this.props.message.value.children) {
+            return (
+                React.createElement("div", null, 
+                    React.createElement("div", null, this.props.message.value.text), 
+                    React.createElement("blockquote", null, 
+                        React.createElement(MessageEntry, {message: this.props.message.value.children})
+                    )
+                )
+            );
+        }
+        return React.createElement(MessageAnchorable, {message: this.props.message});
+    }
+});
+
+var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
+    render: function() {
+        var lines = this.props.message.value.text.split('\n').map(function(line) {
+            return React.createElement(AnchorizableText, {text: line});
+        });
+        return React.createElement("div", {className: "message-wrapper"}, lines);
     }
 });
 
@@ -366,109 +470,6 @@ var Members = React.createClass({displayName: "Members",
             );
         }
         return React.createElement("span", null, members);
-    }
-});
-
-// var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-var Message = React.createClass({displayName: "Message",
-    render: function() {
-        return (
-            React.createElement("div", {className: "entry"}, 
-                React.createElement(MessageMeta, {message: this.props.message}), 
-                React.createElement(MessageEntry, {setText: this.props.setText, message: this.props.message})
-            )
-        );
-    }
-});
-
-var MessageEntry = React.createClass({displayName: "MessageEntry",
-    render: function () {
-        return (
-            React.createElement("div", {className: "box"}, 
-                React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message}), 
-                React.createElement(MessageContent, {message: this.props.message})
-            )
-        );
-    }
-});
-
-var MessageMeta = React.createClass({displayName: "MessageMeta",
-    render: function() {
-        var time = new Date(this.props.message.timestamp / 1000000);
-        return (
-            React.createElement("div", {className: "meta-wrapper"}, 
-                React.createElement("span", {className: "meta"}, React.createElement("small", {className: "grey-text text-lighten-2"}, time.toLocaleString())), 
-                React.createElement("span", {onClick: this.stamprize, className: "meta stealth"}, React.createElement("small", {className: "grey-text text-lighten-2"}, "stamprize"))
-            )
-        );
-    },
-    stamprize: function() {
-        chant.Send('stamprize', JSON.stringify(this.props.message));
-        document.getElementsByTagName('textarea')[0].focus();
-        chant.clearUnread();// うーむ
-    }
-});
-
-var MessageIcon = React.createClass({displayName: "MessageIcon",
-    render: function() {
-        return (
-            React.createElement("div", null, 
-                React.createElement(Icon, {setText: this.props.setText, user: this.props.message.user})
-            )
-        );
-    }
-});
-
-var MessageContent = React.createClass({displayName: "MessageContent",
-    render: function() {
-        return (
-            React.createElement("div", {className: "message-wrapper"}, 
-                React.createElement(MessageInclusive, {message: this.props.message})
-            )
-        );
-    }
-});
-
-var MessageInclusive = React.createClass({displayName: "MessageInclusive",
-    render: function() {
-        switch (this.props.message.type) {
-        case "stamprize":
-            return (
-                React.createElement("div", null, 
-                    React.createElement("div", null, "stamprize"), 
-                    React.createElement("blockquote", null, 
-                        React.createElement(MessageEntry, {message: this.props.message.value})
-                    )
-                )
-            );
-        default:
-            return React.createElement(MessageRecursive, {message: this.props.message});
-        }
-    }
-});
-var MessageRecursive = React.createClass({displayName: "MessageRecursive",
-    render: function() {
-        if (this.props.message.value.children) {
-            return (
-                React.createElement("div", null, 
-                    React.createElement("div", null, this.props.message.value.text), 
-                    React.createElement("blockquote", null, 
-                        React.createElement(MessageEntry, {message: this.props.message.value.children})
-                    )
-                )
-            );
-        }
-        return React.createElement(MessageAnchorable, {message: this.props.message});
-    }
-});
-
-var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
-    render: function() {
-        var lines = this.props.message.value.text.split('\n').map(function(line) {
-            return React.createElement(AnchorizableText, {text: line});
-        });
-        return React.createElement("div", {className: "message-wrapper"}, lines);
     }
 });
 

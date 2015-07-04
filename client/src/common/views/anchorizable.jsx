@@ -20,6 +20,7 @@ var __link = function() {
   return true;
 };
 var __arraynize = function(src, sub, gen) /* []string */ {
+  if (src.trim() === sub) return [gen(sub)];
   var c = [];
   var splitted = src.split(sub);
   for (var i = 0; i < splitted.length; i++) {
