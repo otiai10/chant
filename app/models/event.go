@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
-	"time"
 	"log"
+	"time"
 )
 
 // めんどい // type EventType string
@@ -17,7 +17,7 @@ const (
 
 type Event struct {
 	Type      string                 `json:"type"`      // このイベントの種別
-	Raw       string                 `json:"raw"`       // このイベントの内容を
+	Raw       string                 `json:"raw"`       // このイベントの内容をjson stringにしたもの
 	Value     interface{}            `json:"value"`     // このイベントの内容
 	Params    map[string]interface{} `json:"params"`    // なんか
 	Timestamp int64                  `json:"timestamp"` // このイベントのpublish時間
@@ -37,8 +37,8 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 			"text": event.Raw,
 		}
 	case STAMPRIZE:
-		stamprized, err := ConstructEvent(user, event.Raw)
-		if err != nil {
+		stamprized := new(Event) // stamprizeされたほうの内容
+		if err := json.Unmarshal([]byte(event.Raw), stamprized); err != nil {
 			log.Println("stamprize error", err)
 		}
 		event.Value = stamprized
