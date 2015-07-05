@@ -28,6 +28,7 @@ type Room struct {
 	terminate   chan interface{}
 	subscribers *list.List
 	members     *list.List
+	Repo        *repository.Client
 }
 
 // Serve Roomごとに部屋を開く. foreverなgoroutineをつくる.
@@ -81,13 +82,14 @@ func (room *Room) Serve() {
 	}
 }
 
-func newRoom() *Room {
+func newRoom(id string) *Room {
 	room := &Room{
 		entrance:    make(chan Subscription, bufsize),
 		exit:        make(chan Subscription, bufsize),
 		publish:     make(chan *models.Event, bufsize),
 		subscribers: list.New(),
 		members:     list.New(),
+		Repo:        repository.NewRepoClient(id),
 	}
 	go room.Serve()
 	return room
@@ -99,7 +101,7 @@ func GetRoom(id ...string) *Room {
 	id = append(id, "default") // id指定がなければdefaultを使う
 	room, ok := rooms[id[0]]
 	if !ok || room == nil {
-		room = newRoom()
+		room = newRoom(id[0])
 		rooms[id[0]] = room
 	}
 	return room
@@ -151,7 +153,7 @@ func (room *Room) Say(user *models.User, msg string) {
 		// TODO: なんかする
 		return
 	}
-	repository.PushMessage(event)
+	room.Repo.PushMessage(event)
 	room.publish <- event
 }
 

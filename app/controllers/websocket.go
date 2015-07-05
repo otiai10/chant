@@ -4,7 +4,6 @@ import (
 	"chant.v1/app/chatroom"
 	"chant.v1/app/models"
 
-	"chant.v1/app/repository"
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"
 )
@@ -42,7 +41,7 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	go listenMyself(ws, myself)
 
 	// メッセージアーカイブを、最新の、最大10件を取得する
-	for _, event := range repository.GetMessages(10, -1) {
+	for _, event := range myroom.Repo.GetMessages(10, -1) {
 		websocket.JSON.Send(ws, &event)
 	}
 

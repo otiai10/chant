@@ -12,36 +12,65 @@ const (
 
 // DefaultRepository コードのスタックを使ったやつ.
 type DefaultRepository struct {
+	Namespace map[string]*roomRepository
+}
+
+type roomRepository struct {
 	all                *list.List
 	MessageArchiveSize int
+}
+
+func newRoomRepository() *roomRepository {
+	return &roomRepository{
+		all:                list.New(),
+		MessageArchiveSize: defaultMessageArchiveSize,
+	}
+}
+func (repo *DefaultRepository) getRoomRepository(ns string) *roomRepository {
+	if len(ns) == 0 {
+		return repo.Namespace["default"]
+	}
+	r, ok := repo.Namespace[ns]
+	if !ok {
+		r = newRoomRepository()
+		repo.Namespace[ns] = r
+	}
+	return repo.Namespace[ns]
 }
 
 // NewDefaultRepository ...
 func NewDefaultRepository() *DefaultRepository {
 	return &DefaultRepository{
-		all:                list.New(),
-		MessageArchiveSize: defaultMessageArchiveSize,
+		Namespace: map[string]*roomRepository{
+			"default": newRoomRepository(),
+		},
 	}
 }
 
 // PushMessage ...
-func (repo *DefaultRepository) PushMessage(evs ...*models.Event) error {
-	for _, ev := range evs {
-		repo.all.PushBack(ev)
+func (repo *DefaultRepository) pushMessage(ns string, evs ...*models.Event) error {
+	r, ok := repo.Namespace[ns]
+	if !ok {
+		r = newRoomRepository()
+		repo.Namespace[ns] = r
 	}
-	for repo.MessageArchiveSize < repo.all.Len() {
-		repo.all.Remove(repo.all.Front())
+	for _, ev := range evs {
+		r.all.PushBack(ev)
+	}
+	for r.MessageArchiveSize < r.all.Len() {
+		r.all.Remove(r.all.Front())
 	}
 	return nil
 }
 
 // GetMessages ...
-func (repo *DefaultRepository) GetMessages(count int, than int64) []*models.Event {
+func (repo *DefaultRepository) getMessages(ns string, count int, than int64) []*models.Event {
+	r := repo.getRoomRepository(ns)
 	res := []*models.Event{}
-	if repo.all.Len() == 0 {
+	if r.all.Len() == 0 {
 		return res
 	}
-	for el := repo.all.Back(); el != nil; el = el.Prev() {
+	for el := r.all.Back(); el != nil; el = el.Prev() {
 		ev, ok := el.Value.(*models.Event)
 		if ok {
 			if than < 0 || ev.Timestamp < than {
