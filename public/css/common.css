@@ -99,3 +99,10 @@ img.entry-image {
   max-height: 400px;
   max-width: 100%;
 }
+
+.stealth {
+  opacity: 0;
+}
+.stealth:hover {
+  opacity: 1;
+}
