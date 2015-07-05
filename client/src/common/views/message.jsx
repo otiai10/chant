@@ -14,11 +14,11 @@ var Message = React.createClass({
 var MessageEntry = React.createClass({
     render: function () {
         return (
-            <div className="row">
-              <div className="col s1">
+            <div className="box">
+              <div>
                 <MessageIcon setText={this.props.setText} message={this.props.message}/>
               </div>
-              <div className="col s11">
+              <div>
                 <MessageContent message={this.props.message}/>
               </div>
             </div>

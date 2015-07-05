@@ -162,11 +162,11 @@ var Message = React.createClass({displayName: "Message",
 var MessageEntry = React.createClass({displayName: "MessageEntry",
     render: function () {
         return (
-            React.createElement("div", {className: "row"}, 
-              React.createElement("div", {className: "col s1"}, 
+            React.createElement("div", {className: "box"}, 
+              React.createElement("div", null, 
                 React.createElement(MessageIcon, {setText: this.props.setText, message: this.props.message})
               ), 
-              React.createElement("div", {className: "col s11"}, 
+              React.createElement("div", null, 
                 React.createElement(MessageContent, {message: this.props.message})
               )
             )
