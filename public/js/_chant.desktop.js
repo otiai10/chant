@@ -15,22 +15,33 @@ setTimeout(function(){
 
 var chant = chant || {};
 chant._notification = {
-
+    __get: function() {
+      if (window.Notification) {
+        return window.Notification;
+      }
+      return (function() {
+          return function(title, options) {
+              window.alert(options.body || 'おだやかじゃないわね');
+              this.onclick = function() {};
+              this.onclose = function() {};
+          };
+      })();
+    }
 };
 chant.notify = function(body, title, icon, onclick, onclose) {
     onclick = onclick || function() {window.focus();};
     onclose = onclose || function() {};
     if (icon) icon = icon.replace('_normal', '_bigger');
-    var note = new window.Notification(
+    var notification = chant._notification.__get();
+    var note = new notification(
         title || 'CHANT',
         {
             body: body || 'おだやかじゃないわね',
             icon: icon || '/public/img/icon.png'
         }
     );
-    console.log(note);
     note.onclick = onclick;
-    note.onclise = onclose;
+    note.onclose = onclose;
 };
 
 chant.notifier = {
