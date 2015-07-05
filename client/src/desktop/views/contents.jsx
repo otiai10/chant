@@ -133,6 +133,7 @@ var Contents = React.createClass({
                         */}
                     </div>
                 </div>
+                <Configs id="configs"></Configs>
             </div>
         );
     }

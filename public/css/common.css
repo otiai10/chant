@@ -106,3 +106,26 @@ img.entry-image {
 .stealth:hover {
   opacity: 1;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+/* configs */
+#configs-wrapper {
+  width: 40px;
+  position:fixed;
+}
+#configs-wrapper.display {
+  right:  10px;
+  bottom: 10px;
+}
+#configs-wrapper.hidden {
+  right:  10px;
+  bottom: 10px;
+}
+#configs-wrapper>div {
+  width: 36px;
+  margin: 0 auto;
+  text-align: center;
+}
