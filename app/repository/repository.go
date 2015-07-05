@@ -10,6 +10,8 @@ import (
 type Repository interface {
 	pushMessage(string, ...*models.Event) error
 	getMessages(string, int, int64) []*models.Event
+	pushStamp(string, *models.Event) error
+	getAllStamps(string) []*models.Event
 }
 
 var (

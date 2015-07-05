@@ -44,3 +44,44 @@ func TestDefauRepository(t *testing.T) {
 	Expect(t, events[0].Value).ToBe("001")
 	Expect(t, events[1].Value).ToBe("002")
 }
+
+func TestDefauRepository_PushStamp(t *testing.T) {
+	InitWithInstance(NewDefaultRepository(), true)
+	client := NewRepoClient("default")
+
+	stamps := client.GetAllStamps()
+	Expect(t, len(stamps)).ToBe(0)
+
+	client.PushStamp(&models.Event{
+		Timestamp: 100,
+		Value: &models.Event{
+			Value: "hogeee",
+		},
+	})
+
+	stamps = client.GetAllStamps()
+	Expect(t, len(stamps)).ToBe(1)
+
+	for i := 0; i < 40; i++ {
+		client.PushStamp(&models.Event{
+			Timestamp: int64(100 + i),
+			Value: &models.Event{
+				Value: i,
+			},
+		})
+	}
+
+	stamps = client.GetAllStamps()
+	Expect(t, len(stamps)).ToBe(20)
+
+	client.PushStamp(&models.Event{
+		Timestamp: 110,
+		Value: &models.Event{
+			Value: 30,
+		},
+	})
+
+	stamps = client.GetAllStamps()
+	Expect(t, len(stamps)).ToBe(20)
+	Expect(t, stamps[0].Value.(*models.Event).Value).ToBe(30)
+}

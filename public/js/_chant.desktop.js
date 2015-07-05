@@ -353,6 +353,11 @@ var __arraynize = function(src, sub, gen) /* []string */ {
 var Contents = React.createClass({displayName: "Contents",
     componentDidMount: function() {
       console.info("Desktop build : _chant.desktop.js");
+      $.get('/api/v1/room/default/stamps', function(res) {
+        this.setState({
+          stamps: res.stamps,
+        });
+      }.bind(this));
     },
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
@@ -364,25 +369,24 @@ var Contents = React.createClass({displayName: "Contents",
             console.log('error', ev);
             chant.notify('ERROR!!');
         };
-        var self = this;
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
             console.log(payload);
             switch (payload.type) {
                 case "message":
-                    self.newMessage(payload);
+                    this.newMessage(payload);
                     break;
                 case "stamprize":
-                    self.newStamprize(payload);
+                    this.newStamprize(payload);
                     break;
                 case "join":
-                    self.join(payload);
+                    this.join(payload);
                     break;
                 case "leave":
-                    self.leave(payload);
+                    this.leave(payload);
                     break;
             }
-        };
+        }.bind(this);
         return {
             messages: [],
             stamps: [],

@@ -17,3 +17,6 @@ GET     /public/*filepath                       Static.Serve("public")
 
 # ｳｪｯﾌﾞソケットｩコネクション
 WS      /websocket/room/socket                  ChantSocket.RoomSocket
+
+# syncなAPIのエンドポイント
+GET     /api/v1/room/:id/stamps                 APIv1.RoomStamps

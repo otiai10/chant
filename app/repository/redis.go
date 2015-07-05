@@ -68,3 +68,12 @@ func (repo *RedisRepository) key(ns, key string) string {
 	}
 	return strings.Join([]string{rediskey, ns, key}, ".")
 }
+
+func (repo *RedisRepository) getAllStamps(ns string) []*models.Event {
+	events := []*models.Event{}
+	return events
+}
+
+func (repo *RedisRepository) pushStamp(ns string, ev *models.Event) error {
+	return nil
+}

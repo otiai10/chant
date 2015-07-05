@@ -14,11 +14,6 @@ type Application struct {
 	*revel.Controller
 }
 
-// Env ...
-type Env struct {
-	IsMobile bool
-}
-
 // Index handles `GET /`
 // 1) すでにログインしてたらApp/Indexをレンダリングする.
 // 2) ログインしていない場合、App/Loginにリダイレクトする.

@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"log"
+	"reflect"
 	"time"
 )
 
@@ -51,4 +52,17 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 	case JOIN:
 	}
 	return event, nil
+}
+
+// StamplyEqual ...
+func (ev *Event) StamplyEqual(target *Event) bool {
+	stamprized0, ok := ev.Value.(*Event)
+	if !ok {
+		return false
+	}
+	stamprized1, ok := target.Value.(*Event)
+	if !ok {
+		return false
+	}
+	return reflect.DeepEqual(stamprized0.Value, stamprized1.Value)
 }

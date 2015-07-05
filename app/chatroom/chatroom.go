@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"time"
 
+	"chant.v1/app/it"
 	"chant.v1/app/models"
 	"chant.v1/app/repository"
 
@@ -95,6 +96,12 @@ func newRoom(id string) *Room {
 	return room
 }
 
+// Exists APIからのコールで無駄にRoom立てるんじゃねえよ
+func Exists(id string) bool {
+	_, ok := rooms[id]
+	return ok
+}
+
 // GetRoom id(Name)からRoomをひいてくる.
 // 指定されなければdefaultを採用する.
 func GetRoom(id ...string) *Room {
@@ -144,6 +151,7 @@ type Subscription struct {
 }
 
 // Say Roomへの発言の窓口となるメソッド.
+// このイベンントをアーカイブするか否かはここで判断する.
 // Controllerからしか呼んではいけない. (so far)
 // TODO: アプリケーションサーバでエラーが起きたときに、Roomが自発的に呼ぶかも？
 func (room *Room) Say(user *models.User, msg string) {
@@ -153,7 +161,12 @@ func (room *Room) Say(user *models.User, msg string) {
 		// TODO: なんかする
 		return
 	}
-	room.Repo.PushMessage(event)
+	if it.Is(event.Type).In(models.MESSAGE, models.STAMPRIZE, models.STAMPUSE) {
+		room.Repo.PushMessage(event)
+	}
+	if it.Is(event.Type).In(models.STAMPRIZE, models.STAMPUSE) {
+		room.Repo.PushStamp(event)
+	}
 	room.publish <- event
 }
 

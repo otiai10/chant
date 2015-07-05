@@ -21,3 +21,13 @@ func (client *Client) PushMessage(evs ...*models.Event) error {
 func (client *Client) GetMessages(count int, from int64) []*models.Event {
 	return _impl.getMessages(client.ns, count, from)
 }
+
+// GetAllStamps ...
+func (client *Client) GetAllStamps() []*models.Event {
+	return _impl.getAllStamps(client.ns)
+}
+
+// PushStamp ...
+func (client *Client) PushStamp(ev *models.Event) error {
+	return _impl.pushStamp(client.ns, ev)
+}
