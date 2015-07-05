@@ -112,6 +112,27 @@ var __link = function() {
   this.setState({_c: c});
   return true;
 };
+var __twitter = function() {
+  var expr = /(twitter.com)\/([^\/]+)\/status\/([0-9]+)/gi;
+  var m = expr.exec(this.props.text);
+  console.log(m);
+  if (!m || m.length < 4) return;
+  var id = m[3];
+  $.ajax({
+    url: 'https://api.twitter.com/1/statuses/oembed.json?id=' + String(id),
+    method: 'GET',
+    dataType: 'jsonp',
+    success: function(res){
+      res.html = res.html.replace('<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>', '');
+      var d = React.createElement("div", {dangerouslySetInnerHTML: {__html:res.html}});
+      this.setState({_c: d});
+      setTimeout(function(){twttr.widgets.load();}, 0);
+    }.bind(this),
+    error: function(err){
+      console.log('twitter API error', err);
+    }
+  });
+};
 var __arraynize = function(src, sub, gen) /* []string */ {
   if (src.trim() === sub) return [gen(sub)];
   var c = [];
@@ -151,6 +172,7 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     // anchorize execution
     anchorize: function() {
         if (__image.bind(this)()) {}
+        else if (__twitter.bind(this)()) {}
         else if (__link.bind(this)()) {}
     },
     getDefaultProps: function() {
