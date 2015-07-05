@@ -29,11 +29,17 @@ var MessageEntry = React.createClass({
 var MessageMeta = React.createClass({
     render: function() {
         var time = new Date(this.props.message.timestamp / 1000000);
+        var contents = [
+              <span className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>,
+        ];
+        switch (this.props.message.type) {
+        case 'message':
+          contents.push(
+            <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>
+          );
+        }
         return (
-            <div className="meta-wrapper">
-                <span className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>
-                <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>
-            </div>
+            <div className="meta-wrapper">{contents}</div>
         );
     },
     stamprize: function() {
