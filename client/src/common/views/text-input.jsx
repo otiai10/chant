@@ -8,13 +8,11 @@ var TextInput = React.createClass({
     render: function() {
         return (
             <textarea
-                cols="3"
-                rows="3"
+                id="message-input"
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
                 value={this.state.value}
                 className="materialize-textarea"
-                style={{paddingTop: 0}}
                 placeholder="Shift + ⏎ to newline"
                 ></textarea>
         );
@@ -33,6 +31,9 @@ var TextInput = React.createClass({
         }
     },
     appendTextValue: function(text) {
-        this.setState({value: this.state.value + ' ' + text});
+        var c = this.state.value || '';
+        if (c.length !== 0) c += ' ' + text;
+        else c = text + ' ';
+        this.setState({value: c});
     }
 });

@@ -55,6 +55,11 @@ span.meta {
     cursor: pointer;
 }
 
+textarea#message-input {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 div.message-wrapper {
     margin-left:  8px;
     /*

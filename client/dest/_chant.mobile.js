@@ -291,6 +291,46 @@ var Stamp = React.createClass({displayName: "Stamp",
   }
 });
 
+var TextInput = React.createClass({displayName: "TextInput",
+    getInitialState: function() {
+        return {
+            value: '',
+            rows: 3
+        };
+    },
+    render: function() {
+        return (
+            React.createElement("textarea", {
+                id: "message-input", 
+                onKeyDown: this.onKeyDown, 
+                onChange: this.onChange, 
+                value: this.state.value, 
+                className: "materialize-textarea", 
+                placeholder: "Shift + ⏎ to newline"
+                })
+        );
+    },
+    onChange: function(ev) {
+        chant.clearUnread();// TODO: うーむ
+        this.setState({value: ev.target.value});
+    },
+    onKeyDown: function(ev) {
+        var enterKey = 13;
+        var txt = ev.target.value;
+        if (!ev.shiftKey && ev.which == enterKey) {
+            chant.Send("message", txt);
+            this.setState({value: ""});
+            return ev.preventDefault();
+        }
+    },
+    appendTextValue: function(text) {
+        var c = this.state.value || '';
+        if (c.length !== 0) c += ' ' + text;
+        else c = text + ' ';
+        this.setState({value: c});
+    }
+});
+
 // {{{ bind(this)すれば外からでもいいという意味でとりあえずここに宣言します
 var __image = function() {
   var expr = /((https?):\/\/|www\.)([a-z0-9-]+\.)+[a-z0-9:]+(\/[^\s<>"',;]*)?(jpe?g|png|gif)/gi;
@@ -527,43 +567,4 @@ var Messages = React.createClass({displayName: "Messages",
       )
     );
   }
-});
-
-var TextInput = React.createClass({displayName: "TextInput",
-    getInitialState: function() {
-        return {
-            value: '',
-            rows: 3
-        };
-    },
-    render: function() {
-        return (
-            React.createElement("textarea", {
-                cols: "3", 
-                rows: "3", 
-                onKeyDown: this.onKeyDown, 
-                onChange: this.onChange, 
-                value: this.state.value, 
-                className: "materialize-textarea", 
-                style: {paddingTop: 0}, 
-                placeholder: "Shift + ⏎ to newline"
-                })
-        );
-    },
-    onChange: function(ev) {
-        chant.clearUnread();// TODO: うーむ
-        this.setState({value: ev.target.value});
-    },
-    onKeyDown: function(ev) {
-        var enterKey = 13;
-        var txt = ev.target.value;
-        if (!ev.shiftKey && ev.which == enterKey) {
-            chant.Send("message", txt);
-            this.setState({value: ""});
-            return ev.preventDefault();
-        }
-    },
-    appendTextValue: function(text) {
-        this.setState({value: this.state.value + ' ' + text});
-    }
 });
