@@ -15,12 +15,8 @@ var MessageEntry = React.createClass({
     render: function () {
         return (
             <div className="box">
-              <div>
-                <MessageIcon setText={this.props.setText} message={this.props.message}/>
-              </div>
-              <div>
-                <MessageContent message={this.props.message}/>
-              </div>
+              <MessageIcon setText={this.props.setText} message={this.props.message}/>
+              <MessageContent message={this.props.message}/>
             </div>
         );
     }
