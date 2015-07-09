@@ -84,8 +84,8 @@ div.meta-wrapper {
 blockquote {
     border-left: 8px solid #e0e0e0;
     margin-top:    8px;
-    margin-bottom: 0;
-    padding-left:  8px;
+    margin-bottom: 8px;
+    padding: 8px 18px;
 }
 
 blockquote img.user-icon {

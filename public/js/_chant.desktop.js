@@ -249,6 +249,9 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
+            if (line.match(/^> /)) {// brief quote
+              return React.createElement("blockquote", null, React.createElement(AnchorizableText, {text: line.replace(/^> /, '')}));
+            }
             return React.createElement(AnchorizableText, {text: line});
         });
         return React.createElement("div", null, lines);

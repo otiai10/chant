@@ -101,6 +101,9 @@ var MessageRecursive = React.createClass({
 var MessageAnchorable = React.createClass({
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
+            if (line.match(/^> /)) {// brief quote
+              return <blockquote><AnchorizableText text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
+            }
             return <AnchorizableText text={line}></AnchorizableText>;
         });
         return <div>{lines}</div>;
