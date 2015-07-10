@@ -4,7 +4,7 @@ var Message = React.createClass({
     render: function() {
         return (
             <div className="entry">
-                <MessageMeta message={this.props.message} />
+                <MessageMeta setText={this.props.setText} message={this.props.message} />
                 <MessageEntry setText={this.props.setText} message={this.props.message} />
             </div>
         );
@@ -26,7 +26,7 @@ var MessageMeta = React.createClass({
     render: function() {
         var time = new Date(this.props.message.timestamp / 1000000);
         var contents = [
-              <span className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>,
+              <span onClick={this.quote} className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>,
         ];
         switch (this.props.message.type) {
         case 'message':
@@ -42,6 +42,16 @@ var MessageMeta = React.createClass({
         chant.Send('stamprize', JSON.stringify(this.props.message));
         document.getElementsByTagName('textarea')[0].focus();
         chant.clearUnread();// うーむ
+    },
+    // 本当はちゃんとしたいんだけど、とりあえずbrief quoteに倒す
+    quote: function() {
+      var value = this.props.message.value.text;
+      this.props.setText(function(text) {
+        if (!text) {
+            return '> ' + value + '\n';
+        }
+        return text + '\n> ' + value + '\n';
+      });
     }
 });
 

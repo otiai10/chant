@@ -31,9 +31,15 @@ var TextInput = React.createClass({
         }
     },
     appendTextValue: function(text) {
+      if (typeof text !== 'function') { // replacer
         var c = this.state.value || '';
         if (c.length !== 0) c += ' ' + text;
         else c = text + ' ';
         this.setState({value: c});
+        return;
+      }
+      var _c = text(this.state.value);
+      this.setState({value: _c});
+      return;
     }
 });

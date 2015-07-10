@@ -152,7 +152,7 @@ var Message = React.createClass({displayName: "Message",
     render: function() {
         return (
             React.createElement("div", {className: "entry"}, 
-                React.createElement(MessageMeta, {message: this.props.message}), 
+                React.createElement(MessageMeta, {setText: this.props.setText, message: this.props.message}), 
                 React.createElement(MessageEntry, {setText: this.props.setText, message: this.props.message})
             )
         );
@@ -174,7 +174,7 @@ var MessageMeta = React.createClass({displayName: "MessageMeta",
     render: function() {
         var time = new Date(this.props.message.timestamp / 1000000);
         var contents = [
-              React.createElement("span", {className: "meta"}, React.createElement("small", {className: "grey-text text-lighten-2"}, time.toLocaleString())),
+              React.createElement("span", {onClick: this.quote, className: "meta"}, React.createElement("small", {className: "grey-text text-lighten-2"}, time.toLocaleString())),
         ];
         switch (this.props.message.type) {
         case 'message':
@@ -190,6 +190,16 @@ var MessageMeta = React.createClass({displayName: "MessageMeta",
         chant.Send('stamprize', JSON.stringify(this.props.message));
         document.getElementsByTagName('textarea')[0].focus();
         chant.clearUnread();// うーむ
+    },
+    // 本当はちゃんとしたいんだけど、とりあえずbrief quoteに倒す
+    quote: function() {
+      var value = this.props.message.value.text;
+      this.props.setText(function(text) {
+        if (!text) {
+            return '> ' + value + '\n';
+        }
+        return text + '\n> ' + value + '\n';
+      });
     }
 });
 
@@ -323,10 +333,16 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     },
     appendTextValue: function(text) {
+      if (typeof text !== 'function') { // replacer
         var c = this.state.value || '';
         if (c.length !== 0) c += ' ' + text;
         else c = text + ' ';
         this.setState({value: c});
+        return;
+      }
+      var _c = text(this.state.value);
+      this.setState({value: _c});
+      return;
     }
 });
 
