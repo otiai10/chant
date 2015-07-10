@@ -45,13 +45,14 @@ var MessageMeta = React.createClass({
     },
     // 本当はちゃんとしたいんだけど、とりあえずbrief quoteに倒す
     quote: function() {
-      var value = this.props.message.value.text;
+      // var value = this.props.message.value.text;
+      var value = JSON.stringify(this.props.message);
       this.props.setText(function(text) {
         if (!text) {
-            return '> ' + value + '\n';
+            return '\nquote>' + value + '\n';
         }
-        return text + '\n> ' + value + '\n';
-      });
+        return text + '\nquote>' + value + '\n';
+      }, true);
     }
 });
 
@@ -111,6 +112,19 @@ var MessageRecursive = React.createClass({
 var MessageAnchorable = React.createClass({
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
+            var m = line.match(/^quote>({.+})$/);
+            if (m && m.length > 1) {
+              try {
+                  var message = JSON.parse(m[1]);
+                  return (
+                    <blockquote className="rich-quote">
+                      <MessageEntry message={message}></MessageEntry>
+                    </blockquote>
+                  );
+              } catch (e) {
+                  return <blockquote><AnchorizableText text={m[1]}></AnchorizableText></blockquote>;
+              }
+            }
             if (line.match(/^> /)) {// brief quote
               return <blockquote><AnchorizableText text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
             }

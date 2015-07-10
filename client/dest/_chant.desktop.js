@@ -193,13 +193,14 @@ var MessageMeta = React.createClass({displayName: "MessageMeta",
     },
     // 本当はちゃんとしたいんだけど、とりあえずbrief quoteに倒す
     quote: function() {
-      var value = this.props.message.value.text;
+      // var value = this.props.message.value.text;
+      var value = JSON.stringify(this.props.message);
       this.props.setText(function(text) {
         if (!text) {
-            return '> ' + value + '\n';
+            return '\nquote>' + value + '\n';
         }
-        return text + '\n> ' + value + '\n';
-      });
+        return text + '\nquote>' + value + '\n';
+      }, true);
     }
 });
 
@@ -259,6 +260,19 @@ var MessageRecursive = React.createClass({displayName: "MessageRecursive",
 var MessageAnchorable = React.createClass({displayName: "MessageAnchorable",
     render: function() {
         var lines = this.props.message.value.text.split('\n').map(function(line) {
+            var m = line.match(/^quote>({.+})$/);
+            if (m && m.length > 1) {
+              try {
+                  var message = JSON.parse(m[1]);
+                  return (
+                    React.createElement("blockquote", {className: "rich-quote"}, 
+                      React.createElement(MessageEntry, {message: message})
+                    )
+                  );
+              } catch (e) {
+                  return React.createElement("blockquote", null, React.createElement(AnchorizableText, {text: m[1]}));
+              }
+            }
             if (line.match(/^> /)) {// brief quote
               return React.createElement("blockquote", null, React.createElement(AnchorizableText, {text: line.replace(/^> /, '')}));
             }
@@ -333,7 +347,7 @@ var TextInput = React.createClass({displayName: "TextInput",
         }
     },
     appendTextValue: function(text) {
-      if (typeof text !== 'function') { // replacer
+      if (typeof text !== 'function') { // TODO: remove this if block
         var c = this.state.value || '';
         if (c.length !== 0) c += ' ' + text;
         else c = text + ' ';
@@ -503,9 +517,13 @@ var Contents = React.createClass({displayName: "Contents",
             members: {}
         };
     },
-    setText: function(text) {
+    setText: function(text, focushead) {
         this.refs.TextInput.appendTextValue(text);
-        this.refs.TextInput.getDOMNode().focus();
+        if (focushead) {
+          this.refs.TextInput.getDOMNode().setSelectionRange(0, 0);
+        } else {
+          this.refs.TextInput.getDOMNode().focus();
+        }
     },
     newMessage: function(message) {
         // this.state.messages.unshift(message);

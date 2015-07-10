@@ -31,7 +31,7 @@ var TextInput = React.createClass({
         }
     },
     appendTextValue: function(text) {
-      if (typeof text !== 'function') { // replacer
+      if (typeof text !== 'function') { // TODO: remove this if block
         var c = this.state.value || '';
         if (c.length !== 0) c += ' ' + text;
         else c = text + ' ';

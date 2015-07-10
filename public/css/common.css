@@ -92,6 +92,11 @@ blockquote img.user-icon {
     width: 32px;
 }
 
+blockquote.rich-quote {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 .members>span>img.user-icon {
     margin-right: 8px;
 }

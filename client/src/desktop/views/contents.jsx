@@ -45,9 +45,13 @@ var Contents = React.createClass({
             members: {}
         };
     },
-    setText: function(text) {
+    setText: function(text, focushead) {
         this.refs.TextInput.appendTextValue(text);
-        this.refs.TextInput.getDOMNode().focus();
+        if (focushead) {
+          this.refs.TextInput.getDOMNode().setSelectionRange(0, 0);
+        } else {
+          this.refs.TextInput.getDOMNode().focus();
+        }
     },
     newMessage: function(message) {
         // this.state.messages.unshift(message);
