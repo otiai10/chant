@@ -23,7 +23,7 @@ var Contents = React.createClass({
         };
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
-            console.log(payload);
+            // console.log(payload);
             switch (payload.type) {
                 case "message":
                     this.newMessage(payload);

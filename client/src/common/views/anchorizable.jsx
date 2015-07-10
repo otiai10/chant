@@ -17,8 +17,9 @@ var AnchorizableText = React.createClass({
     },
     // anchorize execution
     anchorize: function() {
-        if (__image.bind(this)()) {}
+        if (__vine.bind(this)()) {}
         else if (__twitter.bind(this)()) {}
+        else if (__image.bind(this)()) {}
         else if (__link.bind(this)()) {}
     },
     getDefaultProps: function() {

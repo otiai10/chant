@@ -39,6 +39,19 @@ var __twitter = function() {
     }
   });
 };
+var __vine = function() {
+    var expr = /(https?:\/\/vine.co\/v\/[^\/]+)\/?.*/;
+    var m = expr.exec(this.props.text);
+    if (!m) return;
+    var c = __arraynize(this.props.text, m[0], function(sub) {
+      sub += '/embed/simple';
+      return (
+        <iframe src={sub} width="400" height="400" frameborder="0"></iframe>
+      );
+    });
+    this.setState({_c: c});
+    return true;
+};
 var __arraynize = function(src, sub, gen) /* []string */ {
   if (src.trim() === sub) return [gen(sub)];
   var c = [];

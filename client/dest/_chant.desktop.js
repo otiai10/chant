@@ -121,8 +121,9 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     },
     // anchorize execution
     anchorize: function() {
-        if (__image.bind(this)()) {}
+        if (__vine.bind(this)()) {}
         else if (__twitter.bind(this)()) {}
+        else if (__image.bind(this)()) {}
         else if (__link.bind(this)()) {}
     },
     getDefaultProps: function() {
@@ -401,6 +402,19 @@ var __twitter = function() {
     }
   });
 };
+var __vine = function() {
+    var expr = /(https?:\/\/vine.co\/v\/[^\/]+)\/?.*/;
+    var m = expr.exec(this.props.text);
+    if (!m) return;
+    var c = __arraynize(this.props.text, m[0], function(sub) {
+      sub += '/embed/simple';
+      return (
+        React.createElement("iframe", {src: sub, width: "400", height: "400", frameborder: "0"})
+      );
+    });
+    this.setState({_c: c});
+    return true;
+};
 var __arraynize = function(src, sub, gen) /* []string */ {
   if (src.trim() === sub) return [gen(sub)];
   var c = [];
@@ -495,7 +509,7 @@ var Contents = React.createClass({displayName: "Contents",
         };
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
-            console.log(payload);
+            // console.log(payload);
             switch (payload.type) {
                 case "message":
                     this.newMessage(payload);
