@@ -18,6 +18,9 @@ var AnchorizableText = React.createClass({
     // anchorize execution
     anchorize: function() {
         if (__vine.bind(this)()) {}
+        else if (__youtube.bind(this)()) {}
+        else if (__mixcloud.bind(this)()) {}
+        else if (__soundcloud.bind(this)()) {}
         else if (__twitter.bind(this)()) {}
         else if (__image.bind(this)()) {}
         else if (__link.bind(this)()) {}

@@ -122,6 +122,9 @@ var AnchorizableText = React.createClass({displayName: "AnchorizableText",
     // anchorize execution
     anchorize: function() {
         if (__vine.bind(this)()) {}
+        else if (__youtube.bind(this)()) {}
+        else if (__mixcloud.bind(this)()) {}
+        else if (__soundcloud.bind(this)()) {}
         else if (__twitter.bind(this)()) {}
         else if (__image.bind(this)()) {}
         else if (__link.bind(this)()) {}
@@ -401,6 +404,40 @@ var __twitter = function() {
       console.log('twitter API error', err);
     }
   });
+};
+var __youtube = function() {
+    var expr = /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/gi;
+    var m = expr.exec(this.props.text);
+    if (!m) return;
+    var c = __arraynize(this.props.text, m[0], function(sub) {
+      var url = "https://www.youtube.com/embed/" + m[1];
+      return React.createElement("iframe", {width: "560", height: "225", src: url, frameborder: "0", allowfullscreen: true});
+    });
+    this.setState({_c: c});
+    return true;
+};
+var __soundcloud = function() {
+    var expr = /(https?:\/\/soundcloud.com\/([^\/]+)\/([^\/]+))/gi;
+    var m = expr.exec(this.props.text);
+    if (!m) return;
+    var c = __arraynize(this.props.text, m[0], function(sub) {
+        // var url = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/189264330";
+        var url = "https://w.soundcloud.com/player/?url=" + m[0] + "&amp;visual=true";
+        return React.createElement("iframe", {width: "100%", height: "225", scrolling: "no", frameborder: "no", src: url});
+    });
+    this.setState({_c: c});
+    return true;
+};
+var __mixcloud = function() {
+    var expr = /(https?:\/\/www.mixcloud.com\/([^\/]+)\/([^ ]+))/gi;
+    var m = expr.exec(this.props.text);
+    if (!m) return;
+    var c = __arraynize(this.props.text, m[0], function(sub) {
+      var url = "https://www.mixcloud.com/widget/iframe/?embed_type=widget_standard&feed=" + encodeURIComponent(m[0]);
+      return React.createElement("iframe", {width: "100%", height: "400", src: url});
+    });
+    this.setState({_c: c});
+    return true;
 };
 var __vine = function() {
     var expr = /(https?:\/\/vine.co\/v\/[^\/]+)\/?.*/;

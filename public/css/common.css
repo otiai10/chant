@@ -65,6 +65,7 @@ div.message-wrapper {
     /*
     margin-right: 12px;
     */
+    width: 100%;
 }
 
 div.meta-wrapper {
