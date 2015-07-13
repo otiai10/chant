@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"chant.v1/app/chatroom"
-	"chant.v1/app/models"
+	"chant/app/chatroom"
+	"chant/app/models"
 
 	"github.com/revel/revel"
 	"golang.org/x/net/websocket"

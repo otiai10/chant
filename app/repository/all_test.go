@@ -3,7 +3,7 @@ package repository
 import (
 	"testing"
 
-	"chant.v1/app/models"
+	"chant/app/models"
 
 	. "github.com/otiai10/mint"
 )

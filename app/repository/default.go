@@ -3,7 +3,7 @@ package repository
 import (
 	"container/list"
 
-	"chant.v1/app/models"
+	"chant/app/models"
 )
 
 const (

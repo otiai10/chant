@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"chant.v1/app/models"
+	"chant/app/models"
 	"github.com/mrjones/oauth"
 	"github.com/revel/revel"
 )

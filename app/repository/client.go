@@ -1,6 +1,6 @@
 package repository
 
-import "chant.v1/app/models"
+import "chant/app/models"
 
 // Client ...
 type Client struct {

@@ -3,7 +3,7 @@ package controllers
 import (
 	"regexp"
 
-	"chant.v1/app/models"
+	"chant/app/models"
 	"github.com/revel/revel"
 )
 

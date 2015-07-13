@@ -4,9 +4,9 @@ import (
 	"container/list"
 	"time"
 
-	"chant.v1/app/it"
-	"chant.v1/app/models"
-	"chant.v1/app/repository"
+	"chant/app/it"
+	"chant/app/models"
+	"chant/app/repository"
 
 	"log"
 

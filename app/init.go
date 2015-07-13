@@ -1,7 +1,7 @@
 package app
 
 import (
-	"chant.v1/app/repository"
+	"chant/app/repository"
 	"github.com/revel/revel"
 )
 

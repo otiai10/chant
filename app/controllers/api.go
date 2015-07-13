@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"regexp"
 
-	"chant.v1/app/chatroom"
+	"chant/app/chatroom"
 	"github.com/revel/revel"
 )
 

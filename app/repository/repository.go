@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"chant.v1/app/models"
+	"chant/app/models"
 )
 
 // Repository オンメモリとか、Redisとか.
