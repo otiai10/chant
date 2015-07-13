@@ -1,14 +1,26 @@
 {
     "name": "chant-client",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "directories": {
+        "test": "test"
+    },
     "devDependencies": {
-        "grunt-contrib-handlebars": "~0.5.9",
-        "grunt-contrib-clean": "*",
-        "grunt-contrib-concat": "*",
-        "grunt-contrib-uglify": "~0.2.0",
-        "grunt-regarde": "*",
-        "grunt": "*",
-        "grunt-exec": "*",
-        "grunt-typescript": "*"
+        "gulp": "3.9.0",
+        "gulp-plumber": "*",
+        "gulp-react": "2.0.0",
+        "gulp-using": "*",
+        "gulp-concat": "*",
+        "coffee-script": "*",
+        "mocha": "*",
+        "chai": "*"
+    },
+    "dependencies": {
+        "react": "0.13.3"
+    },
+    "scripts": {
+        "react": "gulp react",
+        "watch": "gulp watch",
+        "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script/register",
+        "tst": "npm test"
     }
 }

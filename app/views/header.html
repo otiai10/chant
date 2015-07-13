@@ -4,19 +4,35 @@
   <head>
     <title>{{.title}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!-- link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/main.css" -->
-    <link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/room.css">
-    <link rel="shortcut icon" type="image/png" href="/public/images/favicon.png">
-    <script src="/public/javascripts/jquery-1.10.1.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/public/javascripts/templating.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
-    <script src="/public/javascripts/chant.js" type="text/javascript" charset="utf-8"></script>
+    <link id="favicon" rel="shortcut icon" href="/public/img/icon.chant.mini.png"/>
+
+    <!-- for ajax only? -->
+    <script type="text/javascript" src="/public/js/zepto-for-ajax.js"></script>
+
+    <!-- materialize -->
+    <link rel="stylesheet" type="text/css" media="screen,projection" href="/public/css/materialize.min.css">
+    <!-- script type="text/javascript" src="/public/js/materialize.js"></script -->
+
+    <!-- fontawsome -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <!-- twitter embed -->
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <!-- react -->
+    <script type="text/javascript" src="/public/js/react-with-addons-0.13.3.min.js"></script>
+    <!-- script type="text/javascript" src="/public/js/JSXTransformer.js"></script -->
+
     <!-- mobile -->
-    <!-- meta name="apple-mobile-web-app-capable" content="yes" -->
-    <!-- meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" -->
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,minimal-ui">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/otiai10/chant/master/public/images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" href="http://{{.Config.Server.host}}/public/img/apple-touch-icon.png"/>
+
+    <link rel="stylesheet" href="/public/css/common.css">
+    {{if .Config.Agent.is_mobile}}
+      <link rel="stylesheet" href="/public/css/main.mobile.css">
+    {{else}}
+      <link rel="stylesheet" href="/public/css/main.desktop.css">
+    {{end}}
 
   </head>
   <body>
-    <h1 class="clickable">CHA<span class="highlight">N</span>T</h1>

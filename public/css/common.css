@@ -1,0 +1,175 @@
+/* ぜんたい */
+body {
+    background-color: #fafafa;
+}
+
+/* ひかえめなタイトル */
+h1.modest {
+    color: #ff9800;
+    font-size: 1em;
+    line-height: 2.2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+img.user-icon.myself:after {
+    content: "XXXX";
+    width: 30px;
+    height: 30px;
+    background-color: black;
+}
+button.stamp {
+    font-size: xx-small;
+    text-align: center;
+    height: 30px;
+    /* max-width: 40px; */
+    border-radius: 5px;
+    border: none;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    background-color: #dddddd;
+    cursor: pointer;
+}
+button.stamp img {
+    max-height: 90%;
+    max-width:  90%;
+    margin: auto auto;
+    vertical-align: middle;
+}
+button.stamp:focus, button.stamp:hover {
+    box-shadow: 1px 1px 4px #d0d0d0;
+}
+button.stamp:active {
+    background-color: white;
+}
+/* とりあえず */
+iframe {
+    border: none;
+}
+
+div.box {
+    width: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+}
+
+span.meta {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+textarea#message-input {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+div.message-wrapper {
+    margin-left:  8px;
+    /*
+    margin-right: 12px;
+    */
+    width: 100%;
+}
+
+div.meta-wrapper {
+    margin-bottom: 4px;
+}
+
+/* transition */
+.newentry-enter {
+    opacity: 0.01;
+    transition: 0.2s;
+}
+
+.newentry-enter.newentry-enter-active {
+    opacity: 1;
+}
+
+blockquote {
+    border-left: 8px solid #e0e0e0;
+    margin-top:    8px;
+    margin-bottom: 8px;
+    padding: 8px 18px;
+}
+
+blockquote img.user-icon {
+    width: 32px;
+}
+
+blockquote.rich-quote {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.members>span>img.user-icon {
+    margin-right: 8px;
+}
+
+p.line-wrap {
+    margin: 0;
+}
+
+img.entry-image {
+  max-height: 400px;
+  max-width: 100%;
+}
+
+.stealth {
+  opacity: 0;
+  transition: all 0.3s;
+}
+.stealth.hazy {
+  opacity: 0.1;
+}
+.stealth:hover {
+  opacity: 1;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* configs */
+#configs-wrapper {
+  width: 40px;
+  position:fixed;
+}
+#configs-wrapper.display {
+  right:  10px;
+  bottom: 10px;
+}
+#configs-wrapper.hidden {
+  right:  10px;
+  bottom: 10px;
+}
+#configs-wrapper>div {
+  width: 36px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+div.web-preview {
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
+  border-width: 1px;
+  border-style: solid;
+  width: 93%;
+  max-width: 480px;
+}
+
+div.web-preview>div>div.web-preview-image-wrap {
+  width: 100px;
+}
+div.web-preview>div>div.web-preview-description-wrap {
+  width: 350px;
+}
+div.web-preview>div>div.web-preview-description-wrap p {
+  margin: 0;
+  padding: 0 10px;
+}
+div.web-preview>div>div img {
+  max-width: 100%;
+  max-height: 100%;
+}

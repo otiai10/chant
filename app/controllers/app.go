@@ -1,46 +1,70 @@
 package controllers
 
 import (
-	"chant/app/factory"
 	"regexp"
 
+	"chant.v1/app/models"
 	"github.com/revel/revel"
 )
+
+var mobile = regexp.MustCompile("/Mobile|iPhone|Android|BlackBerry/")
 
 // Application ...
 type Application struct {
 	*revel.Controller
 }
 
-// Env ...
-type Env struct {
-	IsMobile bool
-}
-
-// Index さいしょのページレンダリングだけー
+// Index handles `GET /`
+// 1) すでにログインしてたらApp/Indexをレンダリングする.
+// 2) ログインしていない場合、App/Loginにリダイレクトする.
 func (c Application) Index() revel.Result {
-	if _, ok := c.Session["screenName"]; ok {
-		user, _ := factory.UserFromSession(c.Session)
-		server := factory.ServerFromConf(revel.Config)
-		env := c.getEnv()
-		return c.Render(user, server, env)
+	if _, ok := c.Session["screen_name"]; ok {
+		user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
+		if err != nil {
+			// とりあえず
+			return c.Redirect("/login")
+		}
+
+		Config := ServerConfig{
+			Myself: user,
+			Server: map[string]interface{}{
+				"host": getHost(),
+			},
+			Agent: map[string]interface{}{
+				"is_mobile": mobile.MatchString(c.Request.UserAgent()),
+			},
+		}
+		return c.Render(Config)
 		//return c.Redirect(Room.Index)
 	}
-	return c.RenderTemplate("Top/Index.html")
+	return c.Redirect("/login")
 }
 
-func (c Application) getEnv() Env {
-	return Env{
-		IsMobile: c.isMobile(),
-	}
+// Login handles `GET /login`
+// Twitterログイン用の入り口Viewをレンダリングするだけ.
+func (c Application) Login() revel.Result {
+	return c.Render()
 }
 
-func (c Application) isMobile() bool {
-	// これ以外の取り方ないの？
-	var useragent string
-	useragents, ok := c.Controller.Request.Request.Header["User-Agent"]
-	if ok && len(useragents) > 0 {
-		useragent = useragents[0]
+// Logout handles `GET /logout`
+func (c Application) Logout() revel.Result {
+	c.Session = revel.Session{}
+	return c.Redirect("/login")
+}
+
+// ServerConfig サーバサイドで取得したエニシングを
+// クライアントに埋め込みたいときにつかうサムシング.
+type ServerConfig struct {
+	Myself interface{} `json:"myself"`
+	Server interface{} `json:"server"`
+	Agent  interface{} `json:"agent"`
+}
+
+func getHost() string {
+	host, _ := revel.Config.String("http.host")
+	port, _ := revel.Config.String("http.port")
+	if port != "" {
+		port = ":" + port
 	}
-	return regexp.MustCompile("Mobile").MatchString(useragent)
+	return host + port
 }

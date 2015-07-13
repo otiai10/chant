@@ -1,233 +1,140 @@
 package chatroom
 
 import (
-	"chant/app/factory"
-	"chant/app/models"
 	"container/list"
-	"log"
 	"time"
-	// "github.com/revel/revel"
 
-	"github.com/otiai10/rodeo"
+	"chant.v1/app/it"
+	"chant.v1/app/models"
+	"chant.v1/app/repository"
+
+	"log"
+
+	"fmt"
 )
 
-// Event ...
-type Event struct {
-	Type      string // "join", "leave", or "message"
-	User      *models.User
-	Timestamp int    // Unix timestamp (secs)
-	Text      string // What the user said (if Type == "message")
-	RoomInfo  *Info
-    Initial   bool // inital event
+const bufsize = 100
+
+// Name - *Room のハッシュテーブル
+var rooms = map[string]*Room{
+	"default": nil,
 }
 
-// Subscription ...
-type Subscription struct {
-	Archive []Event      // All the events from the archive.
-	New     <-chan Event // New events coming in.
+// Room ひとつの名前を持った部屋に対応
+type Room struct {
+	Name        string
+	entrance    chan Subscription
+	exit        chan Subscription
+	publish     chan *models.Event
+	terminate   chan interface{}
+	subscribers *list.List
+	members     *list.List
+	Repo        *repository.Client
 }
 
-// Info ...
-type Info struct {
-	Users    map[string]*models.User
-	Updated  bool
-	AllUsers *list.List
-}
-
-// Cancel Owner of a subscription must cancel it when they stop listening to events.
-func (s Subscription) Cancel() {
-	unsubscribe <- s.New // Unsubscribe the channel.
-	drain(s.New)         // Drain it, just in case there was a pending publish.
-}
-
-// NewEvent ...
-func NewEvent(typ string, user *models.User, msg string) Event {
-	return Event{
-		Type: typ,
-		User: user,
-		Timestamp: int(time.Now().Unix()),
-		Text: msg,
-		RoomInfo: info,
-	}
-}
-
-// NewKeepAlive ...
-func NewKeepAlive() Event {
-	return Event{
-		"keepalive",
-		&models.User{},
-		int(time.Now().Unix()),
-		"",
-		info,
-		false,
-	}
-}
-
-// Subscribe ...
-func Subscribe() Subscription {
-	resp := make(chan Subscription)
-	subscribe <- resp
-	return <-resp
-}
-
-// Join ...
-func Join(user *models.User) {
-	publish <- NewEvent("join", user, "")
-}
-
-// Say ...
-func Say(user *models.User, message string) {
-	publish <- NewEvent("message", user, message)
-}
-
-// Leave ...
-func Leave(user *models.User) {
-	publish <- NewEvent("leave", user, "")
-}
-
-const archiveSize = 4
-const soundArchiveSize = 21
-const stampArchiveSize = 25
-
-var (
-	// Send a channel here to get room events back.  It will send the entire
-	// archive initially, and then new messages as they come in.
-	subscribe = make(chan (chan<- Subscription), 1000)
-	// Send a channel here to unsubscribe.
-	unsubscribe = make(chan (<-chan Event), 1000)
-	// Send events here to publish them.
-	publish = make(chan Event, 1000)
-
-	keepalive = time.Tick(50 * time.Second)
-
-	info = &Info{
-		make(map[string]*models.User),
-		true,
-		list.New(),
-	}
-
-	// SoundTrack ...
-	SoundTrack = list.New()
-	// StampArchive ...
-	StampArchive = []models.Stamp{}
-
-	vaquero    *rodeo.Vaquero
-	persistent = false
-)
-
-// This function loops forever, handling the chat room pubsub
-func chatroom() {
-	archive := list.New()
-	subscribers := list.New()
-
+// Serve Roomごとに部屋を開く. foreverなgoroutineをつくる.
+func (room *Room) Serve() {
 	for {
 		select {
-		case ch := <-subscribe:
-			var events []Event
-			for e := archive.Front(); e != nil; e = e.Next() {
-				events = append(events, e.Value.(Event))
-			}
-			subscriber := make(chan Event, 10)
-			subscribers.PushBack(subscriber)
-			ch <- Subscription{events, subscriber}
+		// Roomは、
+		// エントランスからsubscription依頼が来たら
+		// subscriptionをRoomのsubscribersに登録しつつ
+		// 受信用のチャンネルを返してあげる必要がある.
+		case sub := <-room.entrance:
+			room.subscribers.PushBack(sub)
+			// Roomは、
+		// 出口にsubscriptionを投げられたら
+		// subscriptionをRoomのsubscribersから抹消する必要がある.
 
-		case event := <-publish:
-			// {{{ クソ
-			event.RoomInfo.Updated = false
-			if event.Type == "join" {
-				info.AllUsers.PushBack(event.User)
-				event.RoomInfo.Updated = true
-			}
-			if event.Type == "leave" {
-				// delete(info.Users, event.User.ScreenName)
-				leaveUser(event.User)
-				event.RoomInfo.Updated = true
-			}
-			restoreRoomUsers()
-			event.RoomInfo = info
-			// }}}
-			if event.Type == "message" {
-				sound, soundError := factory.SoundFromText(event.Text, event.User)
-				if soundError == nil {
-					//fmt.Printf("このサウンドをアーカイブ:\t%+v\n", sound)
-					if SoundTrack.Len() >= soundArchiveSize {
-						SoundTrack.Remove(SoundTrack.Front())
-					}
-					SoundTrack.PushBack(sound)
-				} else {
-					// revel.ERROR.Println("たぶんここ？", soundError)
-				}
-				if stamp, err := factory.StampFromText(event.Text); err == nil {
-					if stamp.IsUsedEvent {
-						event.Type = "message"
-						event.Text = stamp.Value
-					}
-					addStamp(stamp)
+		case sub := <-room.exit:
+			for one := room.subscribers.Front(); one != nil; one = one.Next() {
+				if the, ok := one.Value.(Subscription); ok && the == sub {
+					room.subscribers.Remove(one)
 				}
 			}
-			if archive.Len() >= archiveSize {
-				archive.Remove(archive.Front())
-			}
-			if event.Type != "leave" && event.Type != "join" {
-				archive.PushBack(event)
-			}
-
-			// Finally, subscribe
-			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				log.Println("[process]", "102", "時間くってる気がする")
-				if sub, ok := ch.Value.(chan Event); ok {
-					go func(sub chan Event, event Event) {
-						sub <- event
-						log.Println("[process]", "104", "goroutineにしてみた")
-					}(sub, event)
-				}
-				log.Println("[process]", "103", "listの単位終わり")
-			}
-		case <-keepalive:
-			for subscriber := subscribers.Front(); subscriber != nil; subscriber = subscriber.Next() {
-				subscriber.Value.(chan Event) <- NewKeepAlive()
-			}
-
-		case unsub := <-unsubscribe:
-			for ch := subscribers.Front(); ch != nil; ch = ch.Next() {
-				if ch.Value.(chan Event) == unsub {
-					subscribers.Remove(ch)
-					break
+			// unhandlableなsubscriptionが残ってると、そいつのせいでblockするので
+			// exitに来たchanは必ずdrainにかけなければならない
+			// XXX: これ、room.subscribers.Removeの前にinvokeしてもいいんじゃね？
+			room.drain(sub)
+		// Roomは、
+		// publish用のチャンネルに新しいイベントを流し込まれたとき、
+		// そのイベントを登録されている全Subscribersに配信する必要がある.
+		case ev := <-room.publish:
+			for one := room.subscribers.Front(); one != nil; one = one.Next() {
+				if the, ok := one.Value.(Subscription); ok {
+					// 誰かへのpublishが詰まっても、全体として詰まらないようにするため、
+					// 各人へのpublishはgoroutineにして独立させる.
+					// 逆にいえば、ここはsub.Newへの流し込みが、チャンネルの先でhandle仕切れてない
+					// ので詰まり現象が発生しているのではないかと推測している.
+					go func(sub Subscription, ev *models.Event) {
+						start := time.Now()
+						sub.New <- ev
+						log.Printf("[publish]\t%v\t%v\tto:%s\n", time.Now().Sub(start), ev.Type, sub.ID)
+					}(the, ev)
 				}
 			}
-		}
-	}
-}
-
-func leaveUser(user *models.User) {
-	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
-		if u.Value.(*models.User).ScreenName == user.ScreenName {
-			// delete only one
-			_ = info.AllUsers.Remove(u)
+		// Roomは、
+		// なんらかの不具合があったときに
+		// foreverなルーチンを終了して死ぬ.
+		case cause := <-room.terminate:
+			log.Println(cause)
 			return
 		}
 	}
 }
-func restoreRoomUsers() {
-	// TODO: DRY
-	info.Users = make(map[string]*models.User)
-	for u := info.AllUsers.Front(); u != nil; u = u.Next() {
-		user := u.Value.(*models.User)
-		info.Users[user.ScreenName] = user
+
+func newRoom(id string) *Room {
+	room := &Room{
+		entrance:    make(chan Subscription, bufsize),
+		exit:        make(chan Subscription, bufsize),
+		publish:     make(chan *models.Event, bufsize),
+		subscribers: list.New(),
+		members:     list.New(),
+		Repo:        repository.NewRepoClient(id),
 	}
-}
-func init() {
-	RestoreStamps()
-	go chatroom()
+	go room.Serve()
+	return room
 }
 
-// Helpers
+// Exists APIからのコールで無駄にRoom立てるんじゃねえよ
+func Exists(id string) bool {
+	_, ok := rooms[id]
+	return ok
+}
 
-// Drains a given channel of any messages.
-func drain(ch <-chan Event) {
+// GetRoom id(Name)からRoomをひいてくる.
+// 指定されなければdefaultを採用する.
+func GetRoom(id ...string) *Room {
+	id = append(id, "default") // id指定がなければdefaultを使う
+	room, ok := rooms[id[0]]
+	if !ok || room == nil {
+		room = newRoom(id[0])
+		rooms[id[0]] = room
+	}
+	return room
+}
+
+// Subscribe は呼ばれると、このroomのsubscribersに登録されたsubscriptionが提供される。
+func (room *Room) Subscribe(user *models.User) Subscription {
+	subscription := Subscription{
+		ID:  user.ScreenName,
+		New: make(chan *models.Event),
+	}
+	room.entrance <- subscription
+	return subscription
+}
+
+// Unsubscribe は呼ばれると、このroomのsubscribersから抜ける（べき）。
+func (room *Room) Unsubscribe(subscription Subscription) {
+	room.exit <- subscription
+	room.drain(subscription)
+}
+
+// 不要になったsubscriptionからの流し込みを受けるだけのメソッド。
+func (room *Room) drain(subscription Subscription) {
 	for {
 		select {
-		case _, ok := <-ch:
+		case _, ok := <-subscription.New:
 			if !ok {
 				return
 			}
@@ -237,44 +144,68 @@ func drain(ch <-chan Event) {
 	}
 }
 
-// RestoreStamps restores stamp archive from Database.
-func RestoreStamps() {
-	var err error
-	if vaquero, err = rodeo.NewVaquero("localhost", "6379"); err != nil {
+// Subscription 新しいイベントを伝えるためのチャンネルラッパー
+type Subscription struct {
+	ID  string             // サブスクリプションに名前をつけましょ
+	New chan *models.Event // 新しいイベントをこのsubscriberに伝えるチャンネル
+}
+
+// Say Roomへの発言の窓口となるメソッド.
+// このイベンントをアーカイブするか否かはここで判断する.
+// Controllerからしか呼んではいけない. (so far)
+// TODO: アプリケーションサーバでエラーが起きたときに、Roomが自発的に呼ぶかも？
+func (room *Room) Say(user *models.User, msg string) {
+	event, err := models.ConstructEvent(user, msg)
+	if err != nil {
+		fmt.Println("construct event error", err)
+		// TODO: なんかする
 		return
 	}
-	persistent = true
-	vaquero.Cast("chant.stamps", &StampArchive)
+	if it.Is(event.Type).In(models.MESSAGE, models.STAMPRIZE, models.STAMPUSE) {
+		room.Repo.PushMessage(event)
+	}
+	if it.Is(event.Type).In(models.STAMPRIZE, models.STAMPUSE) {
+		room.Repo.PushStamp(event)
+	}
+	room.publish <- event
 }
 
-// SaveStamps saves stamps
-func SaveStamps() {
-	vaquero.Store("chant.stamps", StampArchive)
-	return
+// Join ユーザがこのRoomにJoinしてきたときの処理をすべて行う.
+// Subscribeでsubscriptionの登録はできてるのだから、joinイベントの発行しかしてない気がする
+func (room *Room) Join(user *models.User) *models.Event {
+	room.members.PushBack(user)
+	event := new(models.Event)
+	event.User = user
+	event.Type = models.JOIN
+	event.Value = room.getUniqueUsers()
+	room.publish <- event
+	return event
 }
 
-// addStamp adds stamp to archive, sort them by LRU and delete overflow
-func addStamp(stamp models.Stamp) {
-	// filter first
-	pool := []models.Stamp{}
-	for _, s := range StampArchive {
-		if s.Value != stamp.Value {
-			pool = append(pool, s)
+// Leave ユーザが接続を切ったりしたときに退出する処理をすべて行う.
+func (room *Room) Leave(user *models.User) {
+	room.removeOneUser(user)
+	event := new(models.Event)
+	event.User = user
+	event.Type = models.LEAVE
+	event.Value = room.getUniqueUsers()
+	room.publish <- event
+}
+
+func (room *Room) getUniqueUsers() map[string]*models.User {
+	res := map[string]*models.User{}
+	for e := room.members.Front(); e != nil; e = e.Next() {
+		user := e.Value.(*models.User)
+		res[user.IDstr] = user
+	}
+	return res
+}
+
+func (room *Room) removeOneUser(user *models.User) {
+	for e := room.members.Front(); e != nil; e = e.Next() {
+		if the := e.Value.(*models.User); the.IDstr == user.IDstr {
+			room.members.Remove(e)
+			return
 		}
 	}
-	// append new
-	StampArchive = append(pool, stamp)
-	// cut head
-	if len(StampArchive) > stampArchiveSize {
-		StampArchive = StampArchive[len(StampArchive)-stampArchiveSize:]
-	}
-	// FIXME: ここで毎回呼ぶのはクソ
-	if persistent {
-		SaveStamps()
-	}
-}
-
-// GetStampArchive returns stamp archives sorted by LRU
-func GetStampArchive() []models.Stamp {
-	return StampArchive
 }

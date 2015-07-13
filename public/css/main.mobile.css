@@ -1,0 +1,23 @@
+/* mobile用 CSS */
+img.user-icon {
+  cursor: pointer;
+  width: 24px;
+  border-radius: 30px;
+}
+
+div.entry {
+  margin-bottom: 0;
+}
+
+/* materialize-textareaうぜえ！ */
+.materialize-textarea {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+div.row.members-wrapper, .textinput-wrapper {
+  margin-bottom: 8px;
+}
+div.members {
+  margin-top: 12px;
+}

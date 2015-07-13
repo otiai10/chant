@@ -1,0 +1,9 @@
+/* desktop用 CSS */
+img.user-icon {
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+div.entry {
+    margin-bottom: 16px;
+}
