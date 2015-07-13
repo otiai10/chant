@@ -6,7 +6,7 @@ var Configs = React.createClass({
           configs: {
             notes: {
               on: false,
-              cn: 'mdi-social-notifications-off small clickable'
+              cn: 'fa fa-bell-slash fa-2x stealth hazy clickable'
             }
           }
         };
@@ -14,19 +14,26 @@ var Configs = React.createClass({
     render: function() {
         return (
             <div id="configs-wrapper" className="display">
-              {/*
-              <div id="configs-tab">
-                <i onClick={this.toggleConfig} className="mdi-action-settings small clickable"></i>
-              </div>
-              */}
               <div class="configs-list">
                 <i onClick={this.toggleNotification} className={this.state.configs.notes.cn}></i>
+              </div>
+              <div class="configs-list">
+                <i onClick={this.signout} className="fa fa-sign-out fa-2x stealth hazy clickable"></i>
+              </div>
+              <div class="configs-list">
+                <i onClick={this.github} className="fa fa-github-square fa-2x stealth hazy clickable"></i>
               </div>
             </div>
         );
     },
     toggleConfig: function() {
       this.display = !this.display;
+    },
+    signout: function() {
+      if (window.confirm('logout?')) location.href = '/logout';
+    },
+    github: function() {
+      window.open('https://github.com/otiai10/chant/issues', '_blank');
     },
     toggleNotification: function() {
         if (!window.Notification) return window.alert("undefined window.Notification");
@@ -37,9 +44,9 @@ var Configs = React.createClass({
           on: !this.state.configs.notes.on,
           cn: (function(){
             if (!this.state.configs.notes.on) {
-              return 'mdi-social-notifications-on small clickable';
+              return 'fa fa-bell fa-2x stealth hazy clickable';
             }
-            return 'mdi-social-notifications-off small clickable';
+            return 'fa fa-bell-slash fa-2x stealth hazy clickable';
           }.bind(this))()
         };
         this.setState({configs: this.state.configs});

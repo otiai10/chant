@@ -4,6 +4,7 @@
 GET     /                                       Application.Index
 # Twitterログイン用のページ
 GET     /login                                  Application.Login
+GET     /logout                                 Application.Logout
 
 # TwitterのOAuth用のエンドポイント
 GET     /auth                                   Auth.Index

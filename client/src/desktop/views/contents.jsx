@@ -89,9 +89,6 @@ var Contents = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col s12">
-                        <h1 className="modest pull-right"><img src="/public/img/title.png" width="60px"/></h1>
-                    </div>
                 </div>
                 <div className="row">
                     <div className="col s12 members">

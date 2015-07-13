@@ -46,6 +46,12 @@ func (c Application) Login() revel.Result {
 	return c.Render()
 }
 
+// Logout handles `GET /logout`
+func (c Application) Logout() revel.Result {
+	c.Session = revel.Session{}
+	return c.Redirect("/login")
+}
+
 // ServerConfig サーバサイドで取得したエニシングを
 // クライアントに埋め込みたいときにつかうサムシング.
 type ServerConfig struct {

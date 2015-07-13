@@ -113,6 +113,10 @@ img.entry-image {
 
 .stealth {
   opacity: 0;
+  transition: all 0.3s;
+}
+.stealth.hazy {
+  opacity: 0.1;
 }
 .stealth:hover {
   opacity: 1;
