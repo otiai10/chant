@@ -33,5 +33,5 @@ Development
 - policy: _Eat your dogfood, and Serve your best dogfood._
 - issues: https://github.com/otiai10/chant/issues
 - server: `revel run chant dev`
-- client: see [client](https://github.com/otiai10/chant/client)
-- license: [MIT](https://github.com/otiai10/chant/LICENSE)
+- client: see [client](https://github.com/otiai10/chant/tree/master/client)
+- license: [MIT](https://github.com/otiai10/chant/blob/master/LICENSE)
