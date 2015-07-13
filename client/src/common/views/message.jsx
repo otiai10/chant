@@ -31,7 +31,8 @@ var MessageMeta = React.createClass({
         switch (this.props.message.type) {
         case 'message':
           contents.push(
-            <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>
+            <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>,
+            <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-2">totsuzenize</small></span>
           );
         }
         return (
@@ -42,6 +43,9 @@ var MessageMeta = React.createClass({
         chant.Send('stamprize', JSON.stringify(this.props.message));
         document.getElementsByTagName('textarea')[0].focus();
         chant.clearUnread();// うーむ
+    },
+    totsuzenize: function() {
+        chant.Send('message', chant.Totsuzen.text(this.props.message.value.text));
     },
     // 本当はちゃんとしたいんだけど、とりあえずbrief quoteに倒す
     quote: function() {
