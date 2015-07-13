@@ -10,9 +10,6 @@ GET     /logout                                 Application.Logout
 GET     /auth                                   Auth.Index
 GET     /auth/callback                          Auth.Callback
 
-# クライアントサイドから、URLの展開用。なんか時々バグる
-# GET     /preview                                Preview.Index
-
 # スタティックpath
 GET     /public/*filepath                       Static.Serve("public")
 
@@ -21,3 +18,4 @@ WS      /websocket/room/socket                  ChantSocket.RoomSocket
 
 # syncなAPIのエンドポイント
 GET     /api/v1/room/:id/stamps                 APIv1.RoomStamps
+GET     /api/v1/preview                         APIv1.WebPreview
