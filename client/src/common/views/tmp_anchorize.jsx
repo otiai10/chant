@@ -13,6 +13,18 @@ var __link = function() {
   var expr = /(https?):\/\/([_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi;
   var m = expr.exec(this.props.text);
   if (!m) return; // do nothing;
+  $.ajax({
+      url: '/api/v1/preview',
+      data: {
+        url: m[0]
+      },
+      success: function(res) {
+        if (!res.summary.title && !res.summary.image && !res.summary.description) return;
+        this.setState({
+          _c: <WebPreview title={res.summary.title} image={res.summary.image} description={res.summary.description} url={res.summary.url} ></WebPreview>
+        });
+      }.bind(this)
+  });
   var c = __arraynize(this.props.text, m[0], function(sub) {
         return <a href={sub} target="_blank">{sub}</a>;
   });

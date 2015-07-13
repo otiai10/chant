@@ -42,7 +42,7 @@ func (c APIv1) WebPreview(url string) revel.Result {
 
 	return c.RenderJson(map[string]interface{}{
 		"html":    page,
-		"summary": page.Summarize(),
+		"summary": page.Summarize(url),
 	})
 }
 
@@ -59,6 +59,7 @@ type Summary struct {
 	Title       string `json:"title"`
 	Image       string `json:"image"`
 	Description string `json:"description"`
+	URL         string `json:"url"`
 }
 
 func (summary *Summary) setTitle(c string) {
@@ -103,8 +104,9 @@ type Link struct {
 }
 
 // Summarize ...
-func (hp *HTMLPage) Summarize() *Summary {
+func (hp *HTMLPage) Summarize(url string) *Summary {
 	summary := new(Summary)
+	summary.URL = url
 	img := regexp.MustCompile("image")
 	desc := regexp.MustCompile("description")
 	title := regexp.MustCompile("title")

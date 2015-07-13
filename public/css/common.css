@@ -147,3 +147,29 @@ img.entry-image {
   margin: 0 auto;
   text-align: center;
 }
+
+div.web-preview {
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
+  padding: 10px;
+  border-radius: 5px;
+  border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
+  border-width: 1px;
+  border-style: solid;
+  width: 93%;
+  max-width: 480px;
+}
+
+div.web-preview>div>div.web-preview-image-wrap {
+  width: 100px;
+}
+div.web-preview>div>div.web-preview-description-wrap {
+  width: 350px;
+}
+div.web-preview>div>div.web-preview-description-wrap p {
+  margin: 0;
+  padding: 0 10px;
+}
+div.web-preview>div>div img {
+  max-width: 100%;
+  max-height: 100%;
+}
