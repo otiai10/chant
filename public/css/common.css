@@ -36,7 +36,7 @@ button.stamp img {
     margin: auto auto;
     vertical-align: middle;
 }
-button.stamp:focus {
+button.stamp:focus, button.stamp:hover {
     box-shadow: 1px 1px 4px #d0d0d0;
 }
 button.stamp:active {
