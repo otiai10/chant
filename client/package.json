@@ -10,6 +10,7 @@
         "gulp-react": "2.0.0",
         "gulp-using": "*",
         "gulp-concat": "*",
+        "gulp-uglify": "*",
         "coffee-script": "*",
         "mocha": "*",
         "chai": "*"
