@@ -38,3 +38,4 @@ conf/app.conf
 
 # client
 client/node_modules/*
+client/dest/*
