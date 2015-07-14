@@ -110,6 +110,7 @@ func (hp *HTMLPage) Summarize(url string) *Summary {
 	img := regexp.MustCompile("image")
 	desc := regexp.MustCompile("description")
 	title := regexp.MustCompile("title")
+	icon := regexp.MustCompile("icon")
 	for _, meta := range hp.Head.Metas {
 		switch {
 		case img.MatchString(meta.Property):
@@ -124,7 +125,7 @@ func (hp *HTMLPage) Summarize(url string) *Summary {
 	summary.setDescription(hp.Head.Title)
 	if len(summary.Image) == 0 {
 		for _, link := range hp.Head.Links {
-			if link.Rel == "shortcut icon" {
+			if icon.MatchString(link.Rel) {
 				summary.setImage(link.Href)
 				break
 			}
