@@ -132,7 +132,9 @@ var MessageAnchorable = React.createClass({
             if (line.match(/^> /)) {// brief quote
               return <blockquote><AnchorizableText text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
             }
+            // return <AnchorizableText text={line}></AnchorizableText>;
             return <AnchorizableText text={line}></AnchorizableText>;
+
         });
         return <div>{lines}</div>;
     }

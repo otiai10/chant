@@ -1,7 +1,12 @@
 package controllers
 
 import (
+	"path"
+	"path/filepath"
+	"strings"
+
 	"github.com/mrjones/oauth"
+	"github.com/otiai10/curr"
 	"github.com/revel/revel"
 )
 
@@ -9,7 +14,12 @@ import (
 // *oauth.Consumerをつくる
 var (
 	twitter *oauth.Consumer
+	emojis  = map[string]string{}
 )
+
+func init() {
+	loadEmojis()
+}
 
 // Twitter ...
 func Twitter() *oauth.Consumer {
@@ -29,4 +39,18 @@ func Twitter() *oauth.Consumer {
 		)
 	}
 	return twitter
+}
+
+// pngに制限しない。 /public/img/emojis/* は全てemojiとして登録する。
+func loadEmojis() {
+	emojiexp := filepath.Join(path.Dir(path.Dir(curr.Dir())), "public", "img", "emojis", "*")
+	files, err := filepath.Glob(emojiexp)
+	if err != nil {
+		return
+	}
+	for _, f := range files {
+		base := filepath.Base(f)
+		name := strings.Replace(base, filepath.Ext(base), "", 1)
+		emojis[":"+name+":"] = filepath.Join("/public", "img", "emojis", base)
+	}
 }

@@ -15,6 +15,9 @@ var Configs = React.createClass({
         return (
             <div id="configs-wrapper" className="display">
               <div class="configs-list">
+                <i onClick={this.toggleEmojiList} className="fa fa-meh-o fa-2x stealth hazy clickable"></i>
+              </div>
+              <div class="configs-list">
                 <i onClick={this.toggleNotification} className={this.state.configs.notes.cn}></i>
               </div>
               <div class="configs-list">
