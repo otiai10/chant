@@ -149,7 +149,7 @@ AnchorizableText.Rules = [
       this.replace = function(i) {
         var url = Config.emojis[sub];
         if (url) {
-          this.replaceContentsOf(i, <img src={url} title={sub} />);
+          this.replaceContentsOf(i, <img className="emoji" src={url} title={sub} />);
         } else {
           this.replaceContentsOf(i, <span>{sub}</span>);
         }
