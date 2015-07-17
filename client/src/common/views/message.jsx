@@ -133,7 +133,7 @@ var MessageAnchorable = React.createClass({
               return <blockquote><AnchorizableText text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
             }
             // return <AnchorizableText text={line}></AnchorizableText>;
-            return <AnchorizableText text={line}></AnchorizableText>;
+            return <p className="line-wrap"><AnchorizableText text={line}></AnchorizableText></p>;
 
         });
         return <div>{lines}</div>;
