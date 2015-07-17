@@ -24,6 +24,8 @@ _testmain.go
 *.test
 *.prof
 
+!*.gitkeep
+
 # log
 *.log
 
@@ -31,6 +33,9 @@ _testmain.go
 app/tmp/*
 app/routes/*
 conf/app.conf
+
+# assets
+public/img/emojis/*
 
 # IntelliJ
 .idea/*

@@ -142,6 +142,20 @@ AnchorizableText.Rules = [
       };
     }
   },
+  // Emoji
+  {
+    match: /(:[a-zA-Z0-9_\-+]+:)/g,
+    replacer: function(sub) {
+      this.replace = function(i) {
+        var url = Config.emojis[sub];
+        if (url) {
+          this.replaceContentsOf(i, <img src={url} title={sub} />);
+        } else {
+          this.replaceContentsOf(i, <span>{sub}</span>);
+        }
+      };
+    }
+  },
   // おっぱい
   {
     match: /(おっぱい)/g,

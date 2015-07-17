@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"chant/app/models"
+
 	"github.com/revel/revel"
 )
 
@@ -33,6 +34,7 @@ func (c Application) Index() revel.Result {
 			Agent: map[string]interface{}{
 				"is_mobile": mobile.MatchString(c.Request.UserAgent()),
 			},
+			Emojis: emojis,
 		}
 		return c.Render(Config)
 		//return c.Redirect(Room.Index)
@@ -58,6 +60,7 @@ type ServerConfig struct {
 	Myself interface{} `json:"myself"`
 	Server interface{} `json:"server"`
 	Agent  interface{} `json:"agent"`
+	Emojis interface{} `json:"emojis"`
 }
 
 func getHost() string {
