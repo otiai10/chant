@@ -53,6 +53,12 @@ var Contents = React.createClass({
           this.refs.TextInput.getDOMNode().focus();
         }
     },
+    totsuzenize: function() {
+        this.refs.TextInput.totsuzenize();
+    },
+    stamprize: function() {
+        this.refs.TextInput.stamprize();
+    },
     newMessage: function(message) {
         // this.state.messages.unshift(message);
         // var newMessages = this.state.messages;
@@ -98,13 +104,19 @@ var Contents = React.createClass({
                         <Members setText={this.setText} members={this.state.members} />
                     </div>
                 </div>
+                <div className="row" id="input-actions">
+                    <div className="col s12 m6">
+                      <TextInput ref="TextInput" />
+                    </div>
+                    <div className="col s12 m6">
+                      <button onClick={this.totsuzenize} className="stealth clickable text-decorate">totsuzenize</button>
+                      <button onClick={this.stamprize} className="stealth clickable text-decorate">stamprize</button>
+                    </div>
+                </div>
                 <div className="row">
-                    <div className="col s12 m6">
-                        <TextInput ref="TextInput" />
-                    </div>
-                    <div className="col s12 m6">
-                        <Stamps stamps={this.state.stamps} />
-                    </div>
+                  <div className="col s12">
+                    <Stamps stamps={this.state.stamps} />
+                  </div>
                 </div>
                 <div className="row">
                     <div className="col s12 m8">

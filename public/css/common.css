@@ -18,7 +18,8 @@ img.user-icon.myself:after {
     height: 30px;
     background-color: black;
 }
-button.stamp {
+button {
+    transition: 0.2s;
     font-size: xx-small;
     text-align: center;
     height: 30px;
@@ -29,6 +30,9 @@ button.stamp {
     margin-bottom: 2px;
     background-color: #dddddd;
     cursor: pointer;
+}
+button:focus {
+    background-color: transparent;
 }
 button.stamp img {
     max-height: 90%;
@@ -41,6 +45,10 @@ button.stamp:focus, button.stamp:hover {
 }
 button.stamp:active {
     background-color: white;
+}
+button.text-decorate {
+    text-align: center;
+    height: 20px;
 }
 /* とりあえず */
 iframe {
@@ -121,7 +129,7 @@ img.entry-image {
 .stealth.hazy {
   opacity: 0.1;
 }
-.stealth:hover {
+.stealth:hover, .stealth:focus {
   opacity: 1;
 }
 
@@ -176,4 +184,8 @@ div.web-preview>div>div img {
 
 img.emoji {
   height: 2em;
+}
+
+div#input-actions {
+    margin-bottom: 0;
 }

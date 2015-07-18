@@ -14,6 +14,7 @@ var TextInput = React.createClass({
                 value={this.state.value}
                 className="materialize-textarea"
                 placeholder="Shift + ⏎ to newline"
+                ref="textarea"
                 ></textarea>
         );
     },
@@ -41,5 +42,23 @@ var TextInput = React.createClass({
       var _c = text(this.state.value);
       this.setState({value: _c});
       return;
+    },
+    totsuzenize: function() {
+      if (!String(this.state.value).length)
+        return this.refs.textarea.getDOMNode().focus();
+      chant.Send("message", chant.Totsuzen.text(this.state.value));
+      this.setState({value: ""});
+      return this.refs.textarea.getDOMNode().focus();
+    },
+    stamprize: function() {
+      if (!String(this.state.value).length)
+        return this.refs.textarea.getDOMNode().focus();
+      chant.Send('stamprize', JSON.stringify({
+        type: "message",
+        value: { text: this.state.value },
+        user: Config.myself,
+      }));
+      this.setState({value: ""});
+      return this.refs.textarea.getDOMNode().focus();
     }
 });
