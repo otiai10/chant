@@ -98,19 +98,19 @@ var MessageInclusive = React.createClass({
     }
 });
 var MessageRecursive = React.createClass({
-    render: function() {
-        if (this.props.message.value.children) {
-            return (
-                <div>
-                    <div>{this.props.message.value.text}</div>
-                    <blockquote>
-                        <MessageEntry message={this.props.message.value.children} />
-                    </blockquote>
-                </div>
-            );
-        }
-        return <MessageAnchorable message={this.props.message} />;
+  render: function() {
+    if (this.props.message.value && this.props.message.value.children) {
+      return (
+        <div>
+          <div>{this.props.message.value.text}</div>
+          <blockquote>
+            <MessageEntry message={this.props.message.value.children} />
+          </blockquote>
+        </div>
+      );
     }
+    return <MessageAnchorable message={this.props.message} />;
+  }
 });
 
 var MessageAnchorable = React.createClass({
