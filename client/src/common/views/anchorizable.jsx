@@ -156,5 +156,12 @@ AnchorizableText.Rules = [
     wrap: function(sub) {
         return <b>{sub}</b>;
     }
+  },
+  // 自分
+  {
+    match: new RegExp('(@' + Config.myself.screen_name + '|' + '@all)', 'g'),
+    wrap: function(sub) {
+      return <b>{sub}</b>;
+    }
   }
 ];
