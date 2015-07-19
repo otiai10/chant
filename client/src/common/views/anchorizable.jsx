@@ -5,10 +5,13 @@ var AnchorizableText = React.createClass({
         replacers.forEach(function(replacer, i) {
             if (typeof replacer === 'string')
               return contents.push(<span>{replacer}</span>);
-            setTimeout(function() {
-              replacer.replace.bind(this)(i);
-            }.bind(this));
-            return contents.push(<span>{replacer}</span>);
+            if (typeof replacer.replace === 'function') {
+              setTimeout(function() {
+                replacer.replace.bind(this)(i, replacer.value);
+              }.bind(this));
+            }
+            var _c = replacer.wrap(replacer.value);
+            return contents.push(<span>{_c}</span>);
         }.bind(this));
         return {contents: contents};
     },
@@ -30,7 +33,12 @@ var AnchorizableText = React.createClass({
           if (!token.split) return res.push(token); // this is already replacer.
           token.split(expr).forEach(function(e) {
             if (e.length === 0) return;
-            if (e.match(expr)) return res.push(new rule.replacer(e));
+            if (e.match(expr)) {
+              var r = new AnchorizableText.Replacer(e);
+              if (typeof rule.wrap === 'function') r.wrap = rule.wrap;
+              if (typeof rule.replace === 'function') r.replace = rule.replace;
+              return res.push(r);
+            }
             return res.push(e);
           });
         });
@@ -43,12 +51,19 @@ var AnchorizableText = React.createClass({
     }
 });
 
+AnchorizableText.Replacer = function(substr) {
+  this.value = substr;
+  // default wrap
+  this.wrap = function(sub) {
+    return <a href={sub} target="_blank">{sub}</a>;
+  };
+};
+
 AnchorizableText.Rules = [
   // Twitter
   {
     match: /(https?:\/\/twitter.com\/[^\/]+\/status\/[0-9]+)/g,
-    replacer: function(sub) {
-      this.replace = function(i) {
+    replace: function(i, sub) {
         var expr = /(https?:\/\/twitter.com)\/([^\/]+)\/status\/([0-9]+)/gi;
         var m = expr.exec(sub);
         if (!m || m.length < 4) return; // do nothing
@@ -66,103 +81,81 @@ AnchorizableText.Rules = [
             console.log('twitter API error', err);
           }
         });
-      };
     }
   },
   // Vine
   {
     match: /(https?:\/\/vine.co\/v\/[^\/]+)\/?/,
-    replacer: function(sub) {
-        this.replace = function(i) {
-          sub += '/embed/simple';
-          this.replaceContentsOf(i, <iframe src={sub} width="400" height="400" frameborder="0"></iframe>);
-        };
+    wrap: function(sub) {
+      sub += '/embed/simple';
+      return <iframe src={sub} width="400" height="400" frameborder="0"></iframe>;
     }
   },
   // YouTube
   {
     match: /(https?:\/\/www.youtube.com\/watch\?.*v=[a-zA-Z0-9_-]{11})/gi,
-    replacer: function(sub) {
+    wrap: function(sub) {
       var id = /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/.exec(sub)[1];
-      this.replace = function(i) {
-        var url = "https://www.youtube.com/embed/" + id;
-        this.replaceContentsOf(i, <iframe width="560" height="225" src={url} frameborder="0" allowfullscreen></iframe>);
-      };
+      var url = "https://www.youtube.com/embed/" + id;
+      return <iframe width="560" height="225" src={url} frameborder="0" allowfullscreen></iframe>;
     }
   },
   // SoundCloud
   {
     match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)\/(?:[^\/]+))/gi,
-    replacer: function(sub) {
-        // var url = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/189264330";
-        this.replace = function(i) {
-          var url = "https://w.soundcloud.com/player/?url=" + sub + "&amp;visual=true";
-          this.replaceContentsOf(i, <iframe width="100%" height="225" scrolling="no" frameborder="no" src={url}></iframe>);
-        };
+    wrap: function(sub) {
+      var url = "https://w.soundcloud.com/player/?url=" + sub + "&amp;visual=true";
+      return <iframe width="100%" height="225" scrolling="no" frameborder="no" src={url}></iframe>;
     }
   },
   // MixCloud
   {
     match: /(https?:\/\/www.mixcloud.com\/(?:[^\/]+)\/(?:[^ ]+))/gi,
-    replacer: function(sub) {
-      this.replace = function(i) {
-        var url = "https://www.mixcloud.com/widget/iframe/?embed_type=widget_standard&feed=" + encodeURIComponent(sub);
-        this.replaceContentsOf(i, <iframe width="100%" height="400" src={url}></iframe>);
-      };
+    wrap: function(sub) {
+      var url = "https://www.mixcloud.com/widget/iframe/?embed_type=widget_standard&feed=" + encodeURIComponent(sub);
+      return <iframe width="100%" height="400" src={url}></iframe>;
     }
   },
   // Image
   {
     match: /((?:(?:https?):\/\/|www\.)(?:[a-z0-9-]+\.)+[a-z0-9:]+(?:\/[^\s<>"',;]*)?(?:jpe?g|png|gif))/gi,
-    replacer: function(sub) {
-        this.replace = function(i) {
-          this.replaceContentsOf(i, <a href={sub} target="_blank"><img src={sub} className="entry-image"></img></a>);
-        };
+    wrap: function(sub) {
+      return <a href={sub} target="_blank"><img src={sub} className="entry-image"></img></a>;
     }
   },
   // URL Link
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
-    replacer: function(sub) {
-        this.replace = function(i) {
-        $.ajax({
-            url: '/api/v1/preview',
-            data: { u: sub },
-            success: function(res) {
-              if (!res.summary.title && !res.summary.image && !res.summary.description) return;
-              this.replaceContentsOf(
-                i,
-                <WebPreview title={res.summary.title} image={res.summary.image} description={res.summary.description} url={res.summary.url} ></WebPreview>
-              );
-            }.bind(this),
-            error: function(err) {
-              this.replaceContentsOf(i, <a href={sub} target="_blank">{sub}</a>);
-            }.bind(this)
-        });
-      };
+    wrap: function(sub) {
+        return <a href={this.value} target="_blank">{this.value}</a>;
+    },
+    replace: function(i, sub) {
+      $.ajax({
+        url: '/api/v1/preview',
+        data: { u: sub },
+        success: function(res) {
+          if (!res.summary.title && !res.summary.description) return;
+          this.replaceContentsOf(
+            i,
+            <WebPreview title={res.summary.title} image={res.summary.image} description={res.summary.description} url={res.summary.url} ></WebPreview>
+          );
+        }.bind(this)
+      });
     }
   },
   // Emoji
   {
     match: /(:[a-zA-Z0-9_\-+]+:)/g,
-    replacer: function(sub) {
-      this.replace = function(i) {
-        var url = Config.emojis[sub];
-        if (url) {
-          this.replaceContentsOf(i, <img className="emoji" src={url} title={sub} />);
-        } else {
-          this.replaceContentsOf(i, <span>{sub}</span>);
-        }
-      };
+    wrap: function(sub) {
+      var url = Config.emojis[sub];
+      if (url) return <img className="emoji" src={url} title={sub} />;
     }
   },
   // おっぱい
   {
     match: /(おっぱい)/g,
-    replacer: function(sub) {
-      this.replace = function(i) {
-        this.replaceContentsOf(i, <b>{sub}</b>);
-      };
+    wrap: function(sub) {
+        return <b>{sub}</b>;
     }
   }
 ];
