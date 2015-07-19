@@ -32,6 +32,21 @@ func (c APIv1) RoomStamps(id string) revel.Result {
 	})
 }
 
+// RoomMessages とりあえず
+func (c APIv1) RoomMessages(id string) revel.Result {
+	if !chatroom.Exists(id) {
+		return c.RenderJson(map[string]interface{}{
+			"messages": []interface{}{},
+		})
+	}
+	room := chatroom.GetRoom(id)
+	// メッセージアーカイブを、最新の、最大10件を取得する
+	messages := room.Repo.GetMessages(10, -1)
+	return c.RenderJson(map[string]interface{}{
+		"messages": messages,
+	})
+}
+
 // WebPreview ...
 func (c APIv1) WebPreview(u string) revel.Result {
 	res, err := http.Get(u)

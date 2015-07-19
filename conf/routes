@@ -18,4 +18,5 @@ WS      /websocket/room/socket                  ChantSocket.RoomSocket
 
 # syncなAPIのエンドポイント
 GET     /api/v1/room/:id/stamps                 APIv1.RoomStamps
+GET     /api/v1/room/:id/messages               APIv1.RoomMessages
 GET     /api/v1/preview                         APIv1.WebPreview

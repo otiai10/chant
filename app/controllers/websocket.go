@@ -40,11 +40,6 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 	// 自分自身のソケットから来る発言を流すgoroutineを流す
 	go listenMyself(ws, myself)
 
-	// メッセージアーカイブを、最新の、最大10件を取得する
-	for _, event := range myroom.Repo.GetMessages(10, -1) {
-		websocket.JSON.Send(ws, &event)
-	}
-
 	// トゥッティ!　私たちが心を奪う!!
 	for {
 		select {

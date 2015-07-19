@@ -10,6 +10,11 @@ var Contents = React.createClass({
           stamps: res.stamps,
         });
       }.bind(this));
+      $.get('/api/v1/room/default/messages', function(res) {
+        this.setState({
+          messages: res.messages.reverse()
+        });
+      }.bind(this));
       React.render(<EmojiList />, document.getElementById('emoji-list-wrapper'));
     },
     closeEmojiList: function() {
