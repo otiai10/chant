@@ -15,7 +15,7 @@ type ChantSocket struct {
 
 // RoomSocket handles `GET /websocket/room/socket` and `websocket connection`
 // websocketが繋がったときの挙動を定義している
-func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
+func (c ChantSocket) RoomSocket(ws *websocket.Conn, id, token string) revel.Result {
 
 	user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
 	if err != nil {
@@ -23,7 +23,7 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn) revel.Result {
 		return c.Redirect(Application.Index)
 	}
 
-	myroom := chatroom.GetRoom()
+	myroom := chatroom.GetRoom("default", token)
 
 	// 自分のJoinを自分に伝えるために、Subscribeのあとに呼ぶ
 	subscription := myroom.Subscribe(user)

@@ -3,6 +3,7 @@ package controllers
 import (
 	"regexp"
 
+	"chant/app/chatroom"
 	"chant/app/models"
 
 	"github.com/revel/revel"
@@ -18,13 +19,18 @@ type Application struct {
 // Index handles `GET /`
 // 1) すでにログインしてたらApp/Indexをレンダリングする.
 // 2) ログインしていない場合、App/Loginにリダイレクトする.
-func (c Application) Index() revel.Result {
+func (c Application) Index(roomID, password string) revel.Result {
 	if _, ok := c.Session["screen_name"]; ok {
 		user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
 		if err != nil {
 			// とりあえず
 			return c.Redirect("/login")
 		}
+
+		if len(roomID) == 0 {
+			roomID = "default"
+		}
+		room := chatroom.GetRoomByPassword(roomID, password)
 
 		Config := ServerConfig{
 			Myself: user,
@@ -35,6 +41,10 @@ func (c Application) Index() revel.Result {
 				"is_mobile": mobile.MatchString(c.Request.UserAgent()),
 			},
 			Emojis: emojis,
+			Room: map[string]interface{}{
+				"name":  room.Name,
+				"token": room.Token,
+			},
 		}
 		return c.Render(Config)
 		//return c.Redirect(Room.Index)
@@ -61,6 +71,7 @@ type ServerConfig struct {
 	Server interface{} `json:"server"`
 	Agent  interface{} `json:"agent"`
 	Emojis interface{} `json:"emojis"`
+	Room   interface{} `json:"room"`
 }
 
 func getHost() string {

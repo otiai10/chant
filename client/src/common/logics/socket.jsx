@@ -7,7 +7,7 @@ chant.socket = function(force) {
         force = true;
     }
     if (!chant.__socket || force) {
-        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
+        chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token);
     }
     return chant.__socket;
 };

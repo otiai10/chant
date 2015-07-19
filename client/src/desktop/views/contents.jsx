@@ -5,12 +5,18 @@
 var Contents = React.createClass({
     componentDidMount: function() {
       console.info("Desktop build : _chant.desktop.js");
-      $.get('/api/v1/room/default/stamps', function(res) {
-        this.setState({
-          stamps: res.stamps,
+      $.get('/api/v1/room/default/stamps', {
+          token: Config.room.token,
+          name: Config.room.name
+        }, function(res) {
+          this.setState({
+            stamps: res.stamps,
         });
       }.bind(this));
-      $.get('/api/v1/room/default/messages', function(res) {
+      $.get('/api/v1/room/default/messages', {
+          token: Config.room.token,
+          name: Config.room.name
+        }, function(res) {
         this.setState({
           messages: res.messages.reverse()
         });

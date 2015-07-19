@@ -2,6 +2,7 @@ package chatroom
 
 import (
 	"container/list"
+	"crypto/md5"
 	"time"
 
 	"chant/app/it"
@@ -16,13 +17,12 @@ import (
 const bufsize = 100
 
 // Name - *Room のハッシュテーブル
-var rooms = map[string]*Room{
-	"default": nil,
-}
+var rooms = map[string]*Room{}
 
 // Room ひとつの名前を持った部屋に対応
 type Room struct {
 	Name        string
+	Token       string
 	entrance    chan Subscription
 	exit        chan Subscription
 	publish     chan *models.Event
@@ -85,6 +85,8 @@ func (room *Room) Serve() {
 
 func newRoom(id string) *Room {
 	room := &Room{
+		Name:        id,
+		Token:       newtoken(id),
 		entrance:    make(chan Subscription, bufsize),
 		exit:        make(chan Subscription, bufsize),
 		publish:     make(chan *models.Event, bufsize),
@@ -104,14 +106,29 @@ func Exists(id string) bool {
 
 // GetRoom id(Name)からRoomをひいてくる.
 // 指定されなければdefaultを採用する.
-func GetRoom(id ...string) *Room {
-	id = append(id, "default") // id指定がなければdefaultを使う
-	room, ok := rooms[id[0]]
-	if !ok || room == nil {
-		room = newRoom(id[0])
-		rooms[id[0]] = room
+func GetRoom(id, token string) *Room {
+	room := getRoom(id)
+	if token != room.Token {
+		return nil
 	}
 	return room
+}
+
+func getRoom(id string) *Room {
+	room, ok := rooms[id]
+	if !ok || room == nil {
+		room = newRoom(id)
+		rooms[id] = room
+	}
+	return room
+}
+
+// GetRoomByPassword ...
+func GetRoomByPassword(id, password string) *Room {
+	if id == "default" {
+		return getRoom(id)
+	}
+	return nil
 }
 
 // Subscribe は呼ばれると、このroomのsubscribersに登録されたsubscriptionが提供される。
@@ -208,4 +225,9 @@ func (room *Room) removeOneUser(user *models.User) {
 			return
 		}
 	}
+}
+
+func newtoken(id string) string {
+	a := md5.New().Sum([]byte(id + time.Now().String()))
+	return fmt.Sprintf("%x", a)
 }
