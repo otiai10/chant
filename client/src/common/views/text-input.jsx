@@ -55,6 +55,7 @@ var TextInput = React.createClass({
         return this.refs.textarea.getDOMNode().focus();
       chant.Send('stamprize', JSON.stringify({
         type: "message",
+        raw: this.state.value,
         value: { text: this.state.value },
         user: Config.myself,
       }));
