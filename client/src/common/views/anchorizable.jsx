@@ -127,7 +127,7 @@ AnchorizableText.Rules = [
         this.replace = function(i) {
         $.ajax({
             url: '/api/v1/preview',
-            data: { url: sub },
+            data: { u: sub },
             success: function(res) {
               if (!res.summary.title && !res.summary.image && !res.summary.description) return;
               this.replaceContentsOf(

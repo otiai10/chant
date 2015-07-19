@@ -5,9 +5,11 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"regexp"
 
 	"chant/app/chatroom"
+
 	"github.com/revel/revel"
 )
 
@@ -31,10 +33,10 @@ func (c APIv1) RoomStamps(id string) revel.Result {
 }
 
 // WebPreview ...
-func (c APIv1) WebPreview(url string) revel.Result {
-	res, err := http.Get(url)
+func (c APIv1) WebPreview(u string) revel.Result {
+	res, err := http.Get(u)
 	if err != nil {
-		log.Println(err, url)
+		log.Println(err, u)
 		return c.RenderJson(map[string]interface{}{})
 	}
 	page := new(HTMLPage)
@@ -42,7 +44,7 @@ func (c APIv1) WebPreview(url string) revel.Result {
 
 	return c.RenderJson(map[string]interface{}{
 		"html":    page,
-		"summary": page.Summarize(url),
+		"summary": page.Summarize(u),
 	})
 }
 
@@ -104,9 +106,9 @@ type Link struct {
 }
 
 // Summarize ...
-func (hp *HTMLPage) Summarize(url string) *Summary {
+func (hp *HTMLPage) Summarize(u string) *Summary {
 	summary := new(Summary)
-	summary.URL = url
+	summary.URL = u
 	img := regexp.MustCompile("image")
 	desc := regexp.MustCompile("description")
 	title := regexp.MustCompile("title")
@@ -130,6 +132,10 @@ func (hp *HTMLPage) Summarize(url string) *Summary {
 				break
 			}
 		}
+	}
+	if len(summary.Image) == 0 {
+		v, _ := url.Parse(u)
+		summary.setImage(v.Scheme + "://" + v.Host + "/favicon.ico")
 	}
 	return summary
 }

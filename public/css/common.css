@@ -158,14 +158,21 @@ img.entry-image {
 }
 
 div.web-preview {
+  /*
   box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
-  padding: 10px;
+  */
+  padding: 14px 20px;
+  padding: 14px 20px 8px 20px;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  /*
   border-radius: 5px;
   border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
   border-width: 1px;
   border-style: solid;
-  width: 93%;
-  max-width: 480px;
+  */
+  width: 100%;
+  background-color: #fff;
 }
 
 div.web-preview>div>div.web-preview-image-wrap {
@@ -177,10 +184,15 @@ div.web-preview>div>div.web-preview-description-wrap {
 div.web-preview>div>div.web-preview-description-wrap p {
   margin: 0;
   padding: 0 10px;
+  font-size: small;
+  color: #1C2022;
 }
 div.web-preview>div>div img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+}
+.web-preview-title {
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
 img.emoji {
