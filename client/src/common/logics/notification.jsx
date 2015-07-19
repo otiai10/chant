@@ -14,6 +14,7 @@ chant._notification = {
     }
 };
 chant.notify = function(body, title, icon, onclick, onclose) {
+    if (! chant.local.config.get('notification')) return;
     onclick = onclick || function() {window.focus();};
     onclose = onclose || function() {};
     if (icon) icon = icon.replace('_normal', '_bigger');

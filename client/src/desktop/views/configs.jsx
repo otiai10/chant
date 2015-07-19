@@ -1,15 +1,25 @@
 
 var Configs = React.createClass({
-    getInitialState: function() {
+    notes: function(on) {
+        if (on) {
+          return {
+            on: true,
+            cn: 'fa fa-bell fa-2x stealth hazy clickable'
+          };
+        }
         return {
-          display: false,
-          configs: {
-            notes: {
-              on: false,
-              cn: 'fa fa-bell-slash fa-2x stealth hazy clickable'
-            }
-          }
+          on: false,
+          cn: 'fa fa-bell-slash fa-2x stealth hazy clickable'
         };
+    },
+    getInitialState: function() {
+      var on = chant.local.config.get('notification');
+      return {
+        display: false,
+        configs: {
+          notes: this.notes(on)
+        }
+      };
     },
     render: function() {
         return (
@@ -43,17 +53,9 @@ var Configs = React.createClass({
         window.Notification.requestPermission(function(status){
           console.info("Notification permission status:", status);
         });
-        this.state.configs.notes = {
-          on: !this.state.configs.notes.on,
-          cn: (function(){
-            if (!this.state.configs.notes.on) {
-              return 'fa fa-bell fa-2x stealth hazy clickable';
-            }
-            return 'fa fa-bell-slash fa-2x stealth hazy clickable';
-          }.bind(this))()
-        };
+        this.state.configs.notes = this.notes(!this.state.configs.notes.on);
         this.setState({configs: this.state.configs});
-        // TODO: localStorageと合わせる
+        chant.local.config.set('notification', this.state.configs.notes.on);
     },
     toggleEmojiList: function() {
       var listwrapper = document.getElementById("emoji-list-wrapper");
