@@ -87,33 +87,28 @@ AnchorizableText.Rules = [
   {
     match: /(https?:\/\/vine.co\/v\/[^\/]+)\/?/,
     wrap: function(sub) {
-      sub += '/embed/simple';
-      return <iframe src={sub} width="400" height="400" frameborder="0"></iframe>;
+      return <Vine src={sub}></Vine>;
     }
   },
   // YouTube
   {
     match: /(https?:\/\/www.youtube.com\/watch\?.*v=[a-zA-Z0-9_-]{11})/gi,
     wrap: function(sub) {
-      var id = /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/.exec(sub)[1];
-      var url = "https://www.youtube.com/embed/" + id;
-      return <iframe width="560" height="225" src={url} frameborder="0" allowfullscreen></iframe>;
+      return <YouTube src={sub}></YouTube>;
     }
   },
   // SoundCloud
   {
     match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)\/(?:[^\/]+))/gi,
     wrap: function(sub) {
-      var url = "https://w.soundcloud.com/player/?url=" + sub + "&amp;visual=true";
-      return <iframe width="100%" height="225" scrolling="no" frameborder="no" src={url}></iframe>;
+      return <SoundCloud src={sub}></SoundCloud>;
     }
   },
   // MixCloud
   {
     match: /(https?:\/\/www.mixcloud.com\/(?:[^\/]+)\/(?:[^ ]+))/gi,
     wrap: function(sub) {
-      var url = "https://www.mixcloud.com/widget/iframe/?embed_type=widget_standard&feed=" + encodeURIComponent(sub);
-      return <iframe width="100%" height="400" src={url}></iframe>;
+      return <MixCloud src={sub}></MixCloud>;
     }
   },
   // Image
