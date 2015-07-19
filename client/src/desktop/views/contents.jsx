@@ -10,6 +10,10 @@ var Contents = React.createClass({
           stamps: res.stamps,
         });
       }.bind(this));
+      React.render(<EmojiList />, document.getElementById('emoji-list-wrapper'));
+    },
+    closeEmojiList: function() {
+      document.getElementById('emoji-list-wrapper').hidden = true;
     },
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
@@ -95,6 +99,8 @@ var Contents = React.createClass({
         return (
             <div>
                 <div className="row">
+                  <div id="emoji-list-wrapper" onClick={this.closeEmojiList} className="clickable" hidden="true">
+                  </div>
                 </div>
                 <div className="row">
                     <div className="col s12 members">

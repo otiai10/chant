@@ -54,5 +54,9 @@ var Configs = React.createClass({
         };
         this.setState({configs: this.state.configs});
         // TODO: localStorageと合わせる
+    },
+    toggleEmojiList: function() {
+      var listwrapper = document.getElementById("emoji-list-wrapper");
+      listwrapper.hidden = !listwrapper.hidden;
     }
 });

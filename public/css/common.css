@@ -144,8 +144,8 @@ img.entry-image {
   position:fixed;
 }
 #configs-wrapper.display {
-  right:  10px;
-  bottom: 10px;
+  right:  2px;
+  bottom: 2px;
 }
 #configs-wrapper.hidden {
   right:  10px;
@@ -200,5 +200,22 @@ img.emoji {
 }
 
 div#input-actions {
-    margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+#emoji-list-wrapper {
+  width: 86%;
+  height: 100%;
+  padding: 10px;
+  background-color: black;
+  position: fixed;
+  top:  0;
+  left: 0;
+  overflow: scroll;
+  opacity: 0.8;
+  z-index: 2;
+}
+#emoji-list-wrapper img {
+  width: 30px;
+  height: 30px;
 }
