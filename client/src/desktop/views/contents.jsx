@@ -105,10 +105,10 @@ var Contents = React.createClass({
                     </div>
                 </div>
                 <div className="row" id="input-actions">
-                    <div className="col s12 m6">
+                    <div className="col s12 m8">
                       <TextInput ref="TextInput" />
                     </div>
-                    <div className="col s12 m6">
+                    <div className="col s12 m4">
                       <button onClick={this.totsuzenize} className="stealth clickable text-decorate">totsuzenize</button>
                       <button onClick={this.stamprize} className="stealth clickable text-decorate">stamprize</button>
                     </div>

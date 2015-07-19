@@ -89,39 +89,16 @@ var Contents = React.createClass({
                     </div>
                 </div>
                 <div className="row textinput-wrapper">
-                    <div className="col s12 m6">
+                    <div className="col s12 m8">
                         <TextInput ref="TextInput" />
                     </div>
-                    <div className="col s12 m6">
+                    <div className="col s12 m4">
                         <Stamps stamps={this.state.stamps} />
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col s12 m8">
+                    <div className="col s12 m12">
                         <Messages setText={this.setText} messages={this.state.messages} />
-                    </div>
-                    <div className="col s12 m4">
-                        {/*
-                        <div className="card">
-                            <div className="card-image">
-                                <div className="video-container">
-                                    <iframe
-                                        width="853"
-                                        height="480"
-                                        src="//www.youtube.com/embed/Q8TXgCzxEnw?rel=0"
-                                        allowfullscreen>
-                                    </iframe>
-                                </div>
-                            </div>
-                            <div className="card-content">
-                                <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa. ...aaaaaaaaaaaaaaaaaaaaaaa</p>
-                            </div>
-                            <div className="card-action">
-                                <a href="#"><i className="mdi-av-skip-previous"></i></a>
-                                <a href="#"><i className="mdi-av-skip-next"></i></a>
-                            </div>
-                        </div>
-                        */}
                     </div>
                 </div>
             </div>
