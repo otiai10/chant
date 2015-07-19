@@ -10,7 +10,7 @@ var AnchorizableText = React.createClass({
                 replacer.replace.bind(this)(i, replacer.value);
               }.bind(this));
             }
-            var _c = replacer.wrap(replacer.value);
+            var _c = replacer.wrap.bind(this)(replacer.value);
             return contents.push(<span>{_c}</span>);
         }.bind(this));
         return {contents: contents};
@@ -143,7 +143,11 @@ AnchorizableText.Rules = [
     match: /(:[a-zA-Z0-9_\-+]+:)/g,
     wrap: function(sub) {
       var url = Config.emojis[sub];
-      if (url) return <img className="emoji" src={url} title={sub} />;
+      if (Config.emojis[sub]) {
+        return <Emoji name={sub}></Emoji>;
+      } else {
+        return <span>{sub}</span>;
+      }
     }
   },
   // おっぱい
