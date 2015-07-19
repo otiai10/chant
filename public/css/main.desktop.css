@@ -2,6 +2,12 @@
 img.user-icon {
     cursor: pointer;
     border-radius: 30px;
+    width: 48px;
+    height: 48px;
+}
+blockquote img.user-icon {
+    width: 32px;
+    height: 32px;
 }
 
 div.entry {
