@@ -1,6 +1,11 @@
 var chant = chant || {};
 chant.__socket = null;
 chant.socket = function(force) {
+    if (chant.__socket !== null &&
+        chant.__socket.readyState > WebSocket.OPEN) {
+        console.debug('chant.socket', '閉じてたのでforceする');
+        force = true;
+    }
     if (!chant.__socket || force) {
         chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket');
     }
@@ -14,7 +19,7 @@ chant.socket = function(force) {
  * @constructor
  */
 chant.Send = function(/* string */typ/* string */, /* any */value) {
-    if (typeof value.trim == 'function' && value.trim().length == 0) {
+    if (typeof value.trim === 'function' && value.trim().length === 0) {
         return;// do nothing
     }
     chant.socket().send(JSON.stringify({
@@ -22,4 +27,3 @@ chant.Send = function(/* string */typ/* string */, /* any */value) {
         raw:value
     }));
 };
-

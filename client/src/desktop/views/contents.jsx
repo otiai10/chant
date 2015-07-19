@@ -16,14 +16,16 @@ var Contents = React.createClass({
       document.getElementById('emoji-list-wrapper').hidden = true;
     },
     getInitialState: function() {
-        chant.socket().onopen = function(ev) { console.log('open', ev); };
+        chant.socket().onopen = function(ev) { /* なんもしない */ };
         chant.socket().onclose = function(ev) {
-            console.log('close', ev);
-            chant.notify("disconnected with code: " + ev.code);
+          console.debug('socket.onclose', ev);
         };
         chant.socket().onerror = function(ev) {
-            console.log('error', ev);
-            chant.notify('ERROR!!');
+          console.debug('socket.onerror', ev);
+          chant.notify('ERROR!!', null, null, function() {
+            chant.socket(true);
+            // sysinfoしたい
+          });
         };
         chant.socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
