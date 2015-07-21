@@ -1,5 +1,6 @@
 var AnchorizableText = React.createClass({
     getInitialState: function() {
+        this.props.rules = this.props.rules || [];
         var replacers = this.expandByRules([this.props.text]);
         var contents = [];
         replacers.forEach(function(replacer, i) {
@@ -19,8 +20,8 @@ var AnchorizableText = React.createClass({
         return <span>{this.state.contents}</span>;
     },
     expandByRules: function(tokens) {
-        if (!AnchorizableText.Rules) return tokens;
-        AnchorizableText.Rules.forEach(function(rule, i) {
+        if (!this.props.rules) return tokens;
+        this.props.rules.forEach(function(rule, i) {
             tokens = this.expandByRule(rule, tokens);
         }.bind(this));
         return tokens;
@@ -59,7 +60,7 @@ AnchorizableText.Replacer = function(substr) {
   };
 };
 
-AnchorizableText.Rules = [
+var defaultRules = [
   // Twitter
   {
     match: /(https?:\/\/twitter.com\/[^\/]+\/status\/[0-9]+)/g,

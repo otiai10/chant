@@ -86,9 +86,14 @@ var Contents = React.createClass({
     newStamprize: function(stamprized) {
         this.state.stamps.unshift(stamprized);
         this.state.messages.unshift(stamprized);
+        var stamps = this.state.stamps;
         this.setState({
             messages: this.state.messages,
-            stamps: this.state.stamps
+            // stamps: this.state.stamps
+            stamps: [] // 超つらみ
+        });
+        this.setState({
+          stamps: stamps
         });
     },
     join: function(ev) {

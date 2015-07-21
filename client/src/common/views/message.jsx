@@ -126,14 +126,14 @@ var MessageAnchorable = React.createClass({
                     </blockquote>
                   );
               } catch (e) {
-                  return <blockquote><AnchorizableText text={m[1]}></AnchorizableText></blockquote>;
+                  return <blockquote><AnchorizableText rules={defaultRules} text={m[1]}></AnchorizableText></blockquote>;
               }
             }
             if (line.match(/^> /)) {// brief quote
-              return <blockquote><AnchorizableText text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
+              return <blockquote><AnchorizableText rules={defaultRules} text={line.replace(/^> /, '')}></AnchorizableText></blockquote>;
             }
             // return <AnchorizableText text={line}></AnchorizableText>;
-            return <p className="line-wrap"><AnchorizableText text={line}></AnchorizableText></p>;
+            return <p className="line-wrap"><AnchorizableText rules={defaultRules} text={line}></AnchorizableText></p>;
 
         });
         return <div>{lines}</div>;
