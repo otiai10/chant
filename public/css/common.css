@@ -58,6 +58,7 @@ iframe {
 div.box {
     width: 100%;
     display: flex;
+    display: -webkit-flex;
     flex-wrap: nowrap;
 }
 
@@ -78,6 +79,7 @@ div.message-wrapper {
     */
     width: 5%;
     flex-grow: 1;
+    -webkit-flex-grow: 1;
 }
 
 div.meta-wrapper {
