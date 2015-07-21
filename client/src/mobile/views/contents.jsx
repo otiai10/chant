@@ -5,6 +5,14 @@
 var Contents = React.createClass({
     componentDidMount: function() {
       console.info("Mobile build : _chant.mobile.js");
+      $.get('/api/v1/room/default/messages', {
+          token: Config.room.token,
+          name: Config.room.name
+        }, function(res) {
+        this.setState({
+          messages: res.messages.reverse()
+        });
+      }.bind(this));
     },
     getInitialState: function() {
         chant.socket().onopen = function(ev) { console.log('open', ev); };
