@@ -123,14 +123,15 @@ var defaultRules = [
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
     wrap: function(sub) {
-        return <a href={this.value} target="_blank">{this.value}</a>;
+      return <a href={sub} target="_blank">{sub}</a>;
     },
     replace: function(i, sub) {
       $.ajax({
         url: '/api/v1/preview',
         data: { u: sub },
         success: function(res) {
-          if (!res.summary.title && !res.summary.description) return;
+          res.summary.title = res.summary.title || res.summary.url;
+          res.summary.description = res.summary.description || res.summary.url;
           this.replaceContentsOf(
             i,
             <WebPreview title={res.summary.title} image={res.summary.image} description={res.summary.description} url={res.summary.url} ></WebPreview>
