@@ -24,9 +24,9 @@ var MessageEntry = React.createClass({
 
 var MessageMeta = React.createClass({
     render: function() {
-        var time = new Date(this.props.message.timestamp / 1000000);
+        var time = moment(this.props.message.timestamp / 1000000).format("YYYY/MM/DD HH:mm:ss");
         var contents = [
-              <span onClick={this.quote} className="meta"><small className="grey-text text-lighten-2">{time.toLocaleString()}</small></span>,
+              <span onClick={this.quote} className="meta"><small className="grey-text text-lighten-2">{time}</small></span>,
         ];
         switch (this.props.message.type) {
         case 'message':

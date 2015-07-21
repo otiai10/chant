@@ -5,6 +5,7 @@
         "test": "test"
     },
     "devDependencies": {
+        "moment": "*",
         "gulp": "3.9.0",
         "gulp-plumber": "*",
         "gulp-react": "2.0.0",
