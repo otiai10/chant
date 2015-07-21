@@ -1,8 +1,15 @@
 var YouTube = React.createClass({
   render: function() {
-    var id = /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/.exec(this.props.src)[1];
+    var id = this.getID();
     var url = "https://www.youtube.com/embed/" + id;
     return <iframe width="100%" height="225" src={url} frameborder="0" allowfullscreen></iframe>;
+  },
+  getID: function() {
+    var m = /https?:\/\/youtu.be\/([a-zA-Z0-9_-]{11})/gi.exec(this.props.src);
+    if (m) {
+        return m[1];
+    }
+    return /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/.exec(this.props.src)[1];
   }
 });
 var SoundCloud = React.createClass({

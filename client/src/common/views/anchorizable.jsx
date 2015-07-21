@@ -98,6 +98,13 @@ var defaultRules = [
       return <YouTube src={sub}></YouTube>;
     }
   },
+  // youtu.be
+  {
+    match: /(https?:\/\/youtu.be\/[a-zA-Z0-9_-]{11})/gi,
+    wrap: function(sub) {
+      return <YouTube src={sub}></YouTube>;
+    }
+  },
   // SoundCloud
   {
     match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)\/(?:[^\/]+))/gi,
