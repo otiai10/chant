@@ -30,6 +30,7 @@ type Room struct {
 	subscribers *list.List
 	members     *list.List
 	Repo        *repository.Client
+	Bot         *models.User
 }
 
 // Serve Roomごとに部屋を開く. foreverなgoroutineをつくる.
@@ -93,6 +94,7 @@ func newRoom(id string) *Room {
 		subscribers: list.New(),
 		members:     list.New(),
 		Repo:        repository.NewRepoClient(id),
+		Bot:         DefaultBot(),
 	}
 	go room.Serve()
 	return room
@@ -185,6 +187,15 @@ func (room *Room) Say(user *models.User, msg string) {
 		room.Repo.PushStamp(event)
 	}
 	room.publish <- event
+
+	// {{{
+	go func() {
+		if response := room.BotHandle(event); response != nil {
+			time.Sleep(500 * time.Millisecond)
+			room.publish <- response
+		}
+	}()
+	// }}}
 }
 
 // Join ユーザがこのRoomにJoinしてきたときの処理をすべて行う.
