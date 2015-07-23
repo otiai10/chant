@@ -55,5 +55,5 @@ func init() {
 // 0~3秒の遅延を意図的につくる
 func wait() {
 	rand.Seed(time.Now().Unix())
-	time.Sleep(time.Duration(rand.Intn(time.Now().Second())*50) * time.Millisecond)
+	time.Sleep(time.Duration(rand.Intn(time.Now().Second()+1)*50) * time.Millisecond)
 }
