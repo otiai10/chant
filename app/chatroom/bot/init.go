@@ -1,10 +1,14 @@
 package bot
 
 import (
+	"chant/app/lib/message"
 	"chant/app/models"
 	"math/rand"
+	"path/filepath"
 	"regexp"
 	"time"
+
+	"github.com/otiai10/curr"
 )
 
 // DefaultBot ...
@@ -23,17 +27,28 @@ type Handler interface {
 	Handle(*models.Event, *models.User) *models.Event
 }
 
-// Handlers ...
-var Handlers = map[string]Handler{}
+var (
+	// Handlers ...
+	Handlers = map[string]Handler{}
+	// Messages ...
+	Messages message.Messages
+)
 
 func init() {
 	Handlers = map[string]Handler{
-		"icon":  IconHandler{regexp.MustCompile("^/icon[ 　]+")},
-		"oppai": OppaiHandler{regexp.MustCompile("^/oppai")},
-		"image": ImageHandler{regexp.MustCompile("^/image[ 　]+")},
-		"amesh": AmeshHandler{regexp.MustCompile("^/amesh")},
-		"hello": HelloHandler{regexp.MustCompile("^/hello")},
+		"icon":   IconHandler{regexp.MustCompile("^/icon[ 　]+")},
+		"oppai":  OppaiHandler{regexp.MustCompile("^/oppai")},
+		"image":  ImageHandler{regexp.MustCompile("^/image[ 　]+")},
+		"amesh":  AmeshHandler{regexp.MustCompile("^/amesh")},
+		"hello":  HelloHandler{regexp.MustCompile("^/hello")},
+		"whoami": WhoamiHandler{regexp.MustCompile("^/whoami")},
 	}
+
+	m, err := message.LoadDir(filepath.Join(curr.Dir(), "messages"))
+	if err != nil {
+		panic(err)
+	}
+	Messages = m
 }
 
 // httpなど介さないHandlerはレスポンスが早すぎるので
