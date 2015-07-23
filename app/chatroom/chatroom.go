@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"time"
 
-	"chant/app/it"
 	"chant/app/models"
 	"chant/app/repository"
 
@@ -180,18 +179,13 @@ func (room *Room) Say(user *models.User, msg string) {
 		// TODO: なんかする
 		return
 	}
-	if it.Is(event.Type).In(models.MESSAGE, models.STAMPRIZE, models.STAMPUSE) {
-		room.Repo.PushMessage(event)
-	}
-	if it.Is(event.Type).In(models.STAMPRIZE, models.STAMPUSE) {
-		room.Repo.PushStamp(event)
-	}
+	room.ArchiveEvent(event)
 	room.publish <- event
 
 	// {{{
 	go func() {
 		if response := room.BotHandle(event); response != nil {
-			time.Sleep(500 * time.Millisecond)
+			room.ArchiveEvent(response)
 			room.publish <- response
 		}
 	}()
@@ -235,6 +229,17 @@ func (room *Room) removeOneUser(user *models.User) {
 			room.members.Remove(e)
 			return
 		}
+	}
+}
+
+// ArchiveEvent ...
+func (room *Room) ArchiveEvent(event *models.Event) {
+	switch event.Type {
+	case models.MESSAGE:
+		room.Repo.PushMessage(event)
+	case models.STAMPRIZE, models.STAMPUSE:
+		room.Repo.PushMessage(event)
+		room.Repo.PushStamp(event)
 	}
 }
 
