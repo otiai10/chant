@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"time"
 
+	"chant/app/chatroom/bot"
 	"chant/app/models"
 	"chant/app/repository"
 
@@ -93,7 +94,7 @@ func newRoom(id string) *Room {
 		subscribers: list.New(),
 		members:     list.New(),
 		Repo:        repository.NewRepoClient(id),
-		Bot:         DefaultBot(),
+		Bot:         bot.DefaultBot(),
 	}
 	go room.Serve()
 	return room
@@ -246,4 +247,14 @@ func (room *Room) ArchiveEvent(event *models.Event) {
 func newtoken(id string) string {
 	a := md5.New().Sum([]byte(id + time.Now().String()))
 	return fmt.Sprintf("%x", a)
+}
+
+//BotHandle ...
+func (room *Room) BotHandle(event *models.Event) *models.Event {
+	for _, h := range bot.Handlers {
+		if h.Match(event) {
+			return h.Handle(event, room.Bot)
+		}
+	}
+	return nil
 }
