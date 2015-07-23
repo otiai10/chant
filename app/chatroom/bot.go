@@ -5,6 +5,8 @@ import (
 	"chant/app/lib/google"
 	"chant/app/models"
 	"fmt"
+	"net/http"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -19,9 +21,31 @@ func DefaultBot() *models.User {
 	}
 }
 
+var (
+	imgExp   = regexp.MustCompile("^image/.+")
+	commands = map[string]*regexp.Regexp{
+		"icon": regexp.MustCompile("^/icon[ 　]+"),
+	}
+)
+
 //BotHandle ...
 func (room *Room) BotHandle(event *models.Event) *models.Event {
 	switch {
+	case commands["icon"].MatchString(event.Raw):
+		u := commands["icon"].ReplaceAllString(event.Raw, "")
+		if u == "" {
+			room.Bot.ProfileImageURL = "/public/img/hisyotan.png"
+			return nil
+		}
+		resp, err := http.Get(u)
+		if err != nil {
+			return models.NewMessage(room.Bot, fmt.Sprintf("しっぱいした: %v", err))
+		}
+		if !imgExp.MatchString(resp.Header.Get("Content-Type")) {
+			return models.NewMessage(room.Bot, fmt.Sprintf("がぞうじゃなくね？"))
+		}
+		room.Bot.ProfileImageURL = u
+		return models.NewMessage(room.Bot, "変えました")
 	case strings.HasPrefix(event.Raw, "/oppai"):
 		return models.NewMessage(room.Bot, "おっぱいな")
 	case strings.HasPrefix(event.Raw, "/hello"):
