@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -44,7 +45,10 @@ func LoadDir(dirpath string) (Messages, error) {
 	}
 	for _, f := range filenames {
 		b := filepath.Base(f)
-		lang := b[0 : len(b)-len(filepath.Ext(b))]
+		lang := func(b string) string {
+			langs := strings.Split(b[0:len(b)-len(filepath.Ext(b))], ".")
+			return langs[len(langs)-1]
+		}(b)
 		if _, ok := dest[lang]; !ok {
 			dest[lang] = map[string]formats{}
 		}
