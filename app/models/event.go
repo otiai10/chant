@@ -16,6 +16,7 @@ const (
 	STAMPUSE  = "stampuse"
 )
 
+// Event ...
 type Event struct {
 	Type      string                 `json:"type"`      // このイベントの種別
 	Raw       string                 `json:"raw"`       // このイベントの内容をjson stringにしたもの
@@ -25,6 +26,7 @@ type Event struct {
 	User      *User                  `json:"user"`      // このイベントの発起人
 }
 
+// ConstructEvent ...
 func ConstructEvent(user *User, raw string) (*Event, error) {
 	event := new(Event)
 	if err := json.Unmarshal([]byte(raw), event); err != nil {
@@ -65,4 +67,17 @@ func (ev *Event) StamplyEqual(target *Event) bool {
 		return false
 	}
 	return reflect.DeepEqual(stamprized0.Value, stamprized1.Value)
+}
+
+// NewMessage construct MESSAGE event.
+func NewMessage(user *User, text string) *Event {
+	return &Event{
+		User: user,
+		Type: MESSAGE,
+		Raw:  text,
+		Value: map[string]interface{}{
+			"text": text,
+		},
+		Timestamp: time.Now().UnixNano(),
+	}
 }

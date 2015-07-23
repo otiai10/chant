@@ -5,7 +5,6 @@ import (
 	"chant/app/models"
 	"fmt"
 	"strings"
-	"time"
 )
 
 // DefaultBot ...
@@ -22,28 +21,17 @@ func DefaultBot() *models.User {
 func (room *Room) BotHandle(event *models.Event) *models.Event {
 	switch {
 	case strings.HasPrefix(event.Raw, "/oppai"):
-		return room.newBotMessage("おっぱいな")
+		return models.NewMessage(room.Bot, "おっぱいな")
 	case strings.HasPrefix(event.Raw, "/hello"):
-		return room.newBotMessage("おう、どうした")
+		return models.NewMessage(room.Bot, "おう、どうした")
 	case strings.HasPrefix(event.Raw, "/image "):
 		q := strings.Replace(event.Raw, "/image ", "", -1)
 		resp, err := google.SearchImage(q)
 		if err != nil {
-			return room.newBotMessage(fmt.Sprintf("すまん: %v", err))
+			return models.NewMessage(room.Bot, fmt.Sprintf("すまん: %v", err))
 		}
 		entry := resp.Random()
-		return room.newBotMessage(entry.URL)
+		return models.NewMessage(room.Bot, entry.URL)
 	}
 	return nil
-}
-
-func (room *Room) newBotMessage(text string) *models.Event {
-	return &models.Event{
-		User: room.Bot,
-		Type: models.MESSAGE,
-		Value: map[string]interface{}{
-			"text": text,
-		},
-		Timestamp: time.Now().UnixNano(),
-	}
 }
