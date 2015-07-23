@@ -14,6 +14,7 @@ const (
 	MESSAGE   = "message"
 	STAMPRIZE = "stamprize"
 	STAMPUSE  = "stampuse"
+	AMESH     = "amesh"
 )
 
 // Event ...

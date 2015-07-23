@@ -83,6 +83,8 @@ var MessageContent = React.createClass({
 var MessageInclusive = React.createClass({
     render: function() {
         switch (this.props.message.type) {
+        case "amesh":
+          return <Amesh entry={this.props.message.value} />;
         case "stamprize":
             return (
                 <div>

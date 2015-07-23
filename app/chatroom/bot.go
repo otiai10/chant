@@ -1,10 +1,12 @@
 package chatroom
 
 import (
+	"chant/app/lib/amesh"
 	"chant/app/lib/google"
 	"chant/app/models"
 	"fmt"
 	"strings"
+	"time"
 )
 
 // DefaultBot ...
@@ -32,6 +34,16 @@ func (room *Room) BotHandle(event *models.Event) *models.Event {
 		}
 		entry := resp.Random()
 		return models.NewMessage(room.Bot, entry.URL)
+	case strings.HasPrefix(event.Raw, "/amesh"):
+		entry := amesh.Get()
+		time.Sleep(500 * time.Millisecond)
+		return &models.Event{
+			User:      room.Bot,
+			Type:      models.AMESH,
+			Raw:       amesh.URL,
+			Value:     entry,
+			Timestamp: time.Now().UnixNano(),
+		}
 	}
 	return nil
 }

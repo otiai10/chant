@@ -221,3 +221,27 @@ div#input-actions {
   width: 30px;
   height: 30px;
 }
+
+.amesh-wrapper {
+  position: relative;
+}
+.amesh-wrapper>img {
+  max-width: 100%;
+  line-height: 0;
+  /*
+  position: absolute;
+  top: 0;
+  left: 0;
+  */
+}
+
+.amesh-wrapper>img.amesh-rain {
+  position: absolute;
+  top: 0;
+  left:0;
+}
+.amesh-wrapper>img.amesh-dict {
+  position: absolute;
+  top: 0;
+  left:0;
+}

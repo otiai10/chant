@@ -235,7 +235,7 @@ func (room *Room) removeOneUser(user *models.User) {
 // ArchiveEvent ...
 func (room *Room) ArchiveEvent(event *models.Event) {
 	switch event.Type {
-	case models.MESSAGE:
+	case models.MESSAGE, models.AMESH:
 		room.Repo.PushMessage(event)
 	case models.STAMPRIZE, models.STAMPUSE:
 		room.Repo.PushMessage(event)

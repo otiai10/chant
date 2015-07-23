@@ -43,6 +43,7 @@ var Contents = React.createClass({
             // console.log(payload);
             switch (payload.type) {
                 case "message":
+                case "amesh":
                     this.newMessage(payload);
                     break;
                 case "stamprize":
