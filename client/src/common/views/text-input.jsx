@@ -26,20 +26,23 @@ var TextInput = React.createClass({
         var enterKey = 13;
         var upKey = 38;
         var txt = ev.target.value;
-        if (!txt && ev.which == upKey) {
+        if (ev.which == upKey) {
             return this.historyCompletion();
         }
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
             this.setState({value: ""});
-            chant.local.history.push(txt);
+            chant.local.history.pool.push(txt);
+            chant.local.history.index = -1;
             return ev.preventDefault();
         }
     },
     historyCompletion: function() {
-      var txt = chant.local.history.pop();
+      chant.local.history.index--;
+      var i = (chant.local.history.index < 0) ? (chant.local.history.pool.length - 1) : chant.local.history.index;
+      chant.local.history.index = i;
+      var txt = chant.local.history.pool[i];
       if (txt) this.setState({value: txt});
-      chant.local.history.unshift(txt);
     },
     appendTextValue: function(text) {
       if (typeof text !== 'function') { // TODO: remove this if block

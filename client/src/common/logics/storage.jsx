@@ -30,4 +30,7 @@ chant.local.config = (function(){
   });
 })();
 
-chant.local.history = [];
+chant.local.history = {
+  index: -1,
+  pool: []
+};
