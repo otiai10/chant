@@ -101,7 +101,7 @@ blockquote {
     border-left: 8px solid #e0e0e0;
     margin-top:    8px;
     margin-bottom: 8px;
-    padding: 8px 18px;
+    padding: 8px 0 0 8px;
 }
 
 blockquote img.user-icon {
