@@ -14,7 +14,11 @@ import (
 	"fmt"
 )
 
-const bufsize = 100
+const (
+	bufsize = 100
+	// PrivilegeAPIToken ああつらい
+	PrivilegeAPIToken = "tmp_X-API"
+)
 
 // Name - *Room のハッシュテーブル
 var rooms = map[string]*Room{}
@@ -110,7 +114,7 @@ func Exists(id string) bool {
 // 指定されなければdefaultを採用する.
 func GetRoom(id, token string) *Room {
 	room := getRoom(id)
-	if token != room.Token {
+	if token != PrivilegeAPIToken && token != room.Token {
 		return nil
 	}
 	return room
@@ -173,12 +177,12 @@ type Subscription struct {
 // このイベンントをアーカイブするか否かはここで判断する.
 // Controllerからしか呼んではいけない. (so far)
 // TODO: アプリケーションサーバでエラーが起きたときに、Roomが自発的に呼ぶかも？
-func (room *Room) Say(user *models.User, msg string) {
+func (room *Room) Say(user *models.User, msg string) (*models.Event, error) {
 	event, err := models.ConstructEvent(user, msg)
 	if err != nil {
 		fmt.Println("construct event error", err)
 		// TODO: なんかする
-		return
+		return event, err
 	}
 	room.ArchiveEvent(event)
 	room.publish <- event
@@ -191,6 +195,8 @@ func (room *Room) Say(user *models.User, msg string) {
 		}
 	}()
 	// }}}
+
+	return event, nil
 }
 
 // Join ユーザがこのRoomにJoinしてきたときの処理をすべて行う.

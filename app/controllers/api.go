@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"chant/app/models"
+	"encoding/json"
 	"encoding/xml"
 	"io"
 	"log"
@@ -54,6 +56,49 @@ func (c APIv1) RoomMessages(id, token string) revel.Result {
 	messages := room.Repo.GetMessages(10, -1)
 	return c.RenderJson(map[string]interface{}{
 		"messages": messages,
+	})
+}
+
+// RoomSay とりあえず
+func (c APIv1) RoomSay(id, token string) revel.Result {
+	c.Request.Format = "json"
+	// FIXME: めんどいからここで
+	type params struct {
+		Type  string       `json:"type"`
+		Value string       `json:"value"`
+		User  *models.User `json:"user"`
+	}
+	p := new(params)
+	if err := json.NewDecoder(c.Request.Body).Decode(p); err != nil {
+		c.Response.Status = http.StatusBadRequest
+		return c.RenderError(err)
+	}
+
+	raw, err := json.Marshal(struct {
+		Type string `json:"type"`
+		Raw  string `json:"raw"`
+	}{p.Type, p.Value})
+
+	if err != nil {
+		c.Response.Status = http.StatusBadRequest
+		return revel.ErrorResult{
+			Error: err,
+		}
+	}
+
+	room := chatroom.GetRoom(id, chatroom.PrivilegeAPIToken)
+
+	event, err := room.Say(p.User, string(raw))
+	if err != nil {
+		c.Response.Status = http.StatusBadRequest
+		return revel.ErrorResult{
+			Error: err,
+		}
+	}
+
+	return c.RenderJson(map[string]interface{}{
+		"params":  p,
+		"created": event,
 	})
 }
 
