@@ -24,12 +24,22 @@ var TextInput = React.createClass({
     },
     onKeyDown: function(ev) {
         var enterKey = 13;
+        var upKey = 38;
         var txt = ev.target.value;
+        if (!txt && ev.which == upKey) {
+            return this.historyCompletion();
+        }
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
             this.setState({value: ""});
+            chant.local.history.push(txt);
             return ev.preventDefault();
         }
+    },
+    historyCompletion: function() {
+      var txt = chant.local.history.pop();
+      if (txt) this.setState({value: txt});
+      chant.local.history.unshift(txt);
     },
     appendTextValue: function(text) {
       if (typeof text !== 'function') { // TODO: remove this if block

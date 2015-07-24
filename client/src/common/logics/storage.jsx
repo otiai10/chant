@@ -29,3 +29,5 @@ chant.local.config = (function(){
     notification: false
   });
 })();
+
+chant.local.history = [];
