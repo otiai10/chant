@@ -42,5 +42,12 @@ var stampContentRules = [
         return <span>{sub}</span>;
       }
     }
+  },
+  {
+    match: /(.{50,})/g,
+    wrap: function(sub) {
+      sub = sub.slice(0, 12) + "...";
+      return <span>{sub}</span>;
+    }
   }
 ];
