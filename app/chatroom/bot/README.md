@@ -20,3 +20,5 @@ commands
   - hisyotanのアイコンを変えます
 - `/oppai`
   - おっぱいな
+- `/help`
+  - help

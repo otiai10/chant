@@ -42,6 +42,7 @@ func init() {
 		"amesh":  AmeshHandler{regexp.MustCompile("^/amesh")},
 		"hello":  HelloHandler{regexp.MustCompile("^/hello")},
 		"whoami": WhoamiHandler{regexp.MustCompile("^/whoami")},
+		"help":   SimpleHandler{regexp.MustCompile("^/help"), "help"},
 	}
 
 	m, err := message.LoadDir(filepath.Join(curr.Dir(), "messages"))
