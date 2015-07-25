@@ -137,6 +137,11 @@ var defaultRules = [
         url: '/api/v1/preview',
         data: { u: sub },
         success: function(res) {
+          switch (res.content) {
+          case 'image':
+            this.replaceContentsOf(i, <img className="entry-image" src={res.url} />);
+            return;
+          }
           res.summary.title = res.summary.title || res.summary.url;
           res.summary.description = res.summary.description || res.summary.url;
           this.replaceContentsOf(

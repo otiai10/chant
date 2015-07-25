@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -106,8 +105,13 @@ func (c APIv1) RoomSay(id, token string) revel.Result {
 func (c APIv1) WebPreview(u string) revel.Result {
 	res, err := http.Get(u)
 	if err != nil {
-		log.Println(err, u)
 		return c.RenderJson(map[string]interface{}{})
+	}
+	if regexp.MustCompile("^ima?ge?/.*").MatchString(res.Header.Get("Content-Type")) {
+		return c.RenderJson(map[string]interface{}{
+			"content": "image",
+			"url":     u,
+		})
 	}
 	page := new(HTMLPage)
 	decoder(res.Body).Decode(page)
