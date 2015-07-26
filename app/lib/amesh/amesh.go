@@ -18,6 +18,10 @@ func getURL(p string) string {
 }
 
 func getTimestamp(now time.Time) string {
+	// Amesh Image not generated yet
+	if now.Minute()%5 == 0 && now.Second() < 30 {
+		now = now.Add(-1 * time.Minute)
+	}
 	min := now.Minute() - now.Minute()%5
 	return now.Format("2006010215") + fmt.Sprintf("%02d", min)
 }
