@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"bytes"
 	"chant/app/models"
 	"encoding/json"
 	"encoding/xml"
 	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -113,8 +116,17 @@ func (c APIv1) WebPreview(u string) revel.Result {
 			"url":     u,
 		})
 	}
+
+	// clean response body
+	b, _ := ioutil.ReadAll(res.Body)
+	b = regexp.MustCompile("\\<script[\\S\\s]+?\\</script\\>").ReplaceAll(b, []byte{})
+	buf := bytes.NewBuffer(b)
+
 	page := new(HTMLPage)
-	decoder(res.Body).Decode(page)
+	err = decoder(buf).Decode(page)
+	if err != nil {
+		log.Println("[WebPreview]", err)
+	}
 
 	return c.RenderJson(map[string]interface{}{
 		"html":    page,
