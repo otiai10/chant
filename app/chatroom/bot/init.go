@@ -36,13 +36,14 @@ var (
 
 func init() {
 	Handlers = map[string]Handler{
-		"icon":   IconHandler{regexp.MustCompile("^/icon[ 　]+")},
-		"oppai":  OppaiHandler{regexp.MustCompile("^/oppai")},
-		"image":  ImageHandler{regexp.MustCompile("^/image[ 　]+")},
-		"amesh":  AmeshHandler{regexp.MustCompile("^/amesh")},
-		"hello":  HelloHandler{regexp.MustCompile("^/hello")},
-		"whoami": WhoamiHandler{regexp.MustCompile("^/whoami")},
-		"help":   SimpleHandler{regexp.MustCompile("^/help"), "help"},
+		"icon":       IconHandler{regexp.MustCompile("^/icon[ 　]+")},
+		"oppai":      OppaiHandler{regexp.MustCompile("^/oppai")},
+		"image":      ImageHandler{regexp.MustCompile("^/image[ 　]+")},
+		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh")},
+		"hello":      HelloHandler{regexp.MustCompile("^/hello")},
+		"whoami":     WhoamiHandler{regexp.MustCompile("^/whoami")},
+		"help":       SimpleHandler{regexp.MustCompile("^/help"), "help"},
+		"soundcloud": SoundCloudHandler{regexp.MustCompile("^/sc")},
 	}
 
 	m, err := message.LoadDir(filepath.Join(curr.Dir(), "messages"))
