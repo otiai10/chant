@@ -235,3 +235,13 @@ func abspath(original, relative string) string {
 	v.Path = relative
 	return v.String()
 }
+
+// FileUpload ...
+func (c APIv1) FileUpload(id, token string) revel.Result {
+	// c.Request.Format = "json"
+	log.Println(id, token)
+	return c.RenderJson(map[string]interface{}{
+		"message": "created",
+		"url":     "/public/img/hisyotan.png",
+	})
+}

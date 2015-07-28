@@ -11,6 +11,7 @@ var TextInput = React.createClass({
                 id="message-input"
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
+                onDrop={this.filedrop}
                 value={this.state.value}
                 className="materialize-textarea"
                 placeholder="Shift + ⏎ to newline"
@@ -36,6 +37,27 @@ var TextInput = React.createClass({
             chant.local.history.index = -1;
             return ev.preventDefault();
         }
+    },
+    filedrop: function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var file = ev.nativeEvent.dataTransfer.files[0];
+      var data = new FormData();
+      // data.append('file-0', file);
+      console.log(file);
+      $.ajax({
+        url: "/api/v1/room/default/upload",
+        type: "post",
+        data: data,
+        dataType: false,
+        processData: false,
+        success: function(res) {
+          console.log('success', res);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      });
     },
     historyCompletion: function() {
       chant.local.history.index--;
