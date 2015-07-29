@@ -21,3 +21,7 @@ div.row.members-wrapper, .textinput-wrapper {
 div.members {
   margin-top: 12px;
 }
+
+div.container {
+  padding: 0 !important;
+}
