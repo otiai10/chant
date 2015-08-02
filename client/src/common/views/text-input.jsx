@@ -42,15 +42,22 @@ var TextInput = React.createClass({
       ev.preventDefault();
       ev.stopPropagation();
       var file = ev.nativeEvent.dataTransfer.files[0];
-      var data = new FormData();
+      if (!file.type.match('^image')) {
+        return;
+      }
       // data.append('file-0', file);
-      console.log(file);
+      var data = new FormData();
+      // var data = new FormData(file);
+      data.append('oppai', file);
+      data.append('name', file.name);
       $.ajax({
         url: "/api/v1/room/default/upload",
-        type: "post",
+        type: "POST",
         data: data,
-        dataType: false,
+        // dataType: false,
         processData: false,
+        contentType: false,
+        // contentType: 'multipart/form-data',
         success: function(res) {
           console.log('success', res);
         },
