@@ -120,12 +120,14 @@ var defaultRules = [
     }
   },
   // Image
+  /*
   {
     match: /((?:(?:https?):\/\/|www\.)(?:[a-z0-9-]+\.)+[a-z0-9:]+(?:\/[^\s<>"',;]*)?(?:jpe?g|png|gif))/gi,
     wrap: function(sub) {
       return <a href={sub} target="_blank"><img src={sub} className="entry-image"></img></a>;
     }
   },
+  */
   // URL Link
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
