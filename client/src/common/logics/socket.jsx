@@ -47,13 +47,13 @@ chant.Socket = function(retry) {
     chant.delegate.onmessage = (chant.__socket && chant.__socket.onmessage) ? chant.__socket.onmessage : null;
   }
   // リトライをインクリメントしとく
-  retry = (retry || 1) * 2;
+  retry = (retry || 2) * 2;
   if (!chant.__socket || chant.__socket.readyState != WebSocket.OPEN) {
     chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token);
   }
   chant.__socket.onopen = function() {
-    if (retry > 2) { // これはSocketによる再接続なので
-      chant.notify("Reconnect successfully!");
+    if (retry > 4) { // これはSocketによる再接続なので
+      chant.notify("[RECONNECTED]\nreconnected successfully (o・∇・o)");
     }
     retry = 0;
     if (chant.delegate.onmessage) {
@@ -69,7 +69,10 @@ chant.Socket = function(retry) {
     */
   };
   chant.__socket.onclose = function() {
-    chant.notify("[WEBSOCKET CLOSED]\nTry to reconnect " + moment.duration(retry * 1000).seconds() + "seconds later");
+    chant.notify(
+      "[WEBSOCKET CLOSED]\nTry to reconnect " + moment.duration(retry * 1000).seconds() + "seconds later",
+      null, "/public/img/icon.chant.unread.png"
+    );
     setTimeout(function(r){
       chant.Socket(r);
     }.bind(this, retry), retry * 1000);
