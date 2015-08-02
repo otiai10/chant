@@ -15,17 +15,8 @@ var Contents = React.createClass({
       }.bind(this));
     },
     getInitialState: function() {
-        chant.socket().onopen = function(ev) { console.log('open', ev); };
-        chant.socket().onclose = function(ev) {
-            console.log('close', ev);
-            chant.notify("disconnected with code: " + ev.code);
-        };
-        chant.socket().onerror = function(ev) {
-            console.log('error', ev);
-            chant.notify('ERROR!!');
-        };
         var self = this;
-        chant.socket().onmessage = function(ev) {
+        chant.Socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
             // console.log(payload);
             switch (payload.type) {

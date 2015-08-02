@@ -27,18 +27,7 @@ var Contents = React.createClass({
       document.getElementById('emoji-list-wrapper').hidden = true;
     },
     getInitialState: function() {
-        chant.socket().onopen = function(ev) { /* なんもしない */ };
-        chant.socket().onclose = function(ev) {
-          console.debug('socket.onclose', ev);
-        };
-        chant.socket().onerror = function(ev) {
-          console.debug('socket.onerror', ev);
-          chant.notify('ERROR!!', null, null, function() {
-            chant.socket(true);
-            // sysinfoしたい
-          });
-        };
-        chant.socket().onmessage = function(ev) {
+        chant.Socket().onmessage = function(ev) {
             var payload = JSON.parse(ev.data);
             // console.log(payload);
             switch (payload.type) {
