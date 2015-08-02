@@ -203,7 +203,7 @@ func (hp *HTMLPage) Summarize(u string) *Summary {
 		switch {
 		case img.MatchString(meta.Property):
 			summary.setImage(meta.Content)
-		case desc.MatchString(meta.Property):
+		case desc.MatchString(meta.Property), desc.MatchString(meta.Name):
 			summary.setDescription(meta.Content)
 		case title.MatchString(meta.Property):
 			summary.setTitle(meta.Content)
@@ -214,14 +214,24 @@ func (hp *HTMLPage) Summarize(u string) *Summary {
 	if len(summary.Image) == 0 {
 		for _, link := range hp.Head.Links {
 			if icon.MatchString(link.Rel) {
-				summary.setImage(link.Href)
+				summary.setImage(abspath(u, link.Href))
 				break
 			}
 		}
 	}
 	if len(summary.Image) == 0 {
-		v, _ := url.Parse(u)
-		summary.setImage(v.Scheme + "://" + v.Host + "/favicon.ico")
+		summary.setImage(abspath(u, "/favicon.ico"))
 	}
 	return summary
+}
+
+// abspath
+func abspath(original, relative string) string {
+	p, err := url.Parse(relative)
+	if err == nil && p.IsAbs() {
+		return p.String()
+	}
+	v, _ := url.Parse(original)
+	v.Path = relative
+	return v.String()
 }
