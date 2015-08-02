@@ -5,15 +5,20 @@ import (
 	"chant/app/models"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strings"
 
 	"chant/app/chatroom"
 
+	"github.com/otiai10/curr"
 	"github.com/revel/revel"
 )
 
@@ -234,4 +239,35 @@ func abspath(original, relative string) string {
 	v, _ := url.Parse(original)
 	v.Path = relative
 	return v.String()
+}
+
+// FileUpload ...
+func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
+	c.Request.Format = "json"
+	publicpath := filepath.Join("/public/img/uploads", name)
+	destpath := filepath.Join(filepath.Dir(filepath.Dir(curr.Dir())), publicpath)
+	if err := os.Rename(oppai.Name(), destpath); err != nil {
+		return c.RenderError(err)
+	}
+	room := chatroom.GetRoom(id, "tmp_X-API")
+	room.Say(room.Bot, fmt.Sprintf(`{"type":"message","raw":"%s"}`, fullpath(publicpath)))
+	c.Params = &revel.Params{}
+	return c.RenderJson(map[string]interface{}{
+		"message": "created",
+		"url":     publicpath,
+	})
+}
+
+func fullpath(p string) string {
+	u := url.URL{Scheme: "http"}
+	if revel.DevMode {
+		u.Host = strings.Join([]string{
+			revel.Config.StringDefault("http.host", "localhost"),
+			revel.Config.StringDefault("http.port", "14000"),
+		}, ":")
+	} else {
+		u.Host = revel.Config.StringDefault("auth.callback", "chant.otiai10.com")
+	}
+	u.Path = p
+	return u.String()
 }

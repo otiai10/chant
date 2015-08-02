@@ -11,6 +11,7 @@ var TextInput = React.createClass({
                 id="message-input"
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
+                onDrop={this.filedrop}
                 value={this.state.value}
                 className="materialize-textarea"
                 placeholder="Shift + ⏎ to newline"
@@ -36,6 +37,34 @@ var TextInput = React.createClass({
             chant.local.history.index = -1;
             return ev.preventDefault();
         }
+    },
+    filedrop: function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var file = ev.nativeEvent.dataTransfer.files[0];
+      if (!file.type.match('^image')) {
+        return;
+      }
+      // data.append('file-0', file);
+      var data = new FormData();
+      // var data = new FormData(file);
+      data.append('oppai', file);
+      data.append('name', file.name);
+      $.ajax({
+        url: "/api/v1/room/default/upload",
+        type: "POST",
+        data: data,
+        // dataType: false,
+        processData: false,
+        contentType: false,
+        // contentType: 'multipart/form-data',
+        success: function(res) {
+          console.log('success', res);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      });
     },
     historyCompletion: function() {
       chant.local.history.index--;

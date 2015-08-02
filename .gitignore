@@ -34,6 +34,7 @@ app/tmp/*
 app/routes/*
 conf/app.conf
 app/chatroom/bot/config.toml
+public/img/uploads/*
 
 # assets
 ## public/img/emojis/*
