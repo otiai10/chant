@@ -33,6 +33,7 @@ _testmain.go
 app/tmp/*
 app/routes/*
 conf/app.conf
+app/chatroom/bot/config.toml
 
 # assets
 ## public/img/emojis/*

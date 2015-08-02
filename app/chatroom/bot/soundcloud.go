@@ -22,7 +22,7 @@ func (h SoundCloudHandler) Match(event *models.Event) bool {
 // Handle ...
 func (h SoundCloudHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")
-	client := &soundcloud.Client{"3f4831d902a9686ec6293ed8dd547cd5"}
+	client := &soundcloud.Client{config.SoundCloud.ClientID}
 
 	tracks, err := client.SearchTracks(q)
 

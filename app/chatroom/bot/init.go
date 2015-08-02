@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/otiai10/curr"
 )
 
@@ -27,6 +28,14 @@ type Handler interface {
 	Handle(*models.Event, *models.User) *models.Event
 }
 
+type conf struct {
+	SoundCloud struct {
+		ClientID string `toml:"client_id"`
+	} `toml:"soundcloud"`
+}
+
+var config conf
+
 var (
 	// Handlers ...
 	Handlers = map[string]Handler{}
@@ -45,7 +54,12 @@ func init() {
 		"help":       SimpleHandler{regexp.MustCompile("^/help"), "help"},
 		"soundcloud": SoundCloudHandler{regexp.MustCompile("^/sc")},
 	}
+	// bot config
+	if _, err := toml.DecodeFile(filepath.Join(curr.Dir(), "/config.toml"), &config); err != nil {
+		panic(err)
+	}
 
+	// messages
 	m, err := message.LoadDir(filepath.Join(curr.Dir(), "messages"))
 	if err != nil {
 		panic(err)
