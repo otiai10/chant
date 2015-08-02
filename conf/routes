@@ -12,6 +12,7 @@ GET     /auth/callback                          Auth.Callback
 
 # スタティックpath
 GET     /public/*filepath                       Static.Serve("public")
+GET     /favicon.ico                            Static.Serve("public","img/icon.chant.png")
 
 # ｳｪｯﾌﾞソケットｩコネクション
 WS      /websocket/room/socket                  ChantSocket.RoomSocket
