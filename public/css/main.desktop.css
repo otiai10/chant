@@ -1,11 +1,18 @@
 /* desktop用 CSS */
-img.user-icon {
+div.user-icon-wrapper {
     cursor: pointer;
     border-radius: 30px;
     width: 48px;
     height: 48px;
+    background-size: cover;
+    background-repeat: none;
+    display: inline-block;
 }
-blockquote img.user-icon {
+div.members div.user-icon-wrapper {
+    margin-right: 8px;
+}
+
+blockquote div.user-icon-wrapper {
     width: 32px;
     height: 32px;
 }

@@ -1,8 +1,14 @@
 /* mobile用 CSS */
-img.user-icon {
+div.user-icon-wrapper {
   cursor: pointer;
   width: 24px;
+  height: 24px;
   border-radius: 30px;
+  background-size: cover;
+  display: inline-block;
+}
+div.members div.user-icon-wrapper {
+    margin-right: 8px;
 }
 
 div.entry {

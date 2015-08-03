@@ -61,13 +61,13 @@ var MessageMeta = React.createClass({
 });
 
 var MessageIcon = React.createClass({
-    render: function() {
-        return (
-            <div>
-                <Icon setText={this.props.setText} user={this.props.message.user} />
-            </div>
-        );
-    }
+  render: function() {
+    return (
+      <div>
+        <Icon setText={this.props.setText} user={this.props.message.user} />
+      </div>
+    );
+  }
 });
 
 var MessageContent = React.createClass({
