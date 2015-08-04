@@ -111,9 +111,18 @@ func (c APIv1) RoomSay(id, token string) revel.Result {
 
 // WebPreview ...
 func (c APIv1) WebPreview(u string) revel.Result {
-	res, err := http.Get(u)
+	c.Request.Format = "json"
+	v, err := url.Parse(u)
 	if err != nil {
-		return c.RenderJson(map[string]interface{}{})
+		return c.RenderError(err)
+	}
+	// avoid basic auth
+	if v.Host == revel.Config.StringDefault("http.host", "localhost") {
+		v.Host = fmt.Sprintf("%s:%s", "localhost", revel.Config.StringDefault("http.port", "14000"))
+	}
+	res, err := http.Get(v.String())
+	if err != nil {
+		return c.RenderError(err)
 	}
 	if regexp.MustCompile("^ima?ge?/.*").MatchString(res.Header.Get("Content-Type")) {
 		return c.RenderJson(map[string]interface{}{
