@@ -141,7 +141,7 @@ var defaultRules = [
         success: function(res) {
           switch (res.content) {
           case 'image':
-            this.replaceContentsOf(i, <img className="entry-image" src={res.url} />);
+            this.replaceContentsOf(i, <a href={res.url} target="_blank"><img src={res.url} className="entry-image"></img></a>);
             return;
           }
           res.summary.title = res.summary.title || res.summary.url;
