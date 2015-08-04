@@ -257,7 +257,7 @@ func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
 	projectpath := filepath.Dir(filepath.Dir(curr.Dir()))
 	pubdir := filepath.Join("/public/img/uploads", time.Now().Format("20060102"))
 	if err := os.Mkdir(filepath.Join(projectpath, pubdir), os.ModePerm); err != nil {
-		return c.RenderError(err)
+		// 	return c.RenderError(err) // file exists
 	}
 	publicpath := filepath.Join(pubdir, name)
 	destpath := filepath.Join(projectpath, publicpath)
