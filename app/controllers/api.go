@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	"chant/app/chatroom"
 
@@ -253,8 +254,13 @@ func abspath(original, relative string) string {
 // FileUpload ...
 func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
 	c.Request.Format = "json"
-	publicpath := filepath.Join("/public/img/uploads", name)
-	destpath := filepath.Join(filepath.Dir(filepath.Dir(curr.Dir())), publicpath)
+	projectpath := filepath.Dir(filepath.Dir(curr.Dir()))
+	pubdir := filepath.Join("/public/img/uploads", time.Now().Format("20060102"))
+	if err := os.Mkdir(filepath.Join(projectpath, pubdir), os.ModePerm); err != nil {
+		return c.RenderError(err)
+	}
+	publicpath := filepath.Join(pubdir, name)
+	destpath := filepath.Join(projectpath, publicpath)
 	if err := os.Rename(oppai.Name(), destpath); err != nil {
 		return c.RenderError(err)
 	}
