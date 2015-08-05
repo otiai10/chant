@@ -11,9 +11,10 @@ var Stamps = React.createClass({
 
 var Stamp = React.createClass({
   render: function() {
+    var text = this.props.stamp.source.value.text.split("\n").join("");
     return (
       <button onClick={this.useStamp} className="stamp">
-        <AnchorizableText rules={stampContentRules} text={this.props.stamp.source.value.text}></AnchorizableText>
+        <AnchorizableText rules={stampContentRules} text={text}></AnchorizableText>
       </button>
     );
   },
@@ -44,7 +45,7 @@ var stampContentRules = [
     }
   },
   {
-    match: /(.{50,})/g,
+    match: /(.{12,})/g,
     wrap: function(sub) {
       sub = sub.slice(0, 12) + "...";
       return <span>{sub}</span>;
