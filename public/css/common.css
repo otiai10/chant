@@ -246,3 +246,9 @@ div#input-actions {
   top: 0;
   left:0;
 }
+
+/* RESET TWITTER */
+.twitter-tweet-rendered {
+  margin: 0 !important;
+  min-width: 10px !important;
+}
