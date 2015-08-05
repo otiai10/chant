@@ -254,6 +254,12 @@ func abspath(original, relative string) string {
 // FileUpload ...
 func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
 	c.Request.Format = "json"
+
+	user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
+	if err != nil {
+		return c.RenderError(err)
+	}
+
 	projectpath := filepath.Dir(filepath.Dir(curr.Dir()))
 	pubdir := filepath.Join("/public/img/uploads", time.Now().Format("20060102"))
 	if err := os.Mkdir(filepath.Join(projectpath, pubdir), os.ModePerm); err != nil {
@@ -265,7 +271,7 @@ func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
 		return c.RenderError(err)
 	}
 	room := chatroom.GetRoom(id, "tmp_X-API")
-	room.Say(room.Bot, fmt.Sprintf(`{"type":"message","raw":"%s"}`, fullpath(publicpath)))
+	room.Say(user, fmt.Sprintf(`{"type":"message","raw":"%s"}`, fullpath(publicpath)))
 	c.Params = &revel.Params{}
 	return c.RenderJson(map[string]interface{}{
 		"message": "created",
