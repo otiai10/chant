@@ -2,7 +2,8 @@ var TextInput = React.createClass({
     getInitialState: function() {
         return {
             value: '',
-            rows: 3
+            rows: 3,
+            draft: true
         };
     },
     render: function() {
@@ -26,17 +27,25 @@ var TextInput = React.createClass({
     onKeyDown: function(ev) {
         var enterKey = 13;
         var upKey = 38;
+        var downKey = 40;
         var txt = ev.target.value;
-        if (ev.which == upKey) {
-            return this.historyCompletion();
+        if (!ev.shiftKey && ev.which == upKey) {
+            this.historyCompletion(-1);
+            if (this.state.draft && this.state.value !== "") {
+                chant.local.history.append(this.state.value);
+            }
+            return;
+        }
+        if (!ev.shiftKey && ev.which == downKey) {
+            return this.historyCompletion(1);
         }
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
             this.setState({value: ""});
-            chant.local.history.pool.push(txt);
-            chant.local.history.index = -1;
+            chant.local.history.push(txt);
             return ev.preventDefault();
         }
+        if (!this.state.draft) this.setState({draft: true});
     },
     filedrop: function(ev) {
       ev.preventDefault();
@@ -66,12 +75,10 @@ var TextInput = React.createClass({
         }
       });
     },
-    historyCompletion: function() {
-      chant.local.history.index--;
-      var i = (chant.local.history.index < 0) ? (chant.local.history.pool.length - 1) : chant.local.history.index;
-      chant.local.history.index = i;
-      var txt = chant.local.history.pool[i];
-      if (txt) this.setState({value: txt});
+    historyCompletion: function(step) {
+      var txt = (step > 0) ? chant.local.history.next() : chant.local.history.prev();
+      if (!txt) return;
+      this.setState({value: txt, draft: false});
     },
     appendTextValue: function(text) {
       if (typeof text !== 'function') { // TODO: remove this if block

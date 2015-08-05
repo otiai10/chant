@@ -32,5 +32,28 @@ chant.local.config = (function(){
 
 chant.local.history = {
   index: -1,
-  pool: []
+  pool: [],
+  push: function(text) {
+    chant.local.history.pool.push(text);
+    chant.local.history.index = chant.local.history.pool.length;
+  },
+  append: function(text) {// indexはうごかさない
+    chant.local.history.pool.push(text);
+  },
+  prev: function() {
+    if (chant.local.history.pool.length === 0) return;
+    var i = chant.local.history.index -= 1;
+    if (i < 0)
+      chant.local.history.index = i = chant.local.history.pool.length - 1;
+    // console.log(i, chant.local.history.pool);
+    return chant.local.history.pool[i];
+  },
+  next: function() {
+    if (chant.local.history.pool.length === 0) return;
+    var i = chant.local.history.index += 1;
+    if (i >= chant.local.history.pool.length)
+      chant.local.history.index = i = chant.local.history.pool.length - 1;
+    // console.log(i, chant.local.history.pool);
+    return chant.local.history.pool[i];
+  }
 };
