@@ -54,10 +54,11 @@ var Contents = React.createClass({
     },
     setText: function(text, focushead) {
         this.refs.TextInput.appendTextValue(text);
+        this.refs.TextInput.getDOMNode().focus();
         if (focushead) {
-          this.refs.TextInput.getDOMNode().setSelectionRange(0, 0);
-        } else {
-          this.refs.TextInput.getDOMNode().focus();
+          setTimeout(function() {
+            document.getElementById('message-input').setSelectionRange(0, 0);
+          });
         }
     },
     totsuzenize: function() {
