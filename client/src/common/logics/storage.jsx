@@ -3,8 +3,19 @@ chant.local = {};
 chant.local.storageAccessor = function(name, _def, _rootNS){
   this.ns = _rootNS || 'chant';
   this.ns += '.' + name;
-  if (window.localStorage.getItem(this.ns) === undefined) {
+  var _old = window.localStorage.getItem(this.ns);
+  if (_old === undefined || _old === null) {
     window.localStorage.setItem(this.ns, JSON.stringify(_def || {}));
+  } else {
+    try {
+      var merged = JSON.parse(_old);
+      for (var key in (_def || {})) {
+        merged[key] = (merged[key] === undefined) ? _def[key] : merged[key];
+      }
+      window.localStorage.setItem(this.ns, JSON.stringify(merged));
+    } catch (e) {
+      console.error('chant.local.storageAccessor', name, e);
+    }
   }
   this.get = function(key, def) {
     var values = JSON.parse(window.localStorage.getItem(this.ns)) || {};
@@ -26,7 +37,8 @@ chant.local.storageAccessor = function(name, _def, _rootNS){
 
 chant.local.config = (function(){
   return new chant.local.storageAccessor('config', {
-    notification: false
+    notification: false,
+    mute: {}
   });
 })();
 

@@ -61,7 +61,7 @@ var MessageMeta = React.createClass({
     },
     mute: function() {
       var text = this.props.message.value.text;
-      var mute = chant.local.config.get('mute', {});
+      var mute = chant.local.config.get('mute');
       mute[text] = 1;
       chant.local.config.set('mute', mute);
       chant.Send('mute', JSON.stringify(this.props.message));
@@ -181,7 +181,7 @@ var Muted = React.createClass({
   },
   unmute: function() {
     if (!window.confirm("unmute?\n" + this.props.message.value.text)) return;
-    var mute = chant.local.config.get('mute', {});
+    var mute = chant.local.config.get('mute');
     delete mute[this.props.message.value.text];
     chant.local.config.set('mute', mute);
     chant.Send('unmute', JSON.stringify(this.props.message));
