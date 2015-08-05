@@ -20,3 +20,13 @@ blockquote div.user-icon-wrapper {
 div.entry {
     margin-bottom: 16px;
 }
+
+@media only screen and (max-width : 340px) {
+  div.user-icon-wrapper {
+    width: 46px;
+    height: 46px;
+  }
+  div.members div.user-icon-wrapper {
+    margin-right: 4px;
+  }
+}
