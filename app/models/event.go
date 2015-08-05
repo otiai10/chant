@@ -14,6 +14,8 @@ const (
 	MESSAGE   = "message"
 	STAMPRIZE = "stamprize"
 	STAMPUSE  = "stampuse"
+	MUTE      = "mute"
+	UNMUTE    = "unmute"
 	AMESH     = "amesh"
 )
 
@@ -52,6 +54,12 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 		event.Value = map[string]interface{}{
 			"text": event.Raw,
 		}
+	case MUTE, UNMUTE:
+		muted := new(Event)
+		if err := json.Unmarshal([]byte(event.Raw), muted); err != nil {
+			log.Println("mute/unmute error", err)
+		}
+		event.Value = muted
 	case JOIN:
 	}
 	return event, nil

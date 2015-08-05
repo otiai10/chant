@@ -32,7 +32,8 @@ var MessageMeta = React.createClass({
         case 'message':
           contents.push(
             <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>,
-            <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-2">totsuzenize</small></span>
+            <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-2">totsuzenize</small></span>,
+            <span onClick={this.mute} className="meta stealth"><small className="grey-text text-lighten-2">mute</small></span>
           );
         }
         return (
@@ -57,6 +58,13 @@ var MessageMeta = React.createClass({
         }
         return text + '\nquote>' + value + '\n';
       }, true);
+    },
+    mute: function() {
+      var text = this.props.message.value.text;
+      var mute = chant.local.config.get('mute', {});
+      mute[text] = 1;
+      chant.local.config.set('mute', mute);
+      chant.Send('mute', JSON.stringify(this.props.message));
     }
 });
 
@@ -94,6 +102,24 @@ var MessageInclusive = React.createClass({
                     </blockquote>
                 </div>
             );
+        case "mute":
+            return (
+              <div>
+                <div>mute</div>
+                <blockquote>
+                  <MessageEntry message={this.props.message.value} />
+                </blockquote>
+              </div>
+            );
+        case "unmute":
+            return (
+              <div>
+                <div>unmute</div>
+                <blockquote>
+                  <MessageEntry message={this.props.message.value} />
+                </blockquote>
+              </div>
+            );
         default:
             return <MessageRecursive message={this.props.message} />;
         }
@@ -117,6 +143,9 @@ var MessageRecursive = React.createClass({
 
 var MessageAnchorable = React.createClass({
     render: function() {
+        if (chant.local.config.get('mute')[this.props.message.value.text]) {
+            return <Muted message={this.props.message}></Muted>;
+        }
         var lines = this.props.message.value.text.split('\n').map(function(line) {
             var m = line.match(/^quote>({.+})$/);
             if (m && m.length > 1) {
@@ -140,4 +169,21 @@ var MessageAnchorable = React.createClass({
         });
         return <div>{lines}</div>;
     }
+});
+
+var Muted = React.createClass({
+  render: function() {
+      return (
+        <div onClick={this.unmute} className="muted-contents clickable">
+          <i className="fa fa-ban">あかんやつ</i>
+        </div>
+      );
+  },
+  unmute: function() {
+    if (!window.confirm("unmute?\n" + this.props.message.value.text)) return;
+    var mute = chant.local.config.get('mute', {});
+    delete mute[this.props.message.value.text];
+    chant.local.config.set('mute', mute);
+    chant.Send('unmute', JSON.stringify(this.props.message));
+  }
 });

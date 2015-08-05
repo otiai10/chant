@@ -252,3 +252,15 @@ div#input-actions {
   margin: 0 !important;
   min-width: 10px !important;
 }
+
+/* muted contents */
+div.muted-contents {
+  padding: 8px 20px;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  width: 100%;
+  background-color: #fff;
+}
+div.muted-contents i.fa {
+  color: #888;
+}
