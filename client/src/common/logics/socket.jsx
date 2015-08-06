@@ -36,7 +36,8 @@ chant.Send = function(/* string */typ/* string */, /* any */value) {
 };
 
 chant.delegate = {
-    onmessage: null
+    onmessage: null,
+    keepaliveID: null
 };
 
 // 内部にWebSocketを持ち、onmessageイベントだけを受け取り、
@@ -59,6 +60,13 @@ chant.Socket = function(retry) {
     if (chant.delegate.onmessage) {
       chant.__socket.onmessage = chant.delegate.onmessage;
     }
+    // keepalive
+    window.clearInterval(chant.delegate.keepaliveID);
+    chant.delegate.keepaliveID = window.setInterval(function() {
+      chant.__socket.send(JSON.stringify({
+        type: 'keepalive'
+      }));
+    }, 10000); // 雑に10秒でいいんすかね？
   };
   chant.__socket.onerror = function() {
     /*
