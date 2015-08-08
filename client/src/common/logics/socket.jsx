@@ -70,9 +70,11 @@ chant.Socket = function(retry) {
     // keepalive
     window.clearInterval(chant.delegate.keepaliveID);
     chant.delegate.keepaliveID = window.setInterval(function() {
-      chant.__socket.send(JSON.stringify({
-        type: 'keepalive'
-      }));
+      if (chant.__socket && chant.__socket.readyState == WebSocket.OPEN) {
+        chant.__socket.send(JSON.stringify({
+          type: 'keepalive'
+        }));
+      }
     }, 2000); // 雑に2秒でいいんすかね？
   };
   chant.__socket.onerror = function() {

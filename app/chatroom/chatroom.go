@@ -114,6 +114,10 @@ func Exists(id string) bool {
 // 指定されなければdefaultを採用する.
 func GetRoom(id, token string) *Room {
 	room := getRoom(id)
+	// うーん、この
+	if id == "default" {
+		return room
+	}
 	if token != PrivilegeAPIToken && token != room.Token {
 		return nil
 	}
