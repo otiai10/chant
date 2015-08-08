@@ -21,6 +21,8 @@ import (
 
 	"github.com/otiai10/curr"
 	"github.com/revel/revel"
+
+	"golang.org/x/net/html/charset"
 )
 
 // APIv1 ...
@@ -132,8 +134,15 @@ func (c APIv1) WebPreview(u string) revel.Result {
 		})
 	}
 
+	// Adjust HTML charset
+	reader, err := charset.NewReader(res.Body, "")
+	if err != nil {
+		return c.RenderError(err)
+	}
+
 	// clean response body
-	b, _ := ioutil.ReadAll(res.Body)
+	b, _ := ioutil.ReadAll(reader)
+
 	b = regexp.MustCompile("\\<script[\\S\\s]+?\\</script\\>").ReplaceAll(b, []byte{})
 	buf := bytes.NewBuffer(b)
 
