@@ -116,7 +116,7 @@ var Contents = React.createClass({
                 <div className="row">
                     <div className="col s12 members">
                         <span>
-                            <Icon setText={this.setText} user={this.props.myself} />
+                            <Icon setText={this.setText} isMyself={true} user={this.props.myself} />
                         </span>
                         <Members setText={this.setText} members={this.state.members} />
                     </div>

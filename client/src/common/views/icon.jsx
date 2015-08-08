@@ -6,8 +6,10 @@ var Icon = React.createClass({
    var styles = {
      backgroundImage: "url(" + this.props.user.profile_image_url + ")"
    };
+   var className = "user-icon-wrapper";
+   if (this.props.isMyself) className += " icon-myself";
    return (
-     <div onClick={this.onClick} className="user-icon-wrapper" style={styles}></div>
+     <div onClick={this.onClick} className={className} style={styles}></div>
    );
    // <img onClick={this.onClick} src={this.props.user.profile_image_url} className="user-icon" />
  },

@@ -37,7 +37,8 @@ chant.Send = function(/* string */typ/* string */, /* any */value) {
 
 chant.delegate = {
     onmessage: null,
-    keepaliveID: null
+    keepaliveID: null,
+    iconMyself: null
 };
 
 // 内部にWebSocketを持ち、onmessageイベントだけを受け取り、
@@ -56,6 +57,12 @@ chant.Socket = function(retry) {
     if (retry > 4) { // これはSocketによる再接続なので
       chant.notify("[RECONNECTED]\nreconnected successfully (o・∇・o)");
     }
+    if (chant.delegate.iconMyself) {
+      chant.delegate.iconMyself.setAttribute(
+        'class',
+        chant.delegate.iconMyself.getAttribute('class').replace(" icon-disconnected", "")
+      );
+    }
     retry = 0;
     if (chant.delegate.onmessage) {
       chant.__socket.onmessage = chant.delegate.onmessage;
@@ -66,7 +73,7 @@ chant.Socket = function(retry) {
       chant.__socket.send(JSON.stringify({
         type: 'keepalive'
       }));
-    }, 10000); // 雑に10秒でいいんすかね？
+    }, 2000); // 雑に2秒でいいんすかね？
   };
   chant.__socket.onerror = function() {
     /*
@@ -77,10 +84,14 @@ chant.Socket = function(retry) {
     */
   };
   chant.__socket.onclose = function() {
-    chant.notify(
-      "[WEBSOCKET CLOSED]\nTry to reconnect " + moment.duration(retry * 1000).seconds() + "seconds later",
-      null, "/public/img/icon.chant.unread.png"
+    console.log("[WEBSOCKET CLOSED]\nTry to reconnect " +
+      moment.duration(retry * 1000).seconds() + "seconds later"
     );
+    chant.delegate.iconMyself = document.getElementsByClassName('icon-myself')[0];
+    var className = chant.delegate.iconMyself.getAttribute('class');
+    if (!className.match('icon-disconnected')) {
+      chant.delegate.iconMyself.setAttribute('class',className + " icon-disconnected");
+    }
     setTimeout(function(r){
       chant.Socket(r);
     }.bind(this, retry), retry * 1000);

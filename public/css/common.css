@@ -12,12 +12,6 @@ h1.modest {
     margin-bottom: 10px;
 }
 
-img.user-icon.myself:after {
-    content: "XXXX";
-    width: 30px;
-    height: 30px;
-    background-color: black;
-}
 button {
     transition: 0.2s;
     font-size: xx-small;
