@@ -132,7 +132,7 @@ var defaultRules = [
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
     wrap: function(sub) {
-      return <Link url={sub} contents={sub} />;
+      return <a href={sub} target="_blank">{sub}</a>;
     },
     replace: function(i, sub) {
       $.ajax({
@@ -141,9 +141,7 @@ var defaultRules = [
         success: function(res) {
           switch (res.content) {
           case 'image':
-            // this.replaceContentsOf(i, <a href={res.url} target="_blank"><img src={res.url} className="entry-image"></img></a>);
-            var c = <img src={res.url} className="entry-image"></img>;
-            this.replaceContentsOf(i, <Link url={res.url} contents={c} />);
+            this.replaceContentsOf(i, <a href={res.url} target="_blank"><img src={res.url} className="entry-image"></img></a>);
             return;
           }
           res.summary.title = res.summary.title || res.summary.url;
@@ -183,14 +181,3 @@ var defaultRules = [
     }
   }
 ];
-
-var Link = React.createClass({
-    render: function() {
-      return (
-          <a onClick={this.open} className="clickable">{this.props.contents}</a>
-      );
-    },
-    open: function() {
-        return chant.interface.open(this.props.url);
-    }
-});
