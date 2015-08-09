@@ -43,14 +43,18 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 
 // InitRepository ...
 func InitRepository() {
-	var repo repository.Repository
-	switch revel.Config.StringDefault("repository", "default") {
-	case "redis":
-		repo = &repository.RedisRepository{
-			Host: "localhost", Port: "6379",
-		}
-	default:
-		repo = repository.NewDefaultRepository()
+	// Init Messages repo
+	initRepository("messages")
+	// Init Stamps repo
+	initRepository("stamps")
+}
+
+func initRepository(key string) {
+	if revel.Config.BoolDefault("persistent."+key, false) {
+		repo := repository.NewRedisRepository(
+			revel.Config.StringDefault("redis.host", "localhost"),
+			revel.Config.StringDefault("redis.port", "6379"),
+		)
+		repository.SetRepository(key, repo)
 	}
-	repository.InitWithInstance(repo)
 }

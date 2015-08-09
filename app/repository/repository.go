@@ -1,10 +1,6 @@
 package repository
 
-import (
-	"fmt"
-
-	"chant/app/models"
-)
+import "chant/app/models"
 
 // Repository オンメモリとか、Redisとか.
 type Repository interface {
@@ -15,10 +11,20 @@ type Repository interface {
 }
 
 var (
-	_impl Repository
+	// _impl Repository
+	repos = map[string]Repository{
+		"messages": NewDefaultRepository(),
+		"stamps":   NewDefaultRepository(),
+	}
 )
 
+// SetRepository ...
+func SetRepository(key string, repo Repository) {
+	repos[key] = repo
+}
+
 // InitWithInstance ...
+/*
 func InitWithInstance(repo Repository, force ...bool) error {
 	force = append(force, false)
 	if force[0] {
@@ -31,3 +37,4 @@ func InitWithInstance(repo Repository, force ...bool) error {
 	_impl = repo
 	return nil
 }
+*/

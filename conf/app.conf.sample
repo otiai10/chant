@@ -1,12 +1,15 @@
 app.name=chant
 http.addr=
-http.port=9090
 
-module.static=github.com/revel/revel/modules/static
+module.static=github.com/revel/modules/static
 
 twitter.key    = xxxxxxxxxxxxxxxxxxxxx
-twitter.secret = xxxxxxxxxxxxxxxxxxxxx
-repository = redis
+twitter.secret = zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+
+persistent.messages = false
+persistent.stamps = true
+persistent.repository = redis
+
 redis.host = localhost
 redis.port = 6379
 
@@ -15,6 +18,7 @@ mode.dev=true
 results.pretty=true
 watch=true
 
+http.port=9999
 http.host=localhost
 
 log.trace.output = off
@@ -22,14 +26,16 @@ log.info.output  = stderr
 log.warn.output  = stderr
 log.error.output = stderr
 
-module.testrunner=github.com/revel/revel/modules/testrunner
-
 [prod]
 mode.dev=false
 results.pretty=false
 watch=false
 
-http.host=my.sample.com
+http.port=9999
+http.host=chat.your-server.com
+
+# public callback address for oauth
+auth.callback=chat.your-server.com
 
 log.trace.output = off
 log.info.output  = off

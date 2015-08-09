@@ -14,20 +14,20 @@ func NewRepoClient(roomname string) *Client {
 
 // PushMessage ...
 func (client *Client) PushMessage(evs ...*models.Event) error {
-	return _impl.pushMessage(client.ns, evs...)
+	return repos["messages"].pushMessage(client.ns, evs...)
 }
 
 // GetMessages ...
 func (client *Client) GetMessages(count int, from int64) []*models.Event {
-	return _impl.getMessages(client.ns, count, from)
+	return repos["messages"].getMessages(client.ns, count, from)
 }
 
 // GetAllStamps ...
 func (client *Client) GetAllStamps() []*models.Event {
-	return _impl.getAllStamps(client.ns)
+	return repos["stamps"].getAllStamps(client.ns)
 }
 
 // PushStamp ...
 func (client *Client) PushStamp(ev *models.Event) error {
-	return _impl.pushStamp(client.ns, ev)
+	return repos["stamps"].pushStamp(client.ns, ev)
 }
