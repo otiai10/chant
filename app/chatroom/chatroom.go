@@ -72,9 +72,9 @@ func (room *Room) Serve() {
 					// 逆にいえば、ここはsub.Newへの流し込みが、チャンネルの先でhandle仕切れてない
 					// ので詰まり現象が発生しているのではないかと推測している.
 					go func(sub Subscription, ev *models.Event) {
-						start := time.Now()
+						// start := time.Now()
 						sub.New <- ev
-						log.Printf("[publish]\t%v\t%v\tto:%s\n", time.Now().Sub(start), ev.Type, sub.ID)
+						// log.Printf("[publish]\t%v\t%v\tto:%s\n", time.Now().Sub(start), ev.Type, sub.ID)
 					}(the, ev)
 				}
 			}
