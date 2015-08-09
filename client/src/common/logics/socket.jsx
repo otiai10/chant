@@ -75,7 +75,7 @@ chant.Socket = function(retry) {
           type: 'keepalive'
         }));
       }
-    }, 2000); // 雑に2秒でいいんすかね？
+    }, 10000); // 雑に10秒でいいんすかね？
   };
   chant.__socket.onerror = function() {
     /*
