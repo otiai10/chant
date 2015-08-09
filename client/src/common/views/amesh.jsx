@@ -10,6 +10,6 @@ var Amesh = React.createClass({
         );
     },
     toAmesh: function() {
-        window.open(this.props.entry.url, "_blank");
+        chant.interface.open(this.props.entry.url, "_blank");
     }
 });

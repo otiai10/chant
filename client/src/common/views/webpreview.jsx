@@ -18,6 +18,6 @@ var WebPreview = React.createClass({
         );
     },
     openURL: function() {
-        window.open(this.props.url, "_blank");
+        chant.interface.open(this.props.url);
     }
 });
