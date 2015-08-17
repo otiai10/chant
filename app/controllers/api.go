@@ -150,6 +150,7 @@ func (c APIv1) WebPreview(u string) revel.Result {
 	err = decoder(buf).Decode(page)
 	if err != nil {
 		log.Println("[WebPreview]", err)
+		return c.RenderError(err)
 	}
 
 	return c.RenderJson(map[string]interface{}{
