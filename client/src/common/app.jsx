@@ -1,14 +1,15 @@
 // entry point
 setTimeout(function(){
-    chant.isCurrentPage = true;
-    React.render(
-        <Contents name="CHANT" myself={Config.myself} />,
-        document.getElementById('container')
-    );
-    window.onfocus = function() {
-        chant.clearUnread();
-    };
-    window.onblur = function () {
-        chant.isCurrentPage = false;
-    };
+  window.focused = true;
+  React.render(
+    <Contents name="CHANT" myself={Config.myself} />,
+    document.getElementById('container')
+  );
 }, 0);
+window.onfocus = function() {
+  window.focused = true;
+  chant.clearUnread();
+};
+window.onblur = function () {
+  window.focused = false;
+};
