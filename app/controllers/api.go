@@ -133,6 +133,12 @@ func (c APIv1) WebPreview(u string) revel.Result {
 			"url":     u,
 		})
 	}
+	if regexp.MustCompile("^video/.*").MatchString(res.Header.Get("Content-Type")) {
+		return c.RenderJson(map[string]interface{}{
+			"content": "video",
+			"url":     u,
+		})
+	}
 
 	// Adjust HTML charset
 	reader, err := charset.NewReader(res.Body, "")
