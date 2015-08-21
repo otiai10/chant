@@ -58,8 +58,4 @@ div.entry {
   div.members div.user-icon-wrapper {
     margin-right: 4px;
   }
-  span.meta>i {
-      font-size: small;
-      width: 32px;
-  }
 }
