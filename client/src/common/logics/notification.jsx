@@ -36,7 +36,8 @@ chant.notifier = {
         if (message.user.id_str == Config.myself.id_str) return;
         chant.addUnread();
         // detect @all or @me
-        var exp = new RegExp('@all|@' + Config.myself.screen_name);
+        var storedRegExp = chant.local.config.get("notificationRegExp");
+        var exp = (storedRegExp) ? new RegExp(storedRegExp) : new RegExp('@all|@' + Config.myself.screen_name);
         if (!exp.test(message.value.text)) return;
         chant.notify(
             message.value.text,
