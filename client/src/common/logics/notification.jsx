@@ -11,7 +11,17 @@ chant._notification = {
               this.onclose = function() {};
           };
       })();
-    }
+    },
+    __sound: (function() {
+        var audio = document.createElement('audio');
+        audio.setAttribute('src', '/public/sound/notification.mp3');
+        return {
+          play: function() {
+              if (window.navigator.userAgent.indexOf('Firefox') > -1) return;
+              audio.play();
+          }
+        };
+    })()
 };
 chant.notify = function(body, title, icon, onclick, onclose) {
     if (! chant.local.config.get('notification')) return;
@@ -28,6 +38,9 @@ chant.notify = function(body, title, icon, onclick, onclose) {
     );
     note.onclick = onclick;
     note.onclose = onclose;
+
+    // if xxx
+    chant._notification.__sound.play();
 };
 
 chant.notifier = {
