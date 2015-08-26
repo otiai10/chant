@@ -12,7 +12,7 @@ h1.modest {
     margin-bottom: 10px;
 }
 
-button {
+button.stamp {
     transition: 0.2s;
     font-size: xx-small;
     text-align: center;
@@ -203,7 +203,8 @@ div#input-actions {
   margin-bottom: 0;
 }
 
-#emoji-list-wrapper {
+/* #emoji-list-wrapper { */
+.modallike {
   width: 86%;
   height: 100%;
   padding: 10px;
@@ -215,9 +216,13 @@ div#input-actions {
   opacity: 0.8;
   z-index: 2;
 }
+
 #emoji-list-wrapper img {
   width: 30px;
   height: 30px;
+}
+#notification-settings {
+  color: white;
 }
 
 .amesh-wrapper {

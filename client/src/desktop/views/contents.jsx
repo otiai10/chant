@@ -110,7 +110,9 @@ var Contents = React.createClass({
         return (
             <div>
                 <div className="row">
-                  <div id="emoji-list-wrapper" onClick={this.closeEmojiList} className="clickable" hidden="true">
+                  <div id="emoji-list-wrapper" onClick={this.closeEmojiList} className="clickable modallike" hidden="true"></div>
+                  <div id="notification-settings" className="clickable modallike" hidden="true">
+                    <NotificationSettings />
                   </div>
                 </div>
                 <div className="row">

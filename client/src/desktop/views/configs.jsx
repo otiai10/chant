@@ -63,7 +63,7 @@ var Configs = React.createClass({
       var id = setTimeout(function(){
         if (!this.state.mousedown) return console.info("Already Mouse Up");
         this.setState({mousedown: false});
-        this.setNotificationRegex();
+        this.openNotificationSettings();
       }.bind(this), 800);
     },
     notificationUp: function() {
@@ -71,16 +71,49 @@ var Configs = React.createClass({
       this.setState({mousedown: false});
       this.toggleNotification();
     },
-    setNotificationRegex: function() {
-      var regexpStr = window.prompt("RegExp for notification");
-      chant.local.config.set("notificationRegExp", regexpStr);
-      if (!regexpStr) return chant.notify(
-        "RegExp cleared and set default (@all|@" + Config.myself.screen_name + ")"
-      );
-      return chant.notify("Notification RegExp is set as /" + regexpStr + "/");
+    openNotificationSettings: function() {
+      var notificationSettings = document.getElementById("notification-settings");
+      notificationSettings.hidden = false;
     },
     toggleEmojiList: function() {
       var listwrapper = document.getElementById("emoji-list-wrapper");
       listwrapper.hidden = !listwrapper.hidden;
     }
+});
+
+var NotificationSettings = React.createClass({
+  getInitialState: function() {
+    return {
+      regexp: chant.local.config.get("notificationRegExp")
+    };
+  },
+  render: function() {
+    var regexplaceholder = "Default: @" + Config.myself.screen_name + " Example: .* ";
+    return (
+      <div>
+        <div className="row">
+          <div className="col s12">
+            <h4>Notification Settings</h4>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <span>RegExp for notification: </span>
+            <input type="text" onChange={this.regexOnChange} placeholder={regexplaceholder} defaultValue={this.state.regexp} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <button className="btn" onClick={this.close}>OK</button>
+          </div>
+        </div>
+      </div>
+    );
+  },
+  regexOnChange: function(ev) {
+    chant.local.config.set("notificationRegExp", ev.target.value);
+  },
+  close: function() {
+    document.getElementById("notification-settings").hidden = true;
+  }
 });
