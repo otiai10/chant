@@ -38,6 +38,7 @@ chant.local.storageAccessor = function(name, _def, _rootNS){
 chant.local.config = (function(){
   return new chant.local.storageAccessor('config', {
     notification: false,
+    notificationVolume: 40,
     mute: {}
   });
 })();

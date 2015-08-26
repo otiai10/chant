@@ -84,13 +84,14 @@ var Configs = React.createClass({
 var NotificationSettings = React.createClass({
   getInitialState: function() {
     return {
-      regexp: chant.local.config.get("notificationRegExp")
+      regexp: chant.local.config.get("notificationRegExp"),
+      volume: chant.local.config.get("notificationVolume")
     };
   },
   render: function() {
     var regexplaceholder = "Default: @" + Config.myself.screen_name + " Example: .* ";
     return (
-      <div>
+      <div className="container">
         <div className="row">
           <div className="col s12">
             <h4>Notification Settings</h4>
@@ -104,6 +105,12 @@ var NotificationSettings = React.createClass({
         </div>
         <div className="row">
           <div className="col s12">
+            <span>Sound volume: </span>
+            <input type="range" onChange={this.volumeChange} defaultValue={this.state.volume} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
             <button className="btn" onClick={this.close}>OK</button>
           </div>
         </div>
@@ -112,6 +119,9 @@ var NotificationSettings = React.createClass({
   },
   regexOnChange: function(ev) {
     chant.local.config.set("notificationRegExp", ev.target.value);
+  },
+  volumeChange: function(ev) {
+    chant.local.config.set("notificationVolume", ev.target.value);
   },
   close: function() {
     document.getElementById("notification-settings").hidden = true;

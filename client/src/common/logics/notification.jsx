@@ -18,6 +18,8 @@ chant._notification = {
         return {
           play: function() {
               if (window.navigator.userAgent.indexOf('Firefox') > -1) return;
+              var vol = parseInt(chant.local.config.get('notificationVolume'));
+              audio.volume = vol / 100;
               audio.play();
           }
         };
