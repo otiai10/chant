@@ -9,6 +9,7 @@ chant._notification = {
               window.alert(options.body || 'おだやかじゃないわね');
               this.onclick = function() {};
               this.onclose = function() {};
+              this.close = function() {};
           };
       })();
     },
@@ -43,6 +44,8 @@ chant.notify = function(body, title, icon, onclick, onclose) {
 
     // if xxx
     chant._notification.__sound.play();
+
+    setTimeout(function() { note.close(); }, 4000);
 };
 
 chant.notifier = {
