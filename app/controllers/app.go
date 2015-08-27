@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"regexp"
+	"time"
 
 	"chant/app/chatroom"
 	"chant/app/models"
@@ -9,7 +10,10 @@ import (
 	"github.com/revel/revel"
 )
 
-var mobile = regexp.MustCompile("/Mobile|iPhone|Android|BlackBerry/")
+var (
+	mobile    = regexp.MustCompile("/Mobile|iPhone|Android|BlackBerry/")
+	timestamp = time.Now().Unix()
+)
 
 // Application ...
 type Application struct {
@@ -46,7 +50,7 @@ func (c Application) Index(roomID, password string) revel.Result {
 				"token": room.Token,
 			},
 		}
-		return c.Render(Config)
+		return c.Render(Config, timestamp)
 		//return c.Redirect(Room.Index)
 	}
 	return c.Redirect("/login")

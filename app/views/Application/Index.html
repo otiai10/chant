@@ -9,9 +9,9 @@
 </div>
 
 {{if .Config.Agent.is_mobile}}
-  <script type="text/javascript" src="/public/js/_chant.mobile.js"></script>
+  <script type="text/javascript" src="/public/js/_chant.mobile.js?ts={{.timestamp}}"></script>
 {{else}}
-  <script type="text/javascript" src="/public/js/_chant.desktop.js"></script>
+  <script type="text/javascript" src="/public/js/_chant.desktop.js?ts={{.timestamp}}"></script>
 {{end}}
 
 {{template "footer.html" .}}
