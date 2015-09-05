@@ -128,8 +128,8 @@ var Contents = React.createClass({
                       <TextInput ref="TextInput" />
                     </div>
                     <div className="col s12 m4">
-                      <button onClick={this.totsuzenize} className="stealth clickable text-decorate">totsuzenize</button>
-                      <button onClick={this.stamprize} className="stealth clickable text-decorate">stamprize</button>
+                      <button onClick={this.totsuzenize} className="stamp stealth clickable text-decorate">totsuzenize</button>
+                      <button onClick={this.stamprize} className="stamp stealth clickable text-decorate">stamprize</button>
                     </div>
                 </div>
                 <div className="row">

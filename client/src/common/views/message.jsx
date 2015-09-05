@@ -26,14 +26,14 @@ var MessageMeta = React.createClass({
     render: function() {
         var time = moment(this.props.message.timestamp / 1000000).format("YYYY/MM/DD HH:mm:ss");
         var contents = [
-              <span onClick={this.quote} className="meta"><small className="grey-text text-lighten-2">{time}</small></span>,
+              <span onClick={this.quote} className="meta"><small className="grey-text text-lighten-1">{time}</small></span>,
         ];
         switch (this.props.message.type) {
         case 'message':
           contents.push(
-            <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-2">stamprize</small></span>,
-            <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-2">totsuzenize</small></span>,
-            <span onClick={this.mute} className="meta stealth"><small className="grey-text text-lighten-2">mute</small></span>
+            <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-1">stamprize</small></span>,
+            <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-1">totsuzenize</small></span>,
+            <span onClick={this.mute} className="meta stealth"><small className="grey-text text-lighten-1">mute</small></span>
           );
         }
         return (
