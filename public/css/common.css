@@ -16,7 +16,7 @@ button.stamp {
     transition: 0.2s;
     font-size: xx-small;
     text-align: center;
-    height: 18px;
+    height: 24px;
     /* max-width: 40px; */
     border-radius: 5px;
     border: none;
@@ -29,8 +29,8 @@ button:focus {
     background-color: transparent;
 }
 button.stamp img {
-    max-height: 90%;
-    max-width:  90%;
+    max-height: 100%;
+    max-width:  100%;
     margin: auto auto;
     vertical-align: middle;
 }
