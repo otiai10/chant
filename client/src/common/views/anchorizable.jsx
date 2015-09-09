@@ -182,3 +182,21 @@ var defaultRules = [
     }
   }
 ];
+
+(function() {
+  if (Config.apis.googlemaps) {
+    var token = Config.apis.googlemaps;
+    var baseURL = "https://www.google.com/maps/embed/v1";
+    defaultRules.unshift({
+      match: /(https?:\/\/www\.google\.co\.jp\/maps.*)/gi,
+      wrap: function(sub) {
+        if (sub.match(/\/place\/([^/]+)\//)) {
+          var q = sub.match(/\/place\/([^/]+)\//)[1];
+          var src = baseURL + "/place?q=" + q + "&zoom=15&key=" + token;
+          return <iframe width="100%" height="450" frameborder="0" style={{border:0}} src={src} />;
+        }
+        return <a href={sub} target="_blank">{sub}</a>;
+      }
+    });
+  }
+})();

@@ -49,6 +49,9 @@ func (c Application) Index(roomID, password string) revel.Result {
 				"name":  room.Name,
 				"token": room.Token,
 			},
+			APIs: map[string]interface{}{
+				"googlemaps": revel.Config.StringDefault("googlemaps.token", ""),
+			},
 		}
 		return c.Render(Config, timestamp)
 		//return c.Redirect(Room.Index)
@@ -76,6 +79,7 @@ type ServerConfig struct {
 	Agent  interface{} `json:"agent"`
 	Emojis interface{} `json:"emojis"`
 	Room   interface{} `json:"room"`
+	APIs   interface{} `json:"apis"`
 }
 
 func getHost() string {

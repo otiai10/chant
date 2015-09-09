@@ -21,7 +21,11 @@
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
     <!-- react -->
-    <script type="text/javascript" src="/public/js/react-with-addons-0.13.3.min.js"></script>
+    {{if .DevMode}}
+      <script type="text/javascript" src="/public/js/react-with-addons-0.13.3.js"></script>
+    {{else}}
+      <script type="text/javascript" src="/public/js/react-with-addons-0.13.3.min.js"></script>
+    {{end}}
     <!-- script type="text/javascript" src="/public/js/JSXTransformer.js"></script -->
 
     <!-- moment -->
