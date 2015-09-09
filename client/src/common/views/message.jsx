@@ -94,14 +94,7 @@ var MessageInclusive = React.createClass({
         case "amesh":
           return <Amesh entry={this.props.message.value} />;
         case "stamprize":
-            return (
-                <div>
-                    <div>stamprize</div>
-                    <blockquote>
-                        <MessageEntry message={this.props.message.value} />
-                    </blockquote>
-                </div>
-            );
+            return <Stamprize message={this.props.message.value} />;
         case "mute":
             return (
               <div>

@@ -52,3 +52,16 @@ var stampContentRules = [
     }
   }
 ];
+
+var Stamprize = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <div>stamprize</div>
+        <blockquote>
+            <MessageEntry message={this.props.message} />
+        </blockquote>
+      </div>
+    );
+  }
+});
