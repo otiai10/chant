@@ -5,28 +5,40 @@ plumber   = require 'gulp-plumber' # エラー発生時もタスクを継続す�
 concat    = require 'gulp-concat'
 uglify    = require 'gulp-uglify'
 
-gulp.task 'react.desktop', () =>
-    gulp.src ['./src/common/**/*.jsx', './src/desktop/**/*.jsx']
-        .pipe plumber() # エラーでも続けて
-        .pipe using() # ファイル名出して
-        .pipe concat '_chant.desktop.jsx' # ひとつのファイルにして
-        .pipe react() # jsxをビルドして
-        .pipe gulp.dest 'dest/' # destにはきれいなjsを置いて
-        .pipe uglify() # mangleして
-        .pipe gulp.dest '../public/js/'
+build = (device) =>
+  return gulp.src ['./src/common/**/*.jsx', './src/desktop/**/*.jsx']
+    .pipe plumber() # エラーでも続けて
+    .pipe using() # ファイル名出して
+    .pipe concat "_chant.#{device}.jsx" # ひとつのファイルにして
+    .pipe react() # jsxをビルドして
+    .pipe gulp.dest 'dest/' # destにはきれいなjsを置いて
 
-gulp.task 'react.mobile', () =>
-    gulp.src ['./src/common/**/*.jsx', './src/mobile/**/*.jsx']
-        .pipe plumber() # エラーでも続けて
-        .pipe using() # ファイル名出して
-        .pipe concat '_chant.mobile.jsx' # ひとつのファイルにして
-        .pipe react() # jsxをビルドして
-        .pipe gulp.dest 'dest/' # destにはきれいなjsを置いて
-        .pipe uglify() # mangleして
-        .pipe gulp.dest '../public/js/'
+gulp.task 'desktop.release', () =>
+  build 'desktop'
+    .pipe uglify() # mangleして
+    .pipe gulp.dest '../public/js/'
 
-gulp.task 'react.all', ['react.mobile', 'react.desktop']
-gulp.task 'watch', ['react.all'], () =>
-    gulp.watch ['./src/**/*.jsx'], ['react.all']
+gulp.task 'desktop.dev', () =>
+  build 'desktop'
+    # .pipe uglify() mangleしない
+    .pipe gulp.dest '../public/js/'
+
+gulp.task 'mobile.release', () =>
+  build 'mobile'
+    .pipe uglify() # mangleして
+    .pipe gulp.dest '../public/js/'
+
+gulp.task 'mobile.dev', () =>
+  build 'mobile'
+    # .pipe uglify() mangleして
+    .pipe gulp.dest '../public/js/'
+
+gulp.task 'all.release', ['mobile.release', 'desktop.release']
+gulp.task 'all.dev', ['mobile.dev', 'desktop.dev']
+
+gulp.task 'watch', ['all.dev'], () =>
+    gulp.watch ['./src/**/*.jsx'], ['all.dev']
+
+gulp.task 'release', ['all.release']
 
 gulp.task 'default', ['watch']
