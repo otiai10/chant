@@ -6,7 +6,7 @@ concat    = require 'gulp-concat'
 uglify    = require 'gulp-uglify'
 
 build = (device) =>
-  return gulp.src ['./src/common/**/*.jsx', './src/desktop/**/*.jsx']
+  return gulp.src ['./src/common/**/*.jsx', "./src/#{device}/**/*.jsx"]
     .pipe plumber() # エラーでも続けて
     .pipe using() # ファイル名出して
     .pipe concat "_chant.#{device}.jsx" # ひとつのファイルにして
