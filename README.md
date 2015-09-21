@@ -35,3 +35,10 @@ Development
 - server: `revel run chant dev`
 - client: see [client](https://github.com/otiai10/chant/tree/master/client)
 - license: [MIT](https://github.com/otiai10/chant/blob/master/LICENSE)
+
+Client Projects
+================
+
+- Desktop (Electron) https://github.com/otiai10/chantron
+- iOS https://github.com/otiai10/chantos
+- Android https://github.com/otiai10/chantroid
