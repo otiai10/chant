@@ -215,6 +215,7 @@ div#input-actions {
   overflow: scroll;
   opacity: 0.8;
   z-index: 2;
+  color: white;
 }
 
 #emoji-list-wrapper img {
@@ -222,7 +223,6 @@ div#input-actions {
   height: 30px;
 }
 #notification-settings {
-  color: white;
 }
 
 .amesh-wrapper {
