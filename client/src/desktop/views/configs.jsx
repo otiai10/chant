@@ -78,6 +78,11 @@ var Configs = React.createClass({
     toggleEmojiList: function() {
       var listwrapper = document.getElementById("emoji-list-wrapper");
       listwrapper.hidden = !listwrapper.hidden;
+      if (listwrapper.hidden) {
+        document.getElementById("emoji-search").blur();
+      } else {
+        document.getElementById("emoji-search").focus();
+      }
     }
 });
 

@@ -13,7 +13,7 @@ var EmojiList = React.createClass({
     return (
       <div>
         <div>
-          <input type="text" onChange={this.onInputChange} />
+          <input id="emoji-search" type="text" onChange={this.onInputChange} />
         </div>
         <div>{this.state.emojis}</div>
       </div>
@@ -23,9 +23,9 @@ var EmojiList = React.createClass({
     if (this.rerendering) return;
     var emojis = [];
     this.replaceState({emojis: emojis, rerendering: true});
-    var exp = new RegExp(ev.target.value);
     for (var key in Config.emojis) {
-      if (exp.test(key)) emojis.push(<Emoji name={key}></Emoji>);
+      if (key.indexOf(ev.target.value) < 0) continue;
+      emojis.push(<Emoji name={key}></Emoji>);
     }
     this.setState({emojis: emojis, rerendering: false});
   }
