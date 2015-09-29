@@ -7,6 +7,6 @@ var Emoji = React.createClass({
         hoge.value += name;
         hoge.focus();
     };
-    return <img onClick={out} className="emoji clickable" src={url} title={name} />;
+    return <img onClick={out} onKeyPress={out} tabIndex="0" className="emoji clickable" src={url} title={name} />;
   }
 });
