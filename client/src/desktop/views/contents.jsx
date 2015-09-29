@@ -23,7 +23,8 @@ var Contents = React.createClass({
       }.bind(this));
       React.render(<EmojiList />, document.getElementById('emoji-list-wrapper'));
     },
-    closeEmojiList: function() {
+    closeEmojiList: function(ev) {
+      if (ev.target.tagName == 'INPUT') return;
       document.getElementById('emoji-list-wrapper').hidden = true;
     },
     getInitialState: function() {
