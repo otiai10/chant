@@ -3,22 +3,69 @@ var TextInput = React.createClass({
         return {
             value: '',
             rows: 3,
-            draft: true
+            draft: true,
+            touchDown: false
         };
     },
     render: function() {
         return (
+          <div>
             <textarea
                 id="message-input"
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
-                onDrop={this.filedrop}
                 value={this.state.value}
                 className="materialize-textarea"
-                placeholder="Shift + ⏎ to newline"
+                onTouchStart={this.touchStart}
+                onTouchEnd={this.touchEnd}
                 ref="textarea"
                 ></textarea>
+              <input type="file" ref="inputFileUpload" id="input-file-upload" />
+            </div>
         );
+    },
+    touchStart: function() {
+      this.setState({touchDown: true});
+      var id = setTimeout(function(){
+        if (!this.state.touchDown) return console.info("Already Touch Up");
+        this.setState({touchDown: false});
+        var finput = React.findDOMNode(this.refs.inputFileUpload);
+        finput.onchange = function(ev) {
+          console.log(finput);
+          // {{{ TODO: DRY
+          // var file = ev.nativeEvent.dataTransfer.files[0];
+          var file = finput.files[0];
+          if (!file.type.match('^image')) {
+            return;
+          }
+          // data.append('file-0', file);
+          var data = new FormData();
+          // var data = new FormData(file);
+          data.append('oppai', file);
+          data.append('name', file.name);
+          $.ajax({
+            url: "/api/v1/room/default/upload",
+            type: "POST",
+            data: data,
+            // dataType: false,
+            processData: false,
+            contentType: false,
+            // contentType: 'multipart/form-data',
+            success: function(res) {
+              console.log('success', res);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          });
+          // }}}
+        };
+        finput.click();
+      }.bind(this), 800);
+    },
+    touchEnd: function(ev) {
+      if (!this.state.touchDown) return console.info('Already Touch Up');
+      this.setState({touchDown: false});
     },
     onChange: function(ev) {
         chant.clearUnread();// TODO: うーむ

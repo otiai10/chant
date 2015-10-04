@@ -31,3 +31,7 @@ div.members {
 div.container {
   padding: 0 !important;
 }
+
+input#input-file-upload {
+  display: none;
+}
