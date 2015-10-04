@@ -10,16 +10,31 @@ var Stamps = React.createClass({
 });
 
 var Stamp = React.createClass({
+  getInitialState: function() {
+    return { left: false };
+  },
   render: function() {
     var text = this.props.stamp.source.value.text.split("\n").join("");
     return (
-      <button onClick={this.useStamp} className="stamp">
+      <button onClick={this.useStamp} onMouseOver={this.showStampPreview} onMouseOut={this.remStampPreview} className="stamp">
         <AnchorizableText rules={stampContentRules} text={text}></AnchorizableText>
       </button>
     );
   },
   useStamp: function () {
     chant.Send("stampuse", this.props.stamp.source.raw);
+  },
+  showStampPreview: function() {
+    var preview = document.getElementById("message-input-preview");
+    if (!preview) return; // TODO: separate mobile/desktop
+    if (!this.props.stamp.source.value.text.match("https?:\/\/")) return; // TODO: 雑だなーw
+    preview.style.backgroundImage = 'url("' + this.props.stamp.source.value.text + '")';
+  },
+  remStampPreview: function() {
+    this.setState({left: true});
+    var preview = document.getElementById("message-input-preview");
+    if (!preview) return; // TODO: separate mobile/desktop
+    preview.style.backgroundImage = '';
   }
 });
 

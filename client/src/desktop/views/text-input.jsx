@@ -8,6 +8,7 @@ var TextInput = React.createClass({
     },
     render: function() {
         return (
+          <div id="message-input-preview">
             <textarea
                 id="message-input"
                 onKeyDown={this.onKeyDown}
@@ -18,6 +19,7 @@ var TextInput = React.createClass({
                 placeholder="Shift + ⏎ to newline"
                 ref="textarea"
                 ></textarea>
+            </div>
         );
     },
     onChange: function(ev) {

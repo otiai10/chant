@@ -63,7 +63,9 @@ span.meta {
 
 textarea#message-input {
     padding: 0 !important;
-    margin-bottom: 0 !important;
+    margin-bottom: -6px !important;
+    background-color: rgba(250, 250, 250, 0.4);
+    height: 60px;
 }
 
 div.message-wrapper {

@@ -59,3 +59,9 @@ div.entry {
     margin-right: 4px;
   }
 }
+
+div#message-input-preview {
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 6px;
+}
