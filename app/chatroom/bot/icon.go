@@ -24,14 +24,15 @@ func (h IconHandler) Handle(event *models.Event, b *models.User) *models.Event {
 		b.ProfileImageURL = "/public/img/hisyotan.png"
 		return nil
 	}
-	resp, err := http.Get(u)
+	res, err := http.Get(u)
 
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("しっぱいした: %v", err))
 	}
+	defer res.Body.Close()
 
 	imgExp := regexp.MustCompile("^image/.+")
-	if !imgExp.MatchString(resp.Header.Get("Content-Type")) {
+	if !imgExp.MatchString(res.Header.Get("Content-Type")) {
 		return models.NewMessage(b, fmt.Sprintf("がぞうじゃなくね？"))
 	}
 	b.ProfileImageURL = u

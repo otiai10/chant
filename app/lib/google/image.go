@@ -48,6 +48,7 @@ func SearchImage(keyword string) (*SearchImageResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 	resp := new(SearchImageResponse)
 
 	if err := json.NewDecoder(res.Body).Decode(resp); err != nil {

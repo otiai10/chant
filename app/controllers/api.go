@@ -127,6 +127,7 @@ func (c APIv1) WebPreview(u string) revel.Result {
 	if err != nil {
 		return c.RenderError(err)
 	}
+	defer res.Body.Close()
 	if regexp.MustCompile("^ima?ge?/.*").MatchString(res.Header.Get("Content-Type")) {
 		return c.RenderJson(map[string]interface{}{
 			"content": "image",
