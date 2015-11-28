@@ -59,7 +59,6 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 		stampused.Timestamp = event.Timestamp
 		stampused.User = event.User
 		event.Value = stampused
-		log.Printf("%+v\n", event.Value)
 	case MUTE, UNMUTE:
 		muted := new(Event)
 		if err := json.Unmarshal([]byte(event.Raw), muted); err != nil {
