@@ -6,6 +6,7 @@ var MessageMeta = React.createClass({
         ];
         switch (this.props.message.type) {
         case 'message':
+        case 'stampuse':
           contents.push(
             <span onClick={this.stamprize} className="meta stealth"><small className="grey-text text-lighten-1">stamprize</small></span>,
             <span onClick={this.totsuzenize} className="meta stealth"><small className="grey-text text-lighten-1">totsuzenize</small></span>,
