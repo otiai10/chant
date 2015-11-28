@@ -49,11 +49,17 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 		}
 		event.Value = stamprized
 	case STAMPUSE:
-		// messageに偽装する
-		event.Type = MESSAGE
-		event.Value = map[string]interface{}{
-			"text": event.Raw,
+		// messageに偽装<s>する</s>しない
+		// stampuseされたほうの内容
+		stampused := new(Event)
+		if err := json.Unmarshal([]byte(event.Raw), stampused); err != nil {
+			log.Println("stampuse error", err)
 		}
+		// TimestampとUserだけ偽造しよう
+		stampused.Timestamp = event.Timestamp
+		stampused.User = event.User
+		event.Value = stampused
+		log.Printf("%+v\n", event.Value)
 	case MUTE, UNMUTE:
 		muted := new(Event)
 		if err := json.Unmarshal([]byte(event.Raw), muted); err != nil {

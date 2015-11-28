@@ -36,6 +36,7 @@ var Contents = React.createClass({
                 case "amesh":
                 case "mute":
                 case "unmute":
+                case "stampuse":
                     this.newMessage(payload);
                     break;
                 case "stamprize":

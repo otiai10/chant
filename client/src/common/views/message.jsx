@@ -67,6 +67,10 @@ var MessageInclusive = React.createClass({
                 </blockquote>
               </div>
             );
+        case "stampuse":
+            // うーむ、なぜ？ あー
+            // 参照で全部変えてるのか
+            this.props.message.value = this.props.message.value.value || this.props.message.value;
         default:
             return <MessageRecursive message={this.props.message} />;
         }
