@@ -62,6 +62,7 @@ var Contents = React.createClass({
         if (focushead) {
           setTimeout(function() {
             document.getElementById('message-input').setSelectionRange(0, 0);
+            document.getElementById('message-input').focus();
           });
         }
     },
