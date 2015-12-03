@@ -20,7 +20,13 @@ func (h ImageHandler) Match(event *models.Event) bool {
 // Handle ...
 func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")
-	resp, err := google.SearchImage(q)
+
+	client := &google.CustomSearchClient{
+		APIKey:               config.Google.APIKey,
+		CustomSearchEngineID: config.Google.DefaultCseID,
+	}
+	// resp, err := google.SearchImage(q)
+	resp, err := client.SearchImage(q)
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまん: %v", err))
 	}

@@ -32,6 +32,10 @@ type conf struct {
 	SoundCloud struct {
 		ClientID string `toml:"client_id"`
 	} `toml:"soundcloud"`
+	Google struct {
+		DefaultCseID string `toml:"default_cse_id"`
+		APIKey       string `toml:"api_key"`
+	} `toml:"google"`
 }
 
 var config conf
