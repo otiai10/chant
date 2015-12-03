@@ -137,3 +137,13 @@ func (c *CustomSearchClient) SearchImage(keyword string) (*CustomSearchResponse,
 	q.Add("searchType", "image")
 	return c.search(q)
 }
+
+// SearchGIF ...
+func (c *CustomSearchClient) SearchGIF(keyword string) (*CustomSearchResponse, error) {
+	q := url.Values{}
+	q.Add("q", keyword)
+	q.Add("searchType", "image")
+	q.Add("fileType", "gif")
+	q.Add("hq", "animated")
+	return c.search(q)
+}

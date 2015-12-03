@@ -52,6 +52,7 @@ func init() {
 		"icon":       IconHandler{regexp.MustCompile("^/icon[ 　]+")},
 		"oppai":      OppaiHandler{regexp.MustCompile("^/oppai")},
 		"image":      ImageHandler{regexp.MustCompile("^/ima?ge?[ 　]+")},
+		"gif":        GifHandler{regexp.MustCompile("^/gif[ 　]+")},
 		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh")},
 		"hello":      HelloHandler{regexp.MustCompile("^/hello")},
 		"whoami":     WhoamiHandler{regexp.MustCompile("^/whoami")},
