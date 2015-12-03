@@ -21,7 +21,7 @@ func (h GifHandler) Match(event *models.Event) bool {
 func (h GifHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")
 
-	client := &google.CustomSearchClient{
+	client := &google.Client{
 		APIKey:               config.Google.APIKey,
 		CustomSearchEngineID: config.Google.DefaultCseID,
 	}
