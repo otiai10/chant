@@ -58,6 +58,7 @@ func ConstructEvent(user *User, raw string) (*Event, error) {
 		// TimestampとUserだけ偽造しよう
 		stampused.Timestamp = event.Timestamp
 		stampused.User = event.User
+		event.Raw = stampused.Raw
 		event.Value = stampused
 	case MUTE, UNMUTE:
 		muted := new(Event)
