@@ -28,6 +28,16 @@ type Handler interface {
 	Handle(*models.Event, *models.User) *models.Event
 }
 
+// HandlerBase ...
+type HandlerBase struct {
+	*regexp.Regexp
+}
+
+// Match ...
+func (h HandlerBase) Match(event *models.Event) bool {
+	return h.MatchString(event.Raw)
+}
+
 type conf struct {
 	SoundCloud struct {
 		ClientID string `toml:"client_id"`
@@ -53,6 +63,7 @@ func init() {
 		"oppai":      OppaiHandler{regexp.MustCompile("^/oppai")},
 		"image":      ImageHandler{regexp.MustCompile("^/ima?ge?[ 　]+")},
 		"gif":        GifHandler{regexp.MustCompile("^/gif[ 　]+")},
+		"vine":       VineHandler{HandlerBase{regexp.MustCompile("^/vine[ 　]+")}},
 		"youtube":    YoutubeHandler{regexp.MustCompile("^/yt|youtube[ 　]+")},
 		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh")},
 		"hello":      HelloHandler{regexp.MustCompile("^/hello")},
