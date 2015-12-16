@@ -5,6 +5,8 @@ import (
 	"crypto/md5"
 	"time"
 
+	"github.com/otiai10/amesh"
+
 	"chant/app/chatroom/bot"
 	"chant/app/models"
 	"chant/app/repository"
@@ -101,6 +103,12 @@ func newRoom(id string) *Room {
 		Bot:         bot.DefaultBot(),
 	}
 	go room.Serve()
+
+	bot.AmeshObserver.IterationDuration = 5 * time.Minute
+	bot.AmeshObserver.On(amesh.Rain, func(ev amesh.Event) error {
+		room.say(models.NewMessage(room.Bot, "/amesh @all"))
+		return nil
+	})
 	return room
 }
 
@@ -188,6 +196,10 @@ func (room *Room) Say(user *models.User, msg string) (*models.Event, error) {
 		// TODO: なんかする
 		return event, err
 	}
+	return room.say(event)
+}
+
+func (room *Room) say(event *models.Event) (*models.Event, error) {
 	room.ArchiveEvent(event)
 	room.publish <- event
 

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/otiai10/amesh"
 	"github.com/otiai10/curr"
 )
 
@@ -50,11 +51,11 @@ type conf struct {
 
 var config conf
 
+// Vars
 var (
-	// Handlers ...
-	Handlers = map[string]Handler{}
-	// Messages ...
-	Messages message.Messages
+	Handlers      = map[string]Handler{}
+	Messages      message.Messages
+	AmeshObserver *amesh.Observer
 )
 
 func init() {
@@ -65,7 +66,7 @@ func init() {
 		"gif":        GifHandler{regexp.MustCompile("^/gif[ 　]+")},
 		"vine":       VineHandler{HandlerBase{regexp.MustCompile("^/vine[ 　]+")}},
 		"youtube":    YoutubeHandler{regexp.MustCompile("^/yt|youtube[ 　]+")},
-		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh")},
+		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh[ 　]*")},
 		"hello":      HelloHandler{regexp.MustCompile("^/hello")},
 		"whoami":     WhoamiHandler{regexp.MustCompile("^/whoami")},
 		"help":       SimpleHandler{regexp.MustCompile("^/help"), "help"},
@@ -82,6 +83,11 @@ func init() {
 		panic(err)
 	}
 	Messages = m
+
+	AmeshObserver = amesh.NewObserver(5 * time.Minute)
+	AmeshObserver.On(amesh.Update, func(ev amesh.Event) error { return nil })
+	AmeshObserver.On(amesh.Start, func(ev amesh.Event) error { return nil })
+	AmeshObserver.On(amesh.Stop, func(ev amesh.Event) error { return nil })
 }
 
 // httpなど介さないHandlerはレスポンスが早すぎるので

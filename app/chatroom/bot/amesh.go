@@ -19,6 +19,14 @@ func (h AmeshHandler) Match(event *models.Event) bool {
 
 // Handle ...
 func (h AmeshHandler) Handle(event *models.Event, b *models.User) *models.Event {
+	switch h.ReplaceAllString(event.Raw, "") {
+	case "on":
+		go AmeshObserver.Start()
+		return models.NewMessage(b, "アメッシュ・オン！")
+	case "off":
+		AmeshObserver.Stop()
+		return models.NewMessage(b, "アメッシュ・オフ！")
+	}
 	entry := amesh.Get()
 	wait()
 	return &models.Event{
