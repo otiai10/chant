@@ -126,7 +126,9 @@ func (resp *CustomSearchResponse) Random() *SearchImageResultEntry {
 		return nil
 	}
 	rand.Seed(time.Now().Unix())
-	a := resp.Items[rand.Intn(len(resp.Items))] // とりあえず
+	i := rand.Intn((len(resp.Items)))
+	a := resp.Items[i] // とりあえず
+	resp.Items = append(resp.Items[:i], resp.Items[i+1:]...)
 	return &SearchImageResultEntry{
 		URL: a.Link,
 	}
