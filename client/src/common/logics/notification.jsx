@@ -36,7 +36,7 @@ chant.notify = function(body, title, icon, isMention, onclick, onclose) {
         {
             body: body || 'おだやかじゃないわね',
             icon: icon || '/public/img/icon.png',
-            requireInteraction: isMention
+            requireInteraction: isMention && !!chant.local.config.get("notificationStay")
         }
     );
     note.onclick = onclick || function() {
