@@ -25,6 +25,11 @@ type Application struct {
 // 2) ログインしていない場合、App/Loginにリダイレクトする.
 func (c Application) Index(roomID, password string) revel.Result {
 	if _, ok := c.Session["screen_name"]; ok {
+
+		if !allowed(c.Session["screen_name"]) {
+			return c.Redirect("/denied")
+		}
+
 		user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
 		if err != nil {
 			// とりあえず
@@ -89,4 +94,31 @@ func getHost() string {
 		port = ":" + port
 	}
 	return host + port
+}
+
+// とりあえず
+func allowed(name string) bool {
+	// とりあえず
+	if blacklist(name) {
+		return false
+	}
+	if whitelist(name) {
+		return true
+	}
+	// とりあえず
+	return true
+}
+
+// とりあえず
+func whitelist(name string) bool {
+	return true
+}
+
+// とりあえず
+func blacklist(name string) bool {
+	switch name {
+	case "excel0679":
+		return true
+	}
+	return false
 }
