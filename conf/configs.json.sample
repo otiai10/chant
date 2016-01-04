@@ -1,0 +1,9 @@
+{
+  "whitelist": [
+    "hoge"
+  ],
+  "blacklist": [
+    "fuga"
+  ],
+  "allow_default": true
+}

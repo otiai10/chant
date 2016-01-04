@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"regexp"
+	"strconv"
 	"time"
 
 	"chant/app/chatroom"
 	"chant/app/models"
+	"chant/conf"
 
 	"github.com/revel/revel"
 )
@@ -26,8 +28,11 @@ type Application struct {
 func (c Application) Index(roomID, password string) revel.Result {
 	if _, ok := c.Session["screen_name"]; ok {
 
+		if reload, _ := strconv.ParseBool(c.Params.Get("reload_conf")); reload {
+			conf.Reload()
+		}
 		if !allowed(c.Session["screen_name"]) {
-			return c.Redirect("/denied")
+			return c.Forbidden("denied")
 		}
 
 		user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
@@ -98,27 +103,11 @@ func getHost() string {
 
 // とりあえず
 func allowed(name string) bool {
-	// とりあえず
-	if blacklist(name) {
+	if conf.Blacklist(name) {
 		return false
 	}
-	if whitelist(name) {
+	if conf.Whitelist(name) {
 		return true
 	}
-	// とりあえず
-	return true
-}
-
-// とりあえず
-func whitelist(name string) bool {
-	return true
-}
-
-// とりあえず
-func blacklist(name string) bool {
-	switch name {
-	case "excel0679":
-		return true
-	}
-	return false
+	return conf.AllowDefault()
 }
