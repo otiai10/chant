@@ -16,7 +16,7 @@ var MessageEntry = React.createClass({
         return (
             <div className="box">
               <MessageIcon setText={this.props.setText} message={this.props.message}/>
-              <MessageContent message={this.props.message}/>
+              <MessageContent setText={this.props.setText} message={this.props.message}/>
             </div>
         );
     }
@@ -36,7 +36,7 @@ var MessageContent = React.createClass({
     render: function() {
         return (
             <div className="message-wrapper">
-                <MessageInclusive message={this.props.message} />
+                <MessageInclusive setText={this.props.setText} message={this.props.message} />
             </div>
         );
     }
@@ -54,7 +54,7 @@ var MessageInclusive = React.createClass({
               <div>
                 <div>mute</div>
                 <blockquote>
-                  <MessageEntry message={this.props.message.value} />
+                  <MessageEntry setText={this.props.setText} message={this.props.message.value} />
                 </blockquote>
               </div>
             );
@@ -63,7 +63,7 @@ var MessageInclusive = React.createClass({
               <div>
                 <div>unmute</div>
                 <blockquote>
-                  <MessageEntry message={this.props.message.value} />
+                  <MessageEntry setText={this.props.setText} message={this.props.message.value} />
                 </blockquote>
               </div>
             );
@@ -72,7 +72,7 @@ var MessageInclusive = React.createClass({
             // 参照で全部変えてるのか
             this.props.message.value = this.props.message.value.value || this.props.message.value;
         default:
-            return <MessageRecursive message={this.props.message} />;
+            return <MessageRecursive setText={this.props.setText} message={this.props.message} />;
         }
     }
 });
@@ -83,12 +83,12 @@ var MessageRecursive = React.createClass({
         <div>
           <div>{this.props.message.value.text}</div>
           <blockquote>
-            <MessageEntry message={this.props.message.value.children} />
+            <MessageEntry setText={this.props.setText} message={this.props.message.value.children} />
           </blockquote>
         </div>
       );
     }
-    return <MessageAnchorable message={this.props.message} />;
+    return <MessageAnchorable setText={this.props.setText} message={this.props.message} />;
   }
 });
 
@@ -97,6 +97,7 @@ var MessageAnchorable = React.createClass({
         if (chant.local.config.get('mute')[this.props.message.value.text]) {
             return <Muted message={this.props.message}></Muted>;
         }
+        var setText = this.props.setText;// ここで退避
         var lines = this.props.message.value.text.split('\n').map(function(line) {
             var m = line.match(/^quote>({.+})$/);
             if (m && m.length > 1) {
@@ -104,7 +105,7 @@ var MessageAnchorable = React.createClass({
                   var message = JSON.parse(m[1]);
                   return (
                     <blockquote className="rich-quote">
-                      <MessageEntry message={message}></MessageEntry>
+                      <MessageEntry setText={setText} message={message}></MessageEntry>
                     </blockquote>
                   );
               } catch (e) {

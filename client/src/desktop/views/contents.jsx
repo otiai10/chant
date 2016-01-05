@@ -58,7 +58,8 @@ var Contents = React.createClass({
     },
     setText: function(text, focushead) {
         this.refs.TextInput.appendTextValue(text);
-        this.refs.TextInput.getDOMNode().focus();
+        // this.refs.TextInput.getDOMNode().focus();
+        document.getElementById('message-input').focus();
         if (focushead) {
           setTimeout(function() {
             document.getElementById('message-input').setSelectionRange(0, 0);
