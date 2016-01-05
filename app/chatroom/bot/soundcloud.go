@@ -26,3 +26,8 @@ func (h SoundCloudHandler) Handle(event *models.Event, b *models.User) *models.E
 	rand.Seed(time.Now().Unix())
 	return models.NewMessage(b, tracks[rand.Intn(len(tracks))].URL)
 }
+
+// Help ...
+func (h SoundCloudHandler) Help() string {
+	return "サウンドクラウドの検索はクソだ"
+}

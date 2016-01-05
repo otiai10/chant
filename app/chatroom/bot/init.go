@@ -27,6 +27,7 @@ func DefaultBot() *models.User {
 type Handler interface {
 	Match(*models.Event) bool
 	Handle(*models.Event, *models.User) *models.Event
+	Help() string
 }
 
 // HandlerBase ...
@@ -37,6 +38,11 @@ type HandlerBase struct {
 // Match ...
 func (h HandlerBase) Match(event *models.Event) bool {
 	return h.MatchString(event.Raw)
+}
+
+// Help ...
+func (h HandlerBase) Help() string {
+	return h.String()
 }
 
 type conf struct {

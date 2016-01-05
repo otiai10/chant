@@ -23,3 +23,8 @@ func (h HelloHandler) Handle(event *models.Event, b *models.User) *models.Event 
 	wait()
 	return models.NewMessage(b, Messages.Get("hello"))
 }
+
+// Help ...
+func (h HelloHandler) Help() string {
+	return "進捗どうですか"
+}

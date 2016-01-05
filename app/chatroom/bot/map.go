@@ -17,3 +17,8 @@ func (h MapHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	msg := fmt.Sprintf("https://www.google.co.jp/maps/place/%s/", url.QueryEscape(q))
 	return models.NewMessage(b, msg)
 }
+
+// Help ...
+func (h MapHandler) Help() string {
+	return "場所検索してGoogleMapを表示するやつ"
+}

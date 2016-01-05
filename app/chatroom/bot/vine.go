@@ -41,3 +41,8 @@ func (h VineHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	rand.Seed(time.Now().Unix())
 	return models.NewMessage(b, records[rand.Intn(len(records))].ShareURL)
 }
+
+// Help ...
+func (h VineHandler) Help() string {
+	return "vineを検索してくるやつ"
+}

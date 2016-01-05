@@ -26,3 +26,8 @@ func (h GifHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	entry := resp.Random()
 	return models.NewMessage(b, entry.URL)
 }
+
+// Help ...
+func (h GifHandler) Help() string {
+	return "GIFアニメさがしてくるやつ"
+}

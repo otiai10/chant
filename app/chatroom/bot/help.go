@@ -3,7 +3,6 @@ package bot
 import (
 	"chant/app/models"
 	"fmt"
-	"reflect"
 )
 
 // HelpHandler ...
@@ -15,8 +14,13 @@ type HelpHandler struct {
 func (h HelpHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	wait()
 	msg := ""
-	for key, handler := range Handlers {
-		msg += fmt.Sprintf("/%s:　　%s.Help()がここに入る\n", key, reflect.TypeOf(handler).String())
+	for key, h := range Handlers {
+		msg += fmt.Sprintf("/%s: %s\n", key, h.Help())
 	}
 	return models.NewMessage(b, msg)
+}
+
+// Help ...
+func (h HelpHandler) Help() string {
+	return "ヘルプ見るやつ"
 }

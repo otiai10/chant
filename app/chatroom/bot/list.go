@@ -18,3 +18,8 @@ func (h ListHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	blacklist := c.Blacklist()
 	return models.NewMessage(b, fmt.Sprintf("whitelist: %v\nblacklist: %v\n", whitelist, blacklist))
 }
+
+// Help ...
+func (h ListHandler) Help() string {
+	return "ホワイトリスト・ブラックリストを確認するやつ"
+}

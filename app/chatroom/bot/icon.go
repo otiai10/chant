@@ -33,3 +33,8 @@ func (h IconHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	b.ProfileImageURL = u
 	return models.NewMessage(b, "変えました")
 }
+
+// Help ...
+func (h IconHandler) Help() string {
+	return "botのアイコンかえるやつ"
+}

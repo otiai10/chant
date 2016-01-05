@@ -31,3 +31,8 @@ func (h AmeshHandler) Handle(event *models.Event, b *models.User) *models.Event 
 		Timestamp: time.Now().UnixNano(),
 	}
 }
+
+// Help ...
+func (h AmeshHandler) Help() string {
+	return "アメッシュ表示するやつ"
+}

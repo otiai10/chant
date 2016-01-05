@@ -21,3 +21,8 @@ func (h InviteHandler) Handle(event *models.Event, b *models.User) *models.Event
 	}
 	return models.NewMessage(b, fmt.Sprintf("%sさんをinviteした", name))
 }
+
+// Help ...
+func (h InviteHandler) Help() string {
+	return "ホワイトリスト入りします"
+}

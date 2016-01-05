@@ -43,3 +43,8 @@ func (h GoogleHandler) Handle(event *models.Event, b *models.User) *models.Event
 	}
 	return models.NewMessage(b, msg)
 }
+
+// Help ...
+func (h GoogleHandler) Help() string {
+	return "ググるやつ"
+}

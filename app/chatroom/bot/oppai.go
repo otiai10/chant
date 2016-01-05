@@ -12,3 +12,8 @@ func (h OppaiHandler) Handle(event *models.Event, b *models.User) *models.Event 
 	wait()
 	return models.NewMessage(b, "おっぱいな")
 }
+
+// Help ...
+func (h OppaiHandler) Help() string {
+	return "おっぱいはいいぞ"
+}

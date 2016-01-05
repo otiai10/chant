@@ -35,3 +35,8 @@ func (h YoutubeHandler) Handle(event *models.Event, b *models.User) *models.Even
 	a := resp.Items[rand.Intn(len(resp.Items))]
 	return models.NewMessage(b, "https://www.youtube.com/watch?v="+a.ID.VideoID)
 }
+
+// Help ...
+func (h YoutubeHandler) Help() string {
+	return "YouTube動画検索してくるやつ"
+}

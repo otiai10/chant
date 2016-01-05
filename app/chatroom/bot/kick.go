@@ -21,3 +21,8 @@ func (h KickHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	}
 	return models.NewMessage(b, fmt.Sprintf("%sさんをkickした", name))
 }
+
+// Help ...
+func (h KickHandler) Help() string {
+	return "ブラックリスト入りします"
+}

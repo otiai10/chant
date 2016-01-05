@@ -27,3 +27,8 @@ func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event 
 	entry := resp.Random()
 	return models.NewMessage(b, entry.URL)
 }
+
+// Help ...
+func (h ImageHandler) Help() string {
+	return "画像検索してくるやつ"
+}
