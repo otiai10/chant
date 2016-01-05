@@ -6,18 +6,12 @@ import (
 	"fmt"
 	"math/rand"
 	"net/url"
-	"regexp"
 	"time"
 )
 
 // YoutubeHandler ...
 type YoutubeHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h YoutubeHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

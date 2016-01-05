@@ -4,18 +4,12 @@ import (
 	"chant/app/lib/google"
 	"chant/app/models"
 	"math/rand"
-	"regexp"
 	"time"
 )
 
 // HelloHandler ...
 type HelloHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h HelloHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

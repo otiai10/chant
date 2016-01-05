@@ -11,11 +11,6 @@ type MapHandler struct {
 	HandlerBase
 }
 
-// Match ...
-func (h MapHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
-}
-
 // Handle ...
 func (h MapHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")

@@ -14,11 +14,6 @@ type GoogleHandler struct {
 	HandlerBase
 }
 
-// Match ...
-func (h GoogleHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
-}
-
 // Handle ...
 func (h GoogleHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")

@@ -13,11 +13,6 @@ type InviteHandler struct {
 	HandlerBase
 }
 
-// Match ...
-func (h InviteHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
-}
-
 // Handle ...
 func (h InviteHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	name := strings.Replace(h.ReplaceAllString(event.Raw, ""), "@", "", -1)

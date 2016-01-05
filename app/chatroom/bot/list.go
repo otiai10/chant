@@ -12,11 +12,6 @@ type ListHandler struct {
 	HandlerBase
 }
 
-// Match ...
-func (h ListHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
-}
-
 // Handle ...
 func (h ListHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	whitelist := c.Whitelist()

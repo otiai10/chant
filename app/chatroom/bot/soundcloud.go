@@ -5,18 +5,12 @@ import (
 	"chant/app/models"
 	"fmt"
 	"math/rand"
-	"regexp"
 	"time"
 )
 
 // SoundCloudHandler ...
 type SoundCloudHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h SoundCloudHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

@@ -9,12 +9,7 @@ import (
 
 // IconHandler ...
 type IconHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h IconHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

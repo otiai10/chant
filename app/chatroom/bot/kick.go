@@ -13,11 +13,6 @@ type KickHandler struct {
 	HandlerBase
 }
 
-// Match ...
-func (h KickHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
-}
-
 // Handle ...
 func (h KickHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	name := strings.Replace(h.ReplaceAllString(event.Raw, ""), "@", "", -1)

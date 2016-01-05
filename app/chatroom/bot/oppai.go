@@ -1,18 +1,10 @@
 package bot
 
-import (
-	"chant/app/models"
-	"regexp"
-)
+import "chant/app/models"
 
 // OppaiHandler ...
 type OppaiHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h OppaiHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

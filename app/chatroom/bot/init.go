@@ -60,22 +60,22 @@ var (
 
 func init() {
 	Handlers = map[string]Handler{
-		"icon":       IconHandler{regexp.MustCompile("^/icon[ 　]+")},
-		"oppai":      OppaiHandler{regexp.MustCompile("^/oppai")},
-		"image":      ImageHandler{regexp.MustCompile("^/ima?ge?[ 　]+")},
-		"gif":        GifHandler{regexp.MustCompile("^/gif[ 　]+")},
-		"ggl":        GoogleHandler{HandlerBase{regexp.MustCompile("^/ggl[ 　]+")}},
-		"map":        MapHandler{HandlerBase{regexp.MustCompile("^/map[ 　]+")}},
-		"vine":       VineHandler{HandlerBase{regexp.MustCompile("^/vine[ 　]+")}},
-		"youtube":    YoutubeHandler{regexp.MustCompile("^/yt|youtube[ 　]+")},
-		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh[ 　]*")},
-		"hello":      HelloHandler{regexp.MustCompile("^/hello")},
-		"whoami":     WhoamiHandler{regexp.MustCompile("^/whoami")},
-		"help":       SimpleHandler{regexp.MustCompile("^/help"), "help"},
-		"soundcloud": SoundCloudHandler{regexp.MustCompile("^/sc")},
-		"kick":       KickHandler{HandlerBase{regexp.MustCompile("^/kick[ 　]+")}},
-		"invite":     InviteHandler{HandlerBase{regexp.MustCompile("^/invite[ 　]+")}},
-		"list":       ListHandler{HandlerBase{regexp.MustCompile("^/list")}},
+		"icon":       IconHandler{HandlerBase{regex("^/icon[ 　]+")}},
+		"oppai":      OppaiHandler{HandlerBase{regex("^/oppai")}},
+		"image":      ImageHandler{HandlerBase{regex("^/ima?ge?[ 　]+")}},
+		"gif":        GifHandler{HandlerBase{regex("^/gif[ 　]+")}},
+		"ggl":        GoogleHandler{HandlerBase{regex("^/ggl[ 　]+")}},
+		"map":        MapHandler{HandlerBase{regex("^/map[ 　]+")}},
+		"vine":       VineHandler{HandlerBase{regex("^/vine[ 　]+")}},
+		"youtube":    YoutubeHandler{HandlerBase{regex("^/yt|youtube[ 　]+")}},
+		"amesh":      AmeshHandler{HandlerBase{regex("^/amesh[ 　]*")}},
+		"hello":      HelloHandler{HandlerBase{regex("^/hello")}},
+		"whoami":     WhoamiHandler{HandlerBase{regex("^/whoami")}},
+		"help":       HelpHandler{HandlerBase{regex("^/help")}},
+		"soundcloud": SoundCloudHandler{HandlerBase{regex("^/sc")}},
+		"kick":       KickHandler{HandlerBase{regex("^/kick[ 　]+")}},
+		"invite":     InviteHandler{HandlerBase{regex("^/invite[ 　]+")}},
+		"list":       ListHandler{HandlerBase{regex("^/list")}},
 	}
 	// bot config
 	if _, err := toml.DecodeFile(filepath.Join(curr.Dir(), "/config.toml"), &config); err != nil {
@@ -100,4 +100,9 @@ func init() {
 func wait() {
 	rand.Seed(time.Now().Unix())
 	time.Sleep(time.Duration(rand.Intn(time.Now().Second()+1)*50) * time.Millisecond)
+}
+
+// ただのregexp.MustCompileのalias
+func regex(pattern string) *regexp.Regexp {
+	return regexp.MustCompile(pattern)
 }

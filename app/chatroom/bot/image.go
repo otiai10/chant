@@ -4,17 +4,11 @@ import (
 	"chant/app/lib/google"
 	"chant/app/models"
 	"fmt"
-	"regexp"
 )
 
 // ImageHandler ...
 type ImageHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h ImageHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

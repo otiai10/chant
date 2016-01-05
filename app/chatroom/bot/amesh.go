@@ -3,18 +3,12 @@ package bot
 import (
 	"chant/app/lib/amesh"
 	"chant/app/models"
-	"regexp"
 	"time"
 )
 
 // AmeshHandler ...
 type AmeshHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h AmeshHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...

@@ -4,17 +4,11 @@ import (
 	"chant/app/lib/google"
 	"chant/app/models"
 	"fmt"
-	"regexp"
 )
 
 // GifHandler ...
 type GifHandler struct {
-	*regexp.Regexp
-}
-
-// Match ...
-func (h GifHandler) Match(event *models.Event) bool {
-	return h.MatchString(event.Raw)
+	HandlerBase
 }
 
 // Handle ...
