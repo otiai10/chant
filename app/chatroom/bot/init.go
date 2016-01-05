@@ -65,6 +65,7 @@ func init() {
 		"image":      ImageHandler{regexp.MustCompile("^/ima?ge?[ 　]+")},
 		"gif":        GifHandler{regexp.MustCompile("^/gif[ 　]+")},
 		"ggl":        GoogleHandler{HandlerBase{regexp.MustCompile("^/ggl[ 　]+")}},
+		"map":        MapHandler{HandlerBase{regexp.MustCompile("^/map[ 　]+")}},
 		"vine":       VineHandler{HandlerBase{regexp.MustCompile("^/vine[ 　]+")}},
 		"youtube":    YoutubeHandler{regexp.MustCompile("^/yt|youtube[ 　]+")},
 		"amesh":      AmeshHandler{regexp.MustCompile("^/amesh[ 　]*")},
