@@ -103,10 +103,10 @@ func getHost() string {
 
 // とりあえず
 func allowed(name string) bool {
-	if conf.Blacklist(name) {
+	if conf.InBlacklist(name) {
 		return false
 	}
-	if conf.Whitelist(name) {
+	if conf.InWhitelist(name) {
 		return true
 	}
 	return conf.AllowDefault()

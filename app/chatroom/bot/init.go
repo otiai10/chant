@@ -73,6 +73,9 @@ func init() {
 		"whoami":     WhoamiHandler{regexp.MustCompile("^/whoami")},
 		"help":       SimpleHandler{regexp.MustCompile("^/help"), "help"},
 		"soundcloud": SoundCloudHandler{regexp.MustCompile("^/sc")},
+		"kick":       KickHandler{HandlerBase{regexp.MustCompile("^/kick[ 　]+")}},
+		"invite":     InviteHandler{HandlerBase{regexp.MustCompile("^/invite[ 　]+")}},
+		"list":       ListHandler{HandlerBase{regexp.MustCompile("^/list")}},
 	}
 	// bot config
 	if _, err := toml.DecodeFile(filepath.Join(curr.Dir(), "/config.toml"), &config); err != nil {

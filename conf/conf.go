@@ -2,11 +2,17 @@ package conf
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/otiai10/curr"
 	"github.com/revel/revel"
+)
+
+const (
+	configfile = "configs.json"
 )
 
 type configures struct {
@@ -27,9 +33,9 @@ func init() {
 	}
 }
 
-// Load ...
+// Load 設定ファイルを読み込んでメモリに載せる
 func Load() error {
-	f, err := os.Open(filepath.Join(curr.Dir(), "configs.json"))
+	f, err := os.Open(filepath.Join(curr.Dir(), configfile))
 	if err != nil {
 		return err
 	}
@@ -39,18 +45,61 @@ func Load() error {
 	return nil
 }
 
+// Apply メモリに載ってる設定structをファイルに書き出す
+func Apply() error {
+	fname := filepath.Join(curr.Dir(), configfile)
+	if _, err := os.Stat(fname); err != nil {
+		os.Create(fname)
+	}
+
+	b, err := json.MarshalIndent(configs, "", "    ")
+	if err != nil {
+		return fmt.Errorf("marshal: %v", err)
+	}
+	if err := ioutil.WriteFile(fname, b, os.ModePerm); err != nil {
+		return fmt.Errorf("write: %v", err)
+	}
+	return nil
+}
+
+// Kick ...
+func Kick(name string) error {
+	configs.Whitelist = removefromlist(configs.Whitelist, name)
+	configs.Blacklist = removefromlist(configs.Blacklist, name)
+	configs.Blacklist = append(configs.Blacklist, name)
+	return Apply()
+}
+
+// Invite ...
+func Invite(name string) error {
+	configs.Whitelist = removefromlist(configs.Whitelist, name)
+	configs.Blacklist = removefromlist(configs.Blacklist, name)
+	configs.Whitelist = append(configs.Whitelist, name)
+	return Apply()
+}
+
 // Reload ...
 func Reload() error {
 	return Load()
 }
 
 // Whitelist ...
-func Whitelist(name string) bool {
+func Whitelist() []string {
+	return configs.Whitelist
+}
+
+// InWhitelist ...
+func InWhitelist(name string) bool {
 	return inlist(configs.Whitelist, name)
 }
 
 // Blacklist ...
-func Blacklist(name string) bool {
+func Blacklist() []string {
+	return configs.Blacklist
+}
+
+// InBlacklist ...
+func InBlacklist(name string) bool {
 	return inlist(configs.Blacklist, name)
 }
 
@@ -66,4 +115,14 @@ func inlist(list []string, name string) bool {
 		}
 	}
 	return false
+}
+
+func removefromlist(list []string, name string) []string {
+	newlist := []string{}
+	for _, v := range list {
+		if v != name {
+			newlist = append(newlist, v)
+		}
+	}
+	return newlist
 }
