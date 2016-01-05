@@ -27,11 +27,11 @@ var TextInput = React.createClass({
     touchStart: function() {
       this.setState({touchDown: true});
       var id = setTimeout(function(){
+        window.alert("touch keeped");
         if (!this.state.touchDown) return console.info("Already Touch Up");
         this.setState({touchDown: false});
         var finput = React.findDOMNode(this.refs.inputFileUpload);
         finput.onchange = function(ev) {
-          console.log(finput);
           // {{{ TODO: DRY
           // var file = ev.nativeEvent.dataTransfer.files[0];
           var file = finput.files[0];
@@ -56,6 +56,7 @@ var TextInput = React.createClass({
             },
             error: function(err) {
               console.log('error', err);
+              window.alert(err.statusText);
             }
           });
           // }}}
