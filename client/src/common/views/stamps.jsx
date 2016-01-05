@@ -22,7 +22,7 @@ var Stamp = React.createClass({
     );
   },
   useStamp: function () {
-    chant.Send("stampuse", this.props.stamp.source.raw);
+    chant.Send("stampuse", JSON.stringify(this.props.stamp.source));
   },
   showStampPreview: function() {
     var preview = document.getElementById("message-input-preview");

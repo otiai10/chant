@@ -90,7 +90,8 @@ var NotificationSettings = React.createClass({
   getInitialState: function() {
     return {
       regexp: chant.local.config.get("notificationRegExp"),
-      volume: chant.local.config.get("notificationVolume")
+      volume: chant.local.config.get("notificationVolume"),
+      stay:   chant.local.config.get("notificationStay")
     };
   },
   render: function() {
@@ -106,6 +107,15 @@ var NotificationSettings = React.createClass({
           <div className="col s12">
             <span>RegExp for notification: </span>
             <input type="text" onChange={this.regexOnChange} placeholder={regexplaceholder} defaultValue={this.state.regexp} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <span>Stay on desktop if mention</span>
+            <p>
+              <input type="checkbox" onClick={this.stayOnClick} className="filled-in" id="note-stay-on-desktop" checked={this.state.stay} />
+              <label for="note-stay-on-desktop" onClick={this.stayOnClick}></label>
+            </p>
           </div>
         </div>
         <div className="row">
@@ -127,6 +137,13 @@ var NotificationSettings = React.createClass({
   },
   volumeChange: function(ev) {
     chant.local.config.set("notificationVolume", ev.target.value);
+  },
+  stayOnClick: function(ev) {
+    var checked = document.getElementById("note-stay-on-desktop").checked;
+    checked = !!!checked;
+    document.getElementById("note-stay-on-desktop").checked = checked;
+    chant.local.config.set("notificationStay", checked);
+    this.setState({stay: checked});
   },
   close: function() {
     document.getElementById("notification-settings").hidden = true;

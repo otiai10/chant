@@ -36,6 +36,8 @@ conf/app.conf
 app/chatroom/bot/config.toml
 public/img/uploads/*
 
+conf/configs.json
+
 # assets
 ## public/img/emojis/*
 

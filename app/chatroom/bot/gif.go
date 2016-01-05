@@ -6,21 +6,20 @@ import (
 	"fmt"
 )
 
-// ImageHandler ...
-type ImageHandler struct {
+// GifHandler ...
+type GifHandler struct {
 	HandlerBase
 }
 
 // Handle ...
-func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h GifHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")
 
 	client := &google.Client{
 		APIKey:               config.Google.APIKey,
 		CustomSearchEngineID: config.Google.DefaultCseID,
 	}
-	// resp, err := google.SearchImage(q)
-	resp, err := client.SearchImage(q)
+	resp, err := client.SearchGIF(q)
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまん: %v", err))
 	}
@@ -29,6 +28,6 @@ func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event 
 }
 
 // Help ...
-func (h ImageHandler) Help() string {
-	return "画像検索してくるやつ"
+func (h GifHandler) Help() string {
+	return "GIFアニメさがしてくるやつ"
 }

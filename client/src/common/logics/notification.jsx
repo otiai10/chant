@@ -26,9 +26,8 @@ chant._notification = {
         };
     })()
 };
-chant.notify = function(body, title, icon, onclick, onclose) {
+chant.notify = function(body, title, icon, isMention, onclick, onclose) {
     if (! chant.local.config.get('notification')) return;
-    onclick = onclick || function() {window.focus();};
     onclose = onclose || function() {};
     if (icon) icon = icon.replace('_normal', '_bigger');
     var notification = chant._notification.__get();
@@ -36,16 +35,18 @@ chant.notify = function(body, title, icon, onclick, onclose) {
         title || 'CHANT',
         {
             body: body || 'おだやかじゃないわね',
-            icon: icon || '/public/img/icon.png'
+            icon: icon || '/public/img/icon.png',
+            requireInteraction: isMention && !!chant.local.config.get("notificationStay")
         }
     );
-    note.onclick = onclick;
+    note.onclick = onclick || function() {
+      window.focus();
+      note.close();
+    };
     note.onclose = onclose;
 
     // if xxx
     chant._notification.__sound.play();
-
-    setTimeout(function() { note.close(); }, 4000);
 };
 
 chant.notifier = {
@@ -54,13 +55,15 @@ chant.notifier = {
         if (message.user.id_str == Config.myself.id_str) return;
         chant.addUnread();
         // detect @all or @me
-        var storedRegExp = chant.local.config.get("notificationRegExp");
-        var exp = (storedRegExp) ? new RegExp(storedRegExp) : new RegExp('@all|@' + Config.myself.screen_name);
+        var stored = chant.local.config.get("notificationRegExp");
+        var mentioned = new RegExp('@all|@' + Config.myself.screen_name);
+        var exp = (stored) ? new RegExp(stored) : mentioned;
         if (!exp.test(message.value.text)) return;
         chant.notify(
             message.value.text,
             message.user.screen_name,
-            message.user.profile_image_url
+            message.user.profile_image_url,
+            mentioned.test(message.value.text)
         );
     }
 };

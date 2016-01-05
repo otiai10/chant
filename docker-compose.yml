@@ -1,0 +1,7 @@
+chant:
+  build: .
+  dockerfile: Dockerfile
+  volumes:
+    - .:/go/src/chant
+  ports:
+    - "14000:14000"

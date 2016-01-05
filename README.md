@@ -16,8 +16,10 @@ cd $GOPATH/src
 git clone git@github.com:otiai10/chant.git
 # set up your conf
 cp conf/app.conf.sample conf/app.conf # and edit a bit please :)
+touch app/chatroom/bot/config.toml
 # dependencies
 go get github.com/revel/cmd/revel
+go get ./...
 # Let's start!
 revel run chant
 ```

@@ -22,11 +22,14 @@ var Contents = React.createClass({
             switch (payload.type) {
                 case "message":
                 case "amesh":
+                case "stampuse":
                     self.newMessage(payload);
                     break;
+                    /*
                 case "stamprize":
                     self.newStamprize(payload);
                     break;
+                    */
                 case "join":
                     self.join(payload);
                     break;

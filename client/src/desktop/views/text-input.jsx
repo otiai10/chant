@@ -31,6 +31,7 @@ var TextInput = React.createClass({
         var upKey = 38;
         var downKey = 40;
         var txt = ev.target.value;
+        /*
         if (!ev.shiftKey && ev.which == upKey) {
             this.historyCompletion(-1);
             if (this.state.draft && this.state.value !== "") {
@@ -41,10 +42,11 @@ var TextInput = React.createClass({
         if (!ev.shiftKey && ev.which == downKey) {
             return this.historyCompletion(1);
         }
+        */
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
             this.setState({value: ""});
-            chant.local.history.push(txt);
+            // chant.local.history.push(txt);
             return ev.preventDefault();
         }
         if (!this.state.draft) this.setState({draft: true});
