@@ -24,7 +24,7 @@ func (h YoutubeHandler) Handle(event *models.Event, b *models.User) *models.Even
 	query := url.Values{}
 	query.Add("q", q)
 	query.Add("part", "snippet")
-	query.Add("maxResults", "40")
+	query.Add("maxResults", "8")
 	resp, err := client.YoutubeSearch(query)
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまん: %v", err))
