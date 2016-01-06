@@ -193,6 +193,8 @@ func (c *Client) SearchImage(keyword string) (*CustomSearchResponse, error) {
 	q := url.Values{}
 	q.Add("q", keyword)
 	q.Add("searchType", "image")
+	q.Add("num", "10")
+	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
 	return c.CustomSearch(q)
 }
 
@@ -203,5 +205,7 @@ func (c *Client) SearchGIF(keyword string) (*CustomSearchResponse, error) {
 	q.Add("searchType", "image")
 	q.Add("fileType", "gif")
 	q.Add("hq", "animated")
+	q.Add("num", "10")
+	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
 	return c.CustomSearch(q)
 }
