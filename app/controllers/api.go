@@ -1,13 +1,9 @@
 package controllers
 
 import (
-	"bytes"
 	"chant/app/models"
 	"encoding/json"
-	"encoding/xml"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -19,10 +15,9 @@ import (
 
 	"chant/app/chatroom"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/otiai10/curr"
 	"github.com/revel/revel"
-
-	"golang.org/x/net/html/charset"
 )
 
 // APIv1 ...
@@ -129,143 +124,88 @@ func (c APIv1) WebPreview(u string) revel.Result {
 	}
 	defer res.Body.Close()
 	if regexp.MustCompile("^ima?ge?/.*").MatchString(res.Header.Get("Content-Type")) {
-		return c.RenderJson(map[string]interface{}{
-			"content": "image",
-			"url":     u,
-		})
+		return c.RenderJson(map[string]string{"content": "image", "url": u})
 	}
 	if regexp.MustCompile("^video/.*").MatchString(res.Header.Get("Content-Type")) {
-		return c.RenderJson(map[string]interface{}{
-			"content": "video",
-			"url":     u,
-		})
+		return c.RenderJson(map[string]string{"content": "video", "url": u})
 	}
 
-	// Adjust HTML charset
-	reader, err := charset.NewReader(res.Body, "")
+	doc, err := goquery.NewDocumentFromResponse(res)
 	if err != nil {
 		return c.RenderError(err)
 	}
 
-	// clean response body
-	b, _ := ioutil.ReadAll(reader)
+	summary := &Summary{URL: u, Original: v}
 
-	b = regexp.MustCompile("\\<script[\\S\\s]+?\\</script\\>").ReplaceAll(b, []byte{})
-	buf := bytes.NewBuffer(b)
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("defered recover:", r)
+		}
+	}()
 
-	page := new(HTMLPage)
-	err = decoder(buf).Decode(page)
-	if err != nil {
-		log.Println("[WebPreview]", err)
-		return c.RenderError(err)
-	}
+	summary.Title = summary.GetTitle(doc)
+	summary.Image = summary.GetImage(doc)
+	summary.Description = summary.GetDescription(doc)
 
 	return c.RenderJson(map[string]interface{}{
-		"html":    page,
-		"summary": page.Summarize(u),
+		"summary": summary,
 	})
-}
-
-func decoder(reader io.Reader) *xml.Decoder {
-	dec := xml.NewDecoder(reader)
-	dec.Strict = false
-	dec.AutoClose = xml.HTMLAutoClose
-	dec.Entity = xml.HTMLEntity
-	return dec
 }
 
 // Summary ...
 type Summary struct {
-	Title       string `json:"title"`
-	Image       string `json:"image"`
-	Description string `json:"description"`
-	URL         string `json:"url"`
+	Title       string   `json:"title"`
+	Image       string   `json:"image"`
+	Description string   `json:"description"`
+	URL         string   `json:"url"`
+	Original    *url.URL `json:"-"`
 }
 
-func (summary *Summary) setTitle(c string) {
-	if len(summary.Title) != 0 || len(c) == 0 {
-		return
+// GetTitle ...
+func (s *Summary) GetTitle(doc *goquery.Document) string {
+	og := doc.Find("meta[property='og:title']").First()
+	if c, ok := og.Attr("content"); ok && c != "" {
+		return c
 	}
-	summary.Title = c
-}
-func (summary *Summary) setImage(c string) {
-	if len(summary.Image) != 0 || len(c) == 0 {
-		return
+	if title := doc.Find("title").First().Text(); title != "" {
+		return title
 	}
-	summary.Image = c
-}
-func (summary *Summary) setDescription(c string) {
-	if len(summary.Description) != 0 || len(c) == 0 {
-		return
-	}
-	summary.Description = c
+	return s.URL
 }
 
-// HTMLPage ...
-type HTMLPage struct {
-	Head struct {
-		Title string `json:"title" xml:"title"`
-		Metas []Meta `json:"metas" xml:"meta"`
-		Links []Link `json:"links" xml:"link"`
-	} `json:"head" xml:"head"`
-} // `xml:"html"`
-
-// Meta ...
-type Meta struct {
-	Property string `json:"property" xml:"property,attr"`
-	Name     string `json:"name"     xml:"name,attr"`
-	Content  string `json:"content"  xml:"content,attr"`
+// GetImage ...
+func (s *Summary) GetImage(doc *goquery.Document) string {
+	og := doc.Find("meta[property='og:image']").First()
+	if c, ok := og.Attr("content"); ok && c != "" {
+		return s.GetAbsURL(c)
+	}
+	img := doc.Find("img").First()
+	if src, ok := img.Attr("src"); ok && src != "" {
+		return s.GetAbsURL(src)
+	}
+	link := doc.Find("link[rel='shortcut icon']").First()
+	if href, ok := link.Attr("href"); ok && href != "" {
+		return s.GetAbsURL(href)
+	}
+	return "/public/img/icon.png"
 }
 
-// Link ...
-type Link struct {
-	Rel  string `json:"rel"  xml:"rel,attr"`
-	Href string `json:"href" xml:"href,attr"`
+// GetDescription ...
+func (s *Summary) GetDescription(doc *goquery.Document) string {
+	og := doc.Find("meta[property='og:description']").First()
+	if c, ok := og.Attr("content"); ok && c != "" {
+		return c
+	}
+	return s.GetTitle(doc)
 }
 
-// Summarize ...
-func (hp *HTMLPage) Summarize(u string) *Summary {
-	summary := new(Summary)
-	summary.URL = u
-	img := regexp.MustCompile("image")
-	desc := regexp.MustCompile("description")
-	title := regexp.MustCompile("title")
-	icon := regexp.MustCompile("icon")
-	for _, meta := range hp.Head.Metas {
-		switch {
-		case img.MatchString(meta.Property):
-			summary.setImage(meta.Content)
-		case desc.MatchString(meta.Property), desc.MatchString(meta.Name):
-			summary.setDescription(meta.Content)
-		case title.MatchString(meta.Property):
-			summary.setTitle(meta.Content)
-		}
+// GetAbsURL ...
+func (s *Summary) GetAbsURL(rel string) string {
+	u, err := url.Parse(rel)
+	if err != nil {
+		return rel
 	}
-	summary.setTitle(hp.Head.Title)
-	summary.setDescription(hp.Head.Title)
-	if len(summary.Image) == 0 {
-		for _, link := range hp.Head.Links {
-			if icon.MatchString(link.Rel) {
-				summary.setImage(abspath(u, link.Href))
-				break
-			}
-		}
-	}
-	if len(summary.Image) == 0 {
-		summary.setImage(abspath(u, "/favicon.ico"))
-	}
-	return summary
-}
-
-// abspath
-func abspath(original, relative string) string {
-	p, err := url.Parse(relative)
-	if err == nil && p.IsAbs() {
-		return p.String()
-	}
-	v, _ := url.Parse(original)
-	v.Path = relative
-	return v.String()
+	return s.Original.ResolveReference(u).String()
 }
 
 // FileUpload ...
