@@ -16,6 +16,7 @@ import (
 	"chant/app/chatroom"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/otiai10/cachely"
 	"github.com/otiai10/curr"
 	"github.com/revel/revel"
 )
@@ -118,7 +119,7 @@ func (c APIv1) WebPreview(u string) revel.Result {
 	if v.Host == revel.Config.StringDefault("http.host", "localhost") {
 		v.Host = fmt.Sprintf("%s:%s", "localhost", revel.Config.StringDefault("http.port", "14000"))
 	}
-	res, err := http.Get(v.String())
+	res, err := cachely.Get(v.String())
 	if err != nil {
 		return c.RenderError(err)
 	}

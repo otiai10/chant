@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"time"
+
+	"github.com/otiai10/cachely"
 )
 
 // VineHandler ...
@@ -18,7 +19,7 @@ type VineHandler struct {
 func (h VineHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	q := h.ReplaceAllString(event.Raw, "")
 	baseURL := "https://api.vineapp.com/posts/search/%s?count=10"
-	res, err := http.Get(fmt.Sprintf(baseURL, q))
+	res, err := cachely.Get(fmt.Sprintf(baseURL, q))
 
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("しっぱいした: %v", err))
