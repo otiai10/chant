@@ -80,7 +80,7 @@ var TextInput = React.createClass({
         if (!ev.shiftKey && ev.which == enterKey) {
             chant.Send("message", txt);
             this.setState({value: ""});
-            this.getDOMNode().blur();
+            document.getElementById('message-input').blur();
             return ev.preventDefault();
         }
         if (!this.state.draft) this.setState({draft: true});
