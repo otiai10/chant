@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"chant/app/models"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -223,7 +224,7 @@ func (c APIv1) FileUpload(id, token, name string, oppai *os.File) revel.Result {
 	if err := os.Mkdir(filepath.Join(projectpath, pubdir), os.ModePerm); err != nil {
 		// 	return c.RenderError(err) // file exists
 	}
-	publicpath := filepath.Join(pubdir, name)
+	publicpath := filepath.Join(pubdir, genEncodedFileName(name))
 	destpath := filepath.Join(projectpath, publicpath)
 	if err := os.Rename(oppai.Name(), destpath); err != nil {
 		return c.RenderError(err)
@@ -249,4 +250,9 @@ func fullpath(p string) string {
 	}
 	u.Path = p
 	return u.String()
+}
+
+func genEncodedFileName(original string) string {
+	ext := strings.ToLower(filepath.Ext(original))
+	return base64.StdEncoding.EncodeToString([]byte(time.Now().String() + original))[:32] + ext
 }
