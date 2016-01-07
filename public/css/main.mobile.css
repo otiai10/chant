@@ -42,6 +42,6 @@ input#input-file-upload {
 i#input-file-upload-proxy {
   position: relative;
   top: -1.4em;
-  font-size: 1.4em;
+  font-size: 2em;
   opacity: 0.5;
 }
