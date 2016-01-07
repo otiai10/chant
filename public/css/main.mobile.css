@@ -31,3 +31,17 @@ div.members {
 div.container {
   padding: 0 !important;
 }
+
+input#input-file-upload {
+  /* display: none; */
+  position: fixed;
+  top: 100%;
+}
+
+/* TODO: #229 textinputの長押しで実現したいんだが */
+i#input-file-upload-proxy {
+  position: relative;
+  top: -1.4em;
+  font-size: 2em;
+  opacity: 0.5;
+}

@@ -3,55 +3,35 @@ var TextInput = React.createClass({
         return {
             value: '',
             rows: 3,
-            draft: true
+            draft: true,
+            touchDown: false
         };
     },
     render: function() {
         return (
+          <div>
             <textarea
-                id="message-input"
-                onKeyDown={this.onKeyDown}
-                onChange={this.onChange}
-                onDrop={this.filedrop}
-                value={this.state.value}
-                className="materialize-textarea"
-                placeholder="Shift + ⏎ to newline"
-                ref="textarea"
-                ></textarea>
+              id="message-input"
+              onKeyDown={this.onKeyDown}
+              onChange={this.onChange}
+              value={this.state.value}
+              className="materialize-textarea"
+              onTouchStart={this.touchStart}
+              onTouchEnd={this.touchEnd}
+              ref="textarea"
+              ></textarea>
+            <label>
+              <i className="fa fa-file pull-right" id="input-file-upload-proxy"></i>
+              <input type="file" ref="inputFileUpload" id="input-file-upload" onChange={this.fileChanged}></input>
+            </label>
+          </div>
         );
     },
-    onChange: function(ev) {
-        chant.clearUnread();// TODO: うーむ
-        this.setState({value: ev.target.value});
-    },
-    onKeyDown: function(ev) {
-        var enterKey = 13;
-        var upKey = 38;
-        var downKey = 40;
-        var txt = ev.target.value;
-        if (!ev.shiftKey && ev.which == upKey) {
-            this.historyCompletion(-1);
-            if (this.state.draft && this.state.value !== "") {
-                chant.local.history.append(this.state.value);
-            }
-            return;
-        }
-        if (!ev.shiftKey && ev.which == downKey) {
-            return this.historyCompletion(1);
-        }
-        if (!ev.shiftKey && ev.which == enterKey) {
-            chant.Send("message", txt);
-            this.setState({value: ""});
-            chant.local.history.push(txt);
-            this.getDOMNode().blur();
-            return ev.preventDefault();
-        }
-        if (!this.state.draft) this.setState({draft: true});
-    },
-    filedrop: function(ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      var file = ev.nativeEvent.dataTransfer.files[0];
+    fileChanged: function(ev) {
+      // var finput = React.findDOMNode(this.refs.inputFileUpload);
+      // var file = ev.nativeEvent.dataTransfer.files[0];
+      // var file = finput.files[0];
+      var file = ev.target.files[0];
       if (!file.type.match('^image')) {
         return;
       }
@@ -72,9 +52,44 @@ var TextInput = React.createClass({
           console.log('success', res);
         },
         error: function(err) {
-          console.log('error', err);
+          window.alert(err.statusText);
         }
       });
+      // }}}
+    },
+    touchStart: function() {
+      this.setState({touchDown: true});
+      var id = setTimeout(function(){
+        if (!this.state.touchDown) return console.info("Already Touch Up");
+        this.setState({touchDown: false});
+        // {{{ TODO: #229
+        var finput = document.getElementById('input-file-upload');
+        finput.click();
+        // mobile safariだとclickイベントは発火するが、dialogがでない
+        // しかたがないので、labelでonclickとってpropagateする方針をとってる
+        // }}}
+      }.bind(this), 800);
+    },
+    touchEnd: function(ev) {
+      if (!this.state.touchDown) return console.info('Already Touch Up');
+      this.setState({touchDown: false});
+    },
+    onChange: function(ev) {
+        chant.clearUnread();// TODO: うーむ
+        this.setState({value: ev.target.value});
+    },
+    onKeyDown: function(ev) {
+        var enterKey = 13;
+        var upKey = 38;
+        var downKey = 40;
+        var txt = ev.target.value;
+        if (!ev.shiftKey && ev.which == enterKey) {
+            chant.Send("message", txt);
+            this.setState({value: ""});
+            document.getElementById('message-input').blur();
+            return ev.preventDefault();
+        }
+        if (!this.state.draft) this.setState({draft: true});
     },
     historyCompletion: function(step) {
       var txt = (step > 0) ? chant.local.history.next() : chant.local.history.prev();
