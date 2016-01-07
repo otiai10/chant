@@ -20,46 +20,47 @@ var TextInput = React.createClass({
                 onTouchEnd={this.touchEnd}
                 ref="textarea"
                 ></textarea>
-              <input type="file" ref="inputFileUpload" id="input-file-upload" />
+              <input type="file" ref="inputFileUpload" id="input-file-upload" onChange={this.fileChanged} />
             </div>
         );
+    },
+    fileChanged: function(ev) {
+      // var finput = React.findDOMNode(this.refs.inputFileUpload);
+      // var file = ev.nativeEvent.dataTransfer.files[0];
+      // var file = finput.files[0];
+      var file = ev.target.files[0];
+      if (!file.type.match('^image')) {
+        return;
+      }
+      // data.append('file-0', file);
+      var data = new FormData();
+      // var data = new FormData(file);
+      data.append('oppai', file);
+      data.append('name', file.name);
+      $.ajax({
+        url: "/api/v1/room/default/upload",
+        type: "POST",
+        data: data,
+        // dataType: false,
+        processData: false,
+        contentType: false,
+        // contentType: 'multipart/form-data',
+        success: function(res) {
+          console.log('success', res);
+        },
+        error: function(err) {
+          window.alert(err.statusText);
+        }
+      });
+      // }}}
     },
     touchStart: function() {
       this.setState({touchDown: true});
       var id = setTimeout(function(){
         if (!this.state.touchDown) return console.info("Already Touch Up");
         this.setState({touchDown: false});
-        var finput = React.findDOMNode(this.refs.inputFileUpload);
-        finput.onchange = function(ev) {
-          // {{{ TODO: DRY
-          // var file = ev.nativeEvent.dataTransfer.files[0];
-          var file = finput.files[0];
-          if (!file.type.match('^image')) {
-            return;
-          }
-          // data.append('file-0', file);
-          var data = new FormData();
-          // var data = new FormData(file);
-          data.append('oppai', file);
-          data.append('name', file.name);
-          $.ajax({
-            url: "/api/v1/room/default/upload",
-            type: "POST",
-            data: data,
-            // dataType: false,
-            processData: false,
-            contentType: false,
-            // contentType: 'multipart/form-data',
-            success: function(res) {
-              console.log('success', res);
-            },
-            error: function(err) {
-              console.log('error', err);
-              window.alert(err.statusText);
-            }
-          });
-          // }}}
-        };
+        // var finput = React.findDOMNode(this.refs.inputFileUpload);
+        var finput = document.getElementById('input-file-upload');
         finput.click();
       }.bind(this), 800);
     },
