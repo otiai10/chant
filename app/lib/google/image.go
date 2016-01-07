@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/otiai10/cachely"
 )
 
 // SearchImageResponse ...
@@ -44,7 +45,7 @@ func SearchImage(keyword string) (*SearchImageResponse, error) {
 	q.Add("v", "1.0")
 	q.Add("rsz", "40")
 	q.Add("q", keyword)
-	res, err := http.Get(baseURL + "?" + q.Encode())
+	res, err := cachely.Get(baseURL + "?" + q.Encode())
 	if err != nil {
 		return nil, err
 	}

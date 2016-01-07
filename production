@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# This is temporary script until getting Dockerized
+# would be replaced Dockerfile in the feature
+
+branch=$1
+
+if [ -z "${branch}" ]; then
+    branch=master
+fi
+
+git fetch origin
+git checkout ${branch}
+git pull origin ${branch}
+pkill chant
+nohup revel run chant prod &

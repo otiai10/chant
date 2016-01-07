@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/otiai10/cachely"
 )
 
 // Client ...
@@ -139,7 +140,7 @@ func (c *Client) YoutubeSearch(query url.Values) (*YoutubeSearchListResponse, er
 	query.Add("key", c.APIKey)
 	baseURL := "https://www.googleapis.com/youtube/v3/search"
 
-	res, err := http.Get(baseURL + "?" + query.Encode())
+	res, err := cachely.Get(baseURL + "?" + query.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +166,7 @@ func (c *Client) CustomSearch(query url.Values) (*CustomSearchResponse, error) {
 
 	baseURL := "https://www.googleapis.com/customsearch/v1"
 
-	res, err := http.Get(baseURL + "?" + query.Encode())
+	res, err := cachely.Get(baseURL + "?" + query.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -192,6 +193,8 @@ func (c *Client) SearchImage(keyword string) (*CustomSearchResponse, error) {
 	q := url.Values{}
 	q.Add("q", keyword)
 	q.Add("searchType", "image")
+	q.Add("num", "10")
+	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
 	return c.CustomSearch(q)
 }
 
@@ -202,5 +205,7 @@ func (c *Client) SearchGIF(keyword string) (*CustomSearchResponse, error) {
 	q.Add("searchType", "image")
 	q.Add("fileType", "gif")
 	q.Add("hq", "animated")
+	q.Add("num", "10")
+	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
 	return c.CustomSearch(q)
 }
