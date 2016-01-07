@@ -57,17 +57,17 @@ var TextInput = React.createClass({
       });
       // }}}
     },
-    openFileSelect: function() {
-      window.alert("hoge");
-    },
     touchStart: function() {
       this.setState({touchDown: true});
       var id = setTimeout(function(){
         if (!this.state.touchDown) return console.info("Already Touch Up");
         this.setState({touchDown: false});
-        // var finput = React.findDOMNode(this.refs.inputFileUpload);
+        // {{{ TODO: #229
         var finput = document.getElementById('input-file-upload');
         finput.click();
+        // mobile safariだとclickイベントは発火するが、dialogがでない
+        // しかたがないので、labelでonclickとってpropagateする方針をとってる
+        // }}}
       }.bind(this), 800);
     },
     touchEnd: function(ev) {
