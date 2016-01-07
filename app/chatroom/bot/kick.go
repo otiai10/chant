@@ -4,6 +4,7 @@ import (
 	"chant/app/models"
 	"fmt"
 	"strings"
+	"time"
 
 	c "chant/conf"
 )
@@ -19,7 +20,14 @@ func (h KickHandler) Handle(event *models.Event, b *models.User) *models.Event {
 	if err := c.Kick(name); err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまんエラー: %v", err))
 	}
-	return models.NewMessage(b, fmt.Sprintf("%sさんをkickした", name))
+	return &models.Event{
+		User:      b,
+		Type:      models.KICK,
+		Raw:       fmt.Sprintf("%sさんをkickした", name),
+		Value:     name,
+		Timestamp: time.Now().UnixNano(),
+	}
+
 }
 
 // Help ...

@@ -48,6 +48,17 @@ var Contents = React.createClass({
                 case "leave":
                     this.leave(payload);
                     break;
+                case "kick":
+                    if (payload.value == Config.myself.screen_name) {
+                      window.alert("kicked :(");
+                      window.location.reload();
+                    }
+                    payload.type = "message";
+                    payload.value = {
+                      "text": payload.raw
+                    };
+                    this.newMessage(payload);
+                    break;
             }
         }.bind(this);
         return {
