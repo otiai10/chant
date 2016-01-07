@@ -27,33 +27,58 @@ var TextInput = React.createClass({
           </div>
         );
     },
+    compress: function(file) {
+      if (file.size < 1000 * 1000) return Promise.resolve(file);
+      var quality = 500 * 1000 / file.size;
+      var uri = URL.createObjectURL(file);
+      var img = new Image();
+      img.src = uri;
+      return new Promise(function(resolve) {
+        var cnvs = document.createElement('canvas');
+        img.onload = function() {
+          try {
+            cnvs.width = img.width / 4;
+            cnvs.height = img.height / 4;
+            cnvs.getContext('2d').drawImage(img, 0, 0, cnvs.width, cnvs.height);
+            var bin = atob(cnvs.toDataURL('image/jpeg', quality).split(',')[1]);
+            var buf = new Uint8Array(bin.length);
+            for (var i = 0; i < bin.length; i++) {
+              buf[i] = bin.charCodeAt(i);
+            }
+            var blob = new Blob([buf.buffer], {type: 'image/jpeg'});
+            blob.name = file.name + '.jpg';
+            resolve(blob);
+          } catch (e) {
+            console.error('compress failed', e);
+            resolve(file);
+          }
+        };
+      });
+    },
     fileChanged: function(ev) {
-      // var finput = React.findDOMNode(this.refs.inputFileUpload);
-      // var file = ev.nativeEvent.dataTransfer.files[0];
-      // var file = finput.files[0];
       var file = ev.target.files[0];
       if (!file.type.match('^image')) {
         return;
       }
-      // data.append('file-0', file);
-      var data = new FormData();
-      // var data = new FormData(file);
-      data.append('oppai', file);
-      data.append('name', file.name);
-      $.ajax({
-        url: "/api/v1/room/default/upload",
-        type: "POST",
-        data: data,
-        // dataType: false,
-        processData: false,
-        contentType: false,
-        // contentType: 'multipart/form-data',
-        success: function(res) {
-          console.log('success', res);
-        },
-        error: function(err) {
-          window.alert(err.statusText);
-        }
+      this.compress(file).then(function(file) {
+        var data = new FormData();
+        data.append('oppai', file);
+        data.append('name', file.name);
+        $.ajax({
+          url: "/api/v1/room/default/upload",
+          type: "POST",
+          data: data,
+          // dataType: false,
+          processData: false,
+          contentType: false,
+          // contentType: 'multipart/form-data',
+          success: function(res) {
+            console.log('success', res);
+          },
+          error: function(err) {
+            window.alert(err.statusText);
+          }
+        });
       });
       // }}}
     },
