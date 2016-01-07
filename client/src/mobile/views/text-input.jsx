@@ -27,7 +27,6 @@ var TextInput = React.createClass({
     touchStart: function() {
       this.setState({touchDown: true});
       var id = setTimeout(function(){
-        window.alert("touch keeped");
         if (!this.state.touchDown) return console.info("Already Touch Up");
         this.setState({touchDown: false});
         var finput = React.findDOMNode(this.refs.inputFileUpload);
