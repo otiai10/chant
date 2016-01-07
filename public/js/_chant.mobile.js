@@ -1094,17 +1094,20 @@ var TextInput = React.createClass({displayName: "TextInput",
         return (
           React.createElement("div", null, 
             React.createElement("textarea", {
-                id: "message-input", 
-                onKeyDown: this.onKeyDown, 
-                onChange: this.onChange, 
-                value: this.state.value, 
-                className: "materialize-textarea", 
-                onTouchStart: this.touchStart, 
-                onTouchEnd: this.touchEnd, 
-                ref: "textarea"
-                }), 
+              id: "message-input", 
+              onKeyDown: this.onKeyDown, 
+              onChange: this.onChange, 
+              value: this.state.value, 
+              className: "materialize-textarea", 
+              onTouchStart: this.touchStart, 
+              onTouchEnd: this.touchEnd, 
+              ref: "textarea"
+              }), 
+            React.createElement("label", null, 
+              React.createElement("i", {className: "fa fa-file pull-right", id: "input-file-upload-proxy"}), 
               React.createElement("input", {type: "file", ref: "inputFileUpload", id: "input-file-upload", onChange: this.fileChanged})
             )
+          )
         );
     },
     fileChanged: function(ev) {
@@ -1137,6 +1140,9 @@ var TextInput = React.createClass({displayName: "TextInput",
       });
       // }}}
     },
+    openFileSelect: function() {
+      window.alert("hoge");
+    },
     touchStart: function() {
       this.setState({touchDown: true});
       var id = setTimeout(function(){
@@ -1167,34 +1173,6 @@ var TextInput = React.createClass({displayName: "TextInput",
             return ev.preventDefault();
         }
         if (!this.state.draft) this.setState({draft: true});
-    },
-    filedrop: function(ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      var file = ev.nativeEvent.dataTransfer.files[0];
-      if (!file.type.match('^image')) {
-        return;
-      }
-      // data.append('file-0', file);
-      var data = new FormData();
-      // var data = new FormData(file);
-      data.append('oppai', file);
-      data.append('name', file.name);
-      $.ajax({
-        url: "/api/v1/room/default/upload",
-        type: "POST",
-        data: data,
-        // dataType: false,
-        processData: false,
-        contentType: false,
-        // contentType: 'multipart/form-data',
-        success: function(res) {
-          console.log('success', res);
-        },
-        error: function(err) {
-          console.log('error', err);
-        }
-      });
     },
     historyCompletion: function(step) {
       var txt = (step > 0) ? chant.local.history.next() : chant.local.history.prev();

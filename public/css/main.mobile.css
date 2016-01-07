@@ -34,8 +34,17 @@ div.container {
 
 input#input-file-upload {
   /* display: none; */
-  /* debug
+  /* debug */
+  /*
   position: fixed;
   top: 100%;
   */
+}
+
+/* TODO: #229 textinputの長押しで実現したいんだが */
+i#input-file-upload-proxy {
+  position: relative;
+  top: -1.4em;
+  font-size: 1.4em;
+  opacity: 0.5;
 }
