@@ -51,7 +51,7 @@ var Contents = React.createClass({
                 case "kick":
                     if (payload.value == Config.myself.screen_name) {
                       window.alert("kicked :(");
-                      window.location.reload();
+                      return window.location.reload();
                     }
                     payload.type = "message";
                     payload.value = {
