@@ -22,7 +22,7 @@ var TextInput = React.createClass({
               ></textarea>
             <label>
               <i className="fa fa-file pull-right" id="input-file-upload-proxy"></i>
-              <input type="file" ref="inputFileUpload" id="input-file-upload" onChange={this.fileChanged}></input>
+              <input type="file" ref="inputFileUpload" accept="image/*" id="input-file-upload" onChange={this.fileChanged}></input>
             </label>
           </div>
         );
