@@ -33,5 +33,7 @@ div.container {
 }
 
 input#input-file-upload {
-  display: none;
+  /* display: none; */
+  position: fixed;
+  top: 100%;
 }
