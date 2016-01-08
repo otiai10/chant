@@ -12,7 +12,10 @@ type HelpHandler struct {
 
 // Handle ...
 func (h HelpHandler) Handle(event *models.Event, b *models.User) *models.Event {
-	wait()
+
+	wg := delay()
+	defer wg.Wait()
+
 	msg := ""
 	for key, h := range Handlers {
 		msg += fmt.Sprintf("/%s: %s\n", key, h.Help())

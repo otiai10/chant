@@ -13,6 +13,9 @@ type MapHandler struct {
 
 // Handle ...
 func (h MapHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wait()
+
 	q := h.ReplaceAllString(event.Raw, "")
 	msg := fmt.Sprintf("https://www.google.co.jp/maps/place/%s/", url.QueryEscape(q))
 	return models.NewMessage(b, msg)

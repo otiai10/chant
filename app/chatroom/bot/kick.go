@@ -16,6 +16,10 @@ type KickHandler struct {
 
 // Handle ...
 func (h KickHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	name := strings.Replace(h.ReplaceAllString(event.Raw, ""), "@", "", -1)
 	if err := c.Kick(name); err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまんエラー: %v", err))

@@ -16,6 +16,10 @@ type YoutubeHandler struct {
 
 // Handle ...
 func (h YoutubeHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	q := h.ReplaceAllString(event.Raw, "")
 
 	client := &google.Client{

@@ -14,6 +14,9 @@ type ListHandler struct {
 
 // Handle ...
 func (h ListHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wait()
+
 	whitelist := c.Whitelist()
 	blacklist := c.Blacklist()
 	return models.NewMessage(b, fmt.Sprintf("whitelist: %v\nblacklist: %v\n", whitelist, blacklist))

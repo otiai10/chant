@@ -15,6 +15,10 @@ type SoundCloudHandler struct {
 
 // Handle ...
 func (h SoundCloudHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	q := h.ReplaceAllString(event.Raw, "")
 	client := &soundcloud.Client{config.SoundCloud.ClientID}
 

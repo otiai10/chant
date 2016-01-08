@@ -16,6 +16,10 @@ type GoogleHandler struct {
 
 // Handle ...
 func (h GoogleHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	q := h.ReplaceAllString(event.Raw, "")
 
 	c := regexp.MustCompile("[ 　]+([0-9]+)$")

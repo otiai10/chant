@@ -17,6 +17,10 @@ type VineHandler struct {
 
 // Handle ...
 func (h VineHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	q := h.ReplaceAllString(event.Raw, "")
 	baseURL := "https://api.vineapp.com/posts/search/%s?count=10"
 	res, err := cachely.Get(fmt.Sprintf(baseURL, q))

@@ -3,8 +3,9 @@ package bot
 import (
 	"chant/app/models"
 	"fmt"
-	"net/http"
 	"regexp"
+
+	"github.com/otiai10/cachely"
 )
 
 // IconHandler ...
@@ -14,12 +15,16 @@ type IconHandler struct {
 
 // Handle ...
 func (h IconHandler) Handle(event *models.Event, b *models.User) *models.Event {
+
+	wg := delay()
+	defer wg.Wait()
+
 	u := h.ReplaceAllString(event.Raw, "")
 	if u == "" {
 		b.ProfileImageURL = "/public/img/hisyotan.png"
 		return nil
 	}
-	res, err := http.Get(u)
+	res, err := cachely.Get(u)
 
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("しっぱいした: %v", err))
