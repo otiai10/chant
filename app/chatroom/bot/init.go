@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"path/filepath"
 	"regexp"
+	"sync"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -71,6 +72,7 @@ func init() {
 		"image":      ImageHandler{HandlerBase{regex("^/ima?ge?[ 　]+")}},
 		"gif":        GifHandler{HandlerBase{regex("^/gif[ 　]+")}},
 		"ggl":        GoogleHandler{HandlerBase{regex("^/ggl[ 　]+")}},
+		"lgtm":       LGTMHandler{HandlerBase{regex("^/lgtm")}},
 		"map":        MapHandler{HandlerBase{regex("^/map[ 　]+")}},
 		"vine":       VineHandler{HandlerBase{regex("^/vine[ 　]+")}},
 		"youtube":    YoutubeHandler{HandlerBase{regex("^/yt|youtube[ 　]+")}},
@@ -106,6 +108,18 @@ func init() {
 func wait() {
 	rand.Seed(time.Now().Unix())
 	time.Sleep(time.Duration(rand.Intn(time.Now().Second()+1)*50) * time.Millisecond)
+}
+
+// 別goroutineでwait分の時間を保証するやつ
+// かならずWaitすること
+func delay() *sync.WaitGroup {
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+	go func() {
+		wait()
+		wg.Done()
+	}()
+	return wg
 }
 
 // ただのregexp.MustCompileのalias
