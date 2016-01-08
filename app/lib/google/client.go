@@ -190,22 +190,26 @@ func (c *Client) CustomSearch(query url.Values) (*CustomSearchResponse, error) {
 
 // SearchImage ...
 func (c *Client) SearchImage(keyword string) (*CustomSearchResponse, error) {
+	num := 5
+	start := 1 // 6, 11, 26, 31, ...
 	q := url.Values{}
 	q.Add("q", keyword)
 	q.Add("searchType", "image")
-	q.Add("num", "10")
-	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
+	q.Add("num", fmt.Sprintf("%d", num))
+	q.Add("start", fmt.Sprintf("%d", start))
 	return c.CustomSearch(q)
 }
 
 // SearchGIF ...
 func (c *Client) SearchGIF(keyword string) (*CustomSearchResponse, error) {
+	num := 5
+	start := 1 // 6, 11, 26, 31, ...
 	q := url.Values{}
 	q.Add("q", keyword)
 	q.Add("searchType", "image")
 	q.Add("fileType", "gif")
 	q.Add("hq", "animated")
-	q.Add("num", "10")
-	q.Add("start", fmt.Sprintf("%d", 1+rand.Intn(4)*10))
+	q.Add("num", fmt.Sprintf("%d", num))
+	q.Add("start", fmt.Sprintf("%d", start))
 	return c.CustomSearch(q)
 }
