@@ -28,31 +28,62 @@ var TextInput = React.createClass({
         );
     },
     compress: function(file) {
-      if (file.size < 1000 * 1000) return Promise.resolve(file);
-      var quality = 500 * 1000 / file.size;
-      var uri = URL.createObjectURL(file);
-      var img = new Image();
-      img.src = uri;
-      return new Promise(function(resolve) {
-        var cnvs = document.createElement('canvas');
-        img.onload = function() {
-          try {
-            cnvs.width = img.width / 4;
-            cnvs.height = img.height / 4;
-            cnvs.getContext('2d').drawImage(img, 0, 0, cnvs.width, cnvs.height);
-            var bin = atob(cnvs.toDataURL('image/jpeg', quality).split(',')[1]);
-            var buf = new Uint8Array(bin.length);
-            for (var i = 0; i < bin.length; i++) {
-              buf[i] = bin.charCodeAt(i);
+      return Promise.resolve().then(function() {
+        return new Promise(function(resolve) {
+          var reader = new FileReader();
+          reader.onloadend = function() {
+            var orientation = 1;
+            if (file.type.match('jpeg')) {
+              var exif = EXIF.readFromBinaryFile(this.result);
+              orientation = exif.Orientation;
             }
-            var blob = new Blob([buf.buffer], {type: 'image/jpeg'});
-            blob.name = file.name + '.jpg';
-            resolve(blob);
-          } catch (e) {
-            console.error('compress failed', e);
-            resolve(file);
+            resolve(orientation);
+          };
+          reader.readAsArrayBuffer(file);
+        });
+      }).then(function(orientation) {
+        var quality = 500 * 1000 / file.size;
+        var uri = URL.createObjectURL(file);
+        return new Promise(function(resolve) {
+          var img = new Image();
+          img.onload = function() {
+            resolve({img: img, quality: quality, orientation: orientation});
+          };
+          img.src = uri;
+        });
+      }).then(function(opt) {
+        var img = opt.img, quality = opt.quality, orientation = opt.orientation;
+        var cnvs = document.createElement('canvas');
+        var ctx = cnvs.getContext('2d');
+        return new Promise(function(resolve) {
+          switch (orientation) { // http://i.stack.imgur.com/VGsAj.gif
+            case 6:
+              cnvs.height = img.width;
+              cnvs.width = img.height;
+              // 原点を中央に
+              ctx.translate(cnvs.width/2, cnvs.height/2);
+              // 原点を中心に90度時計回りに回転
+              ctx.rotate(90 * Math.PI/180)
+              // 原点を左上端点に戻す
+              ctx.translate(-1 * cnvs.height/2, -1 * cnvs.width/2);
+              // 原点からimgをfullにdrawする
+              ctx.drawImage(img, 0, 0);
+              break;
+            default:
+              cnvs.height = img.height;
+              cnvs.width = img.width;
+              ctx.drawImage(img, 0, 0);
           }
-        };
+
+          var bin = atob(cnvs.toDataURL('image/jpeg', quality).split(',')[1]);
+          var buf = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) {
+            buf[i] = bin.charCodeAt(i);
+          }
+          var blob = new Blob([buf.buffer], {type: 'image/jpeg'});
+          blob.name = file.name + '.jpg';
+          resolve(blob);
+        });
       });
     },
     fileChanged: function(ev) {
