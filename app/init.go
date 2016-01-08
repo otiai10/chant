@@ -2,7 +2,9 @@ package app
 
 import (
 	"chant/app/repository"
+	"time"
 
+	"github.com/otiai10/cachely"
 	"github.com/revel/revel"
 )
 
@@ -27,6 +29,8 @@ func init() {
 	// ( order dependent )
 	revel.OnAppStart(InitRepository)
 	// revel.OnAppStart(FillCache)
+
+	cachely.Expires(5 * time.Minute)
 }
 
 // TODO turn this into revel.HeaderFilter
