@@ -7,6 +7,6 @@ WORKDIR /go/src/chant
 RUN go get -u github.com/revel/cmd/revel
 RUN go get ./...
 
-ENTRYPOINT revel run chant
+ENTRYPOINT revel run chant ${CHANT_ENV}
 
 EXPOSE 14000:14000
