@@ -19,8 +19,12 @@ func (h HelloHandler) Handle(event *models.Event, b *models.User) *models.Event 
 	defer wg.Wait()
 
 	rand.Seed(time.Now().Unix())
-	if rand.Intn(3) == 0 {
-		if resp, err := google.SearchImage("進捗どうですか"); err == nil {
+	if rand.Intn(5) == 0 {
+		client := &google.Client{
+			APIKey:               config.Google.APIKey,
+			CustomSearchEngineID: config.Google.DefaultCseID,
+		}
+		if resp, err := client.SearchImage("進捗どうですか", 1); err == nil {
 			return models.NewMessage(b, resp.Random().URL)
 		}
 	}
