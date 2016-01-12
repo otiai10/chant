@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"chant/app/chatroom/bot/context"
 	"chant/app/lib/message"
 	"chant/app/models"
 	"math/rand"
@@ -125,4 +126,15 @@ func delay() *sync.WaitGroup {
 // ただのregexp.MustCompileのalias
 func regex(pattern string) *regexp.Regexp {
 	return regexp.MustCompile(pattern)
+}
+
+// Handle ...
+func Handle(event *models.Event, b *models.User) *models.Event {
+	for _, h := range Handlers {
+		if h.Match(event) {
+			context.Default().Push(event)
+			return h.Handle(event, b)
+		}
+	}
+	return nil
 }

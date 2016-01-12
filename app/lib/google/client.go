@@ -189,9 +189,9 @@ func (c *Client) CustomSearch(query url.Values) (*CustomSearchResponse, error) {
 }
 
 // SearchImage ...
-func (c *Client) SearchImage(keyword string) (*CustomSearchResponse, error) {
+func (c *Client) SearchImage(keyword string, start int) (*CustomSearchResponse, error) {
 	num := 5
-	start := 1 // 6, 11, 26, 31, ...
+	start = 1 + (rand.Intn(start) * 5) // 1, 6, 11, 16, 21, ...
 	q := url.Values{}
 	q.Add("q", keyword)
 	q.Add("searchType", "image")

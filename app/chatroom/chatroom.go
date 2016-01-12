@@ -205,7 +205,8 @@ func (room *Room) say(event *models.Event) (*models.Event, error) {
 
 	// {{{
 	go func() {
-		if response := room.BotHandle(event); response != nil {
+		// これroom.Bot渡すのクソだなー
+		if response := bot.Handle(event, room.Bot); response != nil {
 			room.ArchiveEvent(response)
 			room.publish <- response
 		}
@@ -269,14 +270,4 @@ func (room *Room) ArchiveEvent(event *models.Event) {
 func newtoken(id string) string {
 	a := md5.New().Sum([]byte(id + time.Now().String()))
 	return fmt.Sprintf("%x", a)
-}
-
-//BotHandle ...
-func (room *Room) BotHandle(event *models.Event) *models.Event {
-	for _, h := range bot.Handlers {
-		if h.Match(event) {
-			return h.Handle(event, room.Bot)
-		}
-	}
-	return nil
 }

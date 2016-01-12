@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"chant/app/chatroom/bot/context"
 	"chant/app/lib/google"
 	"chant/app/models"
 	"fmt"
@@ -17,14 +18,15 @@ func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event 
 	wg := delay()
 	defer wg.Wait()
 
+	straight := context.Default().Straight(h, 0, nil)
+
 	q := h.ReplaceAllString(event.Raw, "")
 
 	client := &google.Client{
 		APIKey:               config.Google.APIKey,
 		CustomSearchEngineID: config.Google.DefaultCseID,
 	}
-	// resp, err := google.SearchImage(q)
-	resp, err := client.SearchImage(q)
+	resp, err := client.SearchImage(q, straight)
 	if err != nil {
 		return models.NewMessage(b, fmt.Sprintf("すまん: %v", err))
 	}
