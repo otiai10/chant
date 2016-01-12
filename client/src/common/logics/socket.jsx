@@ -51,7 +51,7 @@ chant.Socket = function(retry) {
   // リトライをインクリメントしとく
   retry = (retry || 2) * 2;
   if (!chant.__socket || chant.__socket.readyState != WebSocket.OPEN) {
-    chant.__socket = new WebSocket('ws://'+location.host+'/websocket/room/socket?token=' + Config.room.token);
+    chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token);
   }
   chant.__socket.onopen = function() {
     if (retry > 4) { // これはSocketによる再接続なので
