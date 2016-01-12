@@ -19,7 +19,10 @@ func (h ListHandler) Handle(event *models.Event, b *models.User) *models.Event {
 
 	whitelist := c.Whitelist()
 	blacklist := c.Blacklist()
-	return models.NewMessage(b, fmt.Sprintf("whitelist: %v\nblacklist: %v\n", whitelist, blacklist))
+	allow := c.AllowDefault()
+	return models.NewMessage(b, fmt.Sprintf(
+		"whitelist: %v\nblacklist: %v\nallow_default: %v\n", whitelist, blacklist, allow,
+	))
 }
 
 // Help ...
