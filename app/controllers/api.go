@@ -16,9 +16,9 @@ import (
 
 	"chant/app/chatroom"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/otiai10/cachely"
 	"github.com/otiai10/curr"
+	"github.com/otiai10/goquery"
 	"github.com/revel/revel"
 )
 
