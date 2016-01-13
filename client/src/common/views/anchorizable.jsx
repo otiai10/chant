@@ -63,12 +63,12 @@ AnchorizableText.Replacer = function(substr) {
 var defaultRules = [
   // Twitter
   {
-    match: /(https?:\/\/twitter.com\/[^\/]+\/status\/[0-9]+)/g,
+    match: /(https?:\/\/(?:mobile\.)?twitter.com\/[^\/]+\/status(?:es)?\/[0-9]+)/g,
     replace: function(i, sub) {
-        var expr = /(https?:\/\/twitter.com)\/([^\/]+)\/status\/([0-9]+)/gi;
+        var expr = /(?:https?:\/\/(?:mobile\.)?twitter.com)\/(?:[^\/]+)\/status(?:es)?\/([0-9]+)/gi;
         var m = expr.exec(sub);
-        if (!m || m.length < 4) return; // do nothing
-        var id = m[3];
+        if (!m || m.length < 2) return; // do nothing
+        var id = m[1];
         $.ajax({
           url: 'https://api.twitter.com/1/statuses/oembed.json?id=' + String(id),
           method: 'GET',
