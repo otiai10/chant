@@ -188,6 +188,7 @@ div.web-preview>div>div.web-preview-description-wrap p {
   padding: 0 10px;
   font-size: small;
   color: #1C2022;
+  overflow: hidden;
 }
 div.web-preview>div>div img {
   width: 100%;
