@@ -14,3 +14,7 @@ git checkout ${branch}
 git pull origin ${branch}
 pkill chant
 nohup revel run chant prod &
+
+echo "----- nohup.out -----"
+
+tail -f nohup.out
