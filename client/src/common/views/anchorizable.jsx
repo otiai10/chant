@@ -107,7 +107,7 @@ var defaultRules = [
   },
   // SoundCloud
   {
-    match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)\/(?:[^\/]+))/gi,
+    match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)(?:\/sets)?\/(?:[^\/]+))/gi,
     wrap: function(sub) {
       return <SoundCloud src={sub}></SoundCloud>;
     }

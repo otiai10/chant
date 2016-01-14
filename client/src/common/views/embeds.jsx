@@ -14,8 +14,9 @@ var YouTube = React.createClass({
 });
 var SoundCloud = React.createClass({
   render: function() {
+    var height = (this.props.src.match(/\/sets\//)) ? 460 : 225;
     var url = "https://w.soundcloud.com/player/?url=" + this.props.src + "&amp;visual=true";
-    return <iframe width="100%" height="225" scrolling="no" frameborder="no" src={url}></iframe>;
+    return <iframe width="100%" height={height} scrolling="no" frameborder="no" src={url}></iframe>;
   }
 });
 var MixCloud = React.createClass({
