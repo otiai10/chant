@@ -9,6 +9,11 @@ setTimeout(function(){
 window.onfocus = function() {
   window.focused = true;
   chant.clearUnread();
+  // {{{
+  if (navigator.userAgent.indexOf('iPhone') > 0) {
+    window.alert('[debug] mobile.focused');
+  }
+  // }}}
 };
 window.onblur = function () {
   window.focused = false;
