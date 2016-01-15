@@ -6,14 +6,13 @@ setTimeout(function(){
     document.getElementById('container')
   );
 }, 0);
-window.onfocus = function() {
-  window.focused = true;
-  chant.clearUnread();
-  // {{{
-  if (navigator.userAgent.indexOf('iPhone') > 0) {
-    window.alert('[debug] mobile.focused');
-  }
-  // }}}
+var chant = chant || {};
+chant.onfocusDelegate = function(func, context) {
+  window.onfocus = function() {
+    window.focused = true;
+    chant.clearUnread();
+    func.call(context);
+  };
 };
 window.onblur = function () {
   window.focused = false;

@@ -2,7 +2,28 @@
  * socketの管理は、ここでやるべきかもしれない
  * onmessageからのディスパッチとか
  */
+var chant = chant || {};
 var Contents = React.createClass({
+    onfocus: function() {
+      $.get('/api/v1/room/default/messages', {
+          token: Config.room.token,
+          name: Config.room.name
+        }, function(res) {
+          // まーとりあえず雑に
+          var messages = res.messages;
+          if (messages.length == 0) return "do nothing";
+          if (this.state.messages.length != 0) {
+            for (var i = 0; i < this.state.messages.length; i++) {
+              if (messages[0].timestamp > this.state.messages[i].timestamp) {
+                messages.unshift(this.state.messages[i]);
+              }
+            }
+          }
+          this.setState({
+            messages: res.messages.reverse()
+          });
+      }.bind(this));
+    },
     componentDidMount: function() {
       console.info("Mobile build : _chant.mobile.js");
       $.get('/api/v1/room/default/messages', {
@@ -13,6 +34,8 @@ var Contents = React.createClass({
           messages: res.messages.reverse()
         });
       }.bind(this));
+
+      chant.onfocusDelegate(this.onfocus, this);
     },
     getInitialState: function() {
         var self = this;

@@ -47,7 +47,7 @@ func (c APIv1) RoomStamps(id, token string) revel.Result {
 }
 
 // RoomMessages とりあえず
-func (c APIv1) RoomMessages(id, token string) revel.Result {
+func (c APIv1) RoomMessages(id, token string, count int, from int64) revel.Result {
 	if !chatroom.Exists(id) {
 		return c.RenderJson(map[string]interface{}{
 			"messages": []interface{}{},
@@ -56,11 +56,17 @@ func (c APIv1) RoomMessages(id, token string) revel.Result {
 	room := chatroom.GetRoom(id, token)
 	if room == nil {
 		return c.RenderJson(map[string]interface{}{
-			"stamps": []interface{}{},
+			"messages": []interface{}{},
 		})
 	}
 	// メッセージアーカイブを、最新の、最大10件を取得する
-	messages := room.Repo.GetMessages(10, -1)
+	if count == 0 {
+		count = 10
+	}
+	if from == 0 {
+		from = -1
+	}
+	messages := room.Repo.GetMessages(count, from)
 	return c.RenderJson(map[string]interface{}{
 		"messages": messages,
 	})
