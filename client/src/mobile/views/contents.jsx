@@ -5,23 +5,36 @@
 var chant = chant || {};
 var Contents = React.createClass({
     onfocus: function() {
-      $.get('/api/v1/room/default/messages', {
-          token: Config.room.token,
-          name: Config.room.name
-        }, function(res) {
-          // まーとりあえず雑に
-          var messages = res.messages;
-          if (messages.length == 0) return "do nothing";
-          if (this.state.messages.length != 0) {
-            for (var i = 0; i < this.state.messages.length; i++) {
-              if (messages[0].timestamp > this.state.messages[i].timestamp) {
-                messages.unshift(this.state.messages[i]);
-              }
-            }
+      Promise.resolve().then(function(){
+        this.setState({loading: 1});
+        return Promise.resolve();
+      }.bind(this)).then(function() {
+        return Promise.all([
+          new Promise(function(resolve) {
+            $.get('/api/v1/room/default/messages', {
+              token: Config.room.token,
+              name: Config.room.name
+            }, resolve);
+          }),
+          new Promise(function(resolve) {
+            setTimeout(resolve, 1000, true);
+          })
+        ]);
+      }).then(function(results) {
+        var messages = results[0].messages;
+        if (messages.length == 0) return "do nothing";
+        if (this.state.messages.length != 0) {
+          for (var i = 0; i < this.state.messages.length; i++) {
+            if (messages[0].timestamp > this.state.messages[i].timestamp) messages.unshift(this.state.messages[i]);
           }
-          this.setState({
-            messages: res.messages.reverse()
-          });
+        }
+        this.setState({messages: messages.reverse()});
+        return Promise.resolve();
+      }.bind(this)).then(function() {
+        this.setState({loading: 0});
+      }.bind(this)).catch(function() {
+        // TODO: なんかエラーを伝える
+        this.setState({loading: 0});
       }.bind(this));
     },
     componentDidMount: function() {
@@ -73,6 +86,7 @@ var Contents = React.createClass({
             }
         };
         return {
+            loading: false,
             messages: [],
             stamps: [],
             members: {}
@@ -121,7 +135,7 @@ var Contents = React.createClass({
             );
         });
         return (
-            <div>
+            <div id="contents-wrapper">
                 <div className="row members-wrapper">
                     <div className="col s12 members">
                         <span>
@@ -143,6 +157,21 @@ var Contents = React.createClass({
                         <Messages setText={this.setText} messages={this.state.messages} />
                     </div>
                 </div>
+                {(this.state.loading == 1) ?
+                  <div id="mobile-loader">
+                      <span>
+                          <i className="fa fa-refresh fa-spin"></i>
+                      </span>
+                  </div>
+                : null}
+                {/* いらんきもするな */}
+                {(this.state.loading == 2) ?
+                  <div id="mobile-loader">
+                      <span>
+                          <i className="fa fa-check"></i>
+                      </span>
+                  </div>
+                : null}
             </div>
         );
     }
