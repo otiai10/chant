@@ -31,6 +31,7 @@ var Contents = React.createClass({
         this.setState({messages: messages.reverse()});
         return Promise.resolve();
       }.bind(this)).then(function() {
+        chant.Socket(0); // ensure connection, reconnect if it is closed
         this.setState({loading: 0});
       }.bind(this)).catch(function() {
         // TODO: なんかエラーを伝える
