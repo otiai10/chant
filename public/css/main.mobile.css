@@ -52,8 +52,7 @@ div#mobile-loader {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);;
-  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.8);;
   display: table;
   text-align: center;
 }
