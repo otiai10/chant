@@ -17,7 +17,7 @@ var Contents = React.createClass({
             }, resolve);
           }),
           new Promise(function(resolve) {
-            setTimeout(resolve, 300, true);
+            setTimeout(resolve, 500, true);
           })
         ]);
       }).then(function(results) {
