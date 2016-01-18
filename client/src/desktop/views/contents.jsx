@@ -22,6 +22,7 @@ var Contents = React.createClass({
         });
       }.bind(this));
       React.render(<EmojiList />, document.getElementById('emoji-list-wrapper'));
+      chant.onfocusDelegate(null, this);
     },
     closeEmojiList: function(ev) {
       if (ev.target.tagName == 'INPUT') return;

@@ -8,6 +8,7 @@ setTimeout(function(){
 }, 0);
 var chant = chant || {};
 chant.onfocusDelegate = function(func, context) {
+  func = func || function() {};
   window.onfocus = function() {
     window.focused = true;
     chant.clearUnread();
