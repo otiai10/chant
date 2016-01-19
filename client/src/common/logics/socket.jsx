@@ -54,9 +54,11 @@ chant.Socket = function(retry) {
     chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token);
   }
   chant.__socket.onopen = function() {
+    /* とりあえず
     if (retry > 4) { // これはSocketによる再接続なので
       chant.notify("[RECONNECTED]\nreconnected successfully (o・∇・o)");
     }
+    */
     if (chant.delegate.iconMyself) {
       chant.delegate.iconMyself.setAttribute(
         'class',
