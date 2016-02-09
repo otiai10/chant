@@ -64,6 +64,10 @@ func Apply() error {
 
 // Kick ...
 func Kick(name string) error {
+	if name == "default" {
+		configs.AllowDefault = false
+		return Apply()
+	}
 	configs.Whitelist = removefromlist(configs.Whitelist, name)
 	configs.Blacklist = removefromlist(configs.Blacklist, name)
 	configs.Blacklist = append(configs.Blacklist, name)
@@ -72,6 +76,10 @@ func Kick(name string) error {
 
 // Invite ...
 func Invite(name string) error {
+	if name == "default" {
+		configs.AllowDefault = true
+		return Apply()
+	}
 	configs.Whitelist = removefromlist(configs.Whitelist, name)
 	configs.Blacklist = removefromlist(configs.Blacklist, name)
 	configs.Whitelist = append(configs.Whitelist, name)
