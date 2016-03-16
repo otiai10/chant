@@ -86,6 +86,7 @@ func init() {
 		"kick":       KickHandler{HandlerBase{regex("^/kick[ 　]+")}},
 		"invite":     InviteHandler{HandlerBase{regex("^/invite[ 　]+")}},
 		"list":       ListHandler{HandlerBase{regex("^/list")}},
+		"tz":         TimezoneHandler{HandlerBase{regex("^/tz ?([^ ]+)?")}},
 	}
 	// bot config
 	if _, err := toml.DecodeFile(filepath.Join(curr.Dir(), "/config.toml"), &config); err != nil {
