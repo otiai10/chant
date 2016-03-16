@@ -8,8 +8,10 @@ type User struct {
 	Name            string `json:"name"`
 	ScreenName      string `json:"screen_name"`
 	ProfileImageURL string `json:"profile_image_url"`
+	Timezone        string `json:"timezone"`
 }
 
+// RestoreUserFromJSON ...
 func RestoreUserFromJSON(jsonstr string) (*User, error) {
 	user := &User{}
 	err := json.Unmarshal([]byte(jsonstr), &user)

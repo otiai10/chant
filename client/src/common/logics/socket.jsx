@@ -51,7 +51,8 @@ chant.Socket = function(retry) {
   // リトライをインクリメントしとく
   retry = (retry || 2) * 2;
   if (!chant.__socket || chant.__socket.readyState != WebSocket.OPEN) {
-    chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token);
+    var tz = (new Date()).toString().split(' ').splice(-2).join(' ');
+    chant.__socket = new WebSocket('ws://'+Config.server.host+'/websocket/room/socket?token=' + Config.room.token + '&tz=' + tz);
   }
   chant.__socket.onopen = function() {
     /* とりあえず

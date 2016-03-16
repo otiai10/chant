@@ -15,7 +15,7 @@ type ChantSocket struct {
 
 // RoomSocket handles `GET /websocket/room/socket` and `websocket connection`
 // websocketが繋がったときの挙動を定義している
-func (c ChantSocket) RoomSocket(ws *websocket.Conn, id, token string) revel.Result {
+func (c ChantSocket) RoomSocket(ws *websocket.Conn, id, token string, tz string) revel.Result {
 
 	// セッション無きものは去れ
 	user, err := models.RestoreUserFromJSON(c.Session["user_raw"])
@@ -23,6 +23,9 @@ func (c ChantSocket) RoomSocket(ws *websocket.Conn, id, token string) revel.Resu
 		revel.ERROR.Println(err)
 		return c.Redirect(Application.Index)
 	}
+
+	// タイムゾーン情報の付加. タイムゾーンはsocket connectionごとに決めようね的な
+	user.Timezone = tz
 
 	myroom := chatroom.GetRoom("default", token)
 
