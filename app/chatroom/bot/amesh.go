@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/amesh"
 	"chant/app/models"
+	"container/list"
 	"time"
 )
 
@@ -12,7 +13,7 @@ type AmeshHandler struct {
 }
 
 // Handle ...
-func (h AmeshHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h AmeshHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 	switch h.ReplaceAllString(event.Raw, "") {
 	case "on":
 		go AmeshObserver.Start()

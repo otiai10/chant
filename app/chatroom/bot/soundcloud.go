@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/soundcloud"
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"math/rand"
 	"time"
@@ -14,7 +15,7 @@ type SoundCloudHandler struct {
 }
 
 // Handle ...
-func (h SoundCloudHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h SoundCloudHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

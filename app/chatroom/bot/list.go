@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 
 	c "chant/conf"
@@ -13,7 +14,7 @@ type ListHandler struct {
 }
 
 // Handle ...
-func (h ListHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h ListHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wait()
 

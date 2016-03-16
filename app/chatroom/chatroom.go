@@ -206,7 +206,7 @@ func (room *Room) say(event *models.Event) (*models.Event, error) {
 	// {{{
 	go func() {
 		// これroom.Bot渡すのクソだなー
-		if response := bot.Handle(event, room.Bot); response != nil {
+		if response := bot.Handle(event, room.Bot, room.members); response != nil {
 			room.ArchiveEvent(response)
 			room.publish <- response
 		}

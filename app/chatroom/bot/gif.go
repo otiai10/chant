@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/google"
 	"chant/app/models"
+	"container/list"
 	"fmt"
 )
 
@@ -12,7 +13,7 @@ type GifHandler struct {
 }
 
 // Handle ...
-func (h GifHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h GifHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

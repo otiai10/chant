@@ -4,6 +4,7 @@ import (
 	"chant/app/chatroom/bot/context"
 	"chant/app/lib/message"
 	"chant/app/models"
+	"container/list"
 	"math/rand"
 	"path/filepath"
 	"regexp"
@@ -28,7 +29,7 @@ func DefaultBot() *models.User {
 // Handler ...
 type Handler interface {
 	Match(*models.Event) bool
-	Handle(*models.Event, *models.User) *models.Event
+	Handle(*models.Event, *models.User, *list.List) *models.Event
 	Help() string
 }
 
@@ -129,11 +130,11 @@ func regex(pattern string) *regexp.Regexp {
 }
 
 // Handle ...
-func Handle(event *models.Event, b *models.User) *models.Event {
+func Handle(event *models.Event, b *models.User, members *list.List) *models.Event {
 	for _, h := range Handlers {
 		if h.Match(event) {
 			context.Default().Push(event)
-			return h.Handle(event, b)
+			return h.Handle(event, b, members)
 		}
 	}
 	return nil

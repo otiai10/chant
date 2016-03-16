@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 
 	"github.com/PuerkitoBio/goquery"
@@ -13,7 +14,7 @@ type LGTMHandler struct {
 }
 
 // Handle ...
-func (h LGTMHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h LGTMHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

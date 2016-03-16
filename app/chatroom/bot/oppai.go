@@ -1,6 +1,9 @@
 package bot
 
-import "chant/app/models"
+import (
+	"chant/app/models"
+	"container/list"
+)
 
 // OppaiHandler ...
 type OppaiHandler struct {
@@ -8,7 +11,7 @@ type OppaiHandler struct {
 }
 
 // Handle ...
-func (h OppaiHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h OppaiHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 	wait()
 	return models.NewMessage(b, "おっぱいな")
 }

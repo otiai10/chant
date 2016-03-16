@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"strings"
 
@@ -14,7 +15,7 @@ type InviteHandler struct {
 }
 
 // Handle ...
-func (h InviteHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h InviteHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

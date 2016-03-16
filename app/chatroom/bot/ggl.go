@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/google"
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -15,7 +16,7 @@ type GoogleHandler struct {
 }
 
 // Handle ...
-func (h GoogleHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h GoogleHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()
