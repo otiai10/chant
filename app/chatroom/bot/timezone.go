@@ -39,7 +39,8 @@ func (h TimezoneHandler) Handle(event *models.Event, b *models.User, members *li
 		}
 		m := regex("GMT([+-])(0?[1-9]{1,2})([0-9]{2}) .+").FindAllStringSubmatch(user.Timezone, -1)
 		if len(m) == 0 || len(m[0]) < 3 {
-			res = append(res, fmt.Sprintf("%s  <%s>  %s", user.ScreenName, "Unknown(UTC)", now.Format("15:04")))
+			t := now.Add(9 * time.Hour)
+			res = add(fmt.Sprintf("%s  <%s>  %s", user.ScreenName, "(JST?)", t.Format("15:04")), res)
 			continue
 		}
 		o := ternary.If(m[0][1] == "+").Int(1, -1)
@@ -49,7 +50,7 @@ func (h TimezoneHandler) Handle(event *models.Event, b *models.User, members *li
 			minutes, _ := strconv.Atoi(m[0][3])
 			t = t.Add(time.Duration(o*minutes) * time.Minute)
 		}
-		res = append(res, fmt.Sprintf("%s  <%s>  %s", user.ScreenName, user.Timezone, t.Format("15:04")))
+		res = add(fmt.Sprintf("%s  <%s>  %s", user.ScreenName, user.Timezone, t.Format("15:04")), res)
 	}
 
 	wg.Wait()
@@ -72,4 +73,12 @@ func inArray(t string, arr []string) bool {
 		}
 	}
 	return false
+}
+
+func add(t string, arr []string) []string {
+	if inArray(t, arr) {
+		return arr
+	}
+	arr = append(arr, t)
+	return arr
 }
