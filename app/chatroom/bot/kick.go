@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"strings"
 	"time"
@@ -15,7 +16,7 @@ type KickHandler struct {
 }
 
 // Handle ...
-func (h KickHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h KickHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

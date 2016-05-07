@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/google"
 	"chant/app/models"
+	"container/list"
 	"math/rand"
 	"time"
 )
@@ -13,7 +14,7 @@ type HelloHandler struct {
 }
 
 // Handle ...
-func (h HelloHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h HelloHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

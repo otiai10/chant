@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -16,7 +17,7 @@ type VineHandler struct {
 }
 
 // Handle ...
-func (h VineHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h VineHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

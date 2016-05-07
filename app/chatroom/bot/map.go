@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"net/url"
 )
@@ -12,7 +13,7 @@ type MapHandler struct {
 }
 
 // Handle ...
-func (h MapHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h MapHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wait()
 

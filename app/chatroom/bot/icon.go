@@ -2,6 +2,7 @@ package bot
 
 import (
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"regexp"
 
@@ -14,7 +15,7 @@ type IconHandler struct {
 }
 
 // Handle ...
-func (h IconHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h IconHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

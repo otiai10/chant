@@ -1,6 +1,9 @@
 package bot
 
-import "chant/app/models"
+import (
+	"chant/app/models"
+	"container/list"
+)
 
 // WhoamiHandler ...
 type WhoamiHandler struct {
@@ -8,7 +11,7 @@ type WhoamiHandler struct {
 }
 
 // Handle ...
-func (h WhoamiHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h WhoamiHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 	wait()
 	return models.NewMessage(b, Messages.Format("whoami", "@"+event.User.ScreenName))
 }

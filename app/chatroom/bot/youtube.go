@@ -3,6 +3,7 @@ package bot
 import (
 	"chant/app/lib/google"
 	"chant/app/models"
+	"container/list"
 	"fmt"
 	"math/rand"
 	"net/url"
@@ -15,7 +16,7 @@ type YoutubeHandler struct {
 }
 
 // Handle ...
-func (h YoutubeHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h YoutubeHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()

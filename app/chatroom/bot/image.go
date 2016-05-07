@@ -4,6 +4,7 @@ import (
 	"chant/app/chatroom/bot/context"
 	"chant/app/lib/google"
 	"chant/app/models"
+	"container/list"
 	"fmt"
 )
 
@@ -13,7 +14,7 @@ type ImageHandler struct {
 }
 
 // Handle ...
-func (h ImageHandler) Handle(event *models.Event, b *models.User) *models.Event {
+func (h ImageHandler) Handle(event *models.Event, b *models.User, _ *list.List) *models.Event {
 
 	wg := delay()
 	defer wg.Wait()
