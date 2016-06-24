@@ -60,11 +60,18 @@ var Contents = React.createClass({
                     };
                     this.newMessage(payload);
                     break;
+                case "keepalive": break;
+                case "liveon":
+                    if (Config.myself.id_str == payload.user.id_str) this.showLive(payload.params);
+                    break;
+                default:
+                    console.info("UNDEFINED EVENT TYPE", payload);
             }
         }.bind(this);
         return {
             messages: [],
             stamps: [],
+            live: null,
             members: {}
         };
     },
@@ -115,6 +122,22 @@ var Contents = React.createClass({
         delete this.state.members[Config.myself.id_str];
         this.setState({members: this.state.members});
     },
+    showLive: function(params) {
+      if (params.platform == '-' && params.channel == '-') {
+        return this.setState({live: null});
+      }
+      this.setState({
+        live: this.getLiveContent(params)
+      });
+    },
+    getLiveContent: function(p) {
+      switch (p.platform) {
+      case 'twitch':
+        var src = "https://player.twitch.tv/?channel=" + p.channel;
+        return <iframe src={src} frameborder="0" scrolling="no" height="378" width="100%"></iframe>;
+      default: return null;
+      }
+    },
     render: function() {
         var messages = this.state.messages.map(function(message, i) {
             return (
@@ -131,6 +154,7 @@ var Contents = React.createClass({
                     <NotificationSettings />
                   </div>
                 </div>
+                {this.state.live}
                 <div className="row">
                     <div className="col s12 members">
                         <span>

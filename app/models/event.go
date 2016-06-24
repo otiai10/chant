@@ -18,6 +18,7 @@ const (
 	UNMUTE    = "unmute"
 	AMESH     = "amesh"
 	KICK      = "kick"
+	LIVEON    = "liveon"
 )
 
 // Event ...
