@@ -48,3 +48,4 @@ conf/configs.json
 # client
 client/node_modules/*
 client/dest/*
+node_modules

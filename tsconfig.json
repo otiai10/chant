@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es5"
+  },
+  "files": [
+    "typings/index.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
