@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/otiai10/chant/src/controllers"
+	"github.com/otiai10/chant/server/controllers"
 	"github.com/otiai10/marmoset"
 )
 

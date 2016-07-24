@@ -3,13 +3,13 @@ package app
 import (
 	"net/http"
 
-	"github.com/otiai10/chant/src/routes"
+	"github.com/otiai10/chant/server/routes"
 	"github.com/otiai10/marmoset"
 )
 
 func init() {
 
-	marmoset.LoadViews("../src/views")
+	marmoset.LoadViews("../server/views")
 
 	frontend := routes.Frontend()
 
