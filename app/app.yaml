@@ -5,6 +5,6 @@ api_version: go1
 
 handlers:
 - url: /assets
-  static_dir: ./assets
+  static_dir: ../src/assets
 - url: /.*
   script: _go_app
