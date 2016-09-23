@@ -11,7 +11,7 @@ import (
 func init() {
 	router := m.NewRouter()
 
-	m.LoadViews("../src/views")
+	m.LoadViews("./views")
 
 	router.GET("/", c.Index)
 	router.POST("/message", c.Message)
