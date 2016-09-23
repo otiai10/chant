@@ -1,8 +1,14 @@
 {{template "partials/header"}}
-<body>
-  <main>
-    <h1>{{.foo}}</h1>
-  </main>
-  <script type="text/javascript" src="/assets/js/index.js"></script>
-</body>
+<main>
+  <h1>{{.user}}</h1>
+  <h1>{{.err0}}</h1>
+  <h1>{{.token}}</h1>
+  <h1>{{.err1}}</h1>
+</main>
+<script type="text/javascript">
+var chant = {
+  token: {{.token}}
+};
+</script>
+<script type="text/javascript" src="/assets/js/index.js"></script>
 {{template "partials/footer"}}

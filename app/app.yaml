@@ -8,3 +8,4 @@ handlers:
   static_dir: ../src/assets
 - url: /.*
   script: _go_app
+  login: required
