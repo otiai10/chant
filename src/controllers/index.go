@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"google.golang.org/appengine"
@@ -10,13 +11,14 @@ import (
 	m "github.com/otiai10/marmoset"
 )
 
-var uids = []string{}
+// Identity Pool
+var uids = map[string]*user.User{}
 
 // Index ...
 func Index(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 	u := user.Current(ctx)
-	uids = append(uids, u.String())
+	uids[u.String()] = u
 	token, err1 := channel.Create(ctx, u.String())
 	m.Render(w).HTML("index", m.P{
 		// "foo":   m.Context().Get(r).Value("chant-sid"),
@@ -26,13 +28,16 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Hello ...
-func Hello(w http.ResponseWriter, r *http.Request) {
+// Message ...
+func Message(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
-	for _, uid := range uids {
-		channel.SendJSON(ctx, uid, m.P{})
+	body := struct {
+		Message string `json:"message"`
+	}{}
+	json.NewDecoder(r.Body).Decode(&body)
+	for _, u := range uids {
+		channel.SendJSON(ctx, u.String(), m.P{
+			"message": body.Message,
+		})
 	}
-	// m.Render(w).JSON(http.StatusCreated, m.P{
-	// 	"foo": "なんだね",
-	// })
 }

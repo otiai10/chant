@@ -14,7 +14,7 @@ func init() {
 	m.LoadViews("../src/views")
 
 	router.GET("/", c.Index)
-	router.POST("/hello", c.Hello)
+	router.POST("/message", c.Message)
 
 	server := m.NewFilter(router).
 		Add(&f.SessionFilter{}).
