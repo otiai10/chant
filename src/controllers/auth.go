@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -28,7 +29,8 @@ func AuthTwitterStart(w http.ResponseWriter, r *http.Request) {
 
 	// Get temporary Request Token from provider.
 	client := urlfetch.Client(ctx)
-	requestToken, url, err := twitter.NewClient(client).GetRequestTokenAndUrl("http://localhost:8080/auth/twitter/callback")
+	callback := fmt.Sprintf("%s://%s/auth/twitter/callback", "http" /* TODO */, r.Host)
+	requestToken, url, err := twitter.NewClient(client).GetRequestTokenAndUrl(callback)
 	if err != nil {
 		m.Render(w).HTML("errors/500", m.P{
 			"errors": []interface{}{map[string]interface{}{"message": err.Error()}},
