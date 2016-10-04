@@ -9,15 +9,19 @@ import (
 )
 
 func init() {
+
 	router := m.NewRouter()
 
 	m.LoadViews("./views")
 
 	router.GET("/", c.Index)
+	router.GET("/login", c.Login)
+	router.GET("/auth/twitter", c.AuthTwitterStart)
+	router.GET("/auth/twitter/callback", c.AuthTwitterCallback)
 	router.POST("/message", c.Message)
 
 	server := m.NewFilter(router).
-		Add(&f.SessionFilter{}).
+		Add(&f.AuthFilter{}).
 		Add(&m.ContextFilter{}).
 		Add(&f.RecoverFilter{}).
 		Server()

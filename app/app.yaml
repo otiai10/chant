@@ -8,4 +8,6 @@ handlers:
   static_dir: assets
 - url: /.*
   script: _go_app
-  login: required
+
+includes:
+- ./env/config.yaml
