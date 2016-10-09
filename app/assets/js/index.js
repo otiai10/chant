@@ -46,6 +46,8 @@
 
 	"use strict";
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -56,8 +58,73 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/* global chant:false */
-	_reactDom2.default.render(_react2.default.createElement("img", { src: chant.myself.profile_image_url }), document.querySelector("main"));
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global chant:false, goog:false */
+
+
+	// redux storeをつくる
+
+	// channelのonmessageでactionを発行するactioncreatorをつくる
+	(function () {
+	    var channel = new goog.appengine.Channel(chant.channeltoken);
+	    var socket = channel.open();
+	    socket.onmessage = function (ev) {
+	        window.console.log(ev);
+	        var li = document.createElement("li");
+	        li.innerHTML = ev.data;
+	        document.querySelector("#messages").appendChild(li);
+	    };
+	})();
+
+	var Foo = function (_Component) {
+	    _inherits(Foo, _Component);
+
+	    function Foo(props) {
+	        _classCallCheck(this, Foo);
+
+	        return _possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, props));
+	    }
+
+	    _createClass(Foo, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement("img", { src: chant.myself.profile_image_url }),
+	                _react2.default.createElement(
+	                    "div",
+	                    null,
+	                    _react2.default.createElement(
+	                        "ol",
+	                        { id: "messages" },
+	                        _react2.default.createElement(
+	                            "li",
+	                            null,
+	                            _react2.default.createElement("input", { type: "text", id: "message", onKeyDown: this.onKeyDown.bind(this) })
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }, {
+	        key: "onKeyDown",
+	        value: function onKeyDown(ev) {
+	            var ENTER = 13;
+	            if (ev.which != ENTER || !document.querySelector("#message").value) return;
+	            var xhr = new XMLHttpRequest();
+	            xhr.open("POST", "/message", true);
+	            xhr.send(JSON.stringify({ message: document.querySelector("#message").value }));
+	        }
+	    }]);
+
+	    return Foo;
+	}(_react.Component);
+
+	_reactDom2.default.render(_react2.default.createElement(Foo, null), document.querySelector("main"));
 
 /***/ },
 /* 1 */
