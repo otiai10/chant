@@ -1,1 +1,7 @@
+*.log
+
+# App
 app/env/config.yaml
+
+# Client
+node_modules/

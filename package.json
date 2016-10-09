@@ -1,0 +1,35 @@
+{
+  "name": "chant-client",
+  "version": "2.0.0",
+  "description": "chant client js",
+  "main": "client/src/index.js",
+  "scripts": {
+    "start": "webpack --config ./client/webpack.config.js --progress --watch",
+    "release": "eslint src/ && NODE_ENV=production webpack --config ./client/webpack/config.js",
+    "lint": "eslint --config client/.eslintrc.yml client/src",
+    "test": "eslint --config ./client/.eslintrc.yml client/src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/otiai10/chant/tree/master/client"
+  },
+  "keywords": [
+    "chat",
+    "js",
+    "reactjs"
+  ],
+  "author": "otiai10",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "eslint": "^3.7.1",
+    "eslint-plugin-react": "^6.3.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "webpack": "^1.13.2"
+  }
+}

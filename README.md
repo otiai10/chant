@@ -7,12 +7,12 @@ Develop
 ===========
 
 ```
-goapp serve app
+npm start & goapp serve app
 ```
 
 Deploy
 ==========
 
 ```
-goapp deploy app
+npm run release && goapp deploy app
 ```
