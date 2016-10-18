@@ -3,6 +3,15 @@ CHANT
 
 the minimum, casual, tiny and easy closed chat.
 
+tl;dr
+=====
+
+Hit it now, by using your cool appengine name.
+
+```zsh
+goapp deploy -application your-appengine-appname ./app
+```
+
 Develop
 ===========
 
@@ -10,9 +19,10 @@ Develop
 npm start & goapp serve app
 ```
 
-Deploy
+Release
 ==========
 
 ```
-npm run release && goapp deploy app
+npm run release && \
+goapp deploy -application your-appengine-appname ./app
 ```
