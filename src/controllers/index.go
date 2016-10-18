@@ -6,6 +6,7 @@ import (
 
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/channel"
+	"google.golang.org/appengine/log"
 
 	"github.com/otiai10/chant/src/chatroom"
 	"github.com/otiai10/chant/src/models"
@@ -36,14 +37,19 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: Error handling
+	room, _ := chatroom.GetRoom(ctx, "default")
+
 	// Add subscribers
-	room := chatroom.GetRoom("default")
-	room.Subscribers = append(room.Subscribers, subscriberID)
+	room.AddMember(user, channeltoken)
+	err = room.Save(ctx)
+	log.Errorf(ctx, "room.Save: %v", err)
 
 	m.Render(w).HTML("index", m.P{
 		"myself":       user,
 		"channeltoken": channeltoken,
 	})
+
 }
 
 // Message ...
@@ -53,7 +59,10 @@ func Message(w http.ResponseWriter, r *http.Request) {
 		Text string `json:"text"`
 	}{}
 	json.NewDecoder(r.Body).Decode(&body)
-	room := chatroom.GetRoom("default")
+	// TODO: Error handling
+	room, _ := chatroom.GetRoom(ctx, "default")
+
+	log.Infof(ctx, "room: %v\n", room)
 	for _, subscribeID := range room.Subscribers {
 		channel.SendJSON(ctx, subscribeID, m.P{
 			"text": body.Text,
