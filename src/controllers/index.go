@@ -50,13 +50,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func Message(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 	body := struct {
-		Message string `json:"message"`
+		Text string `json:"text"`
 	}{}
 	json.NewDecoder(r.Body).Decode(&body)
 	room := chatroom.GetRoom("default")
 	for _, subscribeID := range room.Subscribers {
 		channel.SendJSON(ctx, subscribeID, m.P{
-			"message": body.Message,
+			"text": body.Text,
 		})
 	}
 }

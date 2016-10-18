@@ -5,13 +5,15 @@ var plugins = [];
 if (process.env.NODE_ENV == "production") {
   plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: { warnings: false },
-    mangle: true
+    mangle: false
   }));
 }
+plugins.push(new webpack.DefinePlugin({
+  "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+}));
 
 module.exports = {
   entry: {
-    channel: "./client/src/js/entrypoints/channel.js",
     index: "./client/src/js/entrypoints/index.js",
   },
   output: {filename:"./app/assets/js/[name].js"},
