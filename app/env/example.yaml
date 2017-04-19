@@ -1,5 +1,0 @@
-env_variables:
-  TWITTER_CONSUMER_KEY: xxxxxxxxx
-  TWITTER_CONSUMER_SECRET: yyyyyy
-  JWT_SECRET_SALT: zzzzzzzzzzzz
-  JWT_SIGNING_METHOD: HS256
