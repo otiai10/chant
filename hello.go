@@ -4,9 +4,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/otiai10/marmoset"
 )
 
 func main() {
+
+	router := marmoset.NewRouter()
+	fmt.Println(router)
+
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/_ah/health", healthCheckHandler)
 	log.Print("Listening on port 8080")
