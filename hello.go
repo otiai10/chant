@@ -10,13 +10,17 @@ import (
 
 func main() {
 
-	router := marmoset.NewRouter()
-	fmt.Println(router)
+	r := marmoset.NewRouter()
 
-	http.HandleFunc("/", handle)
-	http.HandleFunc("/_ah/health", healthCheckHandler)
+	r.GET("/", handle)
+	r.GET("/chant", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "CHANT: %s", "ちゃんとしよう")
+	})
+	r.GET("/_ah/health", healthCheckHandler)
+
 	log.Print("Listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
