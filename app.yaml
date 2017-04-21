@@ -1,2 +1,5 @@
 runtime: go
 env: flex
+
+includes:
+  - server/configs/secret.yaml
