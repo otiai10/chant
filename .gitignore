@@ -1,3 +1,7 @@
+### {{{ APPLICATION
+client/dest/js
+### }}}
+
 ###
 # {{{ https://github.com/github/gitignore/blob/master/Go.gitignore
 
