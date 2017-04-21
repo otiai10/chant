@@ -10,11 +10,12 @@ module.exports = {
   },
   module: {
     loaders: [
-      {test: /\.js$/,loaders: ['babel-loader']},
+      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel-loader']},
+      {test: /\.json$/, loaders: ['json-loader']}
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js','.json']
   },
   plugins: plugins,
 };

@@ -1,9 +1,22 @@
+import * as firebase from "firebase/app";
+import 'firebase/auth';
+import 'firebase/database';
+
+import config from "./firebase-config";
+var _app = firebase.initializeApp(config);
 
 export function startListening(dispatch) {
-  setInterval(() => {
+  _app.database().ref('messages').on('value', snapshot => {
     dispatch({
-      type: "REMOTE_MESSAGE",
-      text: `hoge fuga piyo!! ${Date.now()}`,
-    })
-  }, 1000);
+      type: "SYNC_MESSAGE",
+      snapshot: snapshot.val() || [],
+    });
+  })
+  // setInterval(() => {
+  //   const m = _app.database().ref('messages').push();
+  //   m.set({
+  //     text: "やあやあ！",
+  //     ts: Date.now(),
+  //   });
+  // }, 2000);
 }
