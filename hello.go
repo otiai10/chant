@@ -18,6 +18,8 @@ func main() {
 	})
 	r.GET("/_ah/health", healthCheckHandler)
 
+	r.Static("/public", "/client/dest")
+
 	log.Print("Listening on port 8080")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
