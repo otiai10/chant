@@ -1,5 +1,6 @@
 runtime: go
-env: flex
+api_version: go1
 
-includes:
-  - secret.yaml
+handlers:
+- url: /.*
+  script: _go_app

@@ -1,7 +1,0 @@
-memo = "32f18cbf875b33700aec3f6301c7a35aaa6a8c9db247902fe58c5dc3381b2550"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/otiai10/marmoset"
-  packages = ["."]
-  revision = "b5f53c58a80a8135bba1215221f3b8d2caafc904"
