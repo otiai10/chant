@@ -1,5 +1,8 @@
+application: chant-app
+version: 2
 runtime: go
 api_version: go1
+env: standard
 
 handlers:
 - url: /.*
