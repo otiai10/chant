@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	//"github.com/otiai10/marmoset"
+
+	"github.com/otiai10/marmoset"
 )
 
 func init() {
-	// router := marmoset.NewRouter()
-	// router.GET("/", handler)
-	// http.Handle("/", router)
-	http.HandleFunc("/", handler)
+	router := marmoset.NewRouter()
+	router.GET("/", handler)
+	http.Handle("/", router)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world!: %s", time.Now().String())
+	fmt.Fprintf(w, "Using marmoset router!: %s", time.Now().String())
 }
