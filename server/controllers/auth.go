@@ -3,13 +3,14 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"google.golang.org/appengine"
-	"google.golang.org/appengine/log"
 
 	"github.com/mrjones/oauth"
 	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
 )
 
@@ -94,7 +95,17 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 		panic(fmt.Errorf("TODO: Error Handling: %v", err))
 	}
 
-	log.Debugf(ctx, "FETCHED IDENTITY:\n%+v\n\n", identity)
+	// Store Identity, TODO: use Session, instead of Cookie
+	user := &models.User{Identity: *identity}
+	jwttoken, err := user.Encode(os.Getenv("JWT_SALT"))
+	if err != nil {
+		panic(fmt.Errorf("TODO: Error Handling: %v", err))
+	}
+	http.SetCookie(w, &http.Cookie{
+		Name:  "chant_identity_token",
+		Value: jwttoken, Path: "/",
+		Expires: time.Now().Add(480 * time.Hour),
+	})
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }
