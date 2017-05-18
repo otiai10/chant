@@ -4,13 +4,23 @@ import (
 	"net/http"
 	"os"
 
+	"golang.org/x/net/context"
+	"google.golang.org/appengine"
+
 	"github.com/otiai10/chant/server/models"
+	"github.com/otiai10/marmoset"
 )
 
 // AuthFilter ...
 type AuthFilter struct {
 	Next http.Handler
 }
+
+// AuthCtxKey ...
+type AuthCtxKey string
+
+// AuthKey ...
+const AuthKey AuthCtxKey = "user"
 
 // ServeHTTP ...
 func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -32,6 +42,8 @@ func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if user != nil {
+			ctx := appengine.NewContext(r)
+			marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
 			f.Next.ServeHTTP(w, r)
 			return
 		}

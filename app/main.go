@@ -18,6 +18,11 @@ func init() {
 		panic(fmt.Errorf("Failed to initialize identity provider: %v", err))
 	}
 
+	// Views
+	if marmoset.LoadViews("./views") == nil {
+		panic("Marmoset failed to load views")
+	}
+
 	// Routings
 	router := marmoset.NewRouter()
 	// app
@@ -30,12 +35,10 @@ func init() {
 	router.Static("/public", "./public")
 
 	// Filters
-	server := marmoset.NewFilter(router).Add(new(filters.AuthFilter)).Server()
-
-	// Views
-	if marmoset.LoadViews("./views") == nil {
-		panic("Marmoset failed to load views")
-	}
+	server := marmoset.NewFilter(router).
+		Add(new(filters.AuthFilter)).
+		Add(new(marmoset.ContextFilter)).
+		Server()
 
 	http.Handle("/", server)
 }
