@@ -28,6 +28,7 @@ func init() {
 	// app
 	router.GET("/", controllers.Index)
 	router.GET("/login", controllers.Login)
+	router.POST("/logout", controllers.Logout)
 	// auth
 	router.POST("/auth", controllers.Auth)
 	router.GET("/auth/callback", controllers.AuthCallback)
