@@ -23,7 +23,10 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	provider.SharedInstance.SetContext(ctx)
 	// }}}
 
-	requestToken, url, err := provider.SharedInstance.GetRequestTokenAndUrl("http://localhost:8080/auth/callback")
+	// XXX: We can't use r.URL.Scheme/Host to create callback URL,
+	//      because "goapp" proxy server remove them.
+	callback := fmt.Sprintf("%s/auth/callback", r.Header.Get("Origin"))
+	requestToken, url, err := provider.SharedInstance.GetRequestTokenAndUrl(callback)
 
 	if err != nil {
 		marmoset.Render(w).HTML("login", marmoset.P{
