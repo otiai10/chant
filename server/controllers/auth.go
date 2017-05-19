@@ -86,11 +86,11 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 	// Flush Unnecessary Cookies
 	http.SetCookie(w, &http.Cookie{
 		Name:  "chant_twitter_request_token",
-		Value: "", Path: "/", Expires: time.Time{},
+		Value: "", Path: "/", Expires: time.Now(),
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:  "chant_twitter_request_secret",
-		Value: "", Path: "/", Expires: time.Time{},
+		Value: "", Path: "/", Expires: time.Now(),
 	})
 
 	identity, err := provider.SharedInstance.FetchIdentity(accesstoken)
