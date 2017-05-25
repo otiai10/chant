@@ -1,5 +1,6 @@
 *~
 *.pyc
 
+node_modules/
 # CHANT APPLICATION SETTINGS
 app/secret.yaml

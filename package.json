@@ -1,0 +1,15 @@
+{
+  "name": "chant",
+  "version": "2.0.0",
+  "repository": "git@github.com:otiai10/chant.git",
+  "author": "Hiromu OCHIAI <otiai10@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack --config ./client/webpack.config.js --watch",
+    "build": "webpack --config ./client/webpack.config.js",
+    "release": "NODE_ENV=production webpack --config ./client/webpack.config.js"
+  },
+  "devDependencies": {
+    "webpack": "^2.6.1"
+  }
+}
