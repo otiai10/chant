@@ -1,7 +1,7 @@
 {{template "partials/header" .}}
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
-<script type="text/javascript">var chant = {user: {{.user}}}</script>
+<script type="text/javascript">var chant = chant || {}; chant.user = {{.user}};</script>
 <main id="app"></main>
-<script type="text/javascript">(function() { firebase.initializeApp(({{.configs}}).firebase); })();</script>
+<script type="text/javascript">(function() { chant.firebase = firebase.initializeApp(({{.configs}}).firebase); })();</script>
 <script type="text/javascript" src="/public/js/index.js"></script>
 {{template "partials/footer" .}}

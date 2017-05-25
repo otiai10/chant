@@ -1,9 +1,11 @@
+import 'firebase/auth';
+import 'firebase/database';
 
 export function startListeningFirebase(dispatch) {
-  setInterval(() => {
+  chant.firebase.database().ref('messages').on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MESSAGE',
-      text: `hoge fuga piyo!! ${Date.now()}`,
+      data: snapshot.val() || [],
     });
-  }, 10 * 1000);
+  });
 }

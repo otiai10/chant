@@ -19,6 +19,7 @@
     "babel-preset-react": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.0.1",
+    "firebase": "^4.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
@@ -67,6 +68,9 @@
         "error",
         2
       ]
+    },
+    "globals": {
+      "chant": false
     }
   },
   "dependencies": {
