@@ -1,4 +1,5 @@
 {{template "partials/header" .}}
+<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
 <main>
   <h1>CHANTつくりなおし、また仕切り直し</h1>
   <p>{{.user.Name}}</p>
@@ -7,4 +8,6 @@
     <input type="submit" value="Exit" />
   </form>
 </main>
+<script type="text/javascript">(function() { firebase.initializeApp(({{.configs}}).firebase); })();</script>
+<script type="text/javascript" src="/public/js/index.js"></script>
 {{template "partials/footer" .}}
