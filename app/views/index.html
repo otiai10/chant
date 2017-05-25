@@ -1,13 +1,7 @@
 {{template "partials/header" .}}
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
-<main>
-  <h1>CHANTつくりなおし、また仕切り直し</h1>
-  <p>{{.user.Name}}</p>
-  <img src="{{.user.ImageURL}}" />
-  <form method="POST" action="/logout">
-    <input type="submit" value="Exit" />
-  </form>
-</main>
+<script type="text/javascript">var chant = {user: {{.user}}}</script>
+<main id="app"></main>
 <script type="text/javascript">(function() { firebase.initializeApp(({{.configs}}).firebase); })();</script>
 <script type="text/javascript" src="/public/js/index.js"></script>
 {{template "partials/footer" .}}
