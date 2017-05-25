@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import {connect} from 'react-redux';
 
@@ -10,5 +11,8 @@ export default class App extends Component {
         <h1>This is chant: {this.props.messages.length}</h1>
       </div>
     );
+  }
+  static propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 }
