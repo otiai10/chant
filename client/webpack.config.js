@@ -3,14 +3,14 @@
  * where "package.json" located.
  */
 
-var webpack = require("webpack");
+var webpack = require('webpack');
 
 var plugins = [
   new webpack.DefinePlugin({
-    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
   }),
 ];
-if (process.env.NODE_ENV == "production") {
+if (process.env.NODE_ENV == 'production') {
   plugins.push(new webpack.optimize.UglifyJsPlugin({
     // compress: { warnings: false },
     mangle: true
@@ -19,18 +19,18 @@ if (process.env.NODE_ENV == "production") {
 
 module.exports = {
   entry: {
-    index: "./client/src/entrypoints/index.js"
+    index: './client/src/entrypoints/index.js'
   },
   output: {
-    filename: "./app/public/js/[name].js"
+    filename: './app/public/js/[name].js'
   },
   module: {
     loaders: [
-      {test: /.jsx?$/, loader: "babel-loader"}
+      {test: /.jsx?$/, loader: 'babel-loader'}
     ]
   },
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: ['.js', '.jsx']
   },
   plugins: plugins,
 };
