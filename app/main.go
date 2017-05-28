@@ -3,6 +3,7 @@ package chant
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/otiai10/chant/provider"
 	"github.com/otiai10/chant/server/controllers"
@@ -29,6 +30,7 @@ func init() {
 	router.GET("/", controllers.Index)
 	router.GET("/login", controllers.Login)
 	router.POST("/logout", controllers.Logout)
+	router.GET("/403", controllers.Forbidden)
 	// auth
 	router.POST("/auth", controllers.Auth)
 	router.GET("/auth/callback", controllers.AuthCallback)
@@ -36,8 +38,9 @@ func init() {
 	router.Static("/public", "./public")
 
 	// Filters
+	policyfile, _ := os.Open("./policy.yaml")
 	server := marmoset.NewFilter(router).
-		Add(new(filters.AuthFilter)).
+		Add(filters.InitializeAuthFilter(policyfile)).
 		Add(new(marmoset.ContextFilter)).
 		Server()
 

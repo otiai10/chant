@@ -13,7 +13,8 @@ import (
 
 // AuthFilter ...
 type AuthFilter struct {
-	Next http.Handler
+	Next   http.Handler
+	Policy *Policy
 }
 
 // AuthCtxKey ...
@@ -21,6 +22,13 @@ type AuthCtxKey string
 
 // AuthKey ...
 const AuthKey AuthCtxKey = "user"
+
+// InitializeAuthFilter ...
+func InitializeAuthFilter(policyfile *os.File) *AuthFilter {
+	return &AuthFilter{
+		Policy: NewPolicy(policyfile),
+	}
+}
 
 // ServeHTTP ...
 func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -41,13 +49,18 @@ func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 			return
 		}
-		if user != nil {
-			ctx := appengine.NewContext(r)
-			marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
-			f.Next.ServeHTTP(w, r)
+		if user == nil {
+			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 			return
 		}
-		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+		if !f.Policy.Allow(user) {
+			http.Redirect(w, r, "/403", http.StatusTemporaryRedirect)
+			return
+		}
+		ctx := appengine.NewContext(r)
+		marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
+		f.Next.ServeHTTP(w, r)
+		return
 	default:
 		f.Next.ServeHTTP(w, r)
 	}
