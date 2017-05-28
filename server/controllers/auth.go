@@ -110,5 +110,18 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(480 * time.Hour),
 	})
 
+	// {{{ for manual authentication without Firebase in frontend
+	http.SetCookie(w, &http.Cookie{
+		Name:  "tmp_chant_access_token",
+		Value: accesstoken.Token, Path: "/",
+		Expires: time.Now().Add(30 * time.Second),
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:  "tmp_chant_access_secret",
+		Value: accesstoken.Secret, Path: "/",
+		Expires: time.Now().Add(30 * time.Second),
+	})
+	// }}}
+
 	http.Redirect(w, r, "/", http.StatusFound)
 }
