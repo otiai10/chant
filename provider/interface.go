@@ -37,6 +37,7 @@ func Initialize(name string) error {
 // Identity ...
 type Identity struct {
 	Provider string `json:"provider"`
+	ID       string `json:"id"`
 	Name     string `json:"name"`
 	ImageURL string `json:"image_url"`
 }

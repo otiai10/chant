@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/otiai10/chant/provider"
 )
@@ -9,6 +11,7 @@ import (
 type User struct {
 	provider.Identity
 	jwt.StandardClaims
+	LoginTime time.Time `json:"login_time"`
 }
 
 // Encode to JWT string

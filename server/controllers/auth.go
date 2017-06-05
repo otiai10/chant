@@ -4,13 +4,17 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path"
 	"time"
 
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/log"
+	"google.golang.org/appengine/urlfetch"
 
 	"github.com/mrjones/oauth"
 	"github.com/otiai10/chant/provider"
 	"github.com/otiai10/chant/server/models"
+	"github.com/otiai10/firebase"
 	"github.com/otiai10/marmoset"
 )
 
@@ -99,7 +103,7 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Store Identity, TODO: use Session, instead of Cookie
-	user := &models.User{Identity: *identity}
+	user := &models.User{Identity: *identity, LoginTime: time.Now()}
 	jwttoken, err := user.Encode(os.Getenv("JWT_SALT"))
 	if err != nil {
 		panic(fmt.Errorf("TODO: Error Handling: %v", err))
@@ -122,6 +126,15 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(30 * time.Second),
 	})
 	// }}}
+
+	// Firebase
+	url := os.Getenv("FIREBASE_DB_URL") + path.Join("/members", user.ID)
+	auth := os.Getenv("FIREBASE_DEPRECATED_DATABASE_SECRETS")
+	ref := firebase.NewReference(url).Auth(auth)
+	ref.Client = urlfetch.Client(ctx)
+	if err := ref.Write(user); err != nil {
+		log.Debugf(ctx, "CHANT FAILED TO UPDATE `members` entry: %v", err)
+	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }
