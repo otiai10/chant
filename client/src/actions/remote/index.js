@@ -8,4 +8,10 @@ export function startListeningFirebase(dispatch) {
       data: snapshot.val() || [],
     });
   });
+  chant.firebase.database().ref('members').on('value', snapshot => {
+    dispatch({
+      type: 'REMOTE_MEMBER',
+      data: snapshot.val() || [],
+    });
+  });
 }
