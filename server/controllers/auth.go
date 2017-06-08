@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"time"
@@ -18,6 +19,16 @@ import (
 	"github.com/otiai10/marmoset"
 )
 
+// XXX: We can't use r.URL.Scheme/Host to create callback URL,
+//      because "goapp" proxy server remove them.
+func getCallbackURL(req *http.Request) string {
+	u, err := url.Parse(req.Referer())
+	if err == nil {
+		return fmt.Sprintf("%s://%s/auth/callback", u.Scheme, req.Host)
+	}
+	return fmt.Sprintf("%s/auth/callback", req.Header.Get("Origin"))
+}
+
 // Auth handles starting point for OAuth communication.
 // This endpoint is hit intentionally from "/login"
 func Auth(w http.ResponseWriter, r *http.Request) {
@@ -27,9 +38,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	provider.SharedInstance.SetContext(ctx)
 	// }}}
 
-	// XXX: We can't use r.URL.Scheme/Host to create callback URL,
-	//      because "goapp" proxy server remove them.
-	callback := fmt.Sprintf("%s/auth/callback", r.Header.Get("Origin"))
+	callback := getCallbackURL(r)
 	requestToken, url, err := provider.SharedInstance.GetRequestTokenAndUrl(callback)
 
 	if err != nil {
