@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-export default class Entry extends Component {
+export default class Member extends Component {
   render() {
+    const {member} = this.props;
     return (
       <div>
-        <p>{this.props.text}</p>
+        <img src={member.image_url} />
       </div>
     );
   }
   static propTypes = {
-    text: PropTypes.string.isRequired,
+    member: PropTypes.object.isRequired,
   }
 }

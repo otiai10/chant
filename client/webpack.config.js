@@ -26,7 +26,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      {test: /.jsx?$/, loader: 'babel-loader'}
+      {test: /.jsx?$/, loader: 'babel-loader'},
     ]
   },
   resolve: {
