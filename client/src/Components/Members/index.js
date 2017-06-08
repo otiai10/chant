@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import Myself from './Myself';
 import Member from './Member';
 
 export default class Members extends Component {
@@ -8,7 +9,8 @@ export default class Members extends Component {
     const {members} = this.props;
     return (
       <div className="row">
-        {Object.keys(members).map(id => <Member key={id} member={members[id]} />)}
+        <Myself user={chant.user} />
+        {Object.keys(members).filter(id => id != chant.user.id).map(id => <Member key={id} member={members[id]} />)}
       </div>
     );
   }

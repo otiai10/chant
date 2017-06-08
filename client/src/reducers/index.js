@@ -9,7 +9,7 @@ const messages = (state = [], action) => {
   case 'REMOTE_MESSAGE':
     return Object.keys(action.data).map(key => {
       return {id:key, ...action.data[key]};
-    }).sort((p,n) => p.ts < n.ts ? 1 : -1);
+    }).sort((p,n) => p.time < n.time ? 1 : -1);
   }
   return state;
 };

@@ -3,6 +3,23 @@ html {
   font-family: Helvetica;
 }
 
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+}
+
 html, body {
   margin:    0;
   padding:   0;
@@ -23,4 +40,15 @@ div.container {
 
 div.row {
   display: flex;
+}
+
+textarea#message-input {
+  border: none;
+  font-size: 1em;
+  resize: none;
+  transition: all 0.2s;
+  border-left: solid 2px grey;
+}
+textarea#message-input:focus {
+  border-left: solid 2px turquoise;
 }

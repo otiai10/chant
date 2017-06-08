@@ -15,3 +15,12 @@ export function startListeningFirebase(dispatch) {
     });
   });
 }
+
+export function postMessage(text) {
+  const key = chant.firebase.database().ref('messages').push().key;
+  chant.firebase.database().ref(`messages/${key}`).set({
+    text: text,
+    time: Date.now(),
+  });
+  return {type:'IGNORE'};
+}
