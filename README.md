@@ -9,6 +9,15 @@ Enjoy chatting ;)
 % goapp deploy -application your-crazy-app app/
 ```
 
+without AppEngine?
+
+```sh
+% go get github.com/otiai10/chant
+% chant -secret you-secret.yaml
+```
+
+# Secret Variables
+
 `app/secret.yaml` should be like this
 
 ```yaml
