@@ -5,6 +5,7 @@
   "author": "Hiromu OCHIAI <otiai10@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "prestart": "yarn install",
     "start": "webpack --config ./client/webpack.config.js --watch --progress",
     "build": "webpack --config ./client/webpack.config.js --progress",
     "release": "NODE_ENV=production yarn run build"

@@ -30,17 +30,8 @@ env_variables:
   FIREBASE_MESSAGING_SENDER_ID: 72123123123123123123123
 ```
 
-# Dev
-
-server
+# Development
 
 ```sh
-% goapp serve app
-```
-
-client
-
-```sh
-% yarn install
-% yarn start
+% yarn start & goapp serve app
 ```
