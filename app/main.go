@@ -30,6 +30,8 @@ func init() {
 	router.GET("/", controllers.Index)
 	router.GET("/login", controllers.Login)
 	router.POST("/logout", controllers.Logout)
+	router.POST("/join", controllers.Join)
+	router.POST("/leave", controllers.Leave)
 	router.GET("/403", controllers.Forbidden)
 	// auth
 	router.POST("/auth", controllers.Auth)

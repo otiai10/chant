@@ -8,12 +8,9 @@ import (
 	"path"
 	"time"
 
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/log"
-	"google.golang.org/appengine/urlfetch"
-
 	"github.com/mrjones/oauth"
 	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/firebase"
 	"github.com/otiai10/marmoset"
@@ -33,10 +30,8 @@ func getCallbackURL(req *http.Request) string {
 // This endpoint is hit intentionally from "/login"
 func Auth(w http.ResponseWriter, r *http.Request) {
 
-	// {{{ AppEngine Specific code
-	ctx := appengine.NewContext(r)
+	ctx := middleware.Context(r)
 	provider.SharedInstance.SetContext(ctx)
-	// }}}
 
 	callback := getCallbackURL(r)
 	requestToken, url, err := provider.SharedInstance.GetRequestTokenAndUrl(callback)
@@ -67,10 +62,8 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 // after users accept authentication request by CHANT.
 func AuthCallback(w http.ResponseWriter, r *http.Request) {
 
-	// {{{ AppEngine Specific code
-	ctx := appengine.NewContext(r)
+	ctx := middleware.Context(r)
 	provider.SharedInstance.SetContext(ctx)
-	// }}}
 
 	verifier := r.FormValue("oauth_verifier")
 	if verifier == "" {
@@ -137,12 +130,13 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 	// }}}
 
 	// Firebase
+	// TODO: DRY
 	url := os.Getenv("FIREBASE_DB_URL") + path.Join("/members", user.ID)
 	auth := os.Getenv("FIREBASE_DEPRECATED_DATABASE_SECRETS")
 	ref := firebase.NewReference(url).Auth(auth)
-	ref.Client = urlfetch.Client(ctx)
+	ref.Client = middleware.HTTPClient(ctx)
 	if err := ref.Write(user); err != nil {
-		log.Debugf(ctx, "CHANT FAILED TO UPDATE `members` entry: %v", err)
+		middleware.Log(ctx).Debugf("CHANT FAILED TO UPDATE `members` entry: %v", err)
 	}
 
 	http.Redirect(w, r, "/", http.StatusFound)

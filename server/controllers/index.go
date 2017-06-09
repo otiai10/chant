@@ -15,14 +15,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	user, _ := marmoset.Context().Get(r).Value(filters.AuthKey).(*models.User)
 
-	firebase := getFirebaseConfig(r)
+	firebaseconfig := getFirebaseConfig(r)
 	flushUnnecessaryCookies(w)
 
 	marmoset.Render(w).HTML("index", marmoset.P{
 		"title": "CHANT",
 		"user":  user,
 		"configs": map[string]interface{}{
-			"firebase": firebase,
+			"firebase": firebaseconfig,
 		},
 	})
 }

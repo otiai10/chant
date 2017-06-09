@@ -6,9 +6,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"google.golang.org/appengine/urlfetch"
-
 	"github.com/mrjones/oauth"
+	"github.com/otiai10/chant/server/middleware"
 )
 
 // Twitter ...
@@ -35,7 +34,7 @@ func NewTwitterProvider(key, secret string) *Twitter {
 
 // SetContext ...
 func (p *Twitter) SetContext(ctx context.Context) {
-	p.HttpClient = urlfetch.Client(ctx)
+	p.HttpClient = middleware.HTTPClient(ctx)
 }
 
 // FetchIdentity ...

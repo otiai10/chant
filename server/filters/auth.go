@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"golang.org/x/net/context"
-	"google.golang.org/appengine"
 
+	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
 )
@@ -38,7 +38,7 @@ func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/login":
 		f.Next.ServeHTTP(w, r)
-	case "/":
+	case "/", "/join", "/leave":
 		c, err := r.Cookie("chant_identity_token")
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
@@ -57,7 +57,7 @@ func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/403", http.StatusTemporaryRedirect)
 			return
 		}
-		ctx := appengine.NewContext(r)
+		ctx := middleware.Context(r)
 		marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
 		f.Next.ServeHTTP(w, r)
 		return
@@ -65,4 +65,13 @@ func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		f.Next.ServeHTTP(w, r)
 	}
 
+}
+
+// RequestUser returns context user which auth filter detected and has set
+func RequestUser(r *http.Request) *models.User {
+	user, ok := marmoset.Context().Get(r).Value(AuthKey).(*models.User)
+	if !ok {
+		return nil
+	}
+	return user
 }
