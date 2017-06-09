@@ -19,7 +19,7 @@ if (process.env.NODE_ENV == 'production') {
 
 module.exports = {
   entry: {
-    index: './client/src/entrypoints/index.js'
+    index: './client/src/js/entrypoints/index.js'
   },
   output: {
     filename: './app/public/js/[name].js'
