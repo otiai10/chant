@@ -1,0 +1,13 @@
+@import "../common/reset";
+@import "../common/main";
+
+textarea#message-input {
+  border: none;
+  font-size: 1em;
+  resize: none;
+  transition: all 0.2s;
+  border-left: solid 4px grey;
+}
+textarea#message-input:focus {
+  border-left: solid 4px turquoise;
+}

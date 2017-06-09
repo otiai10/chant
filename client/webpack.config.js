@@ -3,7 +3,8 @@
  * where "package.json" located.
  */
 
-var webpack = require('webpack');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var plugins = [
   new webpack.DefinePlugin({
@@ -17,20 +18,47 @@ if (process.env.NODE_ENV == 'production') {
   }));
 }
 
-module.exports = {
-  entry: {
-    index: './client/src/js/entrypoints/index.js'
+module.exports = [
+  {
+    entry: {
+      index: './client/src/js/entrypoints/index.js'
+    },
+    output: {
+      filename: './app/public/js/[name].js'
+    },
+    module: {
+      loaders: [
+        {test: /\.jsx?$/, loader: 'babel-loader'},
+      ]
+    },
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
+    plugins: plugins,
   },
-  output: {
-    filename: './app/public/js/[name].js'
-  },
-  module: {
-    loaders: [
-      {test: /.jsx?$/, loader: 'babel-loader'},
-    ]
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  plugins: plugins,
-};
+  {
+    entry: {
+      index: './client/src/scss/entrypoints/index.scss'
+    },
+    output: {
+      filename: './app/public/css/[name].css'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use:[
+              process.env.NODE_ENV == 'production' ? 'css-loader?minimize' : 'css-loader',
+              'sass-loader'
+            ],
+          })
+        },
+      ]
+    },
+    plugins: [
+      new ExtractTextPlugin({filename:'./app/public/css/[name].css', allChunks:true})
+    ],
+  }
+];
