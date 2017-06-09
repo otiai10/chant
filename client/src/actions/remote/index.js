@@ -11,15 +11,16 @@ export function startListeningFirebase(dispatch) {
   chant.firebase.database().ref('members').on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MEMBER',
-      data: snapshot.val() || [],
+      data: snapshot.val() || {},
     });
   });
 }
 
-export function postMessage(text) {
+export function postMessage(text, user = chant.user) {
   const key = chant.firebase.database().ref('messages').push().key;
   chant.firebase.database().ref(`messages/${key}`).set({
-    text: text,
+    text,
+    user,
     time: Date.now(),
   });
   return {type:'IGNORE'};

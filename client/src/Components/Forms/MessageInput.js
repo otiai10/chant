@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {postMessage} from '../../actions/remote';
 
@@ -16,7 +17,8 @@ export default class MessageInput extends Component {
     return (
       <textarea
         id="message-input"
-        cols={140} rows={4}
+        ref={ref => this.ref = ref}
+        cols={140} rows={2}
         value={this.state.text}
         onChange={this.onChange.bind(this)}
         onKeyDown={this.onKeyDown.bind(this)}
@@ -31,6 +33,10 @@ export default class MessageInput extends Component {
     if (ev.which == ENTER) {
       this.props.postMessage(this.state.text);
       this.setState({text:''});
+      return ev.preventDefault();
     }
+  }
+  static propTypes = {
+    postMessage: PropTypes.func.isRequired,
   }
 }

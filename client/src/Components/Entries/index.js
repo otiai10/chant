@@ -3,14 +3,23 @@ import PropTypes from 'prop-types';
 
 export class Entry extends Component {
   render() {
+    const {user, time, text} = this.props;
     return (
-      <div>
-        <p>{this.props.text}</p>
+      <div className="row">
+        <div>
+          <img src={user.image_url} />
+        </div>
+        <div>
+          <div>{user.name} : {time}</div>
+          <p>{text}</p>
+        </div>
       </div>
     );
   }
   static propTypes = {
     text: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
+    time: PropTypes.number.isRequired,
   }
 }
 
