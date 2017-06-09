@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import Icon from '../Icon';
+
 export default class Myself extends Component {
   render() {
     return (
       <div>
-        <img src={this.props.user.image_url} />
+        <Icon user={this.props.user} />
       </div>
     );
   }

@@ -22,6 +22,7 @@ export default class MessageInput extends Component {
         value={this.state.text}
         onChange={this.onChange.bind(this)}
         onKeyDown={this.onKeyDown.bind(this)}
+        placeholder="Shift + ⏎ for newline"
       />
     );
   }

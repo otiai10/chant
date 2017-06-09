@@ -6,8 +6,24 @@ textarea#message-input {
   font-size: 1em;
   resize: none;
   transition: all 0.2s;
-  border-left: solid 4px grey;
+  border-bottom: solid 1px #dbdbdb;
+  height: 80px;
+  width: 100%;
+  box-sizing: border-box;
+}
+// TODO: Study SCSS and Refactor
+textarea#message-input::-webkit-input-placeholder {
+  color: #dbdbdb;
+}
+textarea#message-input::-moz-placeholder {
+  color: #dbdbdb;
 }
 textarea#message-input:focus {
-  border-left: solid 4px turquoise;
+  border-bottom: solid 2px tomato;
+}
+
+div#members {
+  >div {
+    margin-right: 6px;
+  }
 }
