@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '../Icon';
+import Content from './Content';
 
 export default class Entry extends Component {
   render() {
@@ -16,7 +17,7 @@ export default class Entry extends Component {
             <Icon user={user} />
           </div>
           <div className="contents-box">
-            <p>{text}</p>
+            <Content text={text} />
           </div>
         </div>
       </div>

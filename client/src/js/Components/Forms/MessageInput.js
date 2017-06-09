@@ -31,7 +31,9 @@ export default class MessageInput extends Component {
   }
   onKeyDown(ev) {
     const ENTER = 13;
-    if (ev.which == ENTER) {
+    const {which, shiftKey, ctrlKey} = ev;
+    if (which == ENTER && !(shiftKey || ctrlKey)) {
+      if (this.state.text.trim().length == 0) return ev.preventDefault();
       this.props.postMessage(this.state.text);
       this.setState({text:''});
       return ev.preventDefault();
