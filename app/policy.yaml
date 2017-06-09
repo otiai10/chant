@@ -1,0 +1,9 @@
+type: blacklist
+blacklist: []
+
+### OTHERWISE ###
+# type: whitelist
+# whitelist:
+#   # - otiai10
+#   - otiai20
+#   - ochiaihiromu

@@ -1,0 +1,19 @@
+{{template "partials/header" .}}
+<main>
+  <h1>ログインしてください</h1>
+  <table>
+    <tr>
+      <td>token</td><td>{{.token}}</td>
+    </tr>
+    <tr>
+      <td>body</td><td>{{.body}}</td>
+    </tr>
+    <tr>
+      <td>error</td><td>{{.error}}</td>
+    </tr>
+  </table>
+  <form method="POST" action="/auth">
+    <input type="submit" value="Twitterログイン" />
+  </form>
+</main>
+{{template "partials/footer" .}}
