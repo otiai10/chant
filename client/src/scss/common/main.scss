@@ -62,8 +62,10 @@ div.entry {
       padding-right: $space;
     }
     .contents-box {
-      flex: 1;
-      overflow: hidden; // XXX: for twitter widget width!??!?
+      // {{{ XXX: not sure why it's needed
+      width: 0%;
+      flex:  1;
+      // }}}
       div {
         width: 100%;
       }

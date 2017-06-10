@@ -17,7 +17,7 @@ func GetTweetEmbed(w http.ResponseWriter, r *http.Request) {
 
 	u, _ := url.Parse("https://publish.twitter.com/oembed")
 	q := u.Query()
-	q.Add("url", "https://twitter.com/otiai10/status/873215813993455616")
+	q.Add("url", r.FormValue("url"))
 	u.RawQuery = q.Encode()
 
 	ctx := middleware.Context(r)
