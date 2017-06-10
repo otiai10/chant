@@ -32,3 +32,20 @@ div#members {
 twitterwidget {
   margin: 0 !important;
 }
+
+// {{{
+.entries-enter {
+  opacity: 0.01;
+}
+.entries-enter.entries-enter-active {
+  opacity: 1;
+  transition: opacity 400ms ease-in;
+}
+.entries-leave {
+  opacity: 1;
+}
+.entries-leave.entries-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
+}
+// }}}
