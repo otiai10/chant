@@ -36,6 +36,8 @@ func init() {
 	// auth
 	router.POST("/auth", controllers.Auth)
 	router.GET("/auth/callback", controllers.AuthCallback)
+	// api
+	router.GET("/api/tweets/embed", controllers.GetTweetEmbed)
 	// static resources
 	router.Static("/public", "./public")
 

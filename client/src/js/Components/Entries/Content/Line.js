@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import AnchorizableText from 'react-text-anchorize';
+import rules from './anchorize-rules';
+
 export default class Line extends Component {
   constructor(props) {
     super(props);
@@ -10,9 +13,9 @@ export default class Line extends Component {
   }
   render() {
     return (
-      <p className="line">
-        {this.state.decorated}
-      </p>
+      <div className="line">
+        <AnchorizableText rules={rules} text={this.props.raw} />
+      </div>
     );
   }
   static propTypes = {
