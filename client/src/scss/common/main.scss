@@ -1,5 +1,13 @@
 @import "theme";
 
+html {
+  background-color: $background-color;
+}
+main#app {
+  width:  100%;
+  background-color: $background-color;
+}
+
 div.container {
   margin:  0 auto;
   padding: 12px 0;

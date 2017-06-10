@@ -11,6 +11,7 @@ textarea#message-input {
   height: 80px;
   width: 100%;
   box-sizing: border-box;
+  background-color: transparent;
 }
 // TODO: Study SCSS and Refactor
 textarea#message-input::-webkit-input-placeholder {
