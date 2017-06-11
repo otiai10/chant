@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/otiai10/chant/server/filters"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
+	"github.com/otiai10/totsuzen"
 )
 
 // GetTweetEmbed ...
@@ -39,4 +41,43 @@ func GetTweetEmbed(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.JSON(http.StatusOK, tweet)
+}
+
+// Totsuzenize ...
+func Totsuzenize(w http.ResponseWriter, r *http.Request) {
+
+	render := marmoset.Render(w)
+
+	ctx := middleware.Context(r)
+
+	id := r.FormValue("id")
+	body := struct {
+		Text string `json:"text"`
+	}{}
+	json.NewDecoder(r.Body).Decode(&body)
+
+	user := filters.RequestUser(r)
+	if user == nil {
+		middleware.Log(ctx).Debugf("Foo: %+v", user)
+		render.JSON(http.StatusFound, marmoset.P{
+			"message": "No user",
+		})
+		return
+	}
+
+	m := models.NewMessage(
+		totsuzen.NewToken(body.Text).Totsuzenize().Text,
+		filters.RequestUser(r),
+	)
+	if err := m.Push(ctx); err != nil {
+		render.JSON(http.StatusInternalServerError, marmoset.P{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	render.JSON(http.StatusOK, marmoset.P{
+		"id":   id,
+		"text": totsuzen.NewToken(body.Text).Totsuzenize().Text,
+	})
 }

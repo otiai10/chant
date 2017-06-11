@@ -1,9 +1,9 @@
 type: blacklist
-blacklist: []
+list: []
 
 ### OTHERWISE ###
 # type: whitelist
-# whitelist:
-#   # - otiai10
+# list:
+#   - otiai10
 #   - otiai20
 #   - ochiaihiromu

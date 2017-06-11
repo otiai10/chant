@@ -23,14 +23,14 @@ const (
 
 // Policy is accessibility policy of this chat room
 type Policy struct {
-	Type      PolicyType `yaml:"type"`
-	Whitelist []string   `yaml:"whitelist"`
-	Blacklist []string   `yaml:"blacklist"`
+	Type    PolicyType `yaml:"type"`
+	List    []string   `yaml:"list"`
+	returns bool       `yaml:"-"`
 }
 
 // NewPolicy ...
 func NewPolicy(f *os.File) *Policy {
-	policy := &Policy{Blacklist, []string{}, []string{}}
+	policy := &Policy{Blacklist, []string{}, false}
 	if f == nil {
 		return policy
 	}
@@ -47,19 +47,21 @@ func NewPolicy(f *os.File) *Policy {
 
 // Allow ...
 func (policy *Policy) Allow(user *models.User) bool {
-	if policy.Type == Whitelist {
-		return policy.inList(user, policy.Whitelist)
-	}
-	return !policy.inList(user, policy.Blacklist)
+	return policy.Return().inList(user, policy.List)
+}
+
+// Return ...
+func (policy *Policy) Return() *Policy {
+	policy.returns = (policy.Type == Whitelist)
+	return policy
 }
 
 // inList ...
 func (policy *Policy) inList(user *models.User, list []string) bool {
 	for _, name := range list {
-		print(name, user.Name)
 		if user.Name == name {
-			return true
+			return policy.returns
 		}
 	}
-	return false
+	return !policy.returns
 }

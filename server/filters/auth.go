@@ -33,37 +33,28 @@ func InitializeAuthFilter(policyfile *os.File) *AuthFilter {
 // ServeHTTP ...
 func (f *AuthFilter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	// TODO: Refactor marmoset.Filter to attach filter with ONLY specific routings
-
-	switch r.URL.Path {
-	case "/login":
-		f.Next.ServeHTTP(w, r)
-	case "/", "/join", "/leave":
-		c, err := r.Cookie("chant_identity_token")
-		if err != nil {
-			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
-			return
-		}
-		user, err := models.DecodeUser(c.Value, os.Getenv("JWT_SALT"))
-		if err != nil {
-			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
-			return
-		}
-		if user == nil {
-			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
-			return
-		}
-		if !f.Policy.Allow(user) {
-			http.Redirect(w, r, "/403", http.StatusTemporaryRedirect)
-			return
-		}
-		ctx := middleware.Context(r)
-		marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
-		f.Next.ServeHTTP(w, r)
+	c, err := r.Cookie("chant_identity_token")
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 		return
-	default:
-		f.Next.ServeHTTP(w, r)
 	}
+	user, err := models.DecodeUser(c.Value, os.Getenv("JWT_SALT"))
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+		return
+	}
+	if user == nil {
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+		return
+	}
+	if !f.Policy.Allow(user) {
+		http.Redirect(w, r, "/403", http.StatusTemporaryRedirect)
+		return
+	}
+	ctx := middleware.Context(r)
+	marmoset.Context().Set(r, context.WithValue(ctx, AuthKey, user))
+	f.Next.ServeHTTP(w, r)
+	return
 
 }
 

@@ -24,29 +24,35 @@ func init() {
 		panic("Marmoset failed to load views")
 	}
 
-	// Routings
-	router := marmoset.NewRouter()
-	// app
-	router.GET("/", controllers.Index)
-	router.GET("/login", controllers.Login)
-	router.POST("/logout", controllers.Logout)
-	router.POST("/join", controllers.Join)
-	router.POST("/leave", controllers.Leave)
-	router.GET("/403", controllers.Forbidden)
-	// auth
-	router.POST("/auth", controllers.Auth)
-	router.GET("/auth/callback", controllers.AuthCallback)
-	// api
-	router.GET("/api/tweets/embed", controllers.GetTweetEmbed)
-	// static resources
-	router.Static("/public", "./public")
-
-	// Filters
 	policyfile, _ := os.Open("./policy.yaml")
-	server := marmoset.NewFilter(router).
-		Add(filters.InitializeAuthFilter(policyfile)).
-		Add(new(marmoset.ContextFilter)).
-		Server()
 
-	http.Handle("/", server)
+	// Routings
+	root := marmoset.NewRouter()
+
+	authorized := marmoset.NewRouter()
+	authorized.GET("/", controllers.Index)
+	authorized.POST("/logout", controllers.Logout)
+	authorized.POST("/join", controllers.Join)
+	authorized.POST("/leave", controllers.Leave)
+	authorized.GET("/api/tweets/embed", controllers.GetTweetEmbed)
+	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
+	root.Subrouter(
+		marmoset.NewFilter(authorized).
+			Add(filters.InitializeAuthFilter(policyfile)).
+			Add(new(marmoset.ContextFilter)).Router(),
+	)
+
+	unauthorized := marmoset.NewRouter()
+	unauthorized.GET("/login", controllers.Login)
+	unauthorized.GET("/403", controllers.Forbidden)
+	unauthorized.POST("/auth", controllers.Auth)
+	unauthorized.GET("/auth/callback", controllers.AuthCallback)
+	root.Subrouter(
+		marmoset.NewFilter(unauthorized).Add(new(marmoset.ContextFilter)).Router(),
+	)
+
+	// static resources
+	root.Static("/public", "./public")
+
+	http.Handle("/", root)
 }
