@@ -22,8 +22,10 @@ const members = (state = {}, action) => {
   return state;
 };
 
-const loading = (state = {message:false, member:false}, action) => {
+const loading = (state = {message:false, member:false, days:2}, action) => {
   switch (action.type) {
+  case 'LOADING_DAYS':
+    return {...state, days:action.data};
   case 'MESSAGE_LOADING':
     return {...state, message:true};
   case 'REMOTE_MESSAGE':
