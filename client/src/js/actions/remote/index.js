@@ -1,14 +1,22 @@
 import 'firebase/auth';
 import 'firebase/database';
 
-export function startListeningFirebase(dispatch) {
-  chant.firebase.database().ref('messages').on('value', snapshot => {
+const day = 24*60*60*1000;
+
+export function startListeningFirebase(dispatch, duration = 1*day) {
+  dispatch({type: 'MESSAGE_LOADING'});
+  const messages = chant.firebase.database().ref('messages');
+  messages.off();
+  messages.orderByChild('time').startAt(Date.now() - duration).on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MESSAGE',
       data: snapshot.val() || [],
     });
   });
-  chant.firebase.database().ref('members').on('value', snapshot => {
+  dispatch({type: 'MEMBER_LOADING'});
+  const members = chant.firebase.database().ref('members');
+  members.off();
+  members.on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MEMBER',
       data: snapshot.val() || {},

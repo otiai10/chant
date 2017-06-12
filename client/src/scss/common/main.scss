@@ -103,3 +103,61 @@ blockquote {
   border-left: solid 4px $secondary;
   font-size: 14px;
 }
+
+.justify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-more {
+  transition: all 0.2s;
+  cursor: pointer;
+  color: $weak;
+}
+.load-more:hover {
+  color: $text;
+}
+// loading
+@keyframes loading {
+    0% {
+      width:  48px;
+      height: 0px;
+    }
+    25% {
+      width:   0px;
+      height: 48px;
+      border-top: solid 0px $primary;
+      border-bottom: solid 0px $primary;
+    }
+    50% {
+      width:  48px;
+      height: 48px;
+    }
+    75% {
+      width: 48px;
+      height: 0px;
+      border-right: solid 0px $primary;
+      border-left: solid 0px $primary;
+    }
+    100% {
+      width:  48px;
+      height: 0px;
+    }
+}
+div.loading {
+  animation-name: loading;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  border: solid 24px $primary;
+  border-radius: 24px;
+  box-sizing: border-box;
+  background-color: $primary;
+}
+div.loading-container {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

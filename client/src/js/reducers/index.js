@@ -9,7 +9,7 @@ const messages = (state = [], action) => {
   case 'REMOTE_MESSAGE':
     return Object.keys(action.data).map(key => {
       return {id:key, ...action.data[key]};
-    }).sort((p,n) => p.time < n.time ? 1 : -1);
+    }).reverse();
   }
   return state;
 };
@@ -22,7 +22,23 @@ const members = (state = {}, action) => {
   return state;
 };
 
+const loading = (state = {message:false, member:false}, action) => {
+  switch (action.type) {
+  case 'MESSAGE_LOADING':
+    return {...state, message:true};
+  case 'REMOTE_MESSAGE':
+    return {...state, message:false};
+  case 'MEMBER_LOADING':
+    return {...state, member:true};
+  case 'REMOTE_MEMBER':
+    return {...state, member:false};
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   messages,
   members,
+  loading,
 });
