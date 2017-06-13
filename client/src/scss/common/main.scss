@@ -161,3 +161,20 @@ div.loading-container {
   align-items: center;
   justify-content: center;
 }
+
+// button
+.button {
+  font-size: 16px;
+  border: none;
+  font-family: Helvetica;
+  padding: 12px 32px;
+  border-radius: 4px;
+  color: white;
+  background-color: $secondary;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.1s;
+}
+.button:hover {
+  background-color: #014060;
+}

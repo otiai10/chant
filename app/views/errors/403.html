@@ -1,6 +1,13 @@
 {{template "partials/header" .}}
-<main>
-  <h1>Forbidden ;(</h1>
-  <a href="/login">/login</a>
+<link rel="stylesheet" href="/public/css/index.css" />
+<main id="main">
+  <div class="container">
+    <div class="section justify">
+      <img src="/public/img/403.png" />
+    </div>
+    <div class="section justify">
+      <a class="button" href="/login">Login</a>
+    </div>
+  </div>
 </main>
 {{template "partials/footer" .}}
