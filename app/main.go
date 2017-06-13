@@ -29,6 +29,14 @@ func init() {
 	// Routings
 	root := marmoset.NewRouter()
 
+	unauthorized := marmoset.NewRouter()
+	unauthorized.GET("/login", controllers.Login)
+	unauthorized.GET("/403", controllers.Forbidden)
+	unauthorized.POST("/auth", controllers.Auth)
+	unauthorized.GET("/auth/callback", controllers.AuthCallback)
+	root.Subrouter(unauthorized)
+
+	auth := filters.InitializeAuthFilter(policyfile)
 	authorized := marmoset.NewRouter()
 	authorized.GET("/", controllers.Index)
 	authorized.POST("/logout", controllers.Logout)
@@ -36,20 +44,8 @@ func init() {
 	authorized.POST("/leave", controllers.Leave)
 	authorized.GET("/api/tweets/embed", controllers.GetTweetEmbed)
 	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
-	root.Subrouter(
-		marmoset.NewFilter(authorized).
-			Add(filters.InitializeAuthFilter(policyfile)).
-			Add(new(marmoset.ContextFilter)).Router(),
-	)
-
-	unauthorized := marmoset.NewRouter()
-	unauthorized.GET("/login", controllers.Login)
-	unauthorized.GET("/403", controllers.Forbidden)
-	unauthorized.POST("/auth", controllers.Auth)
-	unauthorized.GET("/auth/callback", controllers.AuthCallback)
-	root.Subrouter(
-		marmoset.NewFilter(unauthorized).Add(new(marmoset.ContextFilter)).Router(),
-	)
+	authorized.Apply(new(marmoset.ContextFilter), auth)
+	root.Subrouter(authorized)
 
 	// static resources
 	root.Static("/public", "./public")

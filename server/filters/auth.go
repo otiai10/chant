@@ -13,7 +13,7 @@ import (
 
 // AuthFilter ...
 type AuthFilter struct {
-	Next   http.Handler
+	marmoset.Filter
 	Policy *Policy
 }
 
