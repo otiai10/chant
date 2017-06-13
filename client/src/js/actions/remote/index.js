@@ -26,6 +26,10 @@ export function startListeningFirebase(dispatch, days = 2) {
       data: snapshot.val() || {},
     });
   });
+
+  // To publish that this browser disconnected
+  const connections = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
+  connections.onDisconnect().remove();
 }
 
 export function postMessage(text, user = chant.user) {

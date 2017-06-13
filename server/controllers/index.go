@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/otiai10/chant/server/filters"
+	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
 )
@@ -13,7 +14,10 @@ import (
 // Index for "/"
 func Index(w http.ResponseWriter, r *http.Request) {
 
+	ctx := middleware.Context(r)
+
 	user, _ := marmoset.Context().Get(r).Value(filters.AuthKey).(*models.User)
+	user.Join(ctx)
 
 	firebaseconfig := getFirebaseConfig(r)
 	flushUnnecessaryCookies(w)

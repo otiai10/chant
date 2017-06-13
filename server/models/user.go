@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"time"
@@ -17,8 +18,9 @@ import (
 type User struct {
 	provider.Identity
 	jwt.StandardClaims
-	LoginTime  time.Time `json:"login_time"`
-	Connection int       `json:"connection"`
+	LoginTime time.Time `json:"login_time"`
+	Browser   int64     `json:"browser"`
+	Browsers  []int64   `json:"browsers"`
 }
 
 // Encode to JWT string
@@ -38,36 +40,18 @@ func DecodeUser(tokenstring, salt string) (*User, error) {
 
 // Join ...
 func (user *User) Join(ctx context.Context) error {
-	ref := user.Ref(ctx)
-	if err := ref.Value(user); err != nil {
-		return err
-	}
-	user.Connection++
-	if err := ref.Write(user); err != nil {
-		return err
-	}
-	return nil
-}
-
-// Leave ...
-func (user *User) Leave(ctx context.Context) error {
-	ref := user.Ref(ctx)
-	if err := ref.Value(user); err != nil {
-		return err
-	}
-	user.Connection--
-	if user.Connection < 0 {
-		user.Connection = 0
-	}
-	if err := ref.Write(user); err != nil {
+	user.Browser = time.Now().Unix() * 1000
+	ref := user.Ref(ctx, "browsers", fmt.Sprintf("%d", user.Browser))
+	if err := ref.Write(true); err != nil {
 		return err
 	}
 	return nil
 }
 
 // Ref ...
-func (user *User) Ref(ctx context.Context) *firebase.Reference {
-	url := os.Getenv("FIREBASE_DB_URL") + path.Join("/members", user.ID)
+func (user *User) Ref(ctx context.Context, refpath ...string) *firebase.Reference {
+	refpath = append([]string{"/members", user.ID}, refpath...)
+	url := os.Getenv("FIREBASE_DB_URL") + path.Join(refpath...)
 	auth := os.Getenv("FIREBASE_DEPRECATED_DATABASE_SECRETS")
 	ref := firebase.NewReference(url).Auth(auth)
 	ref.Client = middleware.HTTPClient(ctx)

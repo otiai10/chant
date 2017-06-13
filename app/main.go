@@ -40,8 +40,6 @@ func init() {
 	authorized := marmoset.NewRouter()
 	authorized.GET("/", controllers.Index)
 	authorized.POST("/logout", controllers.Logout)
-	authorized.POST("/join", controllers.Join)
-	authorized.POST("/leave", controllers.Leave)
 	authorized.GET("/api/tweets/embed", controllers.GetTweetEmbed)
 	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
 	authorized.Apply(new(marmoset.ContextFilter), auth)
