@@ -3,7 +3,7 @@ import 'firebase/database';
 
 const day = 24*60*60*1000;
 
-export function startListeningFirebase(dispatch, days = 2) {
+export function startListeningFirebase(dispatch, days = 1) {
   dispatch({type: 'MESSAGE_LOADING'});
   const messages = chant.firebase.database().ref('messages');
   messages.off();

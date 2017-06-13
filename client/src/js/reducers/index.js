@@ -22,7 +22,7 @@ const members = (state = {}, action) => {
   return state;
 };
 
-const loading = (state = {message:false, member:false, days:2}, action) => {
+const loading = (state = {message:false, member:false, days:1}, action) => {
   switch (action.type) {
   case 'LOADING_DAYS':
     return {...state, days:action.data};
