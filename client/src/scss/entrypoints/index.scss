@@ -14,14 +14,39 @@ textarea#message-input {
   background-color: transparent;
 }
 // TODO: Study SCSS and Refactor
-textarea#message-input::-webkit-input-placeholder {
-  color: $weak;
-}
-textarea#message-input::-moz-placeholder {
-  color: $weak;
-}
-textarea#message-input:focus {
-  border-bottom: solid 2px $primary;
+div#message-input-container {
+  $root: #{&};
+  position: relative;
+  textarea#message-input::-webkit-input-placeholder {
+    color: $weak;
+  }
+  textarea#message-input::-moz-placeholder {
+    color: $weak;
+  }
+  textarea#message-input:focus {
+    border-bottom: solid 2px $primary;
+  }
+  div.actions {
+    position: absolute;
+    right: 0;
+    top:   0;
+    text-align: right;
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      color: $weak;
+      transition: all 0.2s;
+    }
+    button:focus {
+      color: $primary;
+    }
+  }
+  textarea#message-input:focus + div.actions {
+    button {
+      color: $primary;
+    }
+  }
 }
 
 div#members {

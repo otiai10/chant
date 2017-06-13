@@ -15,15 +15,25 @@ export default class MessageInput extends Component {
   }
   render() {
     return (
-      <textarea
-        id="message-input"
-        ref={ref => this.ref = ref}
-        cols={140} rows={2}
-        value={this.state.text}
-        onChange={this.onChange.bind(this)}
-        onKeyDown={this.onKeyDown.bind(this)}
-        placeholder="Shift + ⏎ for newline"
-      />
+      <div id="message-input-container">
+        <textarea
+          id="message-input"
+          ref={ref => this.ref = ref}
+          cols={140} rows={2}
+          value={this.state.text}
+          onChange={this.onChange.bind(this)}
+          onKeyDown={this.onKeyDown.bind(this)}
+          placeholder="Shift + ⏎ for newline"
+        />
+        <div className="actions">
+          <div>
+            <button onClick={this.onTotsuzenizeClick.bind(this)}>Totsuzenize</button>
+          </div>
+          <div>
+            <button onClick={this.onStamprizeClick.bind(this)}>Stamprize</button>
+          </div>
+        </div>
+      </div>
     );
   }
   onChange(ev) {
@@ -38,6 +48,19 @@ export default class MessageInput extends Component {
       this.setState({text:''});
       return ev.preventDefault();
     }
+  }
+  onTotsuzenizeClick(ev) {
+    ev.preventDefault();
+    if (this.state.text.length == 0) return;
+    fetch('/api/messages/text/totsuzenize', {
+      method: 'POST',
+      body: JSON.stringify({text:this.state.text}),
+      credentials: 'include',
+    });
+    this.setState({text:''}, () => this.ref.focus());
+  }
+  onStamprizeClick(ev) {
+    ev.preventDefault();
   }
   static propTypes = {
     postMessage: PropTypes.func.isRequired,
