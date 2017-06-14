@@ -3,7 +3,7 @@ import 'firebase/database';
 
 const day = 24*60*60*1000;
 
-export function startListeningFirebase(dispatch, days = 1) {
+export function listenFirebaseMessages(dispatch, days = 1) {
   dispatch({type: 'MESSAGE_LOADING'});
   const messages = chant.firebase.database().ref('messages');
   messages.off();
@@ -13,14 +13,12 @@ export function startListeningFirebase(dispatch, days = 1) {
       data: snapshot.val() || [],
     });
   });
-  dispatch({
-    type: 'LOADING_DAYS',
-    data: days,
-  });
+  dispatch({type: 'LOADING_DAYS', data: days});
+}
+
+export function listenFirebaseMembers(dispatch) {
   dispatch({type: 'MEMBER_LOADING'});
-  const members = chant.firebase.database().ref('members');
-  members.off();
-  members.on('value', snapshot => {
+  chant.firebase.database().ref('members').on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MEMBER',
       data: snapshot.val() || {},

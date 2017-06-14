@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import Loading from '../Loading';
 
 // {{{ TODO: Refactor
-import {startListeningFirebase} from '../../actions/remote';
+import {listenFirebaseMessages} from '../../actions/remote';
 import store from '../../store';
 // }}}
 
@@ -19,7 +19,7 @@ export default class LoadMore extends Component {
   }
   onClickLoadMore() {
     // TODO: Refactor
-    startListeningFirebase(store.dispatch, this.props.days + 1);
+    listenFirebaseMessages(store.dispatch, this.props.days + 1);
   }
   static propTypes = {
     message: PropTypes.bool.isRequired,
