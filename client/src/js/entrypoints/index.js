@@ -5,9 +5,11 @@ import store from '../store';
 import {
   listenFirebaseMessages,
   listenFirebaseMembers,
+  listenFirebaseStamps,
 } from '../actions/remote';
 listenFirebaseMessages(store.dispatch);
 listenFirebaseMembers(store.dispatch);
+listenFirebaseStamps(store.dispatch);
 
 import App from '../Containers/app';
 render(

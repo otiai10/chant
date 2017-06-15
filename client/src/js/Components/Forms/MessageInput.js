@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {postMessage} from '../../actions/remote';
+import {postMessage,upsertStamp} from '../../actions/remote';
 
 @connect(null, {
   postMessage,
+  upsertStamp,
 })
 export default class MessageInput extends Component {
   constructor(props) {
@@ -51,7 +52,8 @@ export default class MessageInput extends Component {
   }
   onTotsuzenizeClick(ev) {
     ev.preventDefault();
-    if (this.state.text.length == 0) return;
+    const text = this.state.text.trim();
+    if (text.length == 0) return;
     fetch('/api/messages/text/totsuzenize', {
       method: 'POST',
       body: JSON.stringify({text:this.state.text}),
@@ -61,8 +63,13 @@ export default class MessageInput extends Component {
   }
   onStamprizeClick(ev) {
     ev.preventDefault();
+    const text = this.state.text.trim();
+    if (text.length == 0) return;
+    upsertStamp(text);
+    this.setState({text:''}, () => this.ref.focus());
   }
   static propTypes = {
     postMessage: PropTypes.func.isRequired,
+    upsertStamp: PropTypes.func.isRequired,
   }
 }

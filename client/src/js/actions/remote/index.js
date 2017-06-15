@@ -30,12 +30,42 @@ export function listenFirebaseMembers(dispatch) {
   connections.onDisconnect().remove();
 }
 
+export function listenFirebaseStamps(dispatch) {
+  chant.firebase.database().ref('stamps').on('value', snapshot => {
+    dispatch({
+      type: 'REMOTE_STAMP',
+      data: snapshot.val() || {},
+    });
+  });
+}
+
 export function postMessage(text, user = chant.user) {
   const key = chant.firebase.database().ref('messages').push().key;
   chant.firebase.database().ref(`messages/${key}`).set({
     text,
     user,
     time: Date.now(),
+  });
+  return {type:'IGNORE'};
+}
+
+export function useStamp(stamp) {
+  postMessage(stamp.text);
+  const id = encodeURIComponent(stamp.text);
+  chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
+  return {type:'IGNORE'};
+}
+
+export function upsertStamp(text, user = chant.user) {
+  text = text.trim();
+  const id = encodeURIComponent(text);
+  const target = {text, user, time: Date.now(), used: Date.now()};
+  chant.firebase.database().ref(`stamps/${id}`).set(target);
+  const key = chant.firebase.database().ref('messages').push().key;
+  chant.firebase.database().ref(`messages/${key}`).set({
+    type: 'STAMPRIZE',
+    text: 'stamprize:', stamp: target,
+    user, time: Date.now(),
   });
   return {type:'IGNORE'};
 }

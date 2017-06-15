@@ -23,8 +23,8 @@ div.section {
 
 div.icon {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 48px  !important;
+  height: 48px !important;
   border-radius: 24px;
   overflow: hidden;
   display: flex;
@@ -73,13 +73,13 @@ div.entry {
       width: 0%;
       flex:  1;
       // }}}
-      div {
+      &>div {
         width: 100%;
       }
       span {
         margin: 0;
         padding: 0;
-        font-size: 14px;
+        font-size: 16px;
         color: $text;
       }
     }
@@ -101,7 +101,10 @@ blockquote {
   margin: 0;
   padding: 6px 14px;
   border-left: solid 4px $secondary;
-  font-size: 14px;
+  font-size: 16px;
+}
+blockquote>div.entry {
+  padding: 8px;
 }
 
 .justify {
@@ -163,7 +166,7 @@ div.loading-container {
 }
 
 // button
-.button {
+.button.primary {
   font-size: 16px;
   border: none;
   font-family: Helvetica;
@@ -175,6 +178,20 @@ div.loading-container {
   text-decoration: none;
   transition: all 0.1s;
 }
-.button:hover {
+.button.primary:hover {
   background-color: #014060;
+}
+
+.button.stamp {
+  border:           none;
+  transition:   all 0.1s;
+  font-size:        12px;
+  background-color: transparent;
+  border-radius:     4px;
+  cursor:        pointer;
+  box-sizing: border-box;
+  border: solid 1px transparent;
+}
+.button.stamp:hover {
+  border: solid 1px $primary;
 }
