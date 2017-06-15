@@ -6,6 +6,7 @@ import Members  from '../Components/Members';
 import Entries  from '../Components/Entries';
 import Forms    from '../Components/Forms';
 import LoadMore from '../Components/Entries/LoadMore';
+import ToolBar  from '../Components/ToolBar';
 
 @connect(({messages, members}) => {
   return {messages, members};
@@ -19,6 +20,7 @@ export default class App extends Component {
         <Forms />
         <Entries entries={messages} />
         <LoadMore />
+        <ToolBar />
       </div>
     );
   }

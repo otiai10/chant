@@ -78,3 +78,26 @@ div.twitterwidget-wrapper {
   transition: opacity 100ms ease-in;
 }
 // }}}
+
+// {{{ ToolBar
+div#tool-bar {
+  position: absolute;
+  right:  0;
+  bottom: 0;
+  div.tool-item {
+    width:  60px;
+    height: 60px;
+    cursor: pointer;
+    i {
+      transition: all 0.2s;
+      font-size: 2em;
+      color: $weak;
+    }
+    &:hover {
+      i {
+        color: $text;
+      }
+    }
+  }
+}
+// }}}
