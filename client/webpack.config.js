@@ -38,7 +38,8 @@ module.exports = [
   },
   {
     entry: {
-      index: './client/src/scss/entrypoints/index.scss'
+      index:       './client/src/scss/entrypoints/index.scss',
+      fontawesome: './node_modules/font-awesome/scss/font-awesome.scss',
     },
     output: {
       filename: './app/public/css/[name].css'
@@ -54,6 +55,10 @@ module.exports = [
               'sass-loader'
             ],
           })
+        },
+        {
+          test: /\.(eot|woff|woff2|ttf|svg)$/,
+          loaders:['url-loader']
         },
       ]
     },
