@@ -31,10 +31,12 @@ export function listenFirebaseMembers(dispatch) {
 }
 
 export function listenFirebaseStamps(dispatch) {
-  chant.firebase.database().ref('stamps').on('value', snapshot => {
+  chant.firebase.database().ref('stamps').orderByChild('used').limitToLast(20).on('value', snapshot => {
+    const dict = snapshot.val() || {};
+    const newlist = Object.keys(dict).map(key => dict[key]).sort((p, n) => p.used < n.used ? 1 : -1);
     dispatch({
       type: 'REMOTE_STAMP',
-      data: snapshot.val() || {},
+      data: newlist,
     });
   });
 }

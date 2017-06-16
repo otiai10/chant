@@ -1,12 +1,10 @@
-export default (state = [], action) => {
+export default (current = [], action) => {
   switch (action.type) {
   case 'REMOTE_STAMP':
-    return Object.keys(action.data).filter(text => {
-      return !state.some(stamp => stamp.text == text);
-    }).map(text => action.data[text]).concat(state).sort((p, n) => {
-      return (p.used < n.used) ? 1 : -1;
-    });
+    return action.data.filter(coming => { // choose only new commers
+      return !current.some(st => coming.text == st.text);
+    }).concat(current);
   default:
-    return state;
+    return current;
   }
 };
