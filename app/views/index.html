@@ -1,0 +1,17 @@
+{{template "partials/header" .}}
+<link rel="stylesheet" href="/public/css/index.css" />
+<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+<script type="text/javascript">var chant = chant || {}; chant.user = {{.user}};</script>
+<main id="app"></main>
+<script type="text/javascript">(function() {
+  var configs = {{.configs}};
+  chant.firebase = firebase.initializeApp(configs.firebase);
+  if (configs.firebase.delegated) {
+    var credential = firebase.auth.TwitterAuthProvider.credential(configs.firebase.delegated.token, configs.firebase.delegated.secret);
+    firebase.auth().signInWithCredential(credential)
+    // TODO: handle error
+    // .catch(function(err) { ... });
+  }
+})();</script>
+<script type="text/javascript" src="/public/js/index.js"></script>
+{{template "partials/footer" .}}

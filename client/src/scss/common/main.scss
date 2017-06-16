@@ -1,0 +1,197 @@
+@import "theme";
+
+html {
+  background-color: $background-color;
+}
+main#app {
+  width:  100%;
+  background-color: $background-color;
+}
+
+div.container {
+  margin:  0 auto;
+  padding: 12px 0;
+  width:      80%;
+}
+
+div.row {
+  display: flex;
+}
+div.section {
+  margin-bottom: 24px;
+}
+
+div.icon {
+  position: relative;
+  width: 48px  !important;
+  height: 48px !important;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $weak;
+  .icon-image {
+    width:  100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  span {
+    position: absolute;
+    z-index: 0;
+  }
+}
+
+div.entry {
+  padding-bottom: 20px;
+  transition: all 0.1s;
+  $space: 6px;
+  .actions {
+    padding-bottom: $space;
+    font-size: 12px;
+    .action {
+      margin-right: 8px;
+      transition: all 0.2s;
+    }
+    .timestamp {
+      color: $weak;
+    }
+    .stamprize, .totsuzenize {
+      color: transparent;
+    }
+  }
+  .contents {
+    display: flex;
+    .icon-box {
+      padding-right: $space;
+    }
+    .contents-box {
+      // {{{ XXX: not sure why it's needed
+      width: 0%;
+      flex:  1;
+      // }}}
+      &>div {
+        width: 100%;
+      }
+      span {
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+        color: $text;
+      }
+    }
+  }
+  &:hover {
+    background-color: $pale;
+    cursor: pointer;
+    .stamprize, .totsuzenize {
+      color: $weak;
+    }
+    .timestamp:hover, .stamprize:hover, .totsuzenize:hover {
+      cursor: pointer;
+      color: $primary;
+    }
+  }
+}
+
+blockquote {
+  margin: 0;
+  padding: 6px 14px;
+  border-left: solid 4px $secondary;
+  font-size: 16px;
+}
+blockquote>div.entry {
+  padding: 8px;
+}
+
+.justify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-more {
+  transition: all 0.2s;
+  cursor: pointer;
+  color: $weak;
+}
+.load-more:hover {
+  color: $primary;
+}
+// loading
+@keyframes loading {
+    0% {
+      width:  48px;
+      height: 0px;
+    }
+    25% {
+      width:   0px;
+      height: 48px;
+      border-top: solid 0px $primary;
+      border-bottom: solid 0px $primary;
+    }
+    50% {
+      width:  48px;
+      height: 48px;
+    }
+    75% {
+      width: 48px;
+      height: 0px;
+      border-right: solid 0px $primary;
+      border-left: solid 0px $primary;
+    }
+    100% {
+      width:  48px;
+      height: 0px;
+    }
+}
+div.loading {
+  animation-name: loading;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  border: solid 24px $primary;
+  border-radius: 24px;
+  box-sizing: border-box;
+  background-color: $primary;
+}
+div.loading-container {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// button
+.button.primary {
+  font-size: 16px;
+  border: none;
+  font-family: Helvetica;
+  padding: 12px 32px;
+  border-radius: 4px;
+  color: white;
+  background-color: $secondary;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.1s;
+}
+.button.primary:hover {
+  background-color: #014060;
+}
+
+.button.stamp {
+  border:           none;
+  transition:   all 0.1s;
+  font-size:        12px;
+  background-color: transparent;
+  border-radius:     4px;
+  cursor:        pointer;
+  box-sizing: border-box;
+  border: solid 1px transparent;
+}
+.button.stamp:hover {
+  border: solid 1px $primary;
+}

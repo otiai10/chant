@@ -1,0 +1,104 @@
+@import "../common/reset";
+@import "../common/main";
+@import "../common/theme";
+
+textarea#message-input {
+  border: none;
+  font-size: 1em;
+  resize: none;
+  transition: all 0.2s;
+  border-bottom: solid 1px $weak;
+  height: 80px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+// TODO: Study SCSS and Refactor
+div#message-input-container {
+  $root: #{&};
+  position: relative;
+  textarea#message-input::-webkit-input-placeholder {
+    color: $weak;
+  }
+  textarea#message-input::-moz-placeholder {
+    color: $weak;
+  }
+  textarea#message-input:focus {
+    border-bottom: solid 2px $primary;
+  }
+  div.actions {
+    position: absolute;
+    right: 0;
+    top:   0;
+    text-align: right;
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      color: $weak;
+      transition: all 0.2s;
+    }
+    button:focus {
+      color: $primary;
+    }
+  }
+  textarea#message-input:focus + div.actions {
+    button {
+      color: $primary;
+    }
+  }
+}
+
+div#members {
+  >div {
+    margin-right: 6px;
+  }
+}
+
+twitterwidget {
+  margin: 0 !important;
+}
+div.twitterwidget-wrapper {
+  max-width: 80%;
+}
+
+// {{{
+.entries-enter {
+  opacity: 0.01;
+}
+.entries-enter.entries-enter-active {
+  opacity: 1;
+  transition: opacity 400ms ease-in;
+}
+.entries-leave {
+  opacity: 1;
+}
+.entries-leave.entries-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
+}
+// }}}
+
+// {{{ ToolBar
+div#tool-bar {
+  position: absolute;
+  right:  0;
+  bottom: 0;
+  div.tool-item {
+    width:  60px;
+    height: 60px;
+    cursor: pointer;
+    i {
+      transition: all 0.2s;
+      font-size: 2em;
+      color: $weak;
+      text-shadow: 0 1px 0 white;
+    }
+    &:hover {
+      i {
+        color: $text;
+      }
+    }
+  }
+}
+// }}}

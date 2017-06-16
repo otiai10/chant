@@ -1,46 +1,46 @@
-chant
-========
+# chant
 
-The very minimum chat application, by [Golang](http://golang.org/) and [Reactjs](https://facebook.github.io/react/).
+Enjoy chatting ;)
 
-![](/public/img/title.png)
-
-ちゃんと仕事しよう
-
-Install
-========
+# Deploy
 
 ```sh
-# clone project
-cd $GOPATH/src
-git clone git@github.com:otiai10/chant.git
-# set up your conf
-cp conf/app.conf.sample conf/app.conf # and edit a bit please :)
-touch app/chatroom/bot/config.toml
-# dependencies
-go get github.com/revel/cmd/revel
-go get ./...
-# Let's start!
-revel run chant
+% vi app/secret.yaml
+% goapp deploy -application your-crazy-app app/
 ```
 
-options
+without AppEngine?
 
-- redis // TODO: あとで書く
+```sh
+% go get github.com/otiai10/chant
+% chant -secret you-secret.yaml
+```
 
+# Secret Variables
 
-Development
-===========
+`app/secret.yaml` should be like this
 
-- policy: _Eat your dogfood, and Serve your best dogfood._
-- issues: https://github.com/otiai10/chant/issues
-- server: `revel run chant dev`
-- client: see [client](https://github.com/otiai10/chant/tree/master/client)
-- license: [MIT](https://github.com/otiai10/chant/blob/master/LICENSE)
+```yaml
+env_variables:
+  # Server token salt,
+  #     any string as you like
+  JWT_SALT: w5Asjxxxxxxxxxxxxxx
+  # For Twitter OAuth,
+  #     obtained from "https://apps.twitter.com"
+  TWITTER_CONSUMER_KEY: Keskxxxxxxxxxxxxxxxx
+  TWITTER_CONSUMER_SECRET: Ub1c7sVPJJaxxxxxx
+  # For Firebase,
+  #     obtained from "https://console.firebase.google.com/"
+  FIREBASE_API_KEY: AIzaSyCxxxxxxxxxxxxxxxxxxxxxx
+  FIREBASE_AUTH_DOMAIN: your-crazy-app.firebaseapp.com
+  FIREBASE_DB_URL: https://your-crazy-app.firebaseio.com
+  FIREBASE_PROJECT_ID: your-crazy-app
+  FIREBASE_STORAGE_BUCKET: your-crazy-app.appspot.com
+  FIREBASE_MESSAGING_SENDER_ID: 72123123123123123123123
+```
 
-Client Projects
-================
+# Development
 
-- Desktop (Electron) https://github.com/otiai10/chantron
-- iOS https://github.com/otiai10/chantos
-- Android https://github.com/otiai10/chantroid
+```sh
+% yarn start & goapp serve app
+```

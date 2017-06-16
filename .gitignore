@@ -1,50 +1,6 @@
-# Thanks to https://github.com/github/gitignore/blob/master/Go.gitignore
-# Compiled Object files, Static and Dynamic libs (Shared Objects)
-*.o
-*.a
-*.so
+*~
+*.pyc
 
-# Folders
-_obj
-_test
-
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
-
-*.cgo1.go
-*.cgo2.c
-_cgo_defun.c
-_cgo_gotypes.go
-_cgo_export.*
-
-_testmain.go
-
-*.exe
-*.test
-*.prof
-
-!*.gitkeep
-
-# log
-*.log
-
-# Revel App
-app/tmp/*
-app/routes/*
-conf/app.conf
-app/chatroom/bot/config.toml
-public/img/uploads/*
-
-conf/configs.json
-
-# assets
-## public/img/emojis/*
-
-# IntelliJ
-.idea/*
-*.iml
-
-# client
-client/node_modules/*
-client/dest/*
+node_modules/
+# CHANT APPLICATION SETTINGS
+app/secret.yaml
