@@ -34,6 +34,9 @@ export default class MessageInput extends Component {
       </div>
     );
   }
+  componentWillReceiveProps(next) {
+    if (next.inputs.text != this.props.inputs.text) this.ref.focus();
+  }
   onChange(ev) {
     this.props.changeText(ev.target.value);
   }

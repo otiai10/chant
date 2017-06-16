@@ -12,6 +12,7 @@ export function changeText(text) {
 export function appendText(text, newline = false) {
   return {
     type: 'TEXT_APPEND',
-    data: (newline ? '\n' : '') + text,
+    data: text,
+    newline: newline,
   };
 }

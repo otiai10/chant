@@ -3,7 +3,10 @@ export default (state = {text:''}, action) => {
   case 'TEXT_CHANGE':
     return {...state, text: action.data};
   case 'TEXT_APPEND':
-    return {...state, text: state.text + action.data};
+    return {
+      ...state,
+      text: state.text + (state.text.length && action.newline ? '\n' : '') + action.data + (action.newline ? '\n' : ''),
+    };
   }
   return state;
 };
