@@ -81,7 +81,7 @@ div.twitterwidget-wrapper {
 
 // {{{ ToolBar
 div#tool-bar {
-  position: absolute;
+  position: fixed;
   right:  0;
   bottom: 0;
   div.tool-item {
