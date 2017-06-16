@@ -11,6 +11,7 @@ export default  [
     replace: function(sub, result) {
       const id = sub.match(/\[quote:([-_a-zA-Z0-9]+)\]/)[1];
       chant.firebase.database().ref(`messages/${id}`).once('value', snapshot => {
+        if (!snapshot.val()) return result(<span>{sub}</span>);
         const message = {...snapshot.val(), id, type:'QUOTED'};
         result(<blockquote><Entry {...message} /></blockquote>);
       });
