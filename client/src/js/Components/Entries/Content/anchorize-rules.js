@@ -21,6 +21,13 @@ export default  [
       });
     }
   },
+  // URL
+  {
+    match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
+    wrap: function(sub) {
+      return <a href={sub} rel="noopener noreferrer" target="_blank">{sub}</a>;
+    },
+  },
   {
     match: /(おっぱい)/g,
     wrap: (sub) => <b>{sub}</b>,
