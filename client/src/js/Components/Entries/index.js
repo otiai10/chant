@@ -13,7 +13,9 @@ export default class Entries extends Component {
           transitionEnterTimeout={120}
           transitionLeaveTimeout={80}
           >
-          {this.props.entries.map(entry => <Entry key={entry.id} {...entry}/>)}
+          {this.props.entries.map(entry => {
+            return <div key={entry.id} className="entry-container"><Entry {...entry}/></div>;
+          })}
         </CSSTransitionGroup>
       </div>
     );
