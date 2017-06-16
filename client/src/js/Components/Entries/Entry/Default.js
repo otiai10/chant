@@ -51,31 +51,12 @@ export default class DefaultEntry extends Component {
       credentials: 'include',
     });
   }
-  // TODO: Refactor by using `message.type`
-  _getActions() {
-    let actions = [
-      <div key={0} className="action timestamp"
-        onClick={this.props.stamp ? this._onQuote.bind(this) : () => {}}
-      >
-        {this._prettyTime()}
-      </div>
-    ];
-    if (!this.props.stamp) return actions;
-    return actions.concat([
-      <div key={1} className="action totsuzenize"
-        onClick={this._onTotsuzenize.bind(this)}>Totsuzenize</div>,
-      <div key={2} className="action stamprize"
-        onClick={this._onStamprize.bind(this)}>Stamprize</div>
-    ]);
-  }
   static propTypes = {
     id:   PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
     time: PropTypes.number.isRequired,
-    // {{{ TODO: Refactor
-    stamp: PropTypes.object,
-    // }}}
+    appendText:  PropTypes.func,
     upsertStamp: PropTypes.func,
   }
 }
