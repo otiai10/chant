@@ -42,13 +42,15 @@ export function listenFirebaseStamps(dispatch) {
 }
 
 export function postMessage(text, user = chant.user) {
-  const key = chant.firebase.database().ref('messages').push().key;
-  chant.firebase.database().ref(`messages/${key}`).set({
-    text,
-    user,
-    time: Date.now(),
-  });
-  return {type:'IGNORE'};
+  return (dispatch) => {
+    const key = chant.firebase.database().ref('messages').push().key;
+    chant.firebase.database().ref(`messages/${key}`).set({
+      text,
+      user,
+      time: Date.now(),
+    });
+    dispatch({type:'IGNORE'});
+  };
 }
 
 export function useStamp(stamp) {
