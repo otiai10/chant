@@ -2,26 +2,23 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {postMessage,upsertStamp} from '../../actions/remote';
+import {changeText} from '../../actions/inputs';
 
-@connect(null, {
+@connect(({inputs}) => ({inputs}), {
   postMessage,
   upsertStamp,
+  changeText,
 })
 export default class MessageInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
-    };
-  }
   render() {
+    const {inputs} = this.props;
     return (
       <div id="message-input-container">
         <textarea
           id="message-input"
           ref={ref => this.ref = ref}
           cols={140} rows={2}
-          value={this.state.text}
+          value={inputs.text}
           onChange={this.onChange.bind(this)}
           onKeyDown={this.onKeyDown.bind(this)}
           placeholder="Shift + ⏎ for newline"
@@ -37,39 +34,48 @@ export default class MessageInput extends Component {
       </div>
     );
   }
+  componentWillReceiveProps(next) {
+    if (next.inputs.text != this.props.inputs.text) this.ref.focus();
+  }
   onChange(ev) {
-    this.setState({text: ev.target.value});
+    this.props.changeText(ev.target.value);
   }
   onKeyDown(ev) {
     const ENTER = 13;
     const {which, shiftKey, ctrlKey} = ev;
     if (which == ENTER && !(shiftKey || ctrlKey)) {
-      if (this.state.text.trim().length == 0) return ev.preventDefault();
-      this.props.postMessage(this.state.text);
-      this.setState({text:''});
+      if (this.props.inputs.text.trim().length == 0) return ev.preventDefault();
+      this.props.postMessage(this.props.inputs.text);
+      this.props.changeText('');
       return ev.preventDefault();
     }
   }
   onTotsuzenizeClick(ev) {
     ev.preventDefault();
-    const text = this.state.text.trim();
+    const text = this.props.inputs.text.trim();
     if (text.length == 0) return;
     fetch('/api/messages/text/totsuzenize', {
       method: 'POST',
-      body: JSON.stringify({text:this.state.text}),
+      body: JSON.stringify({text:this.props.inputs.text}),
       credentials: 'include',
     });
-    this.setState({text:''}, () => this.ref.focus());
+    this.props.changeText('');
+    this.ref.focus();
   }
   onStamprizeClick(ev) {
     ev.preventDefault();
-    const text = this.state.text.trim();
+    const text = this.props.inputs.text.trim();
     if (text.length == 0) return;
     upsertStamp(text);
-    this.setState({text:''}, () => this.ref.focus());
+    this.props.changeText('');
+    this.ref.focus();
   }
   static propTypes = {
+    inputs: PropTypes.shape({
+      text: PropTypes.string.isRequired,
+    }).isRequired,
     postMessage: PropTypes.func.isRequired,
     upsertStamp: PropTypes.func.isRequired,
+    changeText:  PropTypes.func.isRequired,
   }
 }

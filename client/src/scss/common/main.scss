@@ -31,6 +31,7 @@ div.icon {
   align-items: center;
   justify-content: center;
   background-color: $weak;
+  cursor: pointer;
   .icon-image {
     width:  100%;
     height: 100%;
@@ -45,66 +46,65 @@ div.icon {
   }
 }
 
-div.entry {
+div.entry-container {
   padding-bottom: 20px;
-  transition: all 0.1s;
-  $space: 6px;
-  .actions {
-    padding-bottom: $space;
-    font-size: 12px;
-    .action {
-      margin-right: 8px;
-      transition: all 0.2s;
-    }
-    .timestamp {
-      color: $weak;
-    }
-    .stamprize, .totsuzenize {
-      color: transparent;
-    }
-  }
-  .contents {
-    display: flex;
-    .icon-box {
-      padding-right: $space;
-    }
-    .contents-box {
-      // {{{ XXX: not sure why it's needed
-      width: 0%;
-      flex:  1;
-      // }}}
-      &>div {
-        width: 100%;
+  div.entry {
+    transition: all 0.1s;
+    $space: 6px;
+    .actions {
+      padding-bottom: $space;
+      font-size: 12px;
+      .action {
+        margin-right: 8px;
+        transition: all 0.2s;
       }
-      span {
-        margin: 0;
-        padding: 0;
-        font-size: 16px;
-        color: $text;
+      .timestamp {
+        color: $weak;
+      }
+      .stamprize, .totsuzenize {
+        color: transparent;
       }
     }
-  }
-  &:hover {
-    background-color: $pale;
-    cursor: pointer;
-    .stamprize, .totsuzenize {
-      color: $weak;
+    .contents {
+      display: flex;
+      .icon-box {
+        padding-right: $space;
+      }
+      .contents-box {
+        // {{{ XXX: not sure why it's needed
+        width: 0%;
+        flex:  1;
+        // }}}
+        &>div {
+          width: 100%;
+        }
+        span {
+          margin: 0;
+          padding: 0;
+          font-size: 16px;
+          color: $text;
+        }
+      }
     }
-    .timestamp:hover, .stamprize:hover, .totsuzenize:hover {
+    &:hover {
+      background-color: $pale;
       cursor: pointer;
-      color: $primary;
+      .stamprize, .totsuzenize {
+        color: $weak;
+      }
+      .timestamp:hover, .stamprize:hover, .totsuzenize:hover {
+        cursor: pointer;
+        color: $primary;
+      }
     }
   }
 }
 
 blockquote {
   margin: 0;
-  padding: 6px 14px;
+  padding: 6px 14px 0px 14px;
   border-left: solid 4px $secondary;
   font-size: 16px;
-}
-blockquote>div.entry {
-  padding: 8px;
 }
 
 .justify {
@@ -182,16 +182,21 @@ div.loading-container {
   background-color: #014060;
 }
 
-.button.stamp {
-  border:           none;
-  transition:   all 0.1s;
-  font-size:        12px;
-  background-color: transparent;
-  border-radius:     4px;
-  cursor:        pointer;
-  box-sizing: border-box;
-  border: solid 1px transparent;
-}
-.button.stamp:hover {
-  border: solid 1px $primary;
+.stamps {
+  flex-wrap: wrap;
+  .button.stamp {
+    border:           none;
+    transition:   all 0.1s;
+    font-size:        12px;
+    background-color: transparent;
+    border-radius:     4px;
+    cursor:        pointer;
+    box-sizing: border-box;
+    border: solid 1px transparent;
+    word-break:   keep-all;
+    padding:           6px;
+  }
+  .button.stamp:hover {
+    border: solid 1px $primary;
+  }
 }

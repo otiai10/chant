@@ -24,36 +24,44 @@ export function listenFirebaseMembers(dispatch) {
       data: snapshot.val() || {},
     });
   });
+}
 
+export function listenConnectionStatus(/* dispatch */) {
   // To publish that this browser disconnected
-  const connections = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
-  connections.onDisconnect().remove();
+  chant.firebase.database().ref('.info/connected').on('value', snapshot => {
+    const browser = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
+    if (snapshot.val()) browser.set(true); // Re-connection
+    browser.onDisconnect().remove(); // Remove anyway on disconnected.
+  });
 }
 
 export function listenFirebaseStamps(dispatch) {
-  chant.firebase.database().ref('stamps').on('value', snapshot => {
+  chant.firebase.database().ref('stamps').orderByChild('used').limitToLast(20).on('value', snapshot => {
+    const dict = snapshot.val() || {};
+    const newlist = Object.keys(dict).map(key => dict[key]).sort((p, n) => p.used < n.used ? 1 : -1);
     dispatch({
       type: 'REMOTE_STAMP',
-      data: snapshot.val() || {},
+      data: newlist,
     });
   });
 }
 
 export function postMessage(text, user = chant.user) {
-  const key = chant.firebase.database().ref('messages').push().key;
-  chant.firebase.database().ref(`messages/${key}`).set({
-    text,
-    user,
-    time: Date.now(),
-  });
-  return {type:'IGNORE'};
+  return (dispatch) => {
+    const key = chant.firebase.database().ref('messages').push().key;
+    chant.firebase.database().ref(`messages/${key}`).set({
+      text,
+      user,
+      time: Date.now(),
+    });
+    dispatch({type:'IGNORE'});
+  };
 }
 
 export function useStamp(stamp) {
-  postMessage(stamp.text);
   const id = encodeURIComponent(stamp.text);
   chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
-  return {type:'IGNORE'};
+  return postMessage(stamp.text);
 }
 
 export function upsertStamp(text, user = chant.user) {

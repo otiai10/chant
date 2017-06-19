@@ -28,7 +28,7 @@ export default class StampsInput extends Component {
   render() {
     const {stamps} = this.props;
     return (
-      <div className="row">
+      <div className="row stamps">
         {stamps.map(stamp => <Stamp key={stamp.text} {...stamp} />)}
       </div>
     );

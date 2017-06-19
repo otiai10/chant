@@ -28,8 +28,8 @@ div#message-input-container {
   }
   div.actions {
     position: absolute;
-    right: 0;
-    top:   0;
+    right:     0;
+    bottom: 10px;
     text-align: right;
     button {
       cursor: pointer;
@@ -81,7 +81,7 @@ div.twitterwidget-wrapper {
 
 // {{{ ToolBar
 div#tool-bar {
-  position: absolute;
+  position: fixed;
   right:  0;
   bottom: 0;
   div.tool-item {
