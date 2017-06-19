@@ -24,10 +24,15 @@ export function listenFirebaseMembers(dispatch) {
       data: snapshot.val() || {},
     });
   });
+}
 
+export function listenConnectionStatus(/* dispatch */) {
   // To publish that this browser disconnected
-  const connections = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
-  connections.onDisconnect().remove();
+  chant.firebase.database().ref('.info/connected').on('value', snapshot => {
+    const browser = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
+    if (snapshot.val()) browser.set(true); // Re-connection
+    browser.onDisconnect().remove(); // Remove anyway on disconnected.
+  });
 }
 
 export function listenFirebaseStamps(dispatch) {

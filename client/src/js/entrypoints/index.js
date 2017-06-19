@@ -6,10 +6,12 @@ import {
   listenFirebaseMessages,
   listenFirebaseMembers,
   listenFirebaseStamps,
+  listenConnectionStatus,
 } from '../actions/remote';
 listenFirebaseMessages(store.dispatch);
 listenFirebaseMembers(store.dispatch);
 listenFirebaseStamps(store.dispatch);
+listenConnectionStatus(/* store.dispatch */);
 
 import App from '../Containers/app';
 render(
