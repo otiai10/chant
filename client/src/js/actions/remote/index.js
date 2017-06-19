@@ -54,10 +54,9 @@ export function postMessage(text, user = chant.user) {
 }
 
 export function useStamp(stamp) {
-  postMessage(stamp.text);
   const id = encodeURIComponent(stamp.text);
   chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
-  return {type:'IGNORE'};
+  return postMessage(stamp.text);
 }
 
 export function upsertStamp(text, user = chant.user) {
