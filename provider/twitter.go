@@ -47,12 +47,13 @@ func (p *Twitter) FetchIdentity(token *oauth.AccessToken) (*Identity, error) {
 	}
 	defer res.Body.Close()
 	u := struct {
-		ID              string `json:"id_str"`
-		ScreenName      string `json:"screen_name"`
-		ProfileImageURL string `json:"profile_image_url"`
+		ID                   string `json:"id_str"`
+		ScreenName           string `json:"screen_name"`
+		ProfileImageURL      string `json:"profile_image_url"`
+		ProfileImageURLHTTPS string `json:"profile_image_url_https"`
 	}{}
 	if err := json.NewDecoder(res.Body).Decode(&u); err != nil {
 		return nil, fmt.Errorf("Failed to decode identity response: %v", err)
 	}
-	return &Identity{Provider: "twitter", ID: u.ID, Name: u.ScreenName, ImageURL: u.ProfileImageURL}, nil
+	return &Identity{Provider: "twitter", ID: u.ID, Name: u.ScreenName, ImageURL: u.ProfileImageURLHTTPS}, nil
 }
