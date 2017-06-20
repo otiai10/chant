@@ -30,7 +30,10 @@ export function listenConnectionStatus(/* dispatch */) {
   // To publish that this browser disconnected
   chant.firebase.database().ref('.info/connected').on('value', snapshot => {
     const browser = chant.firebase.database().ref(`members/${chant.user.id}/browsers/${chant.user.browser}`);
-    if (snapshot.val()) browser.set(true); // Re-connection
+    if (snapshot.val()) {
+      browser.set(true); // Re-connection
+      chant.firebase.database().ref(`members/${chant.user.id}`).update({name:chant.user.name, image_url:chant.user.image_url});
+    }
     browser.onDisconnect().remove(); // Remove anyway on disconnected.
   });
 }
