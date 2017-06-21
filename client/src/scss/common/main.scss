@@ -30,7 +30,7 @@ div.icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: $weak;
+  background-color: $pale;
   cursor: pointer;
   .icon-image {
     width:  100%;
@@ -41,8 +41,8 @@ div.icon {
     z-index: 1;
   }
   span {
-    position: absolute;
     z-index: 0;
+    color: $weak;
   }
 }
 
@@ -86,8 +86,10 @@ div.entry-container {
         }
       }
     }
-    &:hover {
-      background-color: $pale;
+  }
+  &:hover {
+    background-color: $pale;
+    div.entry {
       cursor: pointer;
       .stamprize, .totsuzenize {
         color: $weak;
