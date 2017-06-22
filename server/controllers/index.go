@@ -22,6 +22,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	firebaseconfig := getFirebaseConfig(r)
 	flushUnnecessaryCookies(w)
 
+	w.Header().Add("Strict-Transport-Security", "max-age=31536000")
 	marmoset.Render(w).HTML("index", marmoset.P{
 		"title": "CHANT",
 		"user":  user,
