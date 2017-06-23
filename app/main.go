@@ -34,6 +34,8 @@ func init() {
 	unauthorized.GET("/403", controllers.Forbidden)
 	unauthorized.POST("/auth", controllers.Auth)
 	unauthorized.GET("/auth/callback", controllers.AuthCallback)
+	unauthorized.GET("/sw.js", controllers.ServiceWorkerJavaScript)
+	unauthorized.GET("/manifest.json", controllers.ManifestJSON)
 	root.Subrouter(unauthorized)
 
 	auth := filters.InitializeAuthFilter(policyfile)
@@ -42,6 +44,7 @@ func init() {
 	authorized.POST("/logout", controllers.Logout)
 	authorized.GET("/api/tweets/embed", controllers.GetTweetEmbed)
 	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
+	authorized.POST("/api/messages/notification", controllers.MessageNotification)
 	authorized.Apply(new(marmoset.ContextFilter), auth)
 	root.Subrouter(authorized)
 

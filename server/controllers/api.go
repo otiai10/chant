@@ -81,3 +81,34 @@ func Totsuzenize(w http.ResponseWriter, r *http.Request) {
 		"text": totsuzen.NewToken(body.Text).Totsuzenize().Text,
 	})
 }
+
+// MessageNotification ...
+func MessageNotification(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	body := struct {
+		Targets []*models.User `json:"targets"`
+		Sender  *models.User   `json:"sender"`
+		Text    string         `json:"text"`
+	}{}
+	defer r.Body.Close()
+	ctx := middleware.Context(r)
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"messsage": err.Error(),
+		})
+		return
+	}
+	push := middleware.NewPushClient(ctx)
+	for _, target := range body.Targets {
+		for _, device := range target.Notification.Devices {
+			if err := push.Send(middleware.Notification{
+				Title: body.Sender.Name,
+				Body:  body.Text,
+				Icon:  body.Sender.ImageURL,
+			}, device.Token); err != nil {
+				middleware.Log(ctx).Debugf("Push Failed: %+v", err)
+			}
+		}
+	}
+	render.JSON(http.StatusOK, marmoset.P{})
+}
