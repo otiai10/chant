@@ -14,6 +14,9 @@ listenFirebaseMembers(store.dispatch);
 listenFirebaseStamps(store.dispatch);
 listenConnectionStatus(/* store.dispatch */);
 
+// onfocus
+window.onfocus = () => store.dispatch({type:'UNREAD_RESET'});
+
 import App from '../Containers/app';
 render(
   <Provider store={store}><App /></Provider>,
