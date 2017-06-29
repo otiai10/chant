@@ -1,3 +1,4 @@
+/* global firebase:false */
 import 'firebase/auth';
 import 'firebase/database';
 
@@ -49,16 +50,27 @@ export function listenFirebaseStamps(dispatch) {
   });
 }
 
-export function postMessage(text, user = chant.user) {
-  return (dispatch) => {
-    const key = chant.firebase.database().ref('messages').push().key;
-    chant.firebase.database().ref(`messages/${key}`).set({
-      text,
-      user,
-      time: Date.now(),
-    });
+export function hookMention(text, user = chant.user) {
+  return (dispatch, getState) => {
+    const r = new RegExp('[ 　]+');
+    const members = Object.keys(getState().members).map(id => getState().members[id]);
+    const targets = text.split(r).filter(t => /@[_a-zA-Z0-9]+/.test(t)).map(t => t.replace(/^@/, '')).map(name => {
+      return members.filter(member => member.name == name).pop();
+    }).filter(m => !!m);
+    if (targets.length == 0) return dispatch({type:'IGNORE'});
+    fetch('/api/messages/notification', {method:'POST', credentials:'include', body:JSON.stringify({targets, sender: user, text})});
     dispatch({type:'IGNORE'});
   };
+}
+
+export function postMessage(text, user = chant.user) {
+  const key = chant.firebase.database().ref('messages').push().key;
+  chant.firebase.database().ref(`messages/${key}`).set({
+    text,
+    user,
+    time: Date.now(),
+  });
+  return hookMention(text, user);
 }
 
 export function useStamp(stamp) {
@@ -79,4 +91,26 @@ export function upsertStamp(text, user = chant.user) {
     user, time: Date.now(),
   });
   return {type:'IGNORE'};
+}
+
+export function toggleDeviceNotification(user = chant.user) {
+  const db = chant.firebase.database();
+  return (dispath) => {
+    (new Promise(resolve => db.ref(`members/${user.id}`).once('value', snapshot => resolve(snapshot.val()))))
+    .then(member => (member.notification && member.notification.devices) ? member.notification.devices[chant.device.name] : undefined)
+    .then(device => device ? Promise.resolve(device) : Promise.reject())
+    .then(() => db.ref(`members/${user.id}/notification/devices/${chant.device.name}`).remove())
+    .catch(() => saveDeviceToken());
+    dispath({type:'IGNORE'});
+  };
+}
+
+export function saveDeviceToken(user = chant.user) {
+  const messaging = firebase.messaging();
+  messaging.requestPermission().then(() => {
+    messaging.getToken().then(token => {
+      chant.firebase.database().ref(`members/${user.id}/notification/devices/${chant.device.name}`).set({token,ts:Date.now()});
+      return {type:'IGNORE'};
+    });
+  });
 }

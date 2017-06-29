@@ -1,4 +1,5 @@
 {{template "partials/header" .}}
+<link rel="manifest" href="/manifest.json" />
 <link rel="stylesheet" href="/public/css/index.css" />
 <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
 <script type="text/javascript">var chant = chant || {}; chant.user = {{.user}};</script>
@@ -12,6 +13,7 @@
     // TODO: handle error
     // .catch(function(err) { ... });
   }
+  chant.configs = configs;
 })();</script>
 <script type="text/javascript" src="/public/js/index.js"></script>
 {{template "partials/footer" .}}

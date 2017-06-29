@@ -14,13 +14,29 @@ import (
 	"github.com/otiai10/firebase"
 )
 
+// DeviceName ...
+type DeviceName string
+
+const (
+	// Chrome represents Chrome Browser
+	Chrome DeviceName = "chrome"
+	// Firefox represents Firefox Browser
+	Firefox DeviceName = "firefox"
+)
+
 // User ...
 type User struct {
 	provider.Identity
 	jwt.StandardClaims
-	LoginTime time.Time `json:"login_time"`
-	Browser   int64     `json:"browser"`
-	Browsers  []int64   `json:"browsers"`
+	LoginTime    time.Time       `json:"login_time"`
+	Browser      int64           `json:"browser"`
+	Browsers     map[string]bool `json:"browsers"`
+	Notification struct {
+		Devices map[DeviceName]struct {
+			Token string `json:"token"`
+			TS    int64  `json:"ts"`
+		} `json:"devices,omitempty"`
+	} `json:"notification,omitempty"`
 }
 
 // Encode to JWT string

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -79,5 +80,68 @@ func Totsuzenize(w http.ResponseWriter, r *http.Request) {
 	render.JSON(http.StatusOK, marmoset.P{
 		"id":   id,
 		"text": totsuzen.NewToken(body.Text).Totsuzenize().Text,
+	})
+}
+
+// MessageNotification ...
+func MessageNotification(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	body := struct {
+		Targets []*models.User `json:"targets"`
+		Sender  *models.User   `json:"sender"`
+		Text    string         `json:"text"`
+	}{}
+	defer r.Body.Close()
+	ctx := middleware.Context(r)
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"messsage": err.Error(),
+		})
+		return
+	}
+	push := middleware.NewPushClient(ctx)
+	for _, target := range body.Targets {
+		for _, device := range target.Notification.Devices {
+			if err := push.Send(middleware.Notification{
+				Title: body.Sender.Name,
+				Body:  body.Text,
+				Icon:  body.Sender.ImageURL,
+			}, device.Token); err != nil {
+				middleware.Log(ctx).Debugf("Push Failed: %+v", err)
+			}
+		}
+	}
+	render.JSON(http.StatusOK, marmoset.P{})
+}
+
+// GetURLEmbed ...
+func GetURLEmbed(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	u, err := url.QueryUnescape(r.FormValue("url"))
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to unescape parameter: %v", err),
+		})
+		return
+	}
+	client := middleware.HTTPClient(middleware.Context(r))
+	res, err := client.Get(u)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to fetch resource of given parameter: %v", err),
+		})
+		return
+	}
+	defer res.Body.Close()
+	preview := models.NewWebPreview()
+	if err := preview.Parse(res); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to parse response: %v", err),
+		})
+		return
+	}
+	render.JSON(http.StatusOK, marmoset.P{
+		"contenttype": res.Header.Get("Content-Type"),
+		"preview":     preview,
 	})
 }

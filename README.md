@@ -37,6 +37,9 @@ env_variables:
   FIREBASE_PROJECT_ID: your-crazy-app
   FIREBASE_STORAGE_BUCKET: your-crazy-app.appspot.com
   FIREBASE_MESSAGING_SENDER_ID: 72123123123123123123123
+  # For Push Notification
+  #     obtained from "General Settings" of "https://console.firebase.google.com"
+  FCM_SERVER_KEY: AAAAqxxxx:adfadfadfasdfasdfadfadfadfadsfasdfas
 ```
 
 # Development

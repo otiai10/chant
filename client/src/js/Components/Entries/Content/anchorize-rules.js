@@ -35,12 +35,25 @@ export default  [
       });
     }
   },
-  // URL
+  // Any URL
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
     wrap: function(sub) {
       return <a href={sub} rel="noopener noreferrer" target="_blank">{sub}</a>;
     },
+    replace: function(sub, replace) {
+      fetch(`/api/messages/embed?url=${encodeURIComponent(sub)}`, {credentials:'include'})
+      .then(res => res.json())
+      .then(({preview}) => {
+        if (!preview) return;
+        switch (preview.type) {
+        case 'image': return replace(<img src={preview.image} />);
+        case 'html':  return replace(<blockquote><h5>{preview.title}</h5><p>{preview.body}</p></blockquote>);
+        }
+      }).catch(() => {
+        // TODO: do something
+      });
+    }
   },
   {
     match: /(おっぱい)/g,
