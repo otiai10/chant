@@ -43,6 +43,7 @@ func init() {
 	authorized.GET("/", controllers.Index)
 	authorized.POST("/logout", controllers.Logout)
 	authorized.GET("/api/tweets/embed", controllers.GetTweetEmbed)
+	authorized.GET("/api/messages/embed", controllers.GetURLEmbed)
 	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
 	authorized.POST("/api/messages/notification", controllers.MessageNotification)
 	authorized.Apply(new(marmoset.ContextFilter), auth)

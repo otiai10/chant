@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -111,4 +112,36 @@ func MessageNotification(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	render.JSON(http.StatusOK, marmoset.P{})
+}
+
+// GetURLEmbed ...
+func GetURLEmbed(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	u, err := url.QueryUnescape(r.FormValue("url"))
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to unescape parameter: %v", err),
+		})
+		return
+	}
+	client := middleware.HTTPClient(middleware.Context(r))
+	res, err := client.Get(u)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to fetch resource of given parameter: %v", err),
+		})
+		return
+	}
+	defer res.Body.Close()
+	preview := models.NewWebPreview()
+	if err := preview.Parse(res); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Errorf("Failed to parse response: %v", err),
+		})
+		return
+	}
+	render.JSON(http.StatusOK, marmoset.P{
+		"contenttype": res.Header.Get("Content-Type"),
+		"preview":     preview,
+	})
 }
