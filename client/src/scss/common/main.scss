@@ -85,6 +85,18 @@ div.entry-container {
           color: $text;
         }
       }
+      img.preview {
+        width: 100%;
+      }
+      blockquote.preview {
+        &>div>h5 {
+          margin: 0;
+          padding: 0;
+        }
+        &>div>div>img {
+          width: 100%;
+        }
+      }
     }
   }
   &:hover {

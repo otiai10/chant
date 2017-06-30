@@ -3,6 +3,7 @@
 import React from 'react';
 
 import Entry from '../Entry';
+import {PreviewImage, PreviewPage} from './WebPreview';
 
 export default  [
   // quote
@@ -47,8 +48,8 @@ export default  [
       .then(({preview}) => {
         if (!preview) return;
         switch (preview.type) {
-        case 'image': return replace(<img src={preview.image} />);
-        case 'html':  return replace(<blockquote><h5>{preview.title}</h5><p>{preview.body}</p></blockquote>);
+        case 'image': return replace(<PreviewImage {...preview} />);
+        case 'html':  return replace(<PreviewPage  {...preview} />);
         }
       }).catch(() => {
         // TODO: do something
