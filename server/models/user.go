@@ -39,6 +39,18 @@ type User struct {
 	} `json:"notification,omitempty"`
 }
 
+// Bot provides bot user
+func Bot( /* ctx context.Context */ ) *User {
+	// TODO: get bot from Firebase Database
+	return &User{
+		Identity: provider.Identity{
+			Name:     "chang",
+			Provider: "bot",
+			ImageURL: "/public/img/bot.png",
+		},
+	}
+}
+
 // Encode to JWT string
 func (user *User) Encode(salt string) (string, error) {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), user)

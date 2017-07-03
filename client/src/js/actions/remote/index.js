@@ -50,27 +50,34 @@ export function listenFirebaseStamps(dispatch) {
   });
 }
 
-export function hookMention(text, user = chant.user) {
-  return (dispatch, getState) => {
-    const r = new RegExp('[ 　]+');
-    const members = Object.keys(getState().members).map(id => getState().members[id]);
-    const targets = text.split(r).filter(t => /@[_a-zA-Z0-9]+/.test(t)).map(t => t.replace(/^@/, '')).map(name => {
-      return members.filter(member => member.name == name).pop();
-    }).filter(m => !!m);
-    if (targets.length == 0) return dispatch({type:'IGNORE'});
-    fetch('/api/messages/notification', {method:'POST', credentials:'include', body:JSON.stringify({targets, sender: user, text})});
-    dispatch({type:'IGNORE'});
-  };
+function __hook_Mention(text, getState, user = chant.user) {
+  const r = new RegExp('[ 　]+');
+  const members = Object.keys(getState().members).map(id => getState().members[id]);
+  const targets = text.split(r).filter(t => /@[_a-zA-Z0-9]+/.test(t)).map(t => t.replace(/^@/, '')).map(name => {
+    return members.filter(member => member.name == name).pop();
+  }).filter(m => !!m);
+  if (targets.length == 0) return;
+  fetch('/api/messages/notification', {method:'POST', credentials:'include', body:JSON.stringify({targets, sender: user, text})});
+}
+
+function __hook_SlashCommand(text, user = chant.user) {
+  const command = text.split(new RegExp('[ 　]+'))[0];
+  if (!chant.configs.commands.some(cmd => cmd == command)) return;
+  fetch('/api/messages/slashcommand', {method:'POST', credentials:'include', body:JSON.stringify({command, sender: user, text})});
 }
 
 export function postMessage(text, user = chant.user) {
-  const key = chant.firebase.database().ref('messages').push().key;
-  chant.firebase.database().ref(`messages/${key}`).set({
-    text,
-    user,
-    time: Date.now(),
-  });
-  return hookMention(text, user);
+  return (dispatch, getState) => {
+    const key = chant.firebase.database().ref('messages').push().key;
+    chant.firebase.database().ref(`messages/${key}`).set({
+      text,
+      user,
+      time: Date.now(),
+    });
+    __hook_SlashCommand(text);
+    __hook_Mention(text, getState, user);
+    dispatch({type:'IGNORE'});
+  };
 }
 
 export function useStamp(stamp) {

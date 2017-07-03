@@ -18,6 +18,13 @@ export default  [
       });
     }
   },
+  // Mention
+  {
+    match: new RegExp(`(@${chant.user.name})`, 'g'),
+    wrap: function(sub) {
+      return <b>{sub}</b>;
+    }
+  },
   // YouTube
   {
     match: /(https?:\/\/www.youtube.com\/watch\?.*v=[a-zA-Z0-9_-]{11})/gi,
