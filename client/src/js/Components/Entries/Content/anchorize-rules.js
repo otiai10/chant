@@ -18,6 +18,16 @@ export default  [
       });
     }
   },
+  // YouTube
+  {
+    match: /(https?:\/\/www.youtube.com\/watch\?.*v=[a-zA-Z0-9_-]{11})/gi,
+    wrap: function(sub) {
+      const exp = [/https?:\/\/youtu.be\/([a-zA-Z0-9_-]{11})/i, /https?:\/\/www.youtube.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/i];
+      var m = exp[0].exec(sub);
+      const id = (m) ? m[1] : exp[1].exec(sub)[1];
+      return <iframe width="100%" style={{maxWidth:'520px'}} height="225" src={'https://www.youtube.com/embed/' + id} frameBorder="0" allowFullScreen></iframe>;
+    }
+  },
   // Twitter
   {
     match: /(https?:\/\/(?:mobile\.)?twitter.com\/[^\/]+\/status(?:es)?\/[0-9]+)/g,
