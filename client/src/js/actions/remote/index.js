@@ -2,19 +2,17 @@
 import 'firebase/auth';
 import 'firebase/database';
 
-const day = 24*60*60*1000;
-
-export function listenFirebaseMessages(dispatch, days = 1) {
+export function listenFirebaseMessages(dispatch, count = 20) {
   dispatch({type: 'MESSAGE_LOADING'});
   const messages = chant.firebase.database().ref('messages');
   messages.off();
-  messages.orderByChild('time').startAt(Date.now() - days * day).on('value', snapshot => {
+  messages.orderByChild('time').limitToLast(count).on('value', snapshot => {
     dispatch({
       type: 'REMOTE_MESSAGE',
       data: snapshot.val() || [],
     });
   });
-  dispatch({type: 'LOADING_DAYS', data: days});
+  dispatch({type: 'LOADING_DAYS', data: count});
 }
 
 export function listenFirebaseMembers(dispatch) {

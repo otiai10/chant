@@ -1,0 +1,14 @@
+div.contents-box {
+  &>div.amesh-container {
+    position: relative;
+    max-width: 420px;
+    &>img {
+      width: 100%;
+    }
+    &>img.amesh-mask, &>img.amesh-mesh {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}
