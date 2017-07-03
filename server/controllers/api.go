@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/otiai10/chant/server/filters"
+	"github.com/otiai10/chant/server/hook/bot/slashcommands"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
@@ -143,5 +144,24 @@ func GetURLEmbed(w http.ResponseWriter, r *http.Request) {
 	render.JSON(http.StatusOK, marmoset.P{
 		"contenttype": res.Header.Get("Content-Type"),
 		"preview":     preview,
+	})
+}
+
+// SlashCommand ...
+func SlashCommand(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	body := &slashcommands.SlashCommandRequest{Request: r}
+	if err := json.NewDecoder(r.Body).Decode(body); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": err.Error(),
+		})
+	}
+	if err := slashcommands.For(body.Command).Handle(body); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": err.Error(),
+		})
+	}
+	render.JSON(http.StatusOK, marmoset.P{
+		"message": "ok",
 	})
 }

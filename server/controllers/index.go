@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/otiai10/chant/server/filters"
+	"github.com/otiai10/chant/server/hook/bot/slashcommands"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/marmoset"
@@ -22,12 +23,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	firebaseconfig := getFirebaseConfig(r)
 	flushUnnecessaryCookies(w)
 
+	commands := []string{}
+	for key := range slashcommands.Commands {
+		commands = append(commands, key)
+	}
+
 	w.Header().Add("Strict-Transport-Security", "max-age=31536000")
 	marmoset.Render(w).HTML("index", marmoset.P{
 		"title": "CHANT",
 		"user":  user,
 		"configs": map[string]interface{}{
 			"firebase": firebaseconfig,
+			"commands": commands,
 		},
 	})
 }
