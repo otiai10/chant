@@ -1,7 +1,7 @@
-export default (state = {message:false, member:false, days:1}, action) => {
+export default (state = {message:false, member:false, count:20}, action) => {
   switch (action.type) {
   case 'LOADING_DAYS':
-    return {...state, days:action.data};
+    return {...state, count:action.data};
   case 'MESSAGE_LOADING':
     return {...state, message:true};
   case 'REMOTE_MESSAGE':

@@ -15,15 +15,15 @@ export default class LoadMore extends Component {
   }
   getContent() {
     if (this.props.message) return <Loading />;
-    else return <span className="load-more" onClick={this.onClickLoadMore.bind(this)}>load more till {this.props.days + 1} days ago</span>;
+    else return <span className="load-more" onClick={this.onClickLoadMore.bind(this)}>load more up to {this.props.count + 20} entries</span>;
   }
   onClickLoadMore() {
     // TODO: Refactor
-    listenFirebaseMessages(store.dispatch, this.props.days + 1);
+    listenFirebaseMessages(store.dispatch, this.props.count + 20);
   }
   static propTypes = {
     message: PropTypes.bool.isRequired,
     member:  PropTypes.bool.isRequired,
-    days:    PropTypes.number.isRequired,
+    count:   PropTypes.number.isRequired,
   }
 }
