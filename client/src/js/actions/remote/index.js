@@ -50,7 +50,7 @@ export function listenFirebaseStamps(dispatch) {
   });
 }
 
-export function hookMention(text, user = chant.user) {
+function __hook_Mention(text, user = chant.user) {
   return (dispatch, getState) => {
     const r = new RegExp('[ 　]+');
     const members = Object.keys(getState().members).map(id => getState().members[id]);
@@ -70,7 +70,7 @@ export function postMessage(text, user = chant.user) {
     user,
     time: Date.now(),
   });
-  return hookMention(text, user);
+  return __hook_Mention(text, user);
 }
 
 export function useStamp(stamp) {
