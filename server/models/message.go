@@ -17,6 +17,9 @@ type Message struct {
 	Text string `json:"text"`
 	Time int64  `json:"time"`
 	User *User  `json:"user"`
+	// For custom type
+	Type   string                 `json:"type,omitempty"`
+	Params map[string]interface{} `json:"params,omitempty"`
 }
 
 // NewMessage ...
