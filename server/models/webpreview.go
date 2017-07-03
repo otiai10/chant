@@ -9,6 +9,7 @@ import (
 // WebPreview ...
 type WebPreview struct {
 	Type  WebContentType `json:"type"`
+	Link  string         `json:"link"`
 	Title string         `json:"title"`
 	Body  string         `json:"body"`
 	Image string         `json:"image"` // Image URL
@@ -57,6 +58,7 @@ func NewWebPreview() *WebPreview {
 
 // Parse ...
 func (preview *WebPreview) Parse(res *http.Response) error {
+	preview.Link = res.Request.URL.String()
 	switch res.Header.Get("Content-Type") {
 	case "text/html":
 		return preview.parseAsHTML(res)
