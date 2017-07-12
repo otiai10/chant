@@ -79,14 +79,14 @@ export function postMessage(text, user = chant.user) {
 }
 
 export function useStamp(stamp) {
-  const id = encodeURIComponent(stamp.text);
+  const id = encodeURIComponent(stamp.text).replace(/\./g, '%2E');
   chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
   return postMessage(stamp.text);
 }
 
 export function upsertStamp(text, user = chant.user) {
   text = text.trim();
-  const id = encodeURIComponent(text);
+  const id = encodeURIComponent(text).replace(/\./g, '%2E');
   const target = {text, user, time: Date.now(), used: Date.now()};
   chant.firebase.database().ref(`stamps/${id}`).set(target);
   const key = chant.firebase.database().ref('messages').push().key;
