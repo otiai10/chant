@@ -1,4 +1,4 @@
-/* eslint react/display-name:0 */
+/* eslint react/display-name:0 no-console:0 */
 /* global twttr:false */
 import React from 'react';
 
@@ -64,13 +64,13 @@ export default  [
       .then(res => res.json())
       .then(({preview}) => {
         if (!preview) return;
+        // TODO: Create API Client and "Log when Develop" feature
+        console.info('[API][GET /embed]', preview);
         switch (preview.type) {
         case 'image': return replace(<PreviewImage {...preview} />);
         case 'html':  return replace(<PreviewPage  {...preview} />);
         }
-      }).catch(() => {
-        // TODO: do something
-      });
+      }).catch(err => console.error('PREVIEW ERRORED', err));
     }
   },
   {
