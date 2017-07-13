@@ -44,7 +44,10 @@ export default class DefaultEntry extends Component {
     this.props.appendText(`[quote:${this.props.id}]`, true);
   }
   _onStamprize() {
-    this.props.upsertStamp(this.props.text.trim());
+    this.props.upsertStamp({
+      id: this.props.id,     text: this.props.text,
+      user: this.props.user, time: this.props.time,
+    });
   }
   _onTotsuzenize() {
     fetch(`/api/messages/${this.props.id}/totsuzenize`, {

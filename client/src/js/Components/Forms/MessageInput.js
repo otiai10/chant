@@ -66,7 +66,7 @@ export default class MessageInput extends Component {
     ev.preventDefault();
     const text = this.props.inputs.text.trim();
     if (text.length == 0) return;
-    upsertStamp(text);
+    upsertStamp({text, user: chant.user});
     this.props.changeText('');
     this.ref.focus();
   }
