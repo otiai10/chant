@@ -15,7 +15,7 @@ export function listenFirebaseMessages(dispatch, count = 20) {
 
   // Delete old messages according to policy.yaml
   const d = chant.configs.policy.message.days_to_live;
-  messages.orderByChild('time').endAt(Date.now() - (d*24*60*60*100)).limitToLast(1).on('child_added', snapshot => snapshot.ref.remove());
+  messages.orderByChild('time').endAt(Date.now() - (d*24*60*60*1000)).limitToLast(1).on('child_added', snapshot => snapshot.ref.remove());
 
   dispatch({type: 'LOADING_DAYS', data: count});
 }
