@@ -23,10 +23,19 @@ type AuthCtxKey string
 // AuthKey ...
 const AuthKey AuthCtxKey = "user"
 
+// TODO: Refactor: should I embed policy to context??
+var policy *Policy
+
+// SharedPolicy is a getter for "policy"
+func SharedPolicy() Policy {
+	return *policy
+}
+
 // InitializeAuthFilter ...
 func InitializeAuthFilter(policyfile *os.File) *AuthFilter {
+	policy = NewPolicy(policyfile)
 	return &AuthFilter{
-		Policy: NewPolicy(policyfile),
+		Policy: policy,
 	}
 }
 

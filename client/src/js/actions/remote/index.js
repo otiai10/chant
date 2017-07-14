@@ -12,6 +12,11 @@ export function listenFirebaseMessages(dispatch, count = 20) {
       data: snapshot.val() || [],
     });
   });
+
+  // Delete old messages according to policy.yaml
+  const d = chant.configs.policy.message.days_to_live;
+  messages.orderByChild('time').endAt(Date.now() - (d*24*60*60*1000)).limitToLast(1).on('child_added', snapshot => snapshot.ref.remove());
+
   dispatch({type: 'LOADING_DAYS', data: count});
 }
 
@@ -84,15 +89,17 @@ export function useStamp(stamp) {
   return postMessage(stamp.text);
 }
 
-export function upsertStamp(text, user = chant.user) {
-  text = text.trim();
-  const id = encodeURIComponent(text).replace(/\./g, '%2E');
-  const target = {text, user, time: Date.now(), used: Date.now()};
+export function upsertStamp(target, user = chant.user) {
+  const id = encodeURIComponent(target.text.trim()).replace(/\./g, '%2E');
+  target.used = Date.now();
+  // Upsert Stamp
   chant.firebase.database().ref(`stamps/${id}`).set(target);
+  // Post stamprized message
   const key = chant.firebase.database().ref('messages').push().key;
   chant.firebase.database().ref(`messages/${key}`).set({
     type: 'STAMPRIZE',
-    text: 'stamprize:', stamp: target,
+    text: 'stamprize:',
+    stamp: target,
     user, time: Date.now(),
   });
   return {type:'IGNORE'};

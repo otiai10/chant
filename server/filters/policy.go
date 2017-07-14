@@ -26,11 +26,18 @@ type Policy struct {
 	Type    PolicyType `yaml:"type"`
 	List    []string   `yaml:"list"`
 	returns bool       `yaml:"-"`
+
+	Message MessagePolicy `yaml:"message" json:"message"`
+}
+
+// MessagePolicy represents storage policy for messages.
+type MessagePolicy struct {
+	DaysToLive int `yaml:"days_to_live"  json:"days_to_live"`
 }
 
 // NewPolicy ...
 func NewPolicy(f *os.File) *Policy {
-	policy := &Policy{Blacklist, []string{}, false}
+	policy := &Policy{Blacklist, []string{}, false, MessagePolicy{5}}
 	if f == nil {
 		return policy
 	}

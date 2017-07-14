@@ -35,6 +35,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		"configs": map[string]interface{}{
 			"firebase": firebaseconfig,
 			"commands": commands,
+			"policy":   filters.SharedPolicy(),
 		},
 	})
 }

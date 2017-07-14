@@ -2,17 +2,19 @@ package models
 
 import (
 	"net/http"
+	"strings"
 
 	"golang.org/x/net/html"
 )
 
 // WebPreview ...
 type WebPreview struct {
-	Type  WebContentType `json:"type"`
-	Link  string         `json:"link"`
-	Title string         `json:"title"`
-	Body  string         `json:"body"`
-	Image string         `json:"image"` // Image URL
+	Type        WebContentType `json:"type"`
+	ContentType string         `json:"content_type"`
+	Link        string         `json:"link"`
+	Title       string         `json:"title"`
+	Body        string         `json:"body"`
+	Image       string         `json:"image"` // Image URL
 }
 
 type meta struct {
@@ -59,10 +61,11 @@ func NewWebPreview() *WebPreview {
 // Parse ...
 func (preview *WebPreview) Parse(res *http.Response) error {
 	preview.Link = res.Request.URL.String()
-	switch res.Header.Get("Content-Type") {
-	case "text/html":
+	preview.ContentType = res.Header.Get("Content-Type")
+	switch {
+	case strings.HasPrefix(preview.ContentType, "text/html"):
 		return preview.parseAsHTML(res)
-	case "image/jpeg", "image/png":
+	case strings.HasPrefix(preview.ContentType, "image/"):
 		return preview.parseAsImage(res)
 	}
 	return nil
