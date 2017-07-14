@@ -15,10 +15,11 @@ type Help struct {
 func (cmd Help) Handle(req *SlashCommandRequest) error {
 	ctx := middleware.Context(req.Request)
 	bot := models.Bot()
-	text := strings.Join([]string{
-		Hello{}.Help(),
-		Help{}.Help(),
-	}, "\n")
+	helps := []string{}
+	for _, cmd := range Commands {
+		helps = append(helps, cmd.Help())
+	}
+	text := strings.Join(helps, "\n")
 	message := models.NewMessage(text, bot)
 	return message.Push(ctx)
 }
