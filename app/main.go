@@ -47,6 +47,8 @@ func init() {
 	authorized.POST("/api/messages/(?P<id>[a-zA-Z0-9-_]+)/totsuzenize", controllers.Totsuzenize)
 	authorized.POST("/api/messages/notification", controllers.MessageNotification)
 	authorized.POST("/api/messages/slashcommand", controllers.SlashCommand)
+	authorized.POST("/api/messages/image", controllers.ImageUpload)
+	authorized.GET("/uploads/(?P<name>.+)", controllers.ImageDownload)
 	authorized.Apply(new(marmoset.ContextFilter), auth)
 	root.Subrouter(authorized)
 
