@@ -3,26 +3,40 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {postMessage,upsertStamp} from '../../actions/remote';
 import {changeText} from '../../actions/inputs';
+import {api_imageUpload} from '../../actions/api';
 
 @connect(({inputs}) => ({inputs}), {
   postMessage,
   upsertStamp,
   changeText,
+  api_imageUpload,
 })
 export default class MessageInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hold: false,
+    };
+  }
   render() {
     const {inputs} = this.props;
     return (
       <div id="message-input-container">
-        <textarea
-          id="message-input"
-          ref={ref => this.ref = ref}
-          cols={140} rows={2}
-          value={inputs.text}
-          onChange={this.onChange.bind(this)}
-          onKeyDown={this.onKeyDown.bind(this)}
-          placeholder="Shift + ⏎ for newline"
-        />
+        <div
+          onMouseDown={this.onMouseDown.bind(this)}
+          onMouseUp={this.onMouseUp.bind(this)}
+          onMouseOut={this.onMouseOut.bind(this)}
+        >
+          <textarea
+            id="message-input"
+            ref={ref => this.ref = ref}
+            cols={140} rows={2}
+            value={inputs.text}
+            onChange={this.onChange.bind(this)}
+            onKeyDown={this.onKeyDown.bind(this)}
+            placeholder="Shift + ⏎ for newline"
+          />
+        </div>
         <div className="actions">
           <div>
             <button onClick={this.onTotsuzenizeClick.bind(this)}>Totsuzenize</button>
@@ -70,6 +84,33 @@ export default class MessageInput extends Component {
     this.props.changeText('');
     this.ref.focus();
   }
+  // {{{ TODO: Separate
+  onMouseDown() {
+    this.setState({hold:true});
+    setTimeout(() => {
+      const hold = this.state.hold;
+      this.setState({hold:false});
+      if (hold) this.triggerFileSelect();
+    }, 2000);
+  }
+  onMouseUp() {
+    this.setState({hold:false});
+  }
+  onMouseOut() {
+    this.setState({hold:false});
+  }
+  // }}}
+
+  triggerFileSelect() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    new Promise((resolve, reject) => {
+      input.addEventListener('change', ev => ev.target.files.length ? resolve(ev.target.files[0]) : reject());
+    }).then(this.props.api_imageUpload);
+    input.click();
+  }
+
   static propTypes = {
     inputs: PropTypes.shape({
       text: PropTypes.string.isRequired,
@@ -77,5 +118,6 @@ export default class MessageInput extends Component {
     postMessage: PropTypes.func.isRequired,
     upsertStamp: PropTypes.func.isRequired,
     changeText:  PropTypes.func.isRequired,
+    api_imageUpload: PropTypes.func.isRequired,
   }
 }

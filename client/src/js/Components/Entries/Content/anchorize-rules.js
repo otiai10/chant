@@ -53,6 +53,18 @@ export default  [
       });
     }
   },
+  // Application Uploads
+  {
+    match: /(\[uploads\/.+\])/,
+    wrap: function(sub) {
+      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
+      return <PreviewImage image={img} link={img} />;
+    },
+    replace: function(sub, replace) {
+      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
+      setTimeout(() => replace(<PreviewImage image={img} link={img} />), 1000);
+    }
+  },
   // Any URL
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
