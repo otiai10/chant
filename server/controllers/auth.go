@@ -18,12 +18,16 @@ import (
 
 // XXX: We can't use r.URL.Scheme/Host to create callback URL,
 //      because "goapp" proxy server remove them.
-func getCallbackURL(req *http.Request) string {
+func getHostBaseURL(req *http.Request) string {
 	u, err := url.Parse(req.Referer())
 	if err == nil {
-		return fmt.Sprintf("%s://%s/auth/callback", u.Scheme, req.Host)
+		return fmt.Sprintf("%s://%s", u.Scheme, req.Host)
 	}
-	return fmt.Sprintf("%s/auth/callback", req.Header.Get("Origin"))
+	return fmt.Sprintf("%s", req.Header.Get("Origin"))
+}
+
+func getCallbackURL(req *http.Request) string {
+	return fmt.Sprintf("%s/auth/callback", getHostBaseURL(req))
 }
 
 // Auth handles starting point for OAuth communication.

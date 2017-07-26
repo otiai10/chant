@@ -3,8 +3,14 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"path"
+
+	// TODO: should be inside `middleware`
+	"cloud.google.com/go/storage"
+	"google.golang.org/appengine/file"
 
 	"github.com/otiai10/chant/server/filters"
 	"github.com/otiai10/chant/server/hook/bot/slashcommands"
@@ -164,4 +170,103 @@ func SlashCommand(w http.ResponseWriter, r *http.Request) {
 	render.JSON(http.StatusOK, marmoset.P{
 		"message": "ok",
 	})
+}
+
+// ImageUpload ...
+func ImageUpload(w http.ResponseWriter, r *http.Request) {
+
+	render := marmoset.Render(w)
+	f, h, err := r.FormFile("image")
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	defer r.Body.Close()
+
+	// {{{ TODO: Refactor to separate appengine dependencies
+	ctx := middleware.Context(r)
+	bucketname, err := file.DefaultBucketName(ctx)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	defer client.Close()
+
+	p := path.Join("uploads", h.Filename)
+	object := client.Bucket(bucketname).Object(p)
+	writer := object.NewWriter(ctx)
+	defer writer.Close()
+	writer.ContentType = h.Header.Get("Content-Type")
+
+	// size, err := io.Copy(writer, f)
+	body, err := ioutil.ReadAll(f)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	size, err := writer.Write(body)
+
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	// }}}
+
+	message := models.NewMessage(fmt.Sprintf("[%s]", p), filters.RequestUser(r))
+	message.Push(ctx)
+
+	render.JSON(http.StatusOK, marmoset.P{
+		"f": f,
+		"n": h.Filename,
+		"c": h.Header.Get("Content-Type"),
+		"e": err,
+		"s": size,
+		"b": writer.Bucket,
+		"k": bucketname,
+	})
+}
+
+// ImageDownload ...
+// TODO: cache
+func ImageDownload(w http.ResponseWriter, r *http.Request) {
+	render := marmoset.Render(w)
+	name := r.FormValue("name")
+	ctx := middleware.Context(r)
+	bucketname, err := file.DefaultBucketName(ctx)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	object := client.Bucket(bucketname).Object(path.Join("uploads", name))
+	reader, err := object.NewReader(ctx)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{
+			"message": fmt.Sprintf("%s: %s", r.URL.Path, err.Error()),
+		})
+		return
+	}
+	defer reader.Close()
+
+	w.Header().Set("Content-Type", reader.ContentType())
+	// if _, err := io.Copy(w, reader); err != nil {
+	b, err := ioutil.ReadAll(reader)
+	if err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
+	if _, err := w.Write(b); err != nil {
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
+	}
 }

@@ -37,6 +37,10 @@ type User struct {
 			TS    int64  `json:"ts"`
 		} `json:"devices,omitempty"`
 	} `json:"notification,omitempty"`
+	Timezone *struct {
+		Name   string `json:"name"`
+		Offset int    `json:"offset"`
+	} `json:"timezone"`
 }
 
 // Bot provides bot user
@@ -84,4 +88,17 @@ func (user *User) Ref(ctx context.Context, refpath ...string) *firebase.Referenc
 	ref := firebase.NewReference(url).Auth(auth)
 	ref.Client = middleware.HTTPClient(ctx)
 	return ref
+}
+
+// Members ...
+func Members(ctx context.Context) (map[string]*User, error) {
+	url := os.Getenv("FIREBASE_DB_URL") + "/members"
+	auth := os.Getenv("FIREBASE_DEPRECATED_DATABASE_SECRETS")
+	ref := firebase.NewReference(url).Auth(auth)
+	ref.Client = middleware.HTTPClient(ctx)
+	members := map[string]*User{}
+	if err := ref.Value(&members); err != nil {
+		return nil, err
+	}
+	return members, nil
 }

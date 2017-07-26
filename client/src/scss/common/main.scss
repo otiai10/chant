@@ -86,6 +86,14 @@ div.entry-container {
           font-size: 16px;
           color: $text;
         }
+        // {{{ TODO: Separate files
+        >table.timezone {
+          text-align: left;
+          >tbody>tr>td.zone {
+            font-style: italic;
+          }
+        }
+        // }}}
       }
       img.preview {
         max-height: 240px;
@@ -201,19 +209,23 @@ div.loading-container {
 
 .stamps {
   flex-wrap: wrap;
-  .button.stamp {
-    border:           none;
-    transition:   all 0.1s;
-    font-size:        12px;
-    background-color: transparent;
-    border-radius:     4px;
-    cursor:        pointer;
-    box-sizing: border-box;
-    border: solid 1px transparent;
-    word-break:   keep-all;
-    padding:           6px;
-  }
-  .button.stamp:hover {
-    border: solid 1px $primary;
+  >div {
+    overflow: hidden;
+    .button.stamp {
+      width:            100%;
+      border:           none;
+      transition:   all 0.1s;
+      font-size:        12px;
+      background-color: transparent;
+      border-radius:     4px;
+      cursor:        pointer;
+      box-sizing: border-box;
+      border: solid 1px transparent;
+      word-break:   keep-all;
+      padding:           6px;
+    }
+    .button.stamp:hover {
+      border: solid 1px $primary;
+    }
   }
 }

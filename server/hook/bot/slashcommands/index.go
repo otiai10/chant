@@ -6,4 +6,5 @@ var Commands = map[string]SlashCommand{
 	"/img":   Img{},
 	"/hello": Hello{},
 	"/help":  Help{},
+	"/tz":    Timezone{},
 }

@@ -27,6 +27,15 @@ render(
 chant.device = {name: navigator.userAgent.indexOf('Firefox') < 0 ? 'chrome' : 'firefox'};
 // }}}
 
+// {{{ TODO: Refactor
+setTimeout(() => {
+  chant.firebase.database().ref(`/members/${chant.user.id}/timezone`).update({
+    name:   Intl.DateTimeFormat().resolvedOptions().timeZone,
+    offset: (new Date()).getTimezoneOffset(),
+  });
+});
+// }}}
+
 // Register Customized ServiceWorker
 navigator.serviceWorker.getRegistration().then(reg => {
   return reg ? Promise.resolve(reg) : navigator.serviceWorker.register('/sw.js', {scope:'/'});
