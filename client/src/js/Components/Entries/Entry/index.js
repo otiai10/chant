@@ -5,6 +5,7 @@ import Default   from './Default';
 import Stamprize from './Stamprize';
 import Quoted    from './Quoted';
 import Amesh     from './Amesh';
+import Timezone  from './Timezone';
 
 const Entry = (props) => {
   switch (props.type) {
@@ -14,6 +15,8 @@ const Entry = (props) => {
     return <Quoted {...props} />;
   case 'AMESH':
     return <Amesh {...props} />;
+  case 'TIMEZONE':
+    return <Timezone {...props} />;
   default:
     return <Default {...props} />;
   }

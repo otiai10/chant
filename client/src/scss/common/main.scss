@@ -86,6 +86,14 @@ div.entry-container {
           font-size: 16px;
           color: $text;
         }
+        // {{{ TODO: Separate files
+        >table.timezone {
+          text-align: left;
+          >tbody>tr>td.zone {
+            font-style: italic;
+          }
+        }
+        // }}}
       }
       img.preview {
         max-height: 240px;

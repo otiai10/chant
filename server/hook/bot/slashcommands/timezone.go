@@ -1,8 +1,6 @@
 package slashcommands
 
 import (
-	"fmt"
-	"strings"
 	"time"
 
 	"github.com/otiai10/chant/server/middleware"
@@ -20,7 +18,7 @@ func (cmd Timezone) Handle(req *SlashCommandRequest) error {
 	if err != nil {
 		return models.NewMessage(err.Error(), bot).Push(ctx)
 	}
-	list := []string{}
+	dict := map[string]interface{}{}
 	for _, user := range members {
 		if user.Timezone == nil {
 			continue
@@ -29,10 +27,14 @@ func (cmd Timezone) Handle(req *SlashCommandRequest) error {
 		if err != nil {
 			return models.NewMessage(err.Error(), bot).Push(ctx)
 		}
-		expression := time.Now().In(loc).Format("15:04")
-		list = append(list, fmt.Sprintf("%s:  %s (%s)", user.Name, expression, user.Timezone.Name))
+		dict[user.Name] = map[string]interface{}{
+			"date": time.Now().In(loc).Format("15:04 Jan/02"),
+			"zone": user.Timezone.Name,
+		}
 	}
-	message := models.NewMessage(strings.Join(list, "\n"), bot)
+	message := models.NewMessage("timezone", bot)
+	message.Type = "TIMEZONE"
+	message.Params = dict
 	return message.Push(ctx)
 }
 
