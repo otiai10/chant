@@ -4,6 +4,26 @@ import PropTypes from 'prop-types';
 import Icon from '../../Icon';
 import {_prettyTime} from './utils';
 
+class UserTimezone extends Component {
+  render() {
+    const {name, date, zone} = this.props;
+    return (
+      <div className="user-timezone">
+        <div className="user-timezone-username">{name}</div>
+        <div className="user-timezone-contents">
+          <div className="name">{date}</div>
+          <div className="zone">{zone}</div>
+        </div>
+      </div>
+    );
+  }
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    zone: PropTypes.string.isRequired,
+  }
+}
+
 export default class Timezone extends Component {
   render() {
     const {time, user, params} = this.props;
@@ -17,13 +37,9 @@ export default class Timezone extends Component {
             <Icon user={user} />
           </div>
           <div className="contents-box">
-            <table className="timezone">
-              <tbody>
-                {Object.keys(params).map(name => {
-                  return <tr key={name}><th>{name}</th><td>{params[name].date}</td><td className="zone">{params[name].zone}</td></tr>;
-                })}
-              </tbody>
-            </table>
+            <div className="timezone">
+              {Object.keys(params).map(name => <UserTimezone key={name} name={name} {...params[name]} />)}
+            </div>
           </div>
         </div>
       </div>
