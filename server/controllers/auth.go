@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/mrjones/oauth"
-	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/provider/identity"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 	"github.com/otiai10/firebase"
@@ -35,10 +35,10 @@ func getCallbackURL(req *http.Request) string {
 func Auth(w http.ResponseWriter, r *http.Request) {
 
 	ctx := middleware.Context(r)
-	provider.SharedInstance.SetContext(ctx)
+	identity.SharedInstance.SetContext(ctx)
 
 	callback := getCallbackURL(r)
-	requestToken, url, err := provider.SharedInstance.GetRequestTokenAndUrl(callback)
+	requestToken, url, err := identity.SharedInstance.GetRequestTokenAndUrl(callback)
 
 	if err != nil {
 		marmoset.Render(w).HTML("login", marmoset.P{
@@ -67,7 +67,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 func AuthCallback(w http.ResponseWriter, r *http.Request) {
 
 	ctx := middleware.Context(r)
-	provider.SharedInstance.SetContext(ctx)
+	identity.SharedInstance.SetContext(ctx)
 
 	verifier := r.FormValue("oauth_verifier")
 	if verifier == "" {
@@ -88,7 +88,7 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 	rtoken := &oauth.RequestToken{Token: token.Value, Secret: secret.Value}
 
 	// Request AccessToken by this RequestToken and verifier just granted
-	accesstoken, err := provider.SharedInstance.AuthorizeToken(rtoken, verifier)
+	accesstoken, err := identity.SharedInstance.AuthorizeToken(rtoken, verifier)
 	if err != nil {
 		panic(fmt.Errorf("TODO: Error Handling: %v", err))
 	}
@@ -103,7 +103,7 @@ func AuthCallback(w http.ResponseWriter, r *http.Request) {
 		Value: "", Path: "/", Expires: time.Now(),
 	})
 
-	identity, err := provider.SharedInstance.FetchIdentity(accesstoken)
+	identity, err := identity.SharedInstance.FetchIdentity(accesstoken)
 	if err != nil {
 		panic(fmt.Errorf("TODO: Error Handling: %v", err))
 	}
