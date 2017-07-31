@@ -18,27 +18,19 @@ export function appendText(text, newline = false) {
 }
 
 export function showStampPreview(text) {
-  const fired = Date.now();
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const type = 'SHOW_PREVIEW';
     if (text.match(/(\[uploads\/.+\])/)) {
       return dispatch({type, url:  '/' + text.match(/\[(uploads\/.+)\]/).pop()});
     }
     const u = text.match(/(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi);
     if (!u) return dispatch({type: 'IGNORE'});
-    fetch(`/api/messages/embed?url=${encodeURIComponent(u.pop())}`, {credentials:'include'})
-    .then(res => res.json())
-    .then(({preview}) => {
-      if (getState().inputs.preview.canceled > fired) return dispatch({type:'IGNORE'});
-      if (preview && preview.type == 'image') dispatch({type, url: preview.image});
-      else dispatch({type: 'IGNORE'});
-    });
+    dispatch({type, url: u.pop()});
   };
 }
 
 export function clearStampPreview() {
   return {
     type: 'CLEAR_PREVIEW',
-    canceled: Date.now(),
   };
 }

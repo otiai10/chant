@@ -10,7 +10,7 @@ export default (state = {text:'', preview:{}}, action) => {
   case 'SHOW_PREVIEW':
     return {...state, preview: {url: action.url}};
   case 'CLEAR_PREVIEW':
-    return {...state, preview: {url: null, caceled: action.canceled}};
+    return {...state, preview: {url: null}};
   }
   return state;
 };
