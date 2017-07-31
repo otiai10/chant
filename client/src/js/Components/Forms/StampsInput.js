@@ -10,12 +10,24 @@ class Stamp extends Component {
   render() {
     return (
       <div>
-        <button className="button stamp" onClick={this.onClick.bind(this)}>{this.props.text}</button>
+        <button className="button stamp" onClick={this.onClick.bind(this)}>{this.getDisplayText()}</button>
       </div>
     );
   }
   onClick() {
     this.props.useStamp(this.props);
+  }
+  getDisplayText() {
+    if (this.props.text.match(/https?:\/\/.+\.(jpe?g|png|gif)/i)) {
+      return this.props.text.split('/').pop();
+    }
+    if (this.props.text.match(/^\[.+\]$/)) {
+      return this.props.text;
+    }
+    if (this.props.text.length > 20) {
+      return this.props.text.slice(0, 18) + '…';
+    }
+    return this.props.text;
   }
   static propTypes = {
     text: PropTypes.string.isRequired,
