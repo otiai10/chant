@@ -2,14 +2,19 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {useStamp} from '../../actions/remote';
+import {showStampPreview, clearStampPreview} from '../../actions/inputs';
 
 @connect(null, {
   useStamp,
+  showStampPreview, clearStampPreview,
 })
 class Stamp extends Component {
   render() {
     return (
-      <div>
+      <div
+        onMouseEnter={() => this.props.showStampPreview(this.props.text)}
+        onMouseLeave={this.props.clearStampPreview}
+        >
         <button className="button stamp" onClick={this.onClick.bind(this)}>{this.getDisplayText()}</button>
       </div>
     );
@@ -32,6 +37,8 @@ class Stamp extends Component {
   static propTypes = {
     text: PropTypes.string.isRequired,
     useStamp: PropTypes.func.isRequired,
+    showStampPreview:  PropTypes.func.isRequired,
+    clearStampPreview: PropTypes.func.isRequired,
   }
 }
 

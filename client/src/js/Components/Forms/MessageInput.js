@@ -21,7 +21,7 @@ export default class MessageInput extends Component {
   render() {
     const {inputs} = this.props;
     return (
-      <div id="message-input-container">
+      <div id="message-input-container" style={this.getStyle()}>
         <div
           onMouseDown={this.onMouseDown.bind(this)}
           onMouseUp={this.onMouseUp.bind(this)}
@@ -100,6 +100,12 @@ export default class MessageInput extends Component {
     this.setState({hold:false});
   }
   // }}}
+
+  getStyle() {
+    const {inputs} = this.props;
+    if (!inputs.preview.url) return {};
+    return {backgroundImage: `url(${inputs.preview.url})`, backgroundSize: 'contain', backgroundRepeat:'no-repeat'};
+  }
 
   triggerFileSelect() {
     const input = document.createElement('input');
