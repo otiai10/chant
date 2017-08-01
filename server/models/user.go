@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/provider/identity"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/firebase"
 )
@@ -26,7 +26,7 @@ const (
 
 // User ...
 type User struct {
-	provider.Identity
+	identity.Identity
 	jwt.StandardClaims
 	LoginTime    time.Time       `json:"login_time"`
 	Browser      int64           `json:"browser"`
@@ -47,7 +47,7 @@ type User struct {
 func Bot( /* ctx context.Context */ ) *User {
 	// TODO: get bot from Firebase Database
 	return &User{
-		Identity: provider.Identity{
+		Identity: identity.Identity{
 			Name:     "chang",
 			Provider: "bot",
 			ImageURL: "/public/img/bot.png",

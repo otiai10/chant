@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/provider/identity"
+	"github.com/otiai10/chant/provider/storage"
 	"github.com/otiai10/chant/server/controllers"
 	"github.com/otiai10/chant/server/filters"
 
@@ -15,8 +16,12 @@ import (
 func init() {
 
 	// Identity Provider
-	if err := provider.Initialize("twitter"); err != nil {
+	if err := identity.Initialize("twitter"); err != nil {
 		panic(fmt.Errorf("Failed to initialize identity provider: %v", err))
+	}
+	// Storage Provider
+	if err := storage.Initialize("gcs"); err != nil {
+		panic(fmt.Errorf("Failed to initialize storage provider: %v", err))
 	}
 
 	// Views

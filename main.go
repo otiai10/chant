@@ -14,7 +14,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	_ "github.com/otiai10/chant/app"
-	"github.com/otiai10/chant/provider"
+	"github.com/otiai10/chant/provider/identity"
 	"github.com/otiai10/curr"
 )
 
@@ -38,8 +38,8 @@ func main() {
 		}
 	}
 
-	if err := provider.Initialize("twitter"); err != nil {
-		panic(fmt.Errorf("Failed to initialize identity provider: %v", err))
+	if err := identity.Initialize("twitter"); err != nil {
+		panic(fmt.Errorf("Failed to initialize identity: %v", err))
 	}
 
 	p := fmt.Sprintf(":%d", *port)

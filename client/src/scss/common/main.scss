@@ -3,6 +3,8 @@
 
 html {
   background-color: $background-color;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 main#app {
   width:  100%;
@@ -87,10 +89,46 @@ div.entry-container {
           color: $text;
         }
         // {{{ TODO: Separate files
-        >table.timezone {
-          text-align: left;
-          >tbody>tr>td.zone {
-            font-style: italic;
+        >div.timezone {
+          max-width: 540px;
+          >div.user-timezone {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+            >div.user-timezone-username {
+              font-weight: bold;
+            }
+            .zone {
+              font-style: italic;
+            }
+            $small: "screen and (max-width:540px)";
+            @media #{"not" $small} {
+              >div.user-timezone-username {
+                flex: 1;
+              }
+              >div.user-timezone-contents {
+                display: flex;
+                flex: 2;
+                >div {
+                  flex: 1;
+                }
+              }
+            }
+            @media #{"only" $small} {
+              >div.user-timezone-username {
+                width: 100%;
+              }
+              >div.user-timezone-contents {
+                width: 100%;
+                border-bottom: solid thin $weak;
+                >div.name {
+                  float: left;
+                }
+                >div.zone {
+                  float: right;
+                }
+              }
+            }
           }
         }
         // }}}

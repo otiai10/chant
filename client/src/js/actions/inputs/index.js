@@ -16,3 +16,21 @@ export function appendText(text, newline = false) {
     newline: newline,
   };
 }
+
+export function showStampPreview(text) {
+  return (dispatch) => {
+    const type = 'SHOW_PREVIEW';
+    if (text.match(/(\[uploads\/.+\])/)) {
+      return dispatch({type, url:  '/' + text.match(/\[(uploads\/.+)\]/).pop()});
+    }
+    const u = text.match(/(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi);
+    if (!u) return dispatch({type: 'IGNORE'});
+    dispatch({type, url: u.pop()});
+  };
+}
+
+export function clearStampPreview() {
+  return {
+    type: 'CLEAR_PREVIEW',
+  };
+}
