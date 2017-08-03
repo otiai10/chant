@@ -65,7 +65,14 @@ export default  [
       setTimeout(() => replace(<PreviewImage image={img} link={img} />), 1000);
     }
   },
-  // Any URL
+  // Explicit Images
+  {
+    match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+\.(?:gif|png|jpeg|jpg))/gi,
+    wrap: function(sub) {
+      return <PreviewImage link={sub} image={sub} />;
+    }
+  },
+  // Any URL (without image-like extensions)
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+)/gi,
     wrap: function(sub) {
@@ -76,11 +83,10 @@ export default  [
       .then(res => res.json())
       .then(({preview}) => {
         if (!preview) return;
-        // TODO: Create API Client and "Log when Develop" feature
-        console.info('[API][GET /embed]', preview);
         switch (preview.type) {
         case 'image': return replace(<PreviewImage {...preview} />);
         case 'html':  return replace(<PreviewPage  {...preview} />);
+        default:  console.info('[API][GET /embed]', preview);
         }
       }).catch(err => console.error('PREVIEW ERRORED', err));
     }
