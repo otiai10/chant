@@ -17,6 +17,11 @@ textarea#message-input {
 div#message-input-container {
   $root: #{&};
   position: relative;
+
+  >div.dragover {
+    background-color: $weak;
+  }
+
   textarea#message-input::-webkit-input-placeholder {
     color: $weak;
   }
