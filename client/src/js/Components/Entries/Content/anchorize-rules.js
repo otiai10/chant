@@ -67,7 +67,7 @@ export default  [
   },
   // Explicit Images
   {
-    match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+\.(?:gif|png|jpeg|jpg))/gi,
+    match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+\.(?:gif|png|jpeg|jpg)[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]*)/gi,
     wrap: function(sub) {
       return <PreviewImage link={sub} image={sub} />;
     }
