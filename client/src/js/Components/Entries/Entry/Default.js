@@ -31,7 +31,7 @@ export default class DefaultEntry extends Component {
         </div>
         <div className="row contents">
           <div className="icon-box">
-            <Icon user={user} />
+            <Icon user={user} onClick={() => this.props.appendText('@' + this.props.user.name + ' ')} />
           </div>
           <div className="contents-box">
             <Content text={text} />

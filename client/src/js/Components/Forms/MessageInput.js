@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import cn from 'classnames';
+
 import {postMessage,upsertStamp} from '../../actions/remote';
 import {changeText} from '../../actions/inputs';
 import {api_imageUpload} from '../../actions/api';
@@ -16,6 +18,7 @@ export default class MessageInput extends Component {
     super(props);
     this.state = {
       hold: false,
+      dragover: false,
     };
   }
   render() {
@@ -23,9 +26,13 @@ export default class MessageInput extends Component {
     return (
       <div id="message-input-container" style={this.getStyle()}>
         <div
+          className={cn({dragover: this.state.dragover})}
           onMouseDown={this.onMouseDown.bind(this)}
           onMouseUp={this.onMouseUp.bind(this)}
           onMouseOut={this.onMouseOut.bind(this)}
+          onDragOver={this.onFileDragOver.bind(this)}
+          onDragLeave={this.onFileDragLeave.bind(this)}
+          onDrop={this.onFileDrop.bind(this)}
         >
           <textarea
             id="message-input"
@@ -53,6 +60,20 @@ export default class MessageInput extends Component {
   }
   onChange(ev) {
     this.props.changeText(ev.target.value);
+  }
+  onFileDragOver(/* ev */) {
+    this.setState({dragover: true});
+  }
+  onFileDragLeave(/* ev */) {
+    this.setState({dragover: false});
+  }
+  onFileDrop(ev) {
+    this.setState({dragover: false});
+    ev.preventDefault();
+    ev.stopPropagation();
+    const file = ev.nativeEvent.dataTransfer.files[0];
+    if (!file) return; // TODO: show alert
+    this.props.api_imageUpload(file);
   }
   onKeyDown(ev) {
     const ENTER = 13;

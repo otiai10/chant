@@ -10,6 +10,7 @@ export default class Members extends Component {
     const current = Object.keys(members).filter(id => {
       if (id == chant.user.id) return false;
       if (!members[id].browsers) return false;
+      if (!members[id].name) return false;
       return true;
     });
     return (
