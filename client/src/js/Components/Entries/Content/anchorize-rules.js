@@ -20,7 +20,7 @@ export default  [
   },
   // Mention
   {
-    match: new RegExp(`(@${chant.user.name})`, 'g'),
+    match: new RegExp(`(@${chant.user.name}|@all)`, 'g'),
     wrap: function(sub) {
       return <b>{sub}</b>;
     }

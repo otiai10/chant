@@ -58,7 +58,7 @@ export function listenFirebaseStamps(dispatch) {
 function __hook_Mention(text, getState, user = chant.user) {
   const r = new RegExp('[ 　]+');
   const members = Object.keys(getState().members).map(id => getState().members[id]);
-  const targets = text.split(r).filter(t => /@[_a-zA-Z0-9]+/.test(t)).map(t => t.replace(/^@/, '')).map(name => {
+  const targets = (text.match(/@all/i)) ? members : text.split(r).filter(t => /@[_a-zA-Z0-9]+/.test(t)).map(t => t.replace(/^@/, '')).map(name => {
     return members.filter(member => member.name == name).pop();
   }).filter(m => !!m);
   if (targets.length == 0) return;
