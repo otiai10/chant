@@ -7,7 +7,8 @@ import Content from '../Content';
 
 import {upsertStamp} from '../../../actions/remote';
 import {appendText}  from '../../../actions/inputs';
-import {_prettyTime} from './utils';
+
+import entryactions from './entryactions';
 
 @connect(null, {
   upsertStamp,
@@ -19,15 +20,9 @@ export default class DefaultEntry extends Component {
     return (
       <div className="entry">
         <div className="row actions">
-          <div className="action timestamp" onClick={this._onQuote.bind(this)}>
-            {_prettyTime(this.props.time)}
-          </div>
-          <div className="action totsuzenize" onClick={this._onTotsuzenize.bind(this)}>
-            Totsuzenize
-          </div>
-          <div className="action stamprize" onClick={this._onStamprize.bind(this)}>
-            Stamprize
-          </div>
+          <entryactions.Timestamp   onClick={this._onQuote.bind(this)} time={this.props.time}/>
+          <entryactions.Totsuzenize onClick={this._onTotsuzenize.bind(this)}/>
+          <entryactions.Stamprize   onClick={this._onStamprize.bind(this)}/>
         </div>
         <div className="row contents">
           <div className="icon-box">

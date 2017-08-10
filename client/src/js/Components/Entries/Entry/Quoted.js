@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import Icon from '../../Icon';
 import Content from '../Content';
 
+import entryactions from './entryactions';
 import {appendText}  from '../../../actions/inputs';
-import {_prettyTime} from './utils';
 
 @connect(null, {
   appendText,
@@ -17,9 +17,7 @@ export default class DefaultEntry extends Component {
     return (
       <div className="entry">
         <div className="row actions">
-          <div className="action timestamp" onClick={this._onQuote.bind(this)}>
-            {_prettyTime(this.props.time)}
-          </div>
+          <entryactions.Timestamp   onClick={this._onQuote.bind(this)} time={this.props.time}/>
         </div>
         <div className="row contents">
           <div className="icon-box">

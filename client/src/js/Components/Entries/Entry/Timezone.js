@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '../../Icon';
-import {_prettyTime} from './utils';
+import entryactions from './entryactions';
 
 class UserTimezone extends Component {
   render() {
@@ -26,11 +26,11 @@ class UserTimezone extends Component {
 
 export default class Timezone extends Component {
   render() {
-    const {time, user, params} = this.props;
+    const {user, params} = this.props;
     return (
       <div className="entry">
         <div className="row actions">
-          <div className="action timestamp">{_prettyTime(time)}</div>
+          <entryactions.Timestamp time={this.props.time}/>
         </div>
         <div className="row contents">
           <div className="icon-box">
