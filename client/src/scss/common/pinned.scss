@@ -1,0 +1,19 @@
+
+.pinned {
+  border: solid thin #d0d0d0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  >.pinned-by {
+    justify-content: flex-end;
+    >div {
+      display: flex;
+      align-items: center;
+      >img.pinned-by-icon {
+        width:  24px;
+        height: 24px;
+        border-radius: 12px;
+      }
+    }
+  }
+}
