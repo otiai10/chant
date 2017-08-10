@@ -64,9 +64,11 @@ div.entry-container {
       }
       .timestamp {
         color: $weak;
+        flex:  1;
       }
       .stamprize, .totsuzenize {
         color: transparent;
+        font-size: 18px !important; // TODO: Refactor
       }
     }
     .contents {

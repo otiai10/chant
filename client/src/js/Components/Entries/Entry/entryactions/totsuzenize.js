@@ -5,7 +5,7 @@ export default class TotsuzenizeAction extends Component {
   render() {
     return (
       <div className="action totsuzenize" onClick={this.onClick.bind(this)}>
-        Totsuzenize
+        <i className="fa fa-bolt" />
       </div>
     );
   }

@@ -5,7 +5,7 @@ export default class StamprizeAction extends Component {
   render() {
     return (
       <div className="action stamprize" onClick={this.onClick.bind(this)}>
-        Stamprize
+        <i className="fa fa-paw" />
       </div>
     );
   }
