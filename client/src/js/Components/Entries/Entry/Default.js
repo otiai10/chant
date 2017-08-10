@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import Icon from '../../Icon';
 import Content from '../Content';
 
-import {upsertStamp} from '../../../actions/remote';
+import {upsertStamp, pinEntry} from '../../../actions/remote';
 import {appendText}  from '../../../actions/inputs';
 
 import entryactions from './entryactions';
@@ -13,6 +13,7 @@ import entryactions from './entryactions';
 @connect(null, {
   upsertStamp,
   appendText,
+  pinEntry,
 })
 export default class DefaultEntry extends Component {
   render() {
@@ -23,6 +24,7 @@ export default class DefaultEntry extends Component {
           <entryactions.Timestamp   onClick={this._onQuote.bind(this)} time={this.props.time}/>
           <entryactions.Totsuzenize onClick={this._onTotsuzenize.bind(this)}/>
           <entryactions.Stamprize   onClick={this._onStamprize.bind(this)}/>
+          <entryactions.Pin         onClick={this._onPinned.bind(this)} />
         </div>
         <div className="row contents">
           <div className="icon-box">
@@ -44,6 +46,15 @@ export default class DefaultEntry extends Component {
       user: this.props.user, time: this.props.time,
     });
   }
+  _onPinned() {
+    var pinned = {
+      ref:  this.props.id, // This is ref, not "pin" itself
+      text: this.props.text,
+      user: {...this.props.user},
+      time: this.props.time,
+    };
+    this.props.pinEntry(pinned);
+  }
   _onTotsuzenize() {
     fetch(`/api/messages/${this.props.id}/totsuzenize`, {
       method: 'POST',
@@ -58,5 +69,6 @@ export default class DefaultEntry extends Component {
     time: PropTypes.number.isRequired,
     appendText:  PropTypes.func,
     upsertStamp: PropTypes.func,
+    pinEntry:    PropTypes.func,
   }
 }

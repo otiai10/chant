@@ -2,6 +2,8 @@
 import 'firebase/auth';
 import 'firebase/database';
 
+const PINS = 'pins';
+
 export function listenFirebaseMessages(dispatch, count = 20) {
   dispatch({type: 'MESSAGE_LOADING'});
   const messages = chant.firebase.database().ref('messages');
@@ -100,6 +102,23 @@ export function upsertStamp(target, user = chant.user) {
     type: 'STAMPRIZE',
     text: 'stamprize:',
     stamp: target,
+    user, time: Date.now(),
+  });
+  return {type:'IGNORE'};
+}
+
+export function pinEntry(pinned, user = chant.user) {
+  // Create "pin" entry
+  const key = chant.firebase.database().ref(PINS).push().key;
+  chant.firebase.database().ref(`${PINS}/${key}`).set({
+    by:    user,
+    entry: pinned,
+  });
+  // Post message to inform "being pinned"
+  const mkey = chant.firebase.database().ref('messages').push().key;
+  chant.firebase.database().ref(`messages/${mkey}`).set({
+    type: 'PINNED',
+    text: `Pinned [quote:${pinned.ref}]`,
     user, time: Date.now(),
   });
   return {type:'IGNORE'};
