@@ -4,6 +4,9 @@ import React from 'react';
 
 import Entry from '../Entry';
 import {PreviewImage, PreviewPage} from './WebPreview';
+import {
+  SoundCloud,
+} from './VendorEmbed';
 
 export default  [
   // quote
@@ -23,6 +26,13 @@ export default  [
     match: new RegExp(`(@${chant.user.name}|@all)`, 'g'),
     wrap: function(sub) {
       return <b>{sub}</b>;
+    }
+  },
+  // SoundCloud
+  {
+    match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)(?:\/sets)?\/(?:[^\/]+))/gi,
+    wrap: function(sub) {
+      return <SoundCloud src={sub}></SoundCloud>;
     }
   },
   // YouTube
