@@ -2,7 +2,9 @@
 import 'firebase/auth';
 import 'firebase/database';
 
-const PINS = 'pins';
+const
+  MESSAGES = 'messages',
+  PINS     = 'pins';
 
 export function listenFirebaseMessages(dispatch, count = 20) {
   dispatch({type: 'MESSAGE_LOADING'});
@@ -119,6 +121,16 @@ export function pinEntry(pinned, user = chant.user) {
   chant.firebase.database().ref(`messages/${mkey}`).set({
     type: 'PINNED',
     text: `Pinned [quote:${pinned.ref}]`,
+    user, time: Date.now(),
+  });
+  return {type:'IGNORE'};
+}
+
+export function deletePinnedEntry(id, user = chant.user) {
+  chant.firebase.database().ref(`${PINS}/${id}`).remove();
+  const mkey = chant.firebase.database().ref(MESSAGES).push().key;
+  chant.firebase.database().ref(`${MESSAGES}/${mkey}`).set({
+    text: `Deleted pinned entry: ${id}`,
     user, time: Date.now(),
   });
   return {type:'IGNORE'};

@@ -21,6 +21,18 @@ export default  [
       });
     }
   },
+  // pinned
+  {
+    match: /(\[pinned:[-_a-zA-Z0-9]+\])/g,
+    replace: function(sub, result) {
+      const id = sub.match(/\[pinned:([-_a-zA-Z0-9]+)\]/)[1];
+      chant.firebase.database().ref(`pins/${id}`).once('value', snapshot => {
+        if (!snapshot.val()) return result(<span>{sub}</span>);
+        const pin = {...snapshot.val(), id, type:'PIN_DETAIL'};
+        result(<Entry {...pin} />);
+      });
+    }
+  },
   // Mention
   {
     match: new RegExp(`(@${chant.user.name}|@all)`, 'g'),
