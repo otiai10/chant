@@ -1149,6 +1149,10 @@ chokidar@^1.4.3, chokidar@^1.6.1:
   optionalDependencies:
     fsevents "^1.0.0"
 
+chomex@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/chomex/-/chomex-1.0.8.tgz#0148cb0cadaa03c84981a884e0f23caf1e981851"
+
 cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/cipher-base/-/cipher-base-1.0.3.tgz#eeabf194419ce900da3018c207d212f2a6df0a07"

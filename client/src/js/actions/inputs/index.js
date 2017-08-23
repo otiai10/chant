@@ -2,6 +2,8 @@
  * Action creator for any inputs by user
  */
 
+import {TextHistory} from '../../models';
+
 export function changeText(text) {
   return {
     type: 'TEXT_CHANGE',
@@ -32,5 +34,29 @@ export function showStampPreview(text) {
 export function clearStampPreview() {
   return {
     type: 'CLEAR_PREVIEW',
+  };
+}
+
+/**
+ * popTextHistory
+ * References history.stack **with current index**, and set it to state.
+ */
+export function popTextHistory() {
+  return (dispatch, getState) => {
+    const index = getState().inputs.history.index + 1;
+    const text = TextHistory.getByIndex(index);
+    if (text) dispatch({type: 'TEXT_CHANGE', data: text});
+    dispatch({type: 'UPDATE_HISTORY', history: {index}});
+  };
+}
+
+/**
+ * pushTextHistory
+ * Push specified text **OR** re-sort stack, and reset current index anyway.
+ */
+export function pushTextHistory(text) {
+  return (dispatch) => {
+    TextHistory.push(text);
+    dispatch({type: 'UPDATE_HISTORY', history: {index: -1}});
   };
 }

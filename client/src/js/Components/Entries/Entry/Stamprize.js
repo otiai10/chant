@@ -4,15 +4,16 @@ import PropTypes from 'prop-types';
 import Icon from '../../Icon';
 import Content from '../Content';
 
+import entryactions from './entryactions';
 import {_prettyTime} from './utils';
 
 export default class StamprizeEntry extends Component {
   render() {
-    const {user, text, time, stamp} = this.props;
+    const {user, text, stamp} = this.props;
     return (
       <div className="entry">
         <div className="row actions">
-          <div className="action timestamp">{_prettyTime(time)}</div>
+          <entryactions.Timestamp time={this.props.time}/>
         </div>
         <div className="row contents">
           <div className="icon-box">

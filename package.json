@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prestart": "yarn install",
-    "start": "webpack --config ./client/webpack.config.js --watch --progress",
+    "start": "webpack --config ./client/webpack.config.js --watch",
     "build": "webpack --config ./client/webpack.config.js --progress",
     "release": "NODE_ENV=production yarn run build"
   },
@@ -86,6 +86,7 @@
     }
   },
   "dependencies": {
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-preset-stage-0": "^6.24.1",
+    "chomex": "^1.0.8"
   }
 }

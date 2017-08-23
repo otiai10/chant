@@ -1,0 +1,27 @@
+
+.pinned {
+  max-width: 480px;
+  border: solid thin #d0d0d0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  >.pinned-entry {
+    >.pinned-prof {
+      margin-right: 8px;
+    }
+  }
+  >.pinned-by {
+    justify-content: flex-end;
+    >div {
+      display: flex;
+      align-items: center;
+      margin-left: 8px;
+      >img.pinned-by-icon {
+        margin-left: 4px;
+        width:  24px;
+        height: 24px;
+        border-radius: 12px;
+      }
+    }
+  }
+}

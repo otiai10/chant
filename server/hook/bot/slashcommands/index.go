@@ -9,4 +9,6 @@ var Commands = map[string]SlashCommand{
 	"/hello": Hello{},
 	"/help":  Help{},
 	"/tz":    Timezone{},
+	"/pins":  Pins{},
+	"/pin":   Pins{},
 }

@@ -4,7 +4,11 @@ import {connect} from 'react-redux';
 import cn from 'classnames';
 
 import {postMessage,upsertStamp} from '../../actions/remote';
-import {changeText} from '../../actions/inputs';
+import {
+  changeText,
+  pushTextHistory,
+  popTextHistory,
+} from '../../actions/inputs';
 import {api_imageUpload} from '../../actions/api';
 
 @connect(({inputs}) => ({inputs}), {
@@ -12,6 +16,8 @@ import {api_imageUpload} from '../../actions/api';
   upsertStamp,
   changeText,
   api_imageUpload,
+  pushTextHistory,
+  popTextHistory,
 })
 export default class MessageInput extends Component {
   constructor(props) {
@@ -76,11 +82,15 @@ export default class MessageInput extends Component {
     this.props.api_imageUpload(file);
   }
   onKeyDown(ev) {
-    const ENTER = 13;
+    const ENTER = 13, UP = 38;
     const {which, shiftKey, ctrlKey} = ev;
+    if (ev.target.selectionStart == 0 && which == UP) {
+      return this.props.popTextHistory();
+    }
     if (which == ENTER && !(shiftKey || ctrlKey)) {
       if (this.props.inputs.text.trim().length == 0) return ev.preventDefault();
       this.props.postMessage(this.props.inputs.text);
+      this.props.pushTextHistory(this.props.inputs.text);
       this.props.changeText('');
       return ev.preventDefault();
     }
@@ -145,6 +155,8 @@ export default class MessageInput extends Component {
     postMessage: PropTypes.func.isRequired,
     upsertStamp: PropTypes.func.isRequired,
     changeText:  PropTypes.func.isRequired,
+    popTextHistory:  PropTypes.func.isRequired,
+    pushTextHistory: PropTypes.func.isRequired,
     api_imageUpload: PropTypes.func.isRequired,
   }
 }

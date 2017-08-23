@@ -4,6 +4,9 @@ import React from 'react';
 
 import Entry from '../Entry';
 import {PreviewImage, PreviewPage} from './WebPreview';
+import {
+  SoundCloud,
+} from './VendorEmbed';
 
 export default  [
   // quote
@@ -18,11 +21,30 @@ export default  [
       });
     }
   },
+  // pinned
+  {
+    match: /(\[pinned:[-_a-zA-Z0-9]+\])/g,
+    replace: function(sub, result) {
+      const id = sub.match(/\[pinned:([-_a-zA-Z0-9]+)\]/)[1];
+      chant.firebase.database().ref(`pins/${id}`).once('value', snapshot => {
+        if (!snapshot.val()) return result(<span>{sub}</span>);
+        const pin = {...snapshot.val(), id, type:'PIN_DETAIL'};
+        result(<Entry {...pin} />);
+      });
+    }
+  },
   // Mention
   {
-    match: new RegExp(`(@${chant.user.name})`, 'g'),
+    match: new RegExp(`(@${chant.user.name}|@all)`, 'g'),
     wrap: function(sub) {
       return <b>{sub}</b>;
+    }
+  },
+  // SoundCloud
+  {
+    match: /(https?:\/\/soundcloud.com\/(?:[^\/]+)(?:\/sets)?\/(?:[^\/]+))/gi,
+    wrap: function(sub) {
+      return <SoundCloud src={sub}></SoundCloud>;
     }
   },
   // YouTube

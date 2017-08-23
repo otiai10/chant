@@ -1,3 +1,4 @@
+/* eslint no-console:0 */
 
 export function api_imageUpload(file) {
   return (dispatch) => {
