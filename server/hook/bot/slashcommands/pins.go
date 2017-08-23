@@ -2,6 +2,7 @@ package slashcommands
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/otiai10/chant/server/middleware"
@@ -19,11 +20,16 @@ func (cmd Pins) Handle(req *SlashCommandRequest) error {
 	if err != nil {
 		return models.NewMessage(err.Error(), bot).Push(ctx)
 	}
-	middleware.Log(ctx).Debugf("%+v\n", dict)
+	queries := strings.Split(req.Text, " ")[1:]
 	pins := []*models.Pin{}
 	for id, pin := range dict {
-		pin.ID = id
-		pins = append(pins, pin)
+		if pin.HasQueries(queries) {
+			pin.ID = id
+			pins = append(pins, pin)
+		}
+	}
+	if len(pins) == 0 {
+		return models.NewMessage(fmt.Sprintf("No pins found for query: %v", queries), bot).Push(ctx)
 	}
 	message := &models.Message{
 		Time: time.Now().UnixNano() / (1000 * 1000),
@@ -39,6 +45,6 @@ func (cmd Pins) Handle(req *SlashCommandRequest) error {
 
 // Help ...
 func (cmd Pins) Help() string {
-	return `/pins
+	return `/pins {query}
 -- Show/Delete pinned entries`
 }

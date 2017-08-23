@@ -3,6 +3,7 @@ package models
 import (
 	"os"
 	"path"
+	"strings"
 
 	"golang.org/x/net/context"
 
@@ -27,4 +28,17 @@ func Pins(ctx context.Context) (map[string]*Pin, error) {
 	pins := map[string]*Pin{}
 	err := ref.Value(&pins)
 	return pins, err
+}
+
+// HasQueries returns if this contains given queries
+func (pin *Pin) HasQueries(queries []string) bool {
+	if len(queries) == 0 {
+		return true
+	}
+	for _, q := range queries {
+		if strings.Index(pin.Entry.Text, q) >= 0 {
+			return true
+		}
+	}
+	return false
 }
