@@ -1,4 +1,4 @@
-export default (state = {text:'', preview:{}}, action) => {
+export default (state = {text:'', preview:{}, history:{index:-1}}, action) => {
   switch (action.type) {
   case 'TEXT_CHANGE':
     return {...state, text: action.data};
@@ -11,6 +11,8 @@ export default (state = {text:'', preview:{}}, action) => {
     return {...state, preview: {url: action.url}};
   case 'CLEAR_PREVIEW':
     return {...state, preview: {url: null}};
+  case 'UPDATE_HISTORY':
+    return {...state, history: {...action.history}};
   }
   return state;
 };
