@@ -20,6 +20,9 @@ func (cmd Pins) Handle(req *SlashCommandRequest) error {
 	if err != nil {
 		return models.NewMessage(err.Error(), bot).Push(ctx)
 	}
+	if len(dict) == 0 {
+		return models.NewMessage("No any entries pinned", bot).Push(ctx)
+	}
 	queries := strings.Split(req.Text, " ")[1:]
 	pins := []*models.Pin{}
 	for id, pin := range dict {
