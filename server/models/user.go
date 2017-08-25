@@ -6,7 +6,7 @@ import (
 	"path"
 	"time"
 
-	"golang.org/x/net/context"
+	"context"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/otiai10/chant/provider/identity"

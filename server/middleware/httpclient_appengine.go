@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/appengine/urlfetch"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // HTTPClient ...

@@ -1,6 +1,6 @@
 package storage
 
-import "golang.org/x/net/context"
+import "context"
 
 // Provider ...
 type Provider interface {

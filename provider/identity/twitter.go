@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/mrjones/oauth"
 	"github.com/otiai10/chant/server/middleware"

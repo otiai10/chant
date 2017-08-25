@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"golang.org/x/net/context"
+	"context"
 
 	gcs "cloud.google.com/go/storage"
 
