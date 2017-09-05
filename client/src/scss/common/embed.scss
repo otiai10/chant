@@ -1,0 +1,48 @@
+$fade: #d0d0d0;
+
+.embed.embed-page.embed-container {
+    width: 100%;
+    max-width: 600px;
+    border: solid thin $fade;
+    border-radius: 8px;
+    padding: 8px;
+    >.embed-content {
+      >.embed-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        >.embed-title>h3 {
+          margin: 0;
+          font-size: 1em;
+        }
+        >.embed-body {
+          flex: 1;
+          >p {
+            margin: 0;
+            font-size: 0.8em;
+          }
+        }
+        >.embed-meta {
+          >.embed-favicon {
+            width: 24px;
+            >img {
+              width: 100%;
+            }
+          }
+          >.embed-site {
+            padding-left: 8px;
+            >span {
+              font-size: 0.8em;
+              color: $fade;
+            }
+          }
+        }
+      }
+      >.embed-img {
+        width: 240px;
+        >img {
+          width: 100%;
+        }
+      }
+    }
+}

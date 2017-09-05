@@ -17,17 +17,25 @@ export class EmbedImage extends Component {
 
 export class EmbedPage extends Component {
   render() {
-    const {title, body, image} = this.props;
+    const {title, body, image, favicon, site, link} = this.props;
     return (
-      <blockquote className="embed"
-        onClick={() => window.open(this.props.link, '_blank')}
+      <div className="embed embed-page embed-container"
+        onClick={() => window.open(link, '_blank')}
         >
-        <div><h5>{title}</h5></div>
-        <div className="row">
-          <div className="justify"><img src={image}/></div>
-          <div><p>{body}</p></div>
+        <div className="row embed-content">
+          <div className="embed-text">
+            <div className="embed-title"><h3>{title}</h3></div>
+            <div className="embed-body"><p>{body || title}</p></div>
+            <div className="row embed-meta">
+              <div className="embed-favicon justify"><img src={favicon} /></div>
+              <div className="embed-site justify"><span>{site || link}</span></div>
+            </div>
+          </div>
+          <div className="embed-img">
+            <img src={image} />
+          </div>
         </div>
-      </blockquote>
+      </div>
     );
   }
   static propTypes = {
@@ -35,5 +43,7 @@ export class EmbedPage extends Component {
     title: PropTypes.string.isRequired,
     body:  PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
+    site:  PropTypes.string.isRequired,
+    favicon: PropTypes.string,
   }
 }
