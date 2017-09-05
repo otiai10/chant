@@ -5,10 +5,16 @@ div.contents-box {
     &>img {
       width: 100%;
     }
-    &>img.amesh-mask, &>img.amesh-mesh {
+    &>img.amesh-mask {
       position: absolute;
       top: 0;
       left: 0;
+    }
+    &>img.amesh-mesh {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 98.8%;
     }
   }
 }
