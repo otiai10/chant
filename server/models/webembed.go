@@ -7,8 +7,8 @@ import (
 	"golang.org/x/net/html"
 )
 
-// WebPreview ...
-type WebPreview struct {
+// WebEmbed ...
+type WebEmbed struct {
 	Type        WebContentType `json:"type"`
 	ContentType string         `json:"content_type"`
 	Link        string         `json:"link"`
@@ -53,27 +53,27 @@ const (
 	TypeImage WebContentType = "image"
 )
 
-// NewWebPreview ...
-func NewWebPreview() *WebPreview {
-	return new(WebPreview)
+// NewWebEmbed ...
+func NewWebEmbed() *WebEmbed {
+	return new(WebEmbed)
 }
 
 // Parse ...
-func (preview *WebPreview) Parse(res *http.Response) error {
-	preview.Link = res.Request.URL.String()
-	preview.ContentType = res.Header.Get("Content-Type")
+func (embed *WebEmbed) Parse(res *http.Response) error {
+	embed.Link = res.Request.URL.String()
+	embed.ContentType = res.Header.Get("Content-Type")
 	switch {
-	case strings.HasPrefix(preview.ContentType, "text/html"):
-		return preview.parseAsHTML(res)
-	case strings.HasPrefix(preview.ContentType, "image/"):
-		return preview.parseAsImage(res)
+	case strings.HasPrefix(embed.ContentType, "text/html"):
+		return embed.parseAsHTML(res)
+	case strings.HasPrefix(embed.ContentType, "image/"):
+		return embed.parseAsImage(res)
 	}
 	return nil
 }
 
-func (preview *WebPreview) parseAsHTML(res *http.Response) error {
+func (embed *WebEmbed) parseAsHTML(res *http.Response) error {
 
-	preview.Type = TypeHTML
+	embed.Type = TypeHTML
 
 	node, err := html.Parse(res.Body)
 	if err != nil {
@@ -83,21 +83,21 @@ func (preview *WebPreview) parseAsHTML(res *http.Response) error {
 	// {{{
 	var walk func(n *html.Node)
 	walk = func(n *html.Node) {
-		if preview.satisfied() {
+		if embed.satisfied() {
 			return
 		}
 		if n.Type == html.ElementNode && n.Data == "title" {
 			if n.FirstChild != nil {
-				preview.Title = n.FirstChild.Data
+				embed.Title = n.FirstChild.Data
 				return // Abort children
 			}
 		}
 		if n.Type == html.ElementNode && n.Data == "meta" {
 			m := parseMeta(n)
 			if m.IsDescription() {
-				preview.Body = m.Content
+				embed.Body = m.Content
 			} else if m.IsImage() {
-				preview.Image = m.Content
+				embed.Image = m.Content
 			}
 			return
 		}
@@ -111,21 +111,21 @@ func (preview *WebPreview) parseAsHTML(res *http.Response) error {
 	return nil
 }
 
-func (preview *WebPreview) parseAsImage(res *http.Response) error {
-	preview.Type = TypeImage
-	preview.Body = res.Request.URL.String()
-	preview.Image = res.Request.URL.String()
+func (embed *WebEmbed) parseAsImage(res *http.Response) error {
+	embed.Type = TypeImage
+	embed.Body = res.Request.URL.String()
+	embed.Image = res.Request.URL.String()
 	return nil
 }
 
-func (preview *WebPreview) satisfied() bool {
-	if preview.Title == "" {
+func (embed *WebEmbed) satisfied() bool {
+	if embed.Title == "" {
 		return false
 	}
-	if preview.Body == "" {
+	if embed.Body == "" {
 		return false
 	}
-	if preview.Image == "" {
+	if embed.Image == "" {
 		return false
 	}
 	return true

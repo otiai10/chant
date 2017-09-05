@@ -137,8 +137,8 @@ func GetURLEmbed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer res.Body.Close()
-	preview := models.NewWebPreview()
-	if err := preview.Parse(res); err != nil {
+	embed := models.NewWebEmbed()
+	if err := embed.Parse(res); err != nil {
 		render.JSON(http.StatusBadRequest, marmoset.P{
 			"message": fmt.Errorf("Failed to parse response: %v", err),
 		})
@@ -146,7 +146,7 @@ func GetURLEmbed(w http.ResponseWriter, r *http.Request) {
 	}
 	render.JSON(http.StatusOK, marmoset.P{
 		"contenttype": res.Header.Get("Content-Type"),
-		"preview":     preview,
+		"embed":       embed,
 	})
 }
 

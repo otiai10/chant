@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-export class PreviewImage extends Component {
+export class EmbedImage extends Component {
   render() {
     return (
-      <img className="preview" src={this.props.image}
+      <img className="embed" src={this.props.image}
         onClick={() => window.open(this.props.link, '_blank')}
       />
     );
@@ -15,11 +15,11 @@ export class PreviewImage extends Component {
   }
 }
 
-export class PreviewPage extends Component {
+export class EmbedPage extends Component {
   render() {
     const {title, body, image} = this.props;
     return (
-      <blockquote className="preview"
+      <blockquote className="embed"
         onClick={() => window.open(this.props.link, '_blank')}
         >
         <div><h5>{title}</h5></div>
