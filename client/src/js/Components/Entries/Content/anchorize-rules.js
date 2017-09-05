@@ -116,7 +116,7 @@ export default  [
   // Emoji
   {
     match: /(:[a-zA-Z0-9_-]+:)/g,
-    wrap: (sub) => <i className={`twa twa-lg twa-${sub.replace(/^:/, '').replace(/:$/,'')}`}></i>
+    wrap: (sub) => <i className={`twa twa-lg twa-${sub.slice(1, sub.length - 1)}`}></i>
   },
   {
     match: /(おっぱい)/g,
