@@ -87,7 +87,9 @@ const (
 
 // NewWebEmbed ...
 func NewWebEmbed() *WebEmbed {
-	return new(WebEmbed)
+	return &WebEmbed{
+		Favicon: "/favicon.ico",
+	}
 }
 
 // Parse ...
