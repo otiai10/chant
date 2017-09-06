@@ -152,6 +152,10 @@ func (embed *WebEmbed) parseAsHTML(res *http.Response) error {
 
 	walk(node)
 
+	if embed.Site == "" {
+		embed.Site = res.Request.URL.Host
+	}
+
 	return embed.resolveRelativeURLs()
 }
 
