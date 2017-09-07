@@ -3,7 +3,7 @@
 import React from 'react';
 
 import Entry from '../Entry';
-import {PreviewImage, PreviewPage} from './WebPreview';
+import {EmbedImage, EmbedPage} from './WebEmbed';
 import {
   SoundCloud,
 } from './VendorEmbed';
@@ -80,18 +80,18 @@ export default  [
     match: /(\[uploads\/.+\])/,
     wrap: function(sub) {
       const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      return <PreviewImage image={img} link={img} />;
+      return <EmbedImage image={img} link={img} />;
     },
     replace: function(sub, replace) {
       const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      setTimeout(() => replace(<PreviewImage image={img} link={img} />), 1000);
+      setTimeout(() => replace(<EmbedImage image={img} link={img} />), 1000);
     }
   },
   // Explicit Images
   {
     match: /(https?:\/\/[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]+\.(?:gif|png|jpeg|jpg)[_a-zA-Z0-9-.@&=!~*()\';/?:+$,%#]*)/gi,
     wrap: function(sub) {
-      return <PreviewImage link={sub} image={sub} />;
+      return <EmbedImage link={sub} image={sub} />;
     }
   },
   // Any URL (without image-like extensions)
@@ -103,15 +103,20 @@ export default  [
     replace: function(sub, replace) {
       fetch(`/api/messages/embed?url=${encodeURIComponent(sub)}`, {credentials:'include'})
       .then(res => res.json())
-      .then(({preview}) => {
-        if (!preview) return;
-        switch (preview.type) {
-        case 'image': return replace(<PreviewImage {...preview} />);
-        case 'html':  return replace(<PreviewPage  {...preview} />);
-        default:  console.info('[API][GET /embed]', preview);
+      .then(({embed}) => {
+        if (!embed) return;
+        switch (embed.type) {
+        case 'image': return replace(<EmbedImage {...embed} />);
+        case 'html':  return replace(<EmbedPage  {...embed} />);
+        default:  console.info('[API][GET /embed]', embed);
         }
-      }).catch(err => console.error('PREVIEW ERRORED', err));
+      }).catch(err => console.error('EMBED ERRORED', err));
     }
+  },
+  // Emoji
+  {
+    match: /(:[a-zA-Z0-9_-]+:)/g,
+    wrap: (sub) => <i className={`twa twa-lg twa-${sub.slice(1, sub.length - 1)}`}></i>
   },
   {
     match: /(おっぱい)/g,

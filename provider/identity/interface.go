@@ -3,7 +3,7 @@ package identity
 import (
 	"os"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/mrjones/oauth"
 )

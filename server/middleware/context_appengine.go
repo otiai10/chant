@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/appengine"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 // Context ...

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"

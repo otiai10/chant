@@ -1,5 +1,6 @@
 @import "theme";
 @import "amesh-entry";
+@import "embed";
 
 html {
   background-color: $background-color;
@@ -135,11 +136,11 @@ div.entry-container {
         }
         // }}}
       }
-      img.preview {
+      img.embed {
         max-height: 240px;
         max-width: 100%;
       }
-      blockquote.preview {
+      blockquote.embed {
         &>div>h5 {
           margin: 0;
           padding: 0;
