@@ -91,14 +91,13 @@ func (c *Client) CustomSearch(query url.Values) (*CustomSearchResponse, error) {
 }
 
 // SearchImage ...
-func (c *Client) SearchImage(keyword string) (*CustomSearchResponse, error) {
+func (c *Client) SearchImage(query string, start int) (*CustomSearchResponse, error) {
 	num := 5
-	// start = 1 + (rand.Intn(start) * 5) // 1, 6, 11, 16, 21, ...
 	q := url.Values{}
-	q.Add("q", keyword)
+	q.Add("q", query)
 	q.Add("searchType", "image")
 	q.Add("num", fmt.Sprintf("%d", num))
-	// q.Add("start", fmt.Sprintf("%d", start))
+	q.Add("start", fmt.Sprintf("%d", start))
 	return c.CustomSearch(q)
 }
 
