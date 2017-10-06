@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import Icon from '../../Icon';
 import Timestamp from './entryactions/timestamp';
+import Content from '../Content';
 
 import {appendText} from '../../../actions/inputs';
 import {deletePinnedEntry} from '../../../actions/remote';
@@ -17,7 +18,7 @@ class PinnedEntry extends Component {
         </div>
         <div className="pinned-contents">
           <Timestamp time={this.props.time} onClick={() => this.props.appendText(`[pinned:${this.props.id}]`, true)} />
-          <div>{this.props.text}</div>
+          <Content text={this.props.text} />
         </div>
       </div>
     );
