@@ -78,10 +78,16 @@ div.entry-container {
         padding-right: $space;
       }
       .contents-box {
+
         // {{{ XXX: not sure why it's needed
         width: 0%;
         flex:  1;
         // }}}
+
+        // {{{ XXX: needed for #272
+        overflow: hidden;
+        // }}}
+
         &>div {
           width: 100%;
         }
