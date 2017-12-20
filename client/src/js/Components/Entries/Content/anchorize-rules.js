@@ -23,7 +23,7 @@ export default  [
   },
   // simple quote
   {
-    match: /(>.+)/g,
+    match: /(^>.+$)/g,
     wrap: function(sub) {
       return <blockquote>{sub.replace(/^>/,'')}</blockquote>;
     },
