@@ -80,6 +80,12 @@ func (user *User) Join(ctx context.Context) error {
 	return nil
 }
 
+// Leave delete user object from remote database completely.
+// This is NOT disconnect, meaning it deletes also `notifications`.
+func (user *User) Leave(ctx context.Context) error {
+	return user.Ref(ctx).Delete()
+}
+
 // Ref ...
 func (user *User) Ref(ctx context.Context, refpath ...string) *firebase.Reference {
 	refpath = append([]string{"/members", user.ID}, refpath...)
