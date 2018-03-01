@@ -21,6 +21,13 @@ export default  [
       });
     }
   },
+  // simple quote
+  {
+    match: /(^>.+$)/g,
+    wrap: function(sub) {
+      return <blockquote>{sub.replace(/^>/,'')}</blockquote>;
+    },
+  },
   // pinned
   {
     match: /(\[pinned:[-_a-zA-Z0-9]+\])/g,

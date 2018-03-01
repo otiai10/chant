@@ -10,15 +10,18 @@ $fade: #d0d0d0;
         flex: 1;
         display: flex;
         flex-direction: column;
+        padding-right: 8px;
         >.embed-title>h3 {
           margin: 0;
           font-size: 1em;
+          padding-bottom: 8px;
         }
         >.embed-body {
           flex: 1;
           >p {
             margin: 0;
             font-size: 0.8em;
+            padding-bottom: 8px;
           }
         }
         >.embed-meta {
@@ -38,9 +41,12 @@ $fade: #d0d0d0;
         }
       }
       >.embed-img {
-        width: 240px;
+        max-width: 240px;
         >img {
           width: 100%;
+          &[src=""]{
+            display: none;
+          }
         }
       }
     }
