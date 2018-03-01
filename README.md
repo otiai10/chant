@@ -1,11 +1,13 @@
 # chant
 
-Enjoy chatting ;)
+![Enjoy chatting, then work ;)](https://user-images.githubusercontent.com/931554/36833483-d9b53fb2-1d72-11e8-94b8-63efefa42fa7.png)
 
 # Deploy
 
 ```sh
+# setup your secret varialbes
 % vi app/secret.yaml
+# Deploy it to GAE
 % goapp deploy -application your-crazy-app app/
 ```
 
@@ -45,5 +47,19 @@ env_variables:
 # Development
 
 ```sh
-% yarn start & goapp serve app
+# Build frontend JavaScript
+yarn start
+# Wake up the server on local
+goapp server app
 ```
+
+Better use **[`too` command](https://github.com/otiai10/too)** to parallelize both of them
+
+```sh
+% go get github.com/otiai10/too
+% too -cmd "yarn start" -cmd "goapp serve app"
+```
+
+# Issues and questions
+
+- https://github.com/otiai10/chant/issues
