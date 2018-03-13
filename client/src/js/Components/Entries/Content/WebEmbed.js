@@ -27,7 +27,7 @@ export class EmbedPage extends Component {
             <div className="embed-title"><h3>{title}</h3></div>
             <div className="embed-body"><p>{body || title}</p></div>
             <div className="row embed-meta">
-              <div className="embed-favicon justify"><img src={favicon} /></div>
+              <Favicon url={favicon} />
               <div className="embed-site justify"><span>{site || link}</span></div>
             </div>
           </div>
@@ -45,5 +45,21 @@ export class EmbedPage extends Component {
     image: PropTypes.string.isRequired,
     site:  PropTypes.string.isRequired,
     favicon: PropTypes.string,
+  }
+}
+
+class Favicon extends Component {
+  render() {
+    return (
+      <div className="embed-favicon justify" ref={ref => this.root = ref}>
+        <img
+          src={this.props.url}
+          onError={() => this.root.style.display = 'none'}
+        />
+      </div>
+    );
+  }
+  static propTypes = {
+    url: PropTypes.string.isRequired,
   }
 }

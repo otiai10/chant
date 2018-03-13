@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"io"
 	"net/http"
 	"os"
 
@@ -32,7 +33,8 @@ func SharedPolicy() Policy {
 }
 
 // InitializeAuthFilter ...
-func InitializeAuthFilter(policyfile *os.File) *AuthFilter {
+// Caller should close the policyfile reader if needed.
+func InitializeAuthFilter(policyfile io.Reader) *AuthFilter {
 	policy = NewPolicy(policyfile)
 	return &AuthFilter{
 		Policy: policy,

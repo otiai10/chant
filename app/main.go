@@ -30,6 +30,9 @@ func init() {
 	}
 
 	policyfile, _ := os.Open("./policy.yaml")
+	if policyfile != nil {
+		defer policyfile.Close()
+	}
 
 	// Routings
 	root := marmoset.NewRouter()

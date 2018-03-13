@@ -1,6 +1,8 @@
 # chant
 
-![Enjoy chatting, then work ;)](https://user-images.githubusercontent.com/931554/36833483-d9b53fb2-1d72-11e8-94b8-63efefa42fa7.png)
+[![Build Status](https://travis-ci.org/otiai10/chant.svg?branch=master)](https://travis-ci.org/otiai10/chant)
+
+<img src="https://user-images.githubusercontent.com/931554/36833483-d9b53fb2-1d72-11e8-94b8-63efefa42fa7.png" width="80%" alt="Enjoy chatting, then work ;)"/>
 
 # Deploy
 
