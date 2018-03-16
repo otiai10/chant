@@ -5,5 +5,7 @@ go:
   - tip
 install:
   - go get -t ./...
+  - npm install
 script:
   - go test -cover ./...
+  - npm test
