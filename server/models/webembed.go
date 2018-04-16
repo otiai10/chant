@@ -16,6 +16,7 @@ type WebEmbed struct {
 	Title       string         `json:"title"`
 	Body        string         `json:"body"`
 	Image       string         `json:"image"`   // image URL
+	Video       string         `json:"video"`   // video URL
 	Favicon     string         `json:"favicon"` // image url
 }
 
@@ -27,6 +28,8 @@ const (
 	TypeHTML WebContentType = "html"
 	// TypeImage ...
 	TypeImage WebContentType = "image"
+	// TypeVideo ...
+	TypeVideo WebContentType = "video"
 )
 
 // NewWebEmbed ...
@@ -45,6 +48,8 @@ func (embed *WebEmbed) Parse(res *http.Response) error {
 		return embed.parseAsHTML(res)
 	case strings.HasPrefix(embed.ContentType, "image/"):
 		return embed.parseAsImage(res)
+	case strings.HasPrefix(embed.ContentType, "video/"):
+		return embed.parseAsVideo(res)
 	}
 	return nil
 }
@@ -73,5 +78,12 @@ func (embed *WebEmbed) parseAsImage(res *http.Response) error {
 	embed.Type = TypeImage
 	embed.Body = res.Request.URL.String()
 	embed.Image = res.Request.URL.String()
+	return nil
+}
+
+func (embed *WebEmbed) parseAsVideo(res *http.Response) error {
+	embed.Type = TypeVideo
+	embed.Body = res.Request.URL.String()
+	embed.Video = res.Request.URL.String()
 	return nil
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 
 import Entry from '../Entry';
-import {EmbedImage, EmbedPage} from './WebEmbed';
+import {EmbedImage, EmbedPage, EmbedVideo} from './WebEmbed';
 import {
   SoundCloud,
 } from './VendorEmbed';
@@ -115,6 +115,7 @@ export default  [
         switch (embed.type) {
         case 'image': return replace(<EmbedImage {...embed} />);
         case 'html':  return replace(<EmbedPage  {...embed} />);
+        case 'video': return replace(<EmbedVideo {...embed} />);
         default:  console.info('[API][GET /embed]', embed);
         }
       }).catch(err => console.error('EMBED ERRORED', err));

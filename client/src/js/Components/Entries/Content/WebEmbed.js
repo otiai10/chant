@@ -1,6 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+export class EmbedVideo extends Component {
+  render() {
+    // TODO: Style, just like `img.embed`
+    return (
+      <video src={this.props.video} autoPlay controls />
+    );
+  }
+  static propTypes = {
+    video: PropTypes.string.isRequired,
+  }
+}
+
 export class EmbedImage extends Component {
   render() {
     return (
