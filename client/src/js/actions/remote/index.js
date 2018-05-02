@@ -2,6 +2,9 @@
 import 'firebase/auth';
 import 'firebase/database';
 
+/* TODO: Refactor */
+import {LocalIdentity} from "../../models";
+
 const
   MESSAGES = 'messages',
   PINS     = 'pins';
@@ -151,8 +154,11 @@ export function toggleDeviceNotification(user = chant.user) {
 export function saveDeviceToken(user = chant.user) {
   const messaging = firebase.messaging();
   messaging.requestPermission().then(() => {
-    messaging.getToken().then(token => {
-      chant.firebase.database().ref(`members/${user.id}/notification/devices/${chant.device.name}`).set({token,ts:Date.now()});
+    messaging.getToken().then(pushToken => {
+      // Because this token is unique and constant for each browser, use this token itself as identifier.
+      chant.firebase.database().ref(`members/${user.id}/notification/devices/${pushToken}`).set({enabled:true,timestamp:Date.now()});
+      // Store this device token also locally.
+      LocalIdentity.me().update({pushToken});
       return {type:'IGNORE'};
     });
   });

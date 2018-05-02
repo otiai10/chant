@@ -5,6 +5,7 @@
  * Take care and don't mix up them.
  */
 import {Model} from 'chomex';
+import { extend } from '@firebase/util';
 Model.useStorage(window.sessionStorage);
 
 export class TextHistory extends Model {
@@ -17,5 +18,14 @@ export class TextHistory extends Model {
     const exists = this.list().filter(th => th.text == text).pop();
     if (exists) exists.update({lastused: Date.now()});
     else this.create({lastused:Date.now(), text});
+  }
+}
+
+export class LocalIdentity extends Model {
+  static me() {
+    return this.find("me");
+  }
+  static default = {
+    me: {},
   }
 }
