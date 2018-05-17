@@ -86,12 +86,19 @@ export default  [
   {
     match: /(\[uploads\/.+\])/,
     wrap: function(sub) {
-      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      return <EmbedImage image={img} link={img} />;
+      const url = sub.replace(/^\[/, '').replace(/\]$/, '');
+      if (/\.mp4$/.test(url)) {
+        return <EmbedVideo video={url} />;
+      }
+      return <EmbedImage image={url} link={url} />;
     },
     replace: function(sub, replace) {
-      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      setTimeout(() => replace(<EmbedImage image={img} link={img} />), 1000);
+      const url = sub.replace(/^\[/, '').replace(/\]$/, '');
+      if (/\.mp4$/.test(url)) {
+        setTimeout(() => replace(<EmbedVideo video={url} />), 1000);
+      } else {
+        setTimeout(() => replace(<EmbedImage image={url} link={url} />), 1000);
+      }
     }
   },
   // Explicit Images
