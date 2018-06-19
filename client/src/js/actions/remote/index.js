@@ -67,7 +67,10 @@ export function listenFirebaseStamps(dispatch) {
 }
 export function useStamp(stamp) {
   const id = idFromStamp(stamp);
-  chant.firebase.database().ref(`${STAMPS}/${id}`).update({used:Date.now()});
+  chant.firebase.database().ref(`${STAMPS}/${id}`).once('value', snapshot => {
+    if (!snapshot.exists()) return;
+    chant.firebase.database().ref(`${STAMPS}/${id}`).update({ used: Date.now() });
+  });
   return postMessage(stamp.text);
 }
 export function upsertStamp(target, user = chant.user) {
