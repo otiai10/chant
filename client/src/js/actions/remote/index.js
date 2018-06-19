@@ -47,13 +47,18 @@ export function listenConnectionStatus(/* dispatch */) {
 }
 
 export function listenFirebaseStamps(dispatch) {
-  chant.firebase.database().ref('stamps').orderByChild('used').limitToLast(20).on('value', snapshot => {
+  chant.firebase.database().ref('stamps').orderByChild('used').limitToLast(21).on('value', snapshot => {
     const dict = snapshot.val() || {};
     const newlist = Object.keys(dict).map(key => dict[key]).sort((p, n) => p.used < n.used ? 1 : -1);
     dispatch({
       type: 'REMOTE_STAMP',
-      data: newlist,
+      data: newlist.slice(0, 20),
     });
+    if (newlist.length > 20) {
+      const last = newlist[newlist.length - 1];
+      const id = encodeURIComponent(last.text).replace(/\./g, '%2E').replace(/\%0A$/g, '');
+      chant.firebase.database().ref(`stamps/${id}`).remove();
+    }
   });
 }
 
