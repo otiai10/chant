@@ -88,7 +88,7 @@ export function postMessage(text, user = chant.user) {
 }
 
 export function useStamp(stamp) {
-  const id = encodeURIComponent(stamp.text).replace(/\./g, '%2E');
+  const id = encodeURIComponent(stamp.text).replace(/\./g, '%2E').replace(/\%0A$/g, '');
   chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
   return postMessage(stamp.text);
 }
