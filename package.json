@@ -5,10 +5,10 @@
   "author": "Hiromu OCHIAI <otiai10@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prestart": "yarn install",
+    "prestart": "npm install",
     "start": "webpack --config ./client/webpack.config.js --watch",
     "build": "webpack --config ./client/webpack.config.js --progress",
-    "release": "NODE_ENV=production yarn run build"
+    "release": "NODE_ENV=production npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

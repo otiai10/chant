@@ -3,7 +3,7 @@
 import React from 'react';
 
 import Entry from '../Entry';
-import {EmbedImage, EmbedPage} from './WebEmbed';
+import {EmbedImage, EmbedPage, EmbedVideo} from './WebEmbed';
 import {
   SoundCloud,
 } from './VendorEmbed';
@@ -86,12 +86,19 @@ export default  [
   {
     match: /(\[uploads\/.+\])/,
     wrap: function(sub) {
-      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      return <EmbedImage image={img} link={img} />;
+      const url = sub.replace(/^\[/, '').replace(/\]$/, '');
+      if (/\.mp4$/.test(url)) {
+        return <EmbedVideo video={url} />;
+      }
+      return <EmbedImage image={url} link={url} />;
     },
     replace: function(sub, replace) {
-      const img = sub.replace(/^\[/, '').replace(/\]$/, '');
-      setTimeout(() => replace(<EmbedImage image={img} link={img} />), 1000);
+      const url = sub.replace(/^\[/, '').replace(/\]$/, '');
+      if (/\.mp4$/.test(url)) {
+        setTimeout(() => replace(<EmbedVideo video={url} />), 1000);
+      } else {
+        setTimeout(() => replace(<EmbedImage image={url} link={url} />), 1000);
+      }
     }
   },
   // Explicit Images
@@ -115,6 +122,7 @@ export default  [
         switch (embed.type) {
         case 'image': return replace(<EmbedImage {...embed} />);
         case 'html':  return replace(<EmbedPage  {...embed} />);
+        case 'video': return replace(<EmbedVideo {...embed} />);
         default:  console.info('[API][GET /embed]', embed);
         }
       }).catch(err => console.error('EMBED ERRORED', err));

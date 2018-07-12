@@ -155,14 +155,12 @@ func SlashCommand(w http.ResponseWriter, r *http.Request) {
 	render := marmoset.Render(w)
 	body := &slashcommands.SlashCommandRequest{Request: r}
 	if err := json.NewDecoder(r.Body).Decode(body); err != nil {
-		render.JSON(http.StatusBadRequest, marmoset.P{
-			"message": err.Error(),
-		})
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
 	}
 	if err := slashcommands.For(body.Command).Handle(body); err != nil {
-		render.JSON(http.StatusBadRequest, marmoset.P{
-			"message": err.Error(),
-		})
+		render.JSON(http.StatusBadRequest, marmoset.P{"message": err.Error()})
+		return
 	}
 	render.JSON(http.StatusOK, marmoset.P{
 		"message": "ok",

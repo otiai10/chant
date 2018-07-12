@@ -4,6 +4,7 @@ import 'firebase/database';
 
 const
   MESSAGES = 'messages',
+  STAMPS   = 'stamps',
   PINS     = 'pins';
 
 export function listenFirebaseMessages(dispatch, count = 20) {
@@ -46,16 +47,48 @@ export function listenConnectionStatus(/* dispatch */) {
   });
 }
 
+// {{{ Stamps
+function idFromStamp(stamp = {}) {
+  return encodeURIComponent((stamp.text || "").trim()).replace(/\./g, '%2E').replace(/\%0A$/g, '');
+}
 export function listenFirebaseStamps(dispatch) {
-  chant.firebase.database().ref('stamps').orderByChild('used').limitToLast(20).on('value', snapshot => {
+  chant.firebase.database().ref(STAMPS).orderByChild('used').limitToLast(21).on('value', snapshot => {
     const dict = snapshot.val() || {};
     const newlist = Object.keys(dict).map(key => dict[key]).sort((p, n) => p.used < n.used ? 1 : -1);
     dispatch({
       type: 'REMOTE_STAMP',
-      data: newlist,
+      data: newlist.slice(0, 20),
     });
+    if (newlist.length > 20) {
+      const id = idFromStamp(newlist[newlist.length - 1]);
+      chant.firebase.database().ref(`${STAMPS}/${id}`).remove();
+    }
   });
 }
+export function useStamp(stamp) {
+  const id = idFromStamp(stamp);
+  chant.firebase.database().ref(`${STAMPS}/${id}`).once('value', snapshot => {
+    if (!snapshot.exists()) return;
+    chant.firebase.database().ref(`${STAMPS}/${id}`).update({ used: Date.now() });
+  });
+  return postMessage(stamp.text);
+}
+export function upsertStamp(target, user = chant.user) {
+  const id = idFromStamp(target);
+  target.used = Date.now();
+  // Upsert Stamp
+  chant.firebase.database().ref(`${STAMPS}/${id}`).set(target);
+  // Post stamprized message
+  const key = chant.firebase.database().ref(MESSAGES).push().key;
+  chant.firebase.database().ref(`${MESSAGES}/${key}`).set({
+    type: 'STAMPRIZE',
+    text: 'stamprize:',
+    stamp: target,
+    user, time: Date.now(),
+  });
+  return {type:'IGNORE'};
+}
+// }}}
 
 function __hook_Mention(text, getState, user = chant.user) {
   const r = new RegExp('[ 　]+');
@@ -70,7 +103,10 @@ function __hook_Mention(text, getState, user = chant.user) {
 function __hook_SlashCommand(text, user = chant.user) {
   const command = text.split(new RegExp('[ 　]+'))[0];
   if (!chant.configs.commands.some(cmd => cmd == command)) return;
-  fetch('/api/messages/slashcommand', {method:'POST', credentials:'include', body:JSON.stringify({command, sender: user, text})});
+  fetch('/api/messages/slashcommand', {
+    method:'POST', credentials:'include', body:JSON.stringify({command, sender: user, text}),
+    headers: {'x-chant-client-timestamp': BUILD_TIMESTAMP},
+  });
 }
 
 export function postMessage(text, user = chant.user) {
@@ -85,28 +121,6 @@ export function postMessage(text, user = chant.user) {
     __hook_Mention(text, getState, user);
     dispatch({type:'IGNORE'});
   };
-}
-
-export function useStamp(stamp) {
-  const id = encodeURIComponent(stamp.text).replace(/\./g, '%2E');
-  chant.firebase.database().ref(`stamps/${id}`).update({used:Date.now()});
-  return postMessage(stamp.text);
-}
-
-export function upsertStamp(target, user = chant.user) {
-  const id = encodeURIComponent(target.text.trim()).replace(/\./g, '%2E');
-  target.used = Date.now();
-  // Upsert Stamp
-  chant.firebase.database().ref(`stamps/${id}`).set(target);
-  // Post stamprized message
-  const key = chant.firebase.database().ref('messages').push().key;
-  chant.firebase.database().ref(`messages/${key}`).set({
-    type: 'STAMPRIZE',
-    text: 'stamprize:',
-    stamp: target,
-    user, time: Date.now(),
-  });
-  return {type:'IGNORE'};
 }
 
 export function pinEntry(pinned, user = chant.user) {
