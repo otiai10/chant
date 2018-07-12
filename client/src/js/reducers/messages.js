@@ -1,10 +1,11 @@
 export default (state = [], action) => {
   switch (action.type) {
   case 'REMOTE_MESSAGE':
-    applyUnreadCount(Object.keys(action.data).length - state.length);
-    return Object.keys(action.data).map(key => {
-      return {id:key, ...action.data[key]};
-    }).reverse();
+    // mark new coming
+    state.map(m => action.data[m.id] ? action.data[m.id]._beread = true : null);
+    const messages = Object.keys(action.data).map(key => ({id:key, ...action.data[key]}));
+    applyUnreadCount(messages.filter(m => !m._beread).length);
+    return messages.reverse();
   case 'UNREAD_RESET':
     applyUnreadCount(0);
   }

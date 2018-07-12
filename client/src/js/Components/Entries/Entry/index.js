@@ -8,6 +8,7 @@ import Amesh     from './Amesh';
 import Timezone  from './Timezone';
 import PinList   from './PinList';
 import Pinned    from './Pinned';
+import Reload    from './Reload';
 
 const Entry = (props) => {
   switch (props.type) {
@@ -23,6 +24,8 @@ const Entry = (props) => {
     return <PinList {...props} />;
   case 'PIN_DETAIL':
     return <Pinned {...props} />;
+  case 'RELOAD':
+    return <Reload {...props} />;
   default:
     return <Default {...props} />;
   }

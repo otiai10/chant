@@ -8,6 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var plugins = [
   new webpack.DefinePlugin({
+    'BUILD_TIMESTAMP': JSON.stringify(Date.now()),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
   }),
 ];

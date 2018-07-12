@@ -71,7 +71,7 @@ export function useStamp(stamp) {
     if (!snapshot.exists()) return;
     chant.firebase.database().ref(`${STAMPS}/${id}`).update({ used: Date.now() });
   });
-  return postMessage(stamp.text);
+  // return postMessage(stamp.text);
 }
 export function upsertStamp(target, user = chant.user) {
   const id = idFromStamp(target);
@@ -103,7 +103,10 @@ function __hook_Mention(text, getState, user = chant.user) {
 function __hook_SlashCommand(text, user = chant.user) {
   const command = text.split(new RegExp('[ 　]+'))[0];
   if (!chant.configs.commands.some(cmd => cmd == command)) return;
-  fetch('/api/messages/slashcommand', {method:'POST', credentials:'include', body:JSON.stringify({command, sender: user, text})});
+  fetch('/api/messages/slashcommand', {
+    method:'POST', credentials:'include', body:JSON.stringify({command, sender: user, text}),
+    headers: {'x-chant-client-timestamp': BUILD_TIMESTAMP},
+  });
 }
 
 export function postMessage(text, user = chant.user) {
