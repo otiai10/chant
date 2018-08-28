@@ -5,7 +5,7 @@ export class EmbedVideo extends Component {
   render() {
     // TODO: Style, just like `img.embed`
     return (
-      <video src={this.props.video} autoPlay controls />
+      <video src={this.props.video} style={{width:"100%", maxWidth: "480px"}} autoPlay controls />
     );
   }
   static propTypes = {
