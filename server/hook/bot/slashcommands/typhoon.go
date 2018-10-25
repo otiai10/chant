@@ -3,9 +3,9 @@ package slashcommands
 import (
 	"time"
 
+	"github.com/otiai10/amesh/lib/typhoon"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
-	"github.com/otiai10/typhoon/typhoonjp"
 )
 
 // Typhoon ...
@@ -16,7 +16,7 @@ func (cmd Typhoon) Handle(req *SlashCommandRequest) error {
 	bot := models.Bot()
 	ctx := middleware.Context(req.Request)
 	client := middleware.HTTPClient(ctx)
-	entry, err := typhoonjp.GetEntry(client)
+	entry, err := typhoon.GetEntry(client)
 	if err != nil {
 		message := models.NewMessage(err.Error(), bot)
 		return message.Push(ctx)

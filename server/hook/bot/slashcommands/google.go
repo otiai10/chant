@@ -18,6 +18,7 @@ func (cmd Google) Handle(req *SlashCommandRequest) error {
 	ctx := middleware.Context(req.Request)
 	bot := models.Bot()
 	client, err := google.NewClient(ctx)
+	client.Referer = req.Request.Header.Get("Referer")
 	if err != nil {
 		message := models.NewMessage(err.Error(), bot)
 		return message.Push(ctx)

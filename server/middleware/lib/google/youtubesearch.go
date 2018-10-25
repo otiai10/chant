@@ -1,7 +1,10 @@
 package google
 
 import (
+	"encoding/json"
+	"fmt"
 	"math/rand"
+	"net/url"
 	"time"
 )
 
@@ -37,6 +40,29 @@ type YoutubeSearchListResponse struct {
 		ResultsPerPage int   `json:"resultsPerPage"`
 	} `json:"pageInfo"`
 	Items []YoutubeSearchItem `json:"items"`
+}
+
+// YoutubeSearch ...
+func (c *Client) YoutubeSearch(query url.Values) (*YoutubeSearchListResponse, error) {
+	query.Add("key", c.APIKey)
+	baseURL := "https://www.googleapis.com/youtube/v3/search"
+
+	res, err := c.Get(baseURL + "?" + query.Encode())
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	resp := new(YoutubeSearchListResponse)
+	if err := json.NewDecoder(res.Body).Decode(resp); err != nil {
+		return nil, err
+	}
+
+	if len(resp.Items) == 0 {
+		return nil, fmt.Errorf("not found")
+	}
+
+	return resp, nil
 }
 
 // RandomItem returns an item randomly
