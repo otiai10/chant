@@ -3,7 +3,7 @@ package slashcommands
 import (
 	"time"
 
-	"github.com/otiai10/amesh"
+	"github.com/otiai10/amesh/lib/amesh"
 	"github.com/otiai10/chant/server/middleware"
 	"github.com/otiai10/chant/server/models"
 )
