@@ -4,6 +4,10 @@
   "repository": "git@github.com:otiai10/chant.git",
   "author": "Hiromu OCHIAI <otiai10@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "9.11.1",
+    "npm": "6.4.0"
+  },
   "scripts": {
     "prestart": "npm install",
     "start": "webpack --config ./client/webpack.config.js --watch",
@@ -23,9 +27,9 @@
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^7.0.1",
     "extract-text-webpack-plugin": "^2.1.2",
-    "firebase": "^4.0.0",
+    "firebase": "^5.5.5",
     "font-awesome": "^4.7.0",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.9.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
