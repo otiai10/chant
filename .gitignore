@@ -4,3 +4,4 @@
 node_modules/
 # CHANT APPLICATION SETTINGS
 app/secret.yaml
+app/index.yaml
