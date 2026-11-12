@@ -3,6 +3,8 @@ go:
   - 1.8
   - 1.9
   - tip
+before_install:
+  - nvm install 26.13.1
 install:
   - go get -t ./...
   - npm install
